@@ -27,9 +27,8 @@ function unit_lookup() {
 
 function filtered_unit_array($filter) {
 	global $db;
-	global $unit_array;
+	global $filtered_units;
 	global $filter;
-	global $data;
 
 	$filtered_units = array();
 	$unit_values = $db->Execute("select unit_description from `units` where unit_filter LIKE '" .  $filter . "' order by unit_description");

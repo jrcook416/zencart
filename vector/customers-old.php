@@ -3,9 +3,8 @@
  * @copyright Copyright 2003-2022 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
- * //IEMS Custom Code - 2022-03-30//
- */   
+ * @version $Id: Zcwilt 2021 Jul 15 Modified in v1.5.7d $
+ */
 require('includes/application_top.php');
 
 require(DIR_WS_CLASSES . 'currencies.php');
@@ -688,56 +687,33 @@ if (zen_not_null($action)) {
                   echo zen_draw_input_field('customers_email_address', htmlspecialchars($cInfo->customers_email_address, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_CUSTOMERS, 'customers_email_address', 50) . ' class="form-control"', true);
                 }
                 ?>
-            </div> <!--end div class="col-sm-9 col-md-6"--> 
-          </div> <!--div class="form-group"-->
+            </div>
+          </div>
         </div>
-		<?php
-        if (ACCOUNT_COMPANY == 'true') { ?>
-			<div class="row">
-				<?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></div>
-			<div class="row formAreaTitle"><?php echo CATEGORY_COMPANY; ?></div>
-				<div class="formArea">
-					<div class="form-group">
-						<?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
-						<div class="col-sm-9 col-md-6">
-						<?php
-							if ($error == true) {
-								if ($entry_company_error == true) {
-								echo zen_draw_input_field('entry_company', htmlspecialchars($cInfo->entry_company, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', 50) . ' class="form-control"') . '&nbsp;' . ENTRY_COMPANY_ERROR;
-							} else {
-								echo $cInfo->entry_company . zen_draw_hidden_field('entry_company');
-							} //end else
-							} else {
-								/*IEMS Custom Code - adding iems_pull_down_menu for Agency
-								This box should be populated so that the unit selector will pull the proper units based upon the agency select's value. */
-								company_lookup(); 
-								echo iems_pull_down_menu('entry_company',$company_array, $cInfo->entry_company, 'id ="company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
-								?>
-								<button type="button" class="btn btn-primary btn-lrg add"></button>
-							<?php } //end else
-		} //end company/agency bootstrap-select code ?>
-						</div> <!--end div class="col-sm-9 col-md-6"--> 
-					</div> <!--end div class="form-group"-->
-			<?php
-			if (ACCOUNT_SUBURB == 'true') { ?>
-            <div class="form-group" id="suburb">
-                <?php echo zen_draw_label(ENTRY_SUBURB, 'suburb', 'class="col-sm-3 control-label"'); ?>
+        <?php
+        if (ACCOUNT_COMPANY == 'true') {
+          ?>
+          <div class="row">
+              <?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?>
+          </div>
+          <div class="row formAreaTitle"><?php echo CATEGORY_COMPANY; ?></div>
+          <div class="formArea">
+            <div class="form-group">
+                <?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
               <div class="col-sm-9 col-md-6">
                   <?php
                   if ($error == true) {
-                    if ($entry_suburb_error == true) {
-                      echo zen_draw_input_field('suburb', htmlspecialchars($cInfo->entry_suburb, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', 50) . ' class="form-control"') . '&nbsp;' . ENTRY_SUBURB_ERROR;
+                    if ($entry_company_error == true) {
+                      echo zen_draw_input_field('entry_company', htmlspecialchars($cInfo->entry_company, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', 50) . ' class="form-control"') . '&nbsp;' . ENTRY_COMPANY_ERROR;
                     } else {
-                      echo $cInfo->entry_suburb . zen_draw_hidden_field('entry_suburb');
+                      echo $cInfo->entry_company . zen_draw_hidden_field('entry_company');
                     }
                   } else {
-					/*IEMS Custom Code - adding iems_pull_down_menu for Suburb.
-						This should stay as an empty pull_down_menu - the Javascript will pull the options in. */
-					echo iems_pull_down_menu('entry_suburb', '', $cInfo->entry_suburb, 'id ="entry_suburb" style="background-color:yellow", class="selectpicker" form-control  data-live-search="true"');
-			 } //end suburb bootstrap-select code.?>
-			 <button type="button" class="btn btn-danger btn-lrg remove"></button>
-		  </div>
-		  </div>
+                    echo zen_draw_input_field('entry_company', htmlspecialchars($cInfo->entry_company, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', 50) . ' class="form-control"');
+                  }
+                  ?>
+              </div>
+            </div>
             <?php
             // -----
             // If a plugin has additional fields to add to the form, it supplies that information here.  The
@@ -790,6 +766,28 @@ if (zen_not_null($action)) {
                 ?>
             </div>
           </div>
+          <?php
+          if (ACCOUNT_SUBURB == 'true') {
+            ?>
+            <div class="form-group">
+                <?php echo zen_draw_label(ENTRY_SUBURB, 'suburb', 'class="col-sm-3 control-label"'); ?>
+              <div class="col-sm-9 col-md-6">
+                  <?php
+                  if ($error == true) {
+                    if ($entry_suburb_error == true) {
+                      echo zen_draw_input_field('suburb', htmlspecialchars($cInfo->entry_suburb, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', 50) . ' class="form-control"') . '&nbsp;' . ENTRY_SUBURB_ERROR;
+                    } else {
+                      echo $cInfo->entry_suburb . zen_draw_hidden_field('entry_suburb');
+                    }
+                  } else {
+                    echo zen_draw_input_field('entry_suburb', htmlspecialchars($cInfo->entry_suburb, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', 50) . ' class="form-control"');
+                  }
+                  ?>
+              </div>
+            </div>
+            <?php
+          }
+          ?>
           <div class="form-group">
               <?php echo zen_draw_label(ENTRY_POST_CODE, 'entry_postcode', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9 col-md-6">

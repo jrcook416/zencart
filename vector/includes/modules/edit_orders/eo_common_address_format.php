@@ -43,8 +43,8 @@
 			<td class="eo-label"><label for="update_<?php echo $address_name; ?>_suburb"><?php echo ENTRY_CUSTOMER_SUBURB; ?></label>:&nbsp;</td>
 			<?php
 			$filter = $address_fields['company'];
-			unit_lookup_filtered($filter); ?>
-			<td><?php echo iems_pull_down_menu('update_' . $address_name . '_suburb', $unit_array, $address_fields['suburb'], '');?> 
+			filtered_unit_array($filter); ?>
+			<td><?php echo iems_pull_down_menu('update_' . $address_name . '_suburb', $filtered_units, $address_fields['suburb'], '');?> 
 			</td>	
         </tr> 
 		

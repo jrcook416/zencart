@@ -13,6 +13,7 @@ The following plugins or modules have been added to the 1.5.7d stock code:
 4. Easy Populate 4 was installed on 2022-04-08. 
 5. Super Orders 5.0.0 was installed on 2022-04-08.
 6. One Page Checkout 2.3.12 was installed on 2022-04-08.
+7. Order Comments Boilerplate 1.1.0 was installed on 2022-04-08.
 
 Code Modifications  
 ---------------

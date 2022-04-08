@@ -16,6 +16,7 @@
  *  ~ EZ Integration with Ty Package Tracker and Edit Orders
  *  ~ Admin comment editing
  *  ~ Improved HTML and look & feel
+ *	IEMS MODIFIED CODE - 2022-04-08
  *
  * @copyright Copyright 2003-2021 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
@@ -56,6 +57,28 @@ if (!isset($_GET['page'])) $_GET['page'] = '';
 
 include DIR_FS_CATALOG . DIR_WS_CLASSES . 'order.php';
 $show_including_tax = (DISPLAY_PRICE_WITH_TAX == 'true');
+
+/* BOF Zen4All Order Comment 1 of 3 */
+// prepare order comment pulldown list
+$predefinedCommentsQuery = "SELECT comment_id, comment_title, comment_content
+                            FROM " . TABLE_ORDER_COMMENTS_CONTENT . "
+                            WHERE language_id = " . (int)$_SESSION['languages_id'] . "
+                            ORDER BY comment_id ASC";
+$predefinedComments = $db->Execute($predefinedCommentsQuery);
+$predefinedCommentsArray = array();
+$predefinedCommentsArray[0] = array(
+  'id' => NULL,
+  'text' => TEXT_SELECT_COMMENT
+);
+foreach($predefinedComments as $predefinedComment) {
+  $predefinedCommentsArray[] = array(
+    'id' => $predefinedComment['comment_id'],
+    'text' => $predefinedComment['comment_title'],
+    'content' => addslashes($predefinedComment['comment_content']),
+  );
+}
+/* EOF Zen4All Order Comment 1 of 3 */
+
 // prepare order-status look-up list
 $orders_status_array = array();
 $orders_status = $db->Execute("SELECT orders_status_id, orders_status_name
@@ -502,6 +525,40 @@ if (zen_not_null($action) && $order_exists == true) {
     require(DIR_WS_INCLUDES . 'header.php');
     ?>
     <!-- header_eof //-->
+
+<?php /* BOF Zen4All Order Comment 2 of 3 */ ?>
+    <script>
+      var commentsArray = new Array(
+<?php
+$i = 0;
+$len = count($predefinedCommentsArray);
+foreach ($predefinedCommentsArray as $value) {
+  if ($i == $len - 1) {
+    echo "{value : '" . $value['id'] . "', comment : `" . $value['content'] . "`}";
+  } else {
+    echo "{value : '" . $value['id'] . "', comment : `" . $value['content'] . "`},";
+  }
+  $i++;
+}
+?>
+                );
+    $(document).ready(function() {
+      $('#predefined_comments').change(function(){
+        val = $(":selected", this).index();
+        <?php if ($editor_handler !== '') { ?>
+        CKEDITOR.instances['comments'].setData(commentsArray[val].comment); 
+        <?php } else { ?>
+           /*  Use this instead if you want to strip out HTML
+        var html_comment = $.parseHTML(commentsArray[val].comment);
+        var text = $(html_comment).text(); 
+        $('#comments').val(text); 
+            */
+        $('textarea[name="comments"]').val(commentsArray[val].comment);
+        <?php } ?>
+      });
+    });
+    </script>
+<?php /* EOF Zen4All Order Comment 2 of 3 */ ?>
     <!-- body //-->
     <div class="container-fluid">
       <!-- body_text //-->
@@ -1394,6 +1451,14 @@ if (zen_not_null($action) && $order_exists == true) {
           <div class="formArea">
               <?php echo zen_draw_form('statusUpdate', FILENAME_ORDERS, zen_get_all_get_params(array('action', 'language')) . 'action=update_order&language=' . $order->info['language_code'], 'post', 'class="form-horizontal"', true);
                echo zen_draw_hidden_field('camefrom', 'orderEdit'); // identify from where the form was submitted (infoBox/listing or details), to redirect back to this same page ?>
+            <?php /* BOF Zen4All Order Comment 3 of 3 */ ?>
+            <div class="form-group">
+              <?php echo zen_draw_label(ENTRY_PREDEFINED_COMMENTS, 'predefined_comments', 'class="col-sm-3 control-label"'); ?>
+              <div class="col-sm-9">
+                  <?php echo zen_draw_pull_down_menu('predefined_comments', $predefinedCommentsArray, '', 'id="predefined_comments" class="form-control" readonly'); ?>
+              </div>
+            </div>
+            <?php /* EOF Zen4All Order Comment 3 of 3 */ ?>
               <div class="form-group">
                   <?php echo zen_draw_label(TABLE_HEADING_COMMENTS, 'comments', 'class="col-sm-3 control-label"'); ?>
                   <div class="col-sm-9">

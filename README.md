@@ -7,7 +7,7 @@ This document was last updated with code changes on 2022-04-05.
 Installed Plugins and Modules
 -----------------------
 The following plugins or modules have been added to the 1.5.7d stock code:
-1. Edit Orders 4.6.1 was installed on 2022-03-25.
+1. Edit Orders 4.6.1 was installed on 2022-04-08.
 2. Easy Populate 4 was installed on 2022-03-25.
 3. Administrator Notes 1.0 was installed on 2022-03-26.
 4. Super Orders 5.0.0 was installed on 2022-03-26.

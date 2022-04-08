@@ -44,13 +44,7 @@
 			<?php
 			$filter = $address_fields['company'];
 			filtered_unit_array($filter); ?>
-			<td><?php echo 
-			iems_pull_down_menu('update_' . $address_name . '_suburb', $filtered_units, $cInfo->entry_suburb, 'id ="entry_suburb" style="background-color:yellow", class="selectpicker" form-control  data-live-search="true"')
-			
-			
-			
-			
-			iems_pull_down_menu('update_' . $address_name . '_suburb', $filtered_units, $address_fields['suburb'], '');?> 
+			<td><?php echo iems_pull_down_menu('update_' . $address_name . '_suburb', $filtered_units, $address_fields['suburb'], 'id="update_' . $address_name . '_country" style="background-color:yellow", class="selectpicker" form-control  data-live-search="true"');?>
 			</td>	
         </tr> 
 		

@@ -722,6 +722,14 @@ class order extends base {
 
     zen_db_perform(TABLE_ORDERS, $sql_data_array);
     $this->orderId = $this->info['order_id'] = $insert_id = $db->insert_ID();
+    // BEGIN Super Orders edit
+    // add CC data as a line item to SO payment system
+    if (zen_not_null($this->info['cc_type']) || zen_not_null($this->info['cc_owner']) || zen_not_null($this->info['cc_number'])) {
+      require(DIR_WS_CLASSES . 'super_order.php');
+      $so = new super_order($insert_id);
+      $so->cc_line_item();
+    }
+    // END Super Orders edit
     $this->notify('NOTIFY_ORDER_DURING_CREATE_ADDED_ORDER_HEADER', array_merge(array('orders_id' => $this->orderId, 'shipping_weight' => $_SESSION['cart']->weight), $sql_data_array), $this->orderId);
 
     for ($i=0, $n=sizeof($zf_ot_modules); $i<$n; $i++) {

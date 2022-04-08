@@ -130,3 +130,88 @@ define('TEXT_MAP_BILLING_ADDRESS', 'Map Billing Address');
 
 define('TEXT_EMAIL_LANGUAGE', 'Order Language: %s');
 define('SUCCESS_EMAIL_SENT', 'Email %s sent to customer');
+
+/* Super Order Additional Defines */
+define('HEADING_TITLE_ORDERS_LISTING', 'Orders Listing');
+define('HEADING_TITLE_ORDER_DETAILS', 'Order # ');
+
+define('HEADING_TITLE_STATUS', 'Status:');
+define('HEADING_REOPEN_ORDER', 'Re-Open Order');
+
+define('TABLE_HEADING_STATUS_HISTORY', 'Order Status History &amp; Comments');
+define('TABLE_HEADING_ADD_COMMENTS', 'Add Comments');
+define('TABLE_HEADING_FINAL_STATUS', 'Close Order');
+
+define('TABLE_HEADING_PAYMENT_METHOD', 'Payment Method');
+
+define('PAYMENT_TABLE_NUMBER', 'Number');
+define('PAYMENT_TABLE_NAME', 'Payor Name');
+define('PAYMENT_TABLE_AMOUNT', 'Amount');
+define('PAYMENT_TABLE_TYPE', 'Type');
+define('PAYMENT_TABLE_POSTED', 'Date Posted');
+define('PAYMENT_TABLE_MODIFIED', 'Last Modified');
+define('PAYMENT_TABLE_ACTION', 'Action');
+define('ALT_TEXT_ADD', 'Add');
+define('ALT_TEXT_UPDATE', 'Update');
+define('ALT_TEXT_DELETE', 'Delete');
+define('ENTRY_PAYMENT_DETAILS', 'Payment Details');
+define('ENTRY_CUSTOMER_ADDRESS', 'Customer Address:');
+define('TEXT_ICON_LEGEND', 'Action Icon Legend:');
+define('TEXT_BILLING_SHIPPING_MISMATCH', 'Billing and Shipping do not match');
+
+define('TEXT_INFO_EXPIRED_DATE', 'Expired Date:<br />');
+define('TEXT_INFO_EXPIRED_COUNT', 'Expired Count:<br />');
+
+define('TEXT_INFO_SHIPPING_METHOD', 'Shipping Method:');
+
+define('TEXT_DISPLAY_ONLY', '(Display Only)');
+define('TEXT_CURRENT_STATUS', 'Current Status: ');
+
+define('SUCCESS_MARK_COMPLETED', 'Success: Order #%s is completed!');
+define('WARNING_MARK_CANCELLED', 'Warning: Order #%s has been cancelled');
+define('WARNING_ORDER_REOPEN', 'Warning: Order #%s has been re-opened');
+
+define('TEXT_NEW_WINDOW', ' (New Window)');
+define('IMAGE_SHIPPING_LABEL', 'Shipping Label');
+define('IMAGE_ORDER_DETAILS', 'Display Order Details');
+define('ICON_ORDER_DETAILS', 'Display Order Details');
+define('ICON_ORDER_PRINT', 'Print Data Sheet' . TEXT_NEW_WINDOW);
+define('ICON_ORDER_INVOICE', 'Display Invoice' . TEXT_NEW_WINDOW);
+define('ICON_ORDER_PACKINGSLIP', 'Display Packing Slip' . TEXT_NEW_WINDOW);
+define('ICON_ORDER_SHIPPING_LABEL', 'Display Shipping Label' . TEXT_NEW_WINDOW);
+define('ICON_ORDER_DELETE', 'Delete Order');
+define('ICON_EDIT_CONTACT', 'Edit Contact Data');
+define('ICON_EDIT_PRODUCT', 'Split Order');
+define('ICON_EDIT_HISTORY', 'Edit Hidden (Admin) Comments');
+define('ICON_CLOSE_STATUS', 'Close Status');
+define('ICON_MARK_COMPLETED', 'Mark Order Completed');
+define('ICON_MARK_CANCELLED', 'Mark Order Cancelled');
+define('ICON_ORDER_EDIT', 'Edit this Order');
+
+define('SUPER_IMAGE_ORDER_PRINT', 'Print Data Sheet' . TEXT_NEW_WINDOW);
+define('SUPER_IMAGE_ORDERS_INVOICE', 'Display Invoice' . TEXT_NEW_WINDOW);
+define('SUPER_IMAGE_ORDERS_PACKINGSLIP', 'Display Packing Slip' . TEXT_NEW_WINDOW);
+define('SUPER_IMAGE_SHIPPING_LABEL', 'Display Shipping Label' . TEXT_NEW_WINDOW);
+
+define('MINI_ICON_ORDERS', 'Show Customer\'s Orders');
+define('MINI_ICON_INFO', 'Show Customer\'s Profile');
+
+
+define('ENTRY_ORIGINAL_PAYMENT_AMOUNT', 'Split Order - Grand Total Paid:&nbsp;&nbsp;&nbsp;&nbsp;');
+define('ENTRY_AMOUNT_APPLIED_CUST', 'Amount Applied:');
+define('ENTRY_BALANCE_DUE_CUST', 'Balance Due:');
+define('ENTRY_AMOUNT_APPLIED_SHOP', 'Amount Applied: (Default Store Currency)');
+define('ENTRY_BALANCE_DUE_SHOP', 'Balance Due: (Default Store Currency)');
+
+define('HEADING_COLOR_KEY', 'Color Key:');
+define('TEXT_PURCHASE_ORDERS', 'Purchase Order');
+define('TEXT_PAYMENTS', 'Payment');
+define('TEXT_REFUNDS', 'Refund');
+define('BUTTON_SPLIT', 'Split Packing Slip');
+
+define('TEXT_NO_PAYMENT_DATA', 'No Order Payment Data Available');
+define('TEXT_PAYMENT_DATA', 'Order Payment Data');
+
+define('TEXT_MAILTO', 'mailto');
+define('TEXT_STORE_EMAIL', 'web');
+define('TEXT_WHOIS_LOOKUP', 'whois');

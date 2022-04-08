@@ -21,3 +21,14 @@ define('ENTRY_PAYMENT_METHOD', 'Payment Method:');
 define('ENTRY_DATE_PURCHASED', 'Date Ordered:');
 
 define('ENTRY_ORDER_ID','Order No. ');
+
+/* Super Order defines */
+define('HEADER_PACKINGSLIP', 'Packing Slip - Order #');
+define('HEADER_PACKINGSLIPS', 'Packing Slips');
+define('TEXT_PACKING_SLIP', 'Packing Slip');
+define('TABLE_HEADING_IMAGE', 'Image');
+define('TABLE_HEADING_QTY', 'Qty');
+define('HEADER_CUSTOMER_NOTES', 'Order Notes:');
+define('ENTRY_SHIPPING_METHOD', 'Shipping Method:');
+define('ENTRY_PRODUCTS_INCL', 'Product(s) included in this shipment');
+define('ENTRY_PRODUCTS_EXCL', 'Product(s) will ship separately');

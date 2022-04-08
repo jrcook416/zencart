@@ -1,9 +1,26 @@
 <?php
 /**
- * @copyright Copyright 2003-2022 Zen Cart Development Team
+ * @package admin
+ *
+ *  Based on Super Order 2.0
+ *  By Frank Koehl - PM: BlindSide (original author)
+ *
+ *  Super Orders Updated by:
+ *  ~ JT of GTICustom
+ *  ~ C Jones Over the Hill Web Consulting (http://overthehillweb.com)
+ *  ~ Loose Chicken Software Development, david@loosechicken.com
+ *
+ * DESCRIPTION:   Enhanced admin/orders.php. Features include:
+ *  ~ Improved navigation options
+ *  ~ An advanced payment management system.
+ *  ~ EZ Integration with Ty Package Tracker and Edit Orders
+ *  ~ Admin comment editing
+ *  ~ Improved HTML and look & feel
+ *
+ * @copyright Copyright 2003-2021 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Zcwilt 2021 Jul 15 Modified in v1.5.7d $
+ * @version $Id: mc12345678 2021 Feb 22 Modified in v1.5.7c $
  */
 require('includes/application_top.php');
 
@@ -11,6 +28,12 @@ require('includes/application_top.php');
 if (isset($module)) {
   unset($module);
 }
+
+/* BOF Super Orders 1 of 21 */
+if (!defined('TY_TRACKER')) {
+    define('TY_TRACKER', 'False');
+}
+/* BOF Super Orders 1 of 21 */
 
 $quick_view_popover_enabled = false;
 $includeAttributesInProductDetailRows = true;
@@ -72,6 +95,13 @@ if ($oID) {
   }
 }
 
+/* BOF Super Orders 2 of 21 */
+if ($oID) {
+  require_once(DIR_WS_CLASSES . 'super_order.php');
+  $so = new super_order($oID);
+}
+/* EOF Super Orders 2 of 21 */
+
 
 if (!empty($oID) && !empty($action)) {
   $zco_notifier->notify('NOTIFY_ADMIN_ORDER_PREDISPLAY_HOOK', $oID, $action);
@@ -103,8 +133,24 @@ if (!empty($oID) && !empty($action)) {
 
 if (zen_not_null($action) && $order_exists == true) {
   switch ($action) {
+    /* BOF Super Orders 3 of 21 */
+    case 'mark_completed':
+      $so->mark_completed();
+      $messageStack->add_session(sprintf(SUCCESS_MARK_COMPLETED, $oID), 'success');
+      zen_redirect(zen_href_link(FILENAME_ORDERS, 'action=edit&oID=' . $oID, 'NONSSL'));
+      break;
+    case 'mark_cancelled':
+      $so->mark_cancelled();
+      $messageStack->add_session(sprintf(WARNING_MARK_CANCELLED, $oID), 'warning');
+      zen_redirect(zen_href_link(FILENAME_ORDERS, 'action=edit&oID=' . $oID, 'NONSSL'));
+      break;
+    case 'reopen':
+      $so->reopen();
+      $messageStack->add_session(sprintf(WARNING_ORDER_REOPEN, $oID), 'warning');
+      zen_redirect(zen_href_link(FILENAME_ORDERS, 'action=edit&oID=' . $oID, 'NONSSL'));
+      break;
+    /* EOF Super Orders 3 of 21 */
     case 'download':
-
       $fileName = basename($_GET['filename']);
       $file_extension = strtolower(substr(strrchr($fileName, '.'), 1));
       switch ($file_extension) {
@@ -251,7 +297,12 @@ if (zen_not_null($action) && $order_exists == true) {
       $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_UPDATE_ORDER_START', $oID);
 
       $order_updated = false;
-      $status_updated = zen_update_orders_history($oID, $comments, null, $status, $customer_notified, $email_include_message);
+      /* BOF Super Orders 4 of 21 */
+      // BEGIN TY TRACKER
+      $updated_by = zen_updated_by_admin();
+      $status_updated = zen_update_orders_history($oID, $comments, $updated_by, $status, $customer_notified, $email_include_message);
+      // END TY TRACKER
+      /* EOF Super Orders 4 of 21 */
       $order_updated = ($status_updated > 0);
 
       $check_status = $db->ExecuteNoCache("SELECT customers_name, customers_email_address, orders_status, date_purchased
@@ -422,6 +473,18 @@ if (zen_not_null($action) && $order_exists == true) {
 <html <?php echo HTML_PARAMS; ?>>
   <head>
     <?php require DIR_WS_INCLUDES . 'admin_html_head.php'; ?>
+    <?php /* BOF Super Orders 5 of 21 */ ?>
+    <link rel="stylesheet" href="includes/css/super_stylesheet.css">
+    <?php if (TY_TRACKER == 'True') { ?>
+      <link rel="stylesheet" href="includes/typt_stylesheet.css">
+    <?php } ?>
+
+    <script>
+      function popupWindow(url, features) {
+        window.open(url, 'popupWindow', features)
+      }
+    </script>
+    <?php /* BOF Super Orders 5 of 21 */ ?>
     <script>
       function couponpopupWindow(url) {
           window.open(url, 'popupWindow', 'toolbar=no,location=no,directories=no,status=no,menu bar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=450,height=280,screenX=150,screenY=150,top=150,left=150,noreferrer')
@@ -551,6 +614,19 @@ if (zen_not_null($action) && $order_exists == true) {
         $right_side_buttons = '';
         $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_UPPER_BUTTONS', $oID, $left_side_buttons, $right_side_buttons);
         ?>
+
+        <?php /* BOF Super Orders 6 of 21 */ ?>
+        <div class="row">
+          <div class="col-sm-4 text-right">
+            <?php
+            if ($so->status) {
+              echo
+              '<span class="status-' . $so->status . '">' . zen_datetime_short($so->status_date) . '</span>&nbsp;' .
+              '<a href="' . zen_href_link(FILENAME_ORDERS, 'action=reopen&oID=' . $oID) . '">' . zen_image(DIR_WS_IMAGES . 'icon_red_x.gif', '', '', '', '') . HEADING_REOPEN_ORDER . '</a>';
+            } ?>
+          </div>
+        </div>
+        <?php /* EOF Super Orders 6 of 21 */ ?>
         <div class="row">
           <div class="col-sm-3 col-lg-4 text-left noprint">
             <?php echo $left_side_buttons; ?>
@@ -712,6 +788,179 @@ if (zen_not_null($action) && $order_exists == true) {
           </table>
           <?php $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_PAYMENTDATA_COLUMN2', $oID, $order); ?>
         </div>
+        <?php /* BOF Super Order 7 of 21 Payments Section */ ?>
+        <div class="row">
+           <?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?>
+        </div>
+        <div class="row">
+          <table class="table">
+            <tr>
+              <td class="main"><strong><i class="fa fa-2x fa-money"></i><?php echo '&nbsp;' . (!$so->payment && !$so->refund && !$so->purchase_order && !$so->po_payment ? TEXT_NO_PAYMENT_DATA : TEXT_PAYMENT_DATA); ?></strong></td>
+              <td class="text-right" colspan="6">
+                <?php echo $so->button_add('payment'); ?>
+                <?php echo $so->button_add('purchase_order'); ?>
+                <?php echo $so->button_add('refund'); ?>
+              </td>
+            </tr>
+          </table>
+          <?php if ($so->payment || $so->refund || $so->purchase_order || $so->po_payment) { ?>
+            <table class="table table-hover">
+              <thead>
+                <tr class="dataTableHeadingRow">
+                  <th class="dataTableHeadingContent"><?php echo PAYMENT_TABLE_NUMBER; ?></th>
+                  <th class="dataTableHeadingContent"><?php echo PAYMENT_TABLE_NAME; ?></th>
+                  <th class="dataTableHeadingContent"><?php echo PAYMENT_TABLE_AMOUNT; ?></th>
+                  <th class="dataTableHeadingContent text-center"><?php echo PAYMENT_TABLE_TYPE; ?></th>
+                  <th class="dataTableHeadingContent"><?php echo PAYMENT_TABLE_POSTED; ?></th>
+                  <th class="dataTableHeadingContent"><?php echo PAYMENT_TABLE_MODIFIED; ?></th>
+                  <th class="dataTableHeadingContent text-right"><?php echo PAYMENT_TABLE_ACTION; ?></th>
+                </tr>
+              </thead>
+              <tbody>
+                  <?php
+                  $original_grand_total_paid = 0;
+                  if ($so->payment) {
+                    for ($a = 0; $a < sizeof($so->payment); $a++) {
+                      $original_grand_total_paid = $original_grand_total_paid + $so->payment[$a]['amount'];
+                      ?>
+                    <tr class="paymentRow" onclick="popupWindow('<?php echo zen_href_link(FILENAME_SUPER_PAYMENTS, 'oID=' . $so->oID . '&payment_mode=payment&index=' . $so->payment[$a]['index'] . '&action=my_update', 'NONSSL'); ?>', 'scrollbars=yes,resizable=yes,width=600,height=500,screenX=150,screenY=100,top=100,left=150')">
+                      <td class="paymentContent"><?php echo $so->payment[$a]['number']; ?></td>
+                      <td class="paymentContent"><?php echo $so->payment[$a]['name']; ?></td>
+                      <td class="paymentContent text-right"><strong><?php echo $currencies->format($so->payment[$a]['amount']); ?></strong></td>
+                      <td class="paymentContent text-center"><?php echo $so->full_type($so->payment[$a]['type']); ?></td>
+                      <td class="paymentContent"><?php echo zen_datetime_short($so->payment[$a]['posted']); ?></td>
+                      <td class="paymentContent"><?php echo zen_datetime_short($so->payment[$a]['modified']); ?></td>
+                      <td class="paymentContent text-right">
+                          <?php echo $so->button_update('payment', $so->payment[$a]['index']); ?>
+                          <?php echo $so->button_delete('payment', $so->payment[$a]['index']); ?>
+                      </td>
+
+                    </tr>
+                    <?php
+                    if ($so->refund) {
+                      for ($b = 0; $b < sizeof($so->refund); $b++) {
+                        if ($so->refund[$b]['payment'] == $so->payment[$a]['index']) {
+                          ?>
+                          <tr class="refundRow" onclick="popupWindow('<?php echo zen_href_link(FILENAME_SUPER_PAYMENTS, 'oID=' . $so->oID . '&payment_mode=refund&index=' . $so->refund[$b]['index'] . '&action=my_update'); ?>', 'scrollbars=yes,resizable=yes,width=400,height=300,screenX=150,screenY=100,top=100,left=150')">
+                            <td class="refundContent"><?php echo $so->refund[$b]['number']; ?></td>
+                            <td class="refundContent"><?php echo $so->refund[$b]['name']; ?></td>
+                            <td class="refundContent text-right"><strong><?php echo '-' . $currencies->format($so->refund[$b]['amount']); ?></strong></td>
+                            <td class="refundContent text-center"><?php echo $so->full_type($so->refund[$b]['type']); ?></td>
+                            <td class="refundContent"><?php echo zen_datetime_short($so->refund[$b]['posted']); ?></td>
+                            <td class="refundContent"><?php echo zen_datetime_short($so->refund[$b]['modified']); ?></td>
+                            <td class="refundContent text-right">
+                                <?php echo $so->button_update('refund', $so->refund[$b]['index']); ?>
+                                <?php echo $so->button_delete('refund', $so->refund[$b]['index']); ?>
+                            </td>
+                          </tr>
+                          <?php
+                        }  // END if ($so->refund[$b]['payment'] == $so->payment[$a]['index'])
+                      }  // END for($b = 0; $b < sizeof($so->refund); $b++)
+                    }  // END if ($so->refund)
+                  }  // END for($a = 0; $a < sizeof($payment); $a++)
+                }  // END if ($so->payment)
+                if ($so->purchase_order) {
+                  for ($c = 0; $c < sizeof($so->purchase_order); $c++) {
+                    if ($c < 1 && $so->payment) {
+                      ?>
+                      <tr>
+                        <td colspan="7"><?php echo zen_black_line(); ?></td>
+                      </tr>
+                    <?php } ?>
+                    <tr class="purchaseOrderRow" onclick="popupWindow('<?php echo zen_href_link(FILENAME_SUPER_PAYMENTS, 'oID=' . $so->oID . '&payment_mode=purchase_order&index=' . $so->purchase_order[$c]['index'] . '&action=my_update'); ?>', 'scrollbars=yes,resizable=yes,width=400,height=300,screenX=150,screenY=100,top=100,left=150')">
+                      <td class="purchaseOrderContent" colspan="4"><?php echo $so->purchase_order[$c]['number']; ?></td>
+                      <td class="purchaseOrderContent"><?php echo zen_datetime_short($so->purchase_order[$c]['posted']); ?></td>
+                      <td class="purchaseOrderContent"><?php echo zen_datetime_short($so->purchase_order[$c]['modified']); ?></td>
+                      <td class="purchaseOrderContent text-right">
+                          <?php echo $so->button_update('purchase_order', $so->purchase_order[$c]['index']); ?>
+                          <?php echo $so->button_delete('purchase_order', $so->purchase_order[$c]['index']); ?>
+                      </td>
+                    </tr>
+                    <?php
+                    if ($so->po_payment) {
+                      for ($d = 0; $d < sizeof($so->po_payment); $d++) {
+                        if ($so->po_payment[$d]['assigned_po'] == $so->purchase_order[$c]['index']) {
+                          ?>
+                          <tr class="paymentRow" onclick="popupWindow('<?php echo zen_href_link(FILENAME_SUPER_PAYMENTS, 'oID=' . $so->oID . '&payment_mode=payment&index=' . $so->po_payment[$d]['index'] . '&action=my_update'); ?>', 'scrollbars=yes,resizable=yes,width=400,height=300,screenX=150,screenY=100,top=100,left=150')">
+                            <td class="paymentContent"><?php echo $so->po_payment[$d]['number']; ?></td>
+                            <td class="paymentContent"><?php echo $so->po_payment[$d]['name']; ?></td>
+                            <td class="paymentContent text-right"><strong><?php echo $currencies->format($so->po_payment[$d]['amount']); ?></strong></td>
+                            <td class="paymentContent text-center"><?php echo $so->full_type($so->po_payment[$d]['type']); ?></td>
+                            <td class="paymentContent"><?php echo zen_datetime_short($so->po_payment[$d]['posted']); ?></td>
+                            <td class="paymentContent"><?php echo zen_datetime_short($so->po_payment[$d]['modified']); ?></td>
+                            <td class="paymentContent text-right">
+                                <?php echo $so->button_update('payment', $so->po_payment[$d]['index']); ?>
+                                <?php echo $so->button_delete('payment', $so->po_payment[$d]['index']); ?>
+                            </td>
+                          </tr>
+                          <?php
+                          if ($so->refund) {
+                            for ($e = 0; $e < sizeof($so->refund); $e++) {
+                              if ($so->refund[$e]['payment'] == $so->po_payment[$d]['index']) {
+                                ?>
+                                <tr class="refundRow" onclick="popupWindow('<?php echo zen_href_link(FILENAME_SUPER_PAYMENTS, 'oID=' . $so->oID . '&payment_mode=refund&index=' . $so->refund[$e]['index'] . '&action=my_update'); ?>', 'scrollbars=yes,resizable=yes,width=400,height=300,screenX=150,screenY=100,top=100,left=150')">
+                                  <td class="refundContent"><?php echo $so->refund[$e]['number']; ?></td>
+                                  <td class="refundContent"><?php echo $so->refund[$e]['name']; ?></td>
+                                  <td class="refundContent text-right"><strong><?php echo '-' . $currencies->format($so->refund[$e]['amount']); ?></strong></td>
+                                  <td class="refundContent text-center"><?php echo $so->full_type($so->refund[$e]['type']); ?></td>
+                                  <td class="refundContent"><?php echo zen_datetime_short($so->refund[$e]['posted']); ?></td>
+                                  <td class="refundContent"><?php echo zen_datetime_short($so->refund[$e]['modified']); ?></td>
+                                  <td class="refundContent text-right">
+                                      <?php echo $so->button_update('refund', $so->refund[$e]['index']); ?>
+                                      <?php echo $so->button_delete('refund', $so->refund[$e]['index']); ?>
+                                  </td>
+                                </tr>
+                                <?php
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                // display any refunds not tied directly to a payment
+                if ($so->refund) {
+                  for ($f = 0; $f < sizeof($so->refund); $f++) {
+                    if ($so->refund[$f]['payment'] == 0) {
+                      if ($f < 1) {
+                        ?>
+                        <tr>
+                          <td colspan="7"><?php echo zen_black_line(); ?></td>
+                        </tr>
+                      <?php } ?>
+                      <tr class="refundRow" onclick="popupWindow('<?php echo zen_href_link(FILENAME_SUPER_PAYMENTS, 'oID=' . $so->oID . '&payment_mode=refund&index=' . $so->refund[$f]['index'] . '&action=my_update'); ?>', 'scrollbars=yes,resizable=yes,width=400,height=300,screenX=150,screenY=100,top=100,left=150')">
+                        <td class="refundContent"><?php echo $so->refund[$f]['number']; ?></td>
+                        <td class="refundContent"><?php echo $so->refund[$f]['name']; ?></td>
+                        <td class="refundContent text-right"><strong><?php echo '-' . $currencies->format($so->refund[$f]['amount']); ?></strong></td>
+                        <td class="refundContent text-center"><?php echo $so->full_type($so->refund[$f]['type']); ?></td>
+                        <td class="refundContent"><?php echo zen_datetime_short($so->refund[$f]['posted']); ?></td>
+                        <td class="refundContent"><?php echo zen_datetime_short($so->refund[$f]['modified']); ?></td>
+                        <td class="refundContent text-right">
+                            <?php echo $so->button_update('refund', $so->refund[$f]['index']); ?>
+                            <?php echo $so->button_delete('refund', $so->refund[$f]['index']); ?>
+                        </td>
+                      </tr>
+                      <?php
+                    }
+                  }
+                }  // END if ($so->refund)
+                ?>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <table>
+              <tr>
+                <td class="text-center"><?php echo HEADING_COLOR_KEY; ?></td>
+                <td class="purchaseOrderRow text-center" width="120"><?php echo TEXT_PURCHASE_ORDERS; ?></td>
+                <td class="paymentRow text-center" width="120"><?php echo TEXT_PAYMENTS; ?></td>
+                <td class="refundRow text-center" width="120"><?php echo TEXT_REFUNDS; ?></td>
+              </tr>
+            </table>
+          </div>
+        <?php } ?>
+        <?php /* EOF Super Order 7 of 21 Payments Section */ ?>
         <?php
         if (isset($module) && (is_object($module) && method_exists($module, 'admin_notification'))) {
           ?>
@@ -721,7 +970,50 @@ if (zen_not_null($action) && $order_exists == true) {
           <?php
         }
         ?>
+        <?php /* BOF Super Order 8 of 21 */ ?>
+        <!-- Begin Split Order Details //-->
+        <?php
+        $parent_child = $db->Execute("SELECT split_from_order, is_parent
+                                      FROM " . TABLE_ORDERS . "
+                                      WHERE orders_id = " . (int)$oID);
+        ?>
+        <div class="row">
+            <?php echo zen_draw_separator('pixel_trans.gif', '1', '5'); ?>
+        </div>
+        <?php
+        if ($parent_child->fields['split_from_order']) {
+          $another = new super_order($parent_child->fields['split_from_order']);
+          if ($another->payment && $so->payment) {
+            for ($i = 0; $i < sizeof($another->payment); $i++) {
+              $payment = $another->payment[$i];
+              $original_grand_total_paid = $original_grand_total_paid + $payment['amount'];
+            }
+            ?>
+            <div class="row">
+              <div class="col-sm-12">
+                <strong><i class="fa fa-2x fa-money"></i> <?php echo ENTRY_ORIGINAL_PAYMENT_AMOUNT; ?></strong>
+                <?php echo $currencies->format($original_grand_total_paid); ?>
+              </div>
+            </div>
+            <div class="row">
+                <?php echo zen_draw_separator('pixel_trans.gif', '1', '5'); ?>
+            </div>
 
+            <?php
+          }
+        }
+        if (!$so->status && !$parent_child->fields['split_from_order'] && sizeof($order->products) > 1) {
+          ?>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <a href="javascript:popupWindow('<?php echo zen_href_link(FILENAME_SUPER_EDIT, 'oID=' . $oID . '&target=product'); ?>', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=725,height=450,screenX=150,screenY=100,top=100,left=150')" class="btn btn-info btn-sm"><i class="fa fa-files-o fa-lg" aria-hidden="true"></i> <?php echo ICON_EDIT_PRODUCT; ?></a>
+            </div>
+          </div>
+        <?php }
+        ?>
+        <!-- End Split Order Details //-->
+        <?php /* EOF Super Order 8 of 21 */ ?>
         <div class="row">
           <table class="table">
             <tr class="dataTableHeadingRow">
@@ -738,6 +1030,20 @@ if (zen_not_null($action) && $order_exists == true) {
 <?php } ?>
             </tr>
             <?php
+            /* BOF Super Orders 9 of 21 */
+            if (isset($_GET['cmd'])) {
+              $tempcmd = $_GET['cmd'];
+            }
+            $_GET['cmd'] = FILENAME_ORDERS_PACKINGSLIP;
+            echo zen_draw_form('split_packing', FILENAME_ORDERS_PACKINGSLIP, '', 'get', 'target="_blank"', true) . "\n";
+            unset($_GET['cmd']);
+            if (isset($tempcmd)) {
+                $_GET['cmd'] = $tempcmd;
+            }
+            echo zen_draw_hidden_field('oID', (int)$oID) . "\n";
+            echo zen_draw_hidden_field('split', 'true') . "\n";
+            echo zen_draw_hidden_field('reverse_count', 0) . "\n";
+            /* EOF Super Orders 9 of 21 */
             for ($i = 0, $n = sizeof($order->products); $i < $n; $i++) {
               if (DISPLAY_PRICE_WITH_TAX_ADMIN == 'true') {
                 $priceIncTax = $currencies->format(zen_round(zen_add_tax($order->products[$i]['final_price'], $order->products[$i]['tax']), $currencies->get_decimal_places($order->info['currency'])) * $order->products[$i]['qty'], true, $order->info['currency'], $order->info['currency_value']);
@@ -803,11 +1109,25 @@ if (zen_not_null($action) && $order_exists == true) {
                 </td>
 <?php } ?>
               </tr>
-              <?php
-            }
-            ?>
+            <?php } ?>
             <tr>
-
+                <?php /* BOF Super Orders 10 of 21 */ ?>
+                <?php
+                if ($parent_child->fields['split_from_order']) {
+                  ?>
+                <td>
+                  <button type="submit"><i class="fa fa-reply fa-lg fa-rotate-180" aria-hidden="true"></i>&nbsp;<?php echo BUTTON_SPLIT; ?></button><br>
+                  <?php echo TEXT_DISPLAY_ONLY; ?>
+                </td>
+                <!-- Begin Order Totals Modified for Super Orders//-->
+                <?php
+                $colspan = 7;
+              } else {
+                $colspan = 8;
+              }
+              ?>
+              <?php echo '</form> '; ?>
+              <?php /* EOF Super Orders 10 of 21 */ ?>
 <?php if ($show_including_tax)  { ?>
               <td colspan="8">
 <?php } else { ?>
@@ -827,12 +1147,121 @@ if (zen_not_null($action) && $order_exists == true) {
                     </tr>
                     <?php
                   }
+
+                  /* BOF Super Orders 11 of 21 */
+                  // determine what to display on the "Amount Applied" and "Balance Due" lines
+                  $amount_applied = $currencies->format($so->amount_applied);
+                  $balance_due = $currencies->format($so->balance_due);
+
+                  // determine display format of the number
+                  // 'balanceDueRem' = customer still owes money
+                  // 'balanceDueNeg' = customer is due a refund
+                  // 'balanceDueNone' = order is all paid up
+                  // 'balanceDueNull' = balance nullified by order status
+                  switch ($so->status) {
+                    case 'completed':
+                      switch ($so->balance_due) {
+                        case 0:
+                          $class = 'balanceDueNone';
+                          break;
+                        case $so->balance_due < 0:
+                          $class = 'balanceDueNeg';
+                          break;
+                        case $so->balance_due > 0:
+                          $class = 'balanceDueRem';
+                          break;
+                      }
+                      break;
+
+                    case 'cancelled':
+                      switch ($so->balance_due) {
+                        case 0:
+                          $class = 'balanceDueNone';
+                          break;
+                        case $so->balance_due < 0:
+                          $class = 'balanceDueNeg';
+                          break;
+                        case $so->balance_due > 0:
+                          $class = 'balanceDueRem';
+                          break;
+                      }
+                      break;
+
+                    default:
+                      switch ($so->balance_due) {
+                        case 0:
+                          $class = 'balanceDueNone';
+                          break;
+                        case $so->balance_due < 0:
+                          $class = 'balanceDueNeg';
+                          break;
+                        case $so->balance_due > 0:
+                          $class = 'balanceDueRem';
+                          break;
+                      }
+                      break;
+                  }
+                  /* BOF added to get currency type and value for totals */
+                  $dbc = $db->Execute("SELECT currency, currency_value
+                                       FROM " . TABLE_ORDERS . "
+                                       WHERE orders_id =" . (int)$oID);
+                  $cu = $dbc->fields['currency'];
+                  $cv = $dbc->fields['currency_value'];
+                  /* EOF added to get currency type and value for totals */
                   ?>
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="ot-tax-Text text-right"><?php echo ENTRY_AMOUNT_APPLIED_CUST . ' (' . $cu . ')'; ?></td>
+                    <td class="ot-tax-Amount text-right"><?php echo $currencies->format($so->amount_applied, true, $order->info['currency'], $order->info['currency_value']); ?></td>
+                  </tr>
+                  <tr>
+                    <td class="ot-tax-Text text-right"><?php echo ENTRY_BALANCE_DUE_CUST . ' (' . $cu . ')'; ?></td>
+                    <td class="ot-tax-Amount text-right"><?php echo $currencies->format($so->balance_due, true, $order->info['currency'], $order->info['currency_value']); ?></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td class="ot-tax-Text text-right"><?php echo ENTRY_AMOUNT_APPLIED_SHOP; ?></td>
+                    <td class="ot-tax-Amount text-right"><?php echo $amount_applied; ?></td>
+                  </tr>
+                  <tr>
+                    <td class="ot-tax-Text text-right"><?php echo ENTRY_BALANCE_DUE_SHOP; ?></td>
+                    <td class="ot-tax-Amount text-right"><?php echo $balance_due; ?></td>
+                  </tr>
                 </table>
+                <?php /* EOF Super Orders 11 of 21 */ ?>
               </td>
             </tr>
           </table>
         </div>
+        <?php /* BOF Super Orders 12 of 21 */ ?>
+        <div class="row" style="float:right;">
+            <?php if (!$so->status) { ?>
+            <table class="table table-condensed table-bordered">
+              <thead>
+                <tr>
+                  <th class="invoiceHeading"><strong><?php echo TABLE_HEADING_FINAL_STATUS; ?></strong></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="<?php echo zen_href_link(FILENAME_ORDERS, 'action=mark_completed&oID=' . $oID); ?>" class="btn btn-success btn-sm" role="button"><i class="fa fa-lg fa-check-square-o" aria-hidden="true"></i> <?php echo ICON_MARK_COMPLETED; ?></a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="<?php echo zen_href_link(FILENAME_ORDERS, 'action=mark_cancelled&oID=' . $oID); ?>" class="btn btn-danger btn-sm" role="button"><i class="fa fa-lg fa-ban" aria-hidden="true"></i> <?php echo ICON_MARK_CANCELLED; ?></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          <?php } ?>
+        </div>
+        <?php /* EOF Super Orders 12 of 21 */ ?>
         <div class="row">
             <?php
             // show downloads
@@ -1050,6 +1479,9 @@ if (zen_not_null($action) && $order_exists == true) {
         $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_EDIT_BUTTONS', $oID, $order, $extra_buttons);
 ?>
         <div class="row text-right noprint">
+          <?php /* BOF Super Orders 13 of 21 */ ?>
+          <a href="<?php echo zen_href_link(FILENAME_SUPER_DATA_SHEET, 'oID=' . $_GET['oID']); ?>" target="_blank" class="btn btn-info" role="button"><?php echo ICON_ORDER_PRINT; ?></a>
+          <?php /* EOF Super Orders 13 of 21 */ ?>
           <a href="<?php echo zen_href_link(FILENAME_ORDERS_INVOICE, 'oID=' . $_GET['oID']); ?>" target="_blank" class="btn btn-primary" role="button"><?php echo IMAGE_ORDERS_INVOICE; ?></a>
           <a href="<?php echo zen_href_link(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $_GET['oID']); ?>" target="_blank" class="btn btn-primary" role="button"><?php echo IMAGE_ORDERS_PACKINGSLIP; ?></a>
           <?php echo $order_list_button; ?>
@@ -1074,6 +1506,13 @@ if (zen_not_null($action) && $order_exists == true) {
         <?php
       } else {
         ?>
+        <?php /* BOF Super Orders 14 of 21 */ ?>
+        <div class="row">
+          <div class="col-sm-12">
+            <a href="<?php echo zen_href_link(FILENAME_SUPER_BATCH_STATUS); ?>" class="btn btn-info btn-sm" role="button"><?php echo BOX_CUSTOMERS_SUPER_BATCH_STATUS; ?></a>&nbsp;<a href="<?php echo zen_href_link(FILENAME_SUPER_BATCH_FORMS, ''); ?>" class="btn btn-info btn-sm" role="button"><?php echo BOX_CUSTOMERS_SUPER_BATCH_FORMS; ?></a>
+          </div>
+        </div>
+        <?php /* EOF Super Orders 14 of 21 */ ?>
 <?php
         // Additional notification, allowing admin-observers to include additional legend icons
         $extra_legends = '';
@@ -1243,7 +1682,14 @@ if (zen_not_null($action) && $order_exists == true) {
                     $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_SHOW_ORDER_DIFFERENCE', array(), $orders->fields, $show_difference, $extra_action_icons);
 
                     $show_payment_type = $orders->fields['payment_module_code'] . '<br>' . $orders->fields['shipping_module_code'];
-
+                    /* BOF Super Orders 15 of 21 */
+                    $close_status = so_close_status($orders->fields['orders_id']);
+                    if ($close_status) {
+                      $class = "status-" . $close_status['type'];
+                    } else {
+                      $class = "dataTableContent";
+                    }
+                    /* EOF Super Orders 15 of 21 */
                     $sql = "SELECT op.orders_products_id, op.products_quantity AS qty, op.products_name AS name, op.products_model AS model
                             FROM " . TABLE_ORDERS_PRODUCTS . " op
                             WHERE op.orders_id = " . (int)$orders->fields['orders_id'];
@@ -1270,7 +1716,15 @@ if (zen_not_null($action) && $order_exists == true) {
                     ?>
                 <td class="dataTableContent text-center"><?php echo $show_difference . $orders->fields['orders_id']; ?></td>
                 <td class="dataTableContent"><?php echo $show_payment_type; ?></td>
-                <td class="dataTableContent"><?php echo '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $orders->fields['customers_id'], 'NONSSL') . '">' . zen_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW . ' ' . TABLE_HEADING_CUSTOMERS) . '</a>&nbsp;' . zen_output_string($orders->fields['customers_name']) . (zen_output_string($orders->fields['customers_company']) != '' ? '<br>' . zen_output_string($orders->fields['customers_company']) : ''); ?></td>
+                <?php /* EOF Super Orders 16 of 21 */ ?>
+                <td class="dataTableContent"><?php echo '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $orders->fields['customers_id'], 'NONSSL') . '">' . zen_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW . ' ' . TABLE_HEADING_CUSTOMERS) . '</a>&nbsp;'; ?>
+                    <?php
+                    echo '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $orders->fields['customers_id'] . '&action=edit', 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_cust_info.gif', MINI_ICON_INFO) . '</a>&nbsp;';
+                    echo '<a href="' . zen_href_link(FILENAME_ORDERS, 'cID=' . $orders->fields['customers_id'], 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_cust_orders.gif', MINI_ICON_ORDERS) . '</a>&nbsp;';
+                    echo '<a href="' . zen_href_link(FILENAME_MAIL, 'origin=' . FILENAME_ORDERS . '&customer=' . $orders->fields['customers_email_address'] . '&cID=' . $orders->fields['customers_id']) . '">' . $orders->fields['customers_name'] . ($orders->fields['customers_company'] != '' ? '<br />' . $orders->fields['customers_company'] : '') . '</a>';
+                    ?>
+                </td>
+                <?php /* EOF Super Orders 16 of 21 */ ?>
                 <td class="dataTableContent text-right" title="<?php echo zen_output_string($product_details, array('"' => '&quot;', "'" => '&#39;', '<br />' => '', '<hr>' => "----\n")); ?>">
                   <?php echo strip_tags($currencies->format($orders->fields['order_total'], true, $orders->fields['currency'], $orders->fields['currency_value'])); ?>
                 </td>
@@ -1325,6 +1779,14 @@ if (zen_not_null($action) && $order_exists == true) {
                     if (isset($oInfo) && is_object($oInfo) && ($orders->fields['orders_id'] == $oInfo->orders_id)) {
                       echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', '');
                     } else {
+                      /* BOF Super Orders 17 of 21 */
+                      echo '<a href="' . zen_href_link(FILENAME_ORDERS, 'oID=' . $orders->fields['orders_id'] . '&action=edit', 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_details.gif', ICON_ORDER_DETAILS) . '</a>&nbsp';
+                      echo '<a href="' . zen_href_link(FILENAME_SUPER_SHIPPING_LABEL, 'oID=' . $orders->fields['orders_id']) . '" target="_blank">' . zen_image(DIR_WS_IMAGES . 'icon_shipping_label.gif', ICON_ORDER_SHIPPING_LABEL) . '</a>&nbsp;';
+                      echo '<a href="' . zen_href_link(FILENAME_ORDERS_INVOICE, 'oID=' . $orders->fields['orders_id']) . '" target="_blank">' . zen_image(DIR_WS_IMAGES . 'icon_invoice.gif', ICON_ORDER_INVOICE) . '</a>&nbsp;';
+                      echo '<a href="' . zen_href_link(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $orders->fields['orders_id']) . '" target="_blank">' . zen_image(DIR_WS_IMAGES . 'icon_packingslip.gif', ICON_ORDER_PACKINGSLIP) . '</a>&nbsp;';
+                      echo '<a href="' . zen_href_link(FILENAME_SUPER_DATA_SHEET, 'oID=' . $orders->fields['orders_id']) . '" target="_blank">' . zen_image(DIR_WS_IMAGES . 'icon_print.gif', ICON_ORDER_PRINT) . '</a>&nbsp;';
+                      echo '<a href="' . zen_href_link(FILENAME_ORDERS, 'oID=' . $orders->fields['orders_id'] . '&action=delete', 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_delete2.gif', ICON_ORDER_DELETE) . '</a>&nbsp;';
+                      /* EOF Super Orders 17 of 21 */
                       echo '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID')) . 'oID=' . $orders->fields['orders_id'], 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>';
                     }
                     ?>&nbsp;</td>
@@ -1381,6 +1843,15 @@ if (zen_not_null($action) && $order_exists == true) {
 
                     $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=edit', 'NONSSL') . '" class="btn btn-primary" role="button">' . IMAGE_DETAILS . '</a> <a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=delete', 'NONSSL') . '" class="btn btn-warning" role="button">' . IMAGE_DELETE . '</a>');
                     $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_ORDERS_INVOICE, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button">' . IMAGE_ORDERS_INVOICE . '</a> <a href="' . zen_href_link(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button">' . IMAGE_ORDERS_PACKINGSLIP . '</a>');
+                    /* BOF Super Orders 18 of 21 */
+                    // Begin - Add Edit Order button to order order list page
+                    if (SO_EDIT_ORDERS_SWITCH == 'True') {
+                      $contents[] = array('align' => 'center', 'text' => '<a href="' . zen_href_link(FILENAME_EDIT_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=edit', 'NONSSL') . '">' . zen_image_button('button_edit.gif', ICON_ORDER_EDIT) . '</a>');
+                    }
+                    $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_SUPER_DATA_SHEET, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button"><i class="fa fa-lg fa-print" aria-hidden="true"></i> ' . SUPER_IMAGE_ORDER_PRINT . '</a>');
+                    $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_SUPER_SHIPPING_LABEL, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button">' . SUPER_IMAGE_SHIPPING_LABEL . '</a>');
+                    // End - Add Edit Order button to order order list page
+                    /* EOF Super Orders 18 of 21 */
                     $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_MENU_BUTTONS', $oInfo, $contents);
 
                     // each contents array is drawn in a div, so this form block must be a single array element.
@@ -1443,7 +1914,15 @@ if (zen_not_null($action) && $order_exists == true) {
                     }
 
                     if (sizeof($order->products) > 0) {
-                      $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=edit', 'NONSSL') . '" class="btn btn-primary" role="button">' . IMAGE_DETAILS . '</a>');
+                      /* BOF Super Orders 19 of 21 */
+                      // Begin add Edit Orders button to lower buttons
+                      if (SO_EDIT_ORDERS_SWITCH == 'True') {
+                        $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=edit', 'NONSSL') . '" class="btn btn-primary" role="button">' . IMAGE_DETAILS . '</a>&nbsp;<a href="' . zen_href_link(FILENAME_EDIT_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=edit', 'NONSSL') . '" class="btn btn-primary" role="button">' . ICON_ORDER_EDIT . '</a>');
+                      } else {
+                        $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=edit', 'NONSSL') . '" class="btn btn-primary" role="button">' . IMAGE_DETAILS . '</a>');
+                      }
+                      // End add Edit Orders button to lower buttons
+                      /* EOF Super Orders 19 of 21 */
                     }
                   }
                   break;
@@ -1456,8 +1935,73 @@ if (zen_not_null($action) && $order_exists == true) {
               }
               ?>
           </div>
-        </div>
-        <?php
+          <?php /* BOF Super Orders 20 of 21 */ ?>
+          <!-- SHORTCUT ICON LEGEND BOF-->
+          <div class="row">
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="2"><strong><?php echo TEXT_ICON_LEGEND; ?></strong></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_red.gif', TEXT_BILLING_SHIPPING_MISMATCH, 10, 10); ?></td>
+                  <td><?php echo TEXT_BILLING_SHIPPING_MISMATCH; ?></td>
+                </tr>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_cust_info.gif', MINI_ICON_INFO); ?></td>
+                  <td><?php echo MINI_ICON_INFO; ?></td>
+                </tr>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_cust_orders.gif', MINI_ICON_ORDERS); ?></td>
+                  <td><?php echo MINI_ICON_ORDERS; ?></td>
+                </tr>
+                <tr>
+                  <td colspan="2"><?php echo zen_draw_separator('pixel_black.gif'); ?></td>
+                </tr>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_details.gif', ICON_ORDER_DETAILS); ?></td>
+                  <td><?php echo ICON_ORDER_DETAILS; ?></td>
+                </tr>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_shipping_label.gif', ICON_ORDER_SHIPPING_LABEL); ?></td>
+                  <td><?php echo ICON_ORDER_SHIPPING_LABEL; ?></td>
+                </tr>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_invoice.gif', ICON_ORDER_INVOICE); ?></td>
+                  <td><?php echo ICON_ORDER_INVOICE; ?></td>
+                </tr>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_packingslip.gif', ICON_ORDER_PACKINGSLIP); ?></td>
+                  <td><?php echo ICON_ORDER_PACKINGSLIP; ?></td>
+                </tr>
+                <!-- Begin - add Edit Orders to legend icons -->
+                <?php if (SO_EDIT_ORDERS_SWITCH == 'True') { ?>
+                  <tr>
+                    <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_edit.gif', ICON_ORDER_EDIT); ?></td>
+                    <td><?php echo ICON_ORDER_EDIT; ?></td>
+                  </tr>
+                <?php } ?>
+                <!-- End - add Edit Orders to legend icons -->
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_print.gif', ICON_ORDER_PRINT); ?></td>
+                  <td><?php echo ICON_ORDER_PRINT; ?></td>
+                </tr>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_delete2.gif', ICON_ORDER_DELETE); ?></td>
+                  <td><?php echo ICON_ORDER_DELETE; ?></td>
+                </tr>
+                <tr>
+                  <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO); ?></td>
+                  <td><?php echo IMAGE_ICON_INFO; ?></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- SHORTCUT ICON LEGEND EOF -->
+          <?php /* EOF Super Orders 20 of 21 */  ?>
+          <?php
       }
       ?>
       <!-- body_text_eof //-->
@@ -1488,6 +2032,9 @@ if (zen_not_null($action) && $order_exists == true) {
     <!-- footer //-->
     <div class="footer-area">
       <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+    <?php /* EOF Super Orders 21 of 21 */  ?>
+    </div>
+    <?php /* EOF Super Orders 21 of 21 */  ?>
     </div>
     <!-- footer_eof //-->
   </body>

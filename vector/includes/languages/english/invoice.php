@@ -29,3 +29,25 @@ define('ENTRY_DATE_PURCHASED', 'Date Ordered:');
 
 define('ENTRY_ORDER_ID','Order No. ');
 define('TEXT_INFO_ATTRIBUTE_FREE', '&nbsp;-&nbsp;FREE');
+
+/* Super Order defines */
+define('HEADER_INVOICE', 'Invoice - Order #');
+define('HEADER_INVOICES', 'Invoices');
+define('HEADER_TAX_ID', 'Tax ID #');
+define('HEADER_PHONE', 'Phone:');
+define('HEADER_FAX', 'Fax:');
+define('HEADER_CUSTOMER_NOTES', 'Order Notes:');
+define('HEADER_PO_NUMBER', 'P.O. Number:');
+define('HEADER_PO_INVOICE_DATE', 'Invoice Date:');
+define('HEADER_PO_TERMS', 'Terms:');
+define('HEADER_PO_TERMS_LENGTH', '30 Days');
+define('TABLE_HEADING_PRICE_NO_TAX', 'Unit Price');
+define('TABLE_HEADING_TOTAL_NO_TAX', 'Total');
+define('ENTRY_BILL_TO', 'BILL TO:');
+define('ENTRY_PO_INFO', 'P.O. DETAILS');
+define('ENTRY_NO_TAX', 'Tax Exempt');
+define('ENTRY_PAYMENT_METHOD', 'Payment Method:');
+define('ENTRY_AMOUNT_APPLIED_CUST', 'Amount Applied:');
+define('ENTRY_BALANCE_DUE_CUST', 'Balance Due:');
+define('ENTRY_AMOUNT_APPLIED_SHOP', 'Amount Applied: (Default Store Currency)');
+define('ENTRY_BALANCE_DUE_SHOP', 'Balance Due: (Default Store Currency)');

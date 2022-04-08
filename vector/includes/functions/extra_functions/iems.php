@@ -35,7 +35,7 @@ function filtered_unit_array($filter) {
 	$unit_values = $db->Execute("select unit_description from `units` where unit_filter LIKE '" .  $filter . "' order by unit_description");
 
 		while (!$unit_values->EOF) {
-			$filtered_unit_array[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description']);
+			$filtered_units[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description']);
 			$unit_values->MoveNext();
 			};
 	return $filtered_units; 

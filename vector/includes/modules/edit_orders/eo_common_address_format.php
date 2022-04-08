@@ -40,10 +40,14 @@
         </tr>
 
         <tr>
-            <td class="eo-label"><label for="update_<?php echo $address_name; ?>_suburb"><?php echo ENTRY_CUSTOMER_SUBURB; ?></label>:&nbsp;</td>
-            <td><input name="update_<?php echo $address_name; ?>_suburb" size="45" value="<?php echo zen_output_string_protected($address_fields['suburb']); ?>" <?php echo $max_suburb_length; ?> id="update_<?php echo $address_name; ?>_suburb"></td>
-        </tr>
-
+			<td class="eo-label"><label for="update_<?php echo $address_name; ?>_suburb"><?php echo ENTRY_CUSTOMER_SUBURB; ?></label>:&nbsp;</td>
+			<?php
+			$filter = $address_fields['company'];
+			unit_lookup_filtered($filter); ?>
+			<td><?php echo iems_pull_down_menu('update_' . $address_name . '_suburb', $unit_array, $address_fields['suburb'], '');?> 
+			</td>	
+        </tr> 
+		
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_city"><?php echo ENTRY_CUSTOMER_CITY; ?></label>:&nbsp;</td>
             <td><input name="update_<?php echo $address_name; ?>_city" size="45" value="<?php echo zen_output_string_protected($address_fields['city']); ?>" <?php echo $max_city_length; ?> id="update_<?php echo $address_name; ?>_city"></td>

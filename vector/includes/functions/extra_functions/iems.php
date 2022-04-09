@@ -1,11 +1,13 @@
 <?php
 /**
- * This is a summary.
+ * This file contains common functions used throughout the application.
  *
- * IEMS Custom Code - 2022-03-30
+ * @package    MyProject
+ * @subpackage Common
+ * @author     Moshe Teutsch <moteutsch@gmail.com>
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @copyright Copyright 2022 Indianapolis EMS Logistics
  * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
  */
 

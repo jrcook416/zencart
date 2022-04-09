@@ -26,7 +26,7 @@ $(document).on('click', '.add', function(){
     alert("button clicked.");
 	var data = <?php echo json_encode($unit_array, JSON_UNESCAPED_SLASHES); ?>;
 	alert("data variable loaded");
-	var agency = $("#entry_company option:selected").text();
+	var agency = $("#select-entry_company option:selected").text();
 	alert(agency);
 	var agFilter = data.filter((data) => data.agency_filter === agency);
 	alert("agency data loaded");

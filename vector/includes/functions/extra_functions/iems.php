@@ -2,8 +2,8 @@
 /**
  * This file contains common functions used throughout the application.
  *
- * @package    	vector
- * @subpackage 	Functions
+ * @package    	Application
+ * @subpackage	IEMS Modified Code
  * @author     	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license 	<http://www.zen-cart.com/license/2_0.txt> GNU Public License V2.0
  * @copyright 	Copyright 2022 Indianapolis EMS Logistics, Portions Copyright 2003 osCommerce

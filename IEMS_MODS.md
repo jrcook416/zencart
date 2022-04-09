@@ -48,7 +48,79 @@ function unit_lookup_filtered() {
 	}
   ```
 
-* The iems_pull_down_menu() function will create a select based upon either unit_lookup() or unit_lookup_filtered(). 
+* The iems_pull_down_menu() function will create a select based upon either unit_lookup() or unit_lookup_filtered().
+```
+function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false)
+{
+  // -----
+  // Give an observer the opportunity to **totally** override this function's operation.
+  //
+  $field = false;
+  $GLOBALS['zco_notifier']->notify(
+      'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU_OVERRIDE',
+      array(
+        'name' => $name,
+        'values' => $values,
+        'default' => $default,
+        'parameters' => $parameters,
+        'required' => $required,
+      ),
+      $field
+  );
+  if ($field !== false) {
+    return $field;
+  }
+
+  $field = '<select rel="dropdown"';
+
+  if (strpos($parameters, 'id=') === false) {
+    $field .= ' id="select-' . zen_output_string($name) . '"';
+  }
+
+  $field .= ' name="' . zen_output_string($name) . '"';
+
+  if (zen_not_null($parameters)) {
+    $field .= ' ' . $parameters;
+  }
+
+  $field .= '>' . "\n";
+
+  if (empty($default) && isset($GLOBALS[$name]) && is_string($GLOBALS[$name])) {
+    $default = stripslashes($GLOBALS[$name]);
+  }
+
+  foreach ($values as $value) {
+    $field .= '  <option value="' . zen_output_string($value['id']) . '"';
+    if ($default == $value['id']) {
+      $field .= ' selected="selected"';
+    }
+
+    $field .= '>' . zen_output_string($value['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>' . "\n";
+  }
+  $field .= '</select>' . "\n";
+
+  if ($required == true) {
+     $field .= TEXT_FIELD_REQUIRED;
+   }
+  // -----
+  // Give an observer the chance to make modifications to the just-rendered field.
+  //
+  $GLOBALS['zco_notifier']->notify(
+      'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU',
+      array(
+        'name' => $name,
+        'values' => $values,
+        'default' => $default,
+        'parameters' => $parameters,
+        'required' => $required,
+      ),
+      $field
+  );
+  return $field;
+}
+
+```
+
 2. The administrator/supply technician username (employee ID number) will show in updates to an order, just like in 1.5.6c.
 3. Edit Orders 4.6.1 and Super Orders 5.0.0 code have been modified to allow for a select box for agency (company) and unit selection.
 * Most of this modification is in /vector/includes/modules/edit_orders/eo_common_address_format.php. 

@@ -2,19 +2,14 @@
 /**
  * This is a summary.
  *
- * This is a description
- * @package Custom IEMS Code
+ * IEMS Custom Code - 2022-03-30
  * @copyright Copyright 2022 Indianapolis EMS Logistics
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
- * IEMS Custom Code - 2022-03-30
  */
 
-function test_function(){
-	global $db;
-	echo "This is my test function";
-}
+
 
 
 function unit_lookup() {

@@ -11,7 +11,7 @@ All files where IEMS custom coding has been used should have been marked with th
 * //IEMS Custom Code - 2022-03-30// 
 ```
 
-1. IEMS specific functions have been added to the extra_functions folders on core and Vector.  iems.php should be copied to both the core and Vector includes/functions/extra_functions folder.
+1. IEMS specific functions have been added to the extra_functions folders on core and Vector.  iems.php should be copied to both the core and Vector includes/functions/extra_functions folder.  _**I need to make sure that both files are up to date - I found that the Vector and core definitions were different.**_
 * The unit_lookup() function will pull the current unit list, with the exception of the IEMS Reserve units, from the unit table, load it into an associative array, and return the array for use in a select.  It will load the unit description in the 'id' and 'text' fields.  The array can then be loaded into 
 ```
 function unit_lookup() {
@@ -48,7 +48,7 @@ function unit_lookup_filtered() {
 	}
   ```
 
-* The iems_pull_down_menu() function will create a select based upon either unit_lookup() or unit_lookup_filtered().
+* The iems_pull_down_menu() function will create a select based upon either unit_lookup() or unit_lookup_filtered().  Ideally, you will pass the result from either unit lookup function (which should be set up as an associative array in a variable) to this function.
 ```
 function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false)
 {
@@ -121,8 +121,9 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
 
 ```
 
-2. The administrator/supply technician username (employee ID number) will show in updates to an order, just like in 1.5.6c.
-3. Edit Orders 4.6.1 and Super Orders 5.0.0 code have been modified to allow for a select box for agency (company) and unit selection.
+2. Edit Orders 4.6.1 and Super Orders 5.0.0 add some functionality to IEMS Zen Cart that was hard-coded in ZC 1.5.6c. The administrator/supply technician username (employee ID number) will show in updates to an order out of the box. 
+3. Select boxes for agency (company) and unit selection are now part of the Edit Orders page.
+4. ```
 * Most of this modification is in /vector/includes/modules/edit_orders/eo_common_address_format.php. 
-4. Javascript/AJAX code has been added to the /vector/customers.php file.
+5. Javascript/AJAX code has been added to the /vector/customers.php file.
 * The unit select will filter based upon the agency filter. (Requires Bootstrap-Select CDN link in the customers.php vector/javascript folder.

@@ -10,9 +10,12 @@
  * @version 	1.0, modified for Zen Cart v1.5.7d
  */
 
-
-
-
+/**
+ * Finds and returns an array of units.
+ *
+ * @return $unit_array
+ */
+ 
 function unit_lookup() {
 	global $db;
 	global $unit_array;

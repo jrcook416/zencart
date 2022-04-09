@@ -7,7 +7,7 @@
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
- * //IEMS Custom Code - 2022-03-30//
+ * IEMS Custom Code - 2022-03-30
  */
 
 function test_function(){

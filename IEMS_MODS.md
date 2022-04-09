@@ -10,7 +10,13 @@ Code Modifications
 ---------------
 All files where IEMS custom coding has been used should have been marked with the following comment line:
 ```
-* //IEMS Custom Code - 2022-03-30// 
+/**
+ * @copyright Copyright 2022 Indianapolis EMS Logistics
+ * @copyright Portions Copyright 2003 osCommerce
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
+ * //IEMS Custom Code - 2022-03-30//
+ */
 ```
 Additionally, each changed code block or line should be marked with a comment as well.  This will make upgrading and troubleshooting easier.
 _**Go into details on upgrading and changing code.**_

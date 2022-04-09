@@ -1,4 +1,11 @@
 <?php
+/**
+ * @copyright Copyright 2022 Indianapolis EMS Logistics
+ * @copyright Portions Copyright 2003 osCommerce
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
+ * //IEMS Custom Code - 2022-03-30//
+ */
 
 function test_function(){
 	global $db;
@@ -11,30 +18,42 @@ function unit_lookup() {
 	global $unit_array;
 
 	$unit_array = array();
-	$unit_values = $db->Execute("select unit_description from `units` where unit_description NOT LIKE '%reserve%' order by unit_description");
-
+	$unit_values = $db->Execute("select * from `units`");
 		while (!$unit_values->EOF) {
-			$unit_array[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description']);
+			$unit_array[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description'], 'agency_filter' => $unit_values->fields['unit_filter']);
 			$unit_values->MoveNext();
-			};
+			}; //end while
 	return $unit_array; 
-	}
+	} //end unit_lookup
 
-
-function unit_lookup_filtered() {
+function filtered_unit_array($filter) {
 	global $db;
-	global $unit_array;
-	$filter = '49 IEMS';
+	global $filtered_units;
+	global $filter;
 
-	$unit_array = array();
-	$unit_values = $db->Execute("select unit_description from `units` where unit_filter ='" .  $filter . "' order by unit_description");
+	$filtered_units = array();
+	$unit_values = $db->Execute("select unit_description from `units` where unit_filter LIKE '" .  $filter . "' order by unit_description");
 
 		while (!$unit_values->EOF) {
-			$unit_array[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description']);
+			$filtered_units[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description']);
 			$unit_values->MoveNext();
 			};
-	return $unit_array; 
-	}
+	return $filtered_units; 
+	} // end_filtered_unit_array
+	
+function company_lookup() {
+	global $db;
+	global $company_array;
+
+	$company_array = array();
+	$company_values = $db->Execute("select distinct unit_filter from `units` ");
+
+		while (!$company_values->EOF) {
+			$company_array[] = array('id' => $company_values->fields['unit_filter'], 'text' => $company_values->fields['unit_filter']);
+			$company_values->MoveNext();
+			};
+	return $company_array; 
+	} //end company_array
 
   /**
  *  Output a form pull down menu
@@ -67,7 +86,7 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
     return $field;
   }
 
-  $field = '<select rel="dropdown"';
+  $field = '<select rel="select"';
 
   if (strpos($parameters, 'id=') === false) {
     $field .= ' id="select-' . zen_output_string($name) . '"';
@@ -113,7 +132,5 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
       $field
   );
   return $field;
-}
-
-
+} // end iems_pull_down_menu()
 ?>

@@ -10,7 +10,8 @@
 function test_function(){
 	global $db;
 	echo "This is my test function";
-} //end test_function()
+}
+
 
 function unit_lookup() {
 	global $db;
@@ -54,6 +55,16 @@ function company_lookup() {
 	return $company_array; 
 	} //end company_array
 
+  /**
+ *  Output a form pull down menu
+ *  Pulls values from a passed array, with the indicated option pre-selected
+ * @param string $name name
+ * @param array $values values
+ * @param string $default default value
+ * @param string $parameters parameters
+ * @param boolean $required required
+ * @return string
+ */
 function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false)
 {
   // -----
@@ -78,7 +89,7 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   $field = '<select rel="select"';
 
   if (strpos($parameters, 'id=') === false) {
-    $field .= ' id="' . zen_output_string($name) . '"';
+    $field .= ' id="select-' . zen_output_string($name) . '"';
   }
 
   $field .= ' name="' . zen_output_string($name) . '"';

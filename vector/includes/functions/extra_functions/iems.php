@@ -1,15 +1,19 @@
 <?php
 /**
- * This file contains common functions used throughout the application.
+ * Therapy group data template.
  *
- *	This is the file description.
- *
- * @package		admin
- * @author     	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
- * @license 	<https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html> GNU Public License V2.0
- * @copyright 	Copyright 2022 Indianapolis EMS Logistics, Portions Copyright 2003 osCommerce
- * @version 	1.0, modified for Zen Cart v1.5.7d
+ * @package   admin
+ * @link      Zen Cart
+ * @author    Rod Roark <rod@sunsetsystems.com>
+ * @author    Brady Miller <brady.g.miller@gmail.com>
+ * @author    Robert Down <robertdown@live.com>
+ * @copyright Copyright (c) 2016 Rod Roark <rod@sunsetsystems.com>
+ * @copyright Copyright (c) 2016 Brady Miller <brady.g.miller@gmail.com>
+ * @copyright Copyright (c) 2017 Robert Down <robertdown@live.com>
+ * @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
  */
+
+
 
 /**
  * Finds and returns an array of units.

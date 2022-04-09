@@ -4,6 +4,7 @@
  *
  *	This is the file description.
  *
+ * @package		admin
  * @author     	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license 	<https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html> GNU Public License V2.0
  * @copyright 	Copyright 2022 Indianapolis EMS Logistics, Portions Copyright 2003 osCommerce

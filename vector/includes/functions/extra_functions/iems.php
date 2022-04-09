@@ -5,7 +5,6 @@
  *
  * It needs a summary
  *
- * @package   admin
  * @link      Zen Cart
  * @author    Rod Roark <rod@sunsetsystems.com>
  * @author    Brady Miller <brady.g.miller@gmail.com>

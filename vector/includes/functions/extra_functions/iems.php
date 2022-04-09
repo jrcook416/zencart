@@ -2,13 +2,12 @@
 /**
  * This file contains common functions used throughout the application.
  *
- * @package    	Vector (Administration) Files
+ * @package    	vector
  * @subpackage 	Functions
  * @author     	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
- * @license 	http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @copyright 	Copyright 2022 Indianapolis EMS Logistics
- * @copyright 	Portions Copyright 2003 osCommerce
- * @version 	Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
+ * @license 	<http://www.zen-cart.com/license/2_0.txt> GNU Public License V2.0
+ * @copyright 	Copyright 2022 Indianapolis EMS Logistics, Portions Copyright 2003 osCommerce
+ * @version 	1.0, modified for Zen Cart v1.5.7d
  */
 
 

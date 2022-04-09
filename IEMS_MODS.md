@@ -1,3 +1,9 @@
+Zen Cart&reg; v1.5.7d built for IEMS Logistics.
+---------------------
+This is an upgrade/clean install built for Indianapolis EMS Logistics.  
+The previous version, 1.5.6c, was retired from service on March 16, 2022.
+This document was last updated with code changes on 2022-04-05.
+
 Code Modifications  
 ---------------
 All files where IEMS custom coding has been used should have been marked with the following comment line:
@@ -23,7 +29,7 @@ function unit_lookup() {
 	}
 ```
 
-* The unit_lookup_filtered() function will pull the current agency list from the unit table, load it into an associative array, and return the array for use in a select. 
+* The unit_lookup_filtered() function will pull the current agency list from the unit table, load it into an associative array, and return the array for use in a select. **For testing purposes, the $filter variable is passed directly in the function.  This should be changed in both files to pass the $filter variable from outside the function after testing is complete.  I may use the Javascript code established in /vector/customers.php to accomplish this in future versions of the code. **
 
 ```
 function unit_lookup_filtered() {

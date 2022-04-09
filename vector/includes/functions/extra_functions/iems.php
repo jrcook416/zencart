@@ -5,14 +5,15 @@
  *
  * It needs a summary
  *
- * @link      Zen Cart
- * @author    Rod Roark <rod@sunsetsystems.com>
- * @author    Brady Miller <brady.g.miller@gmail.com>
- * @author    Robert Down <robertdown@live.com>
- * @copyright Copyright (c) 2016 Rod Roark <rod@sunsetsystems.com>
- * @copyright Copyright (c) 2016 Brady Miller <brady.g.miller@gmail.com>
- * @copyright Copyright (c) 2017 Robert Down <robertdown@live.com>
- * @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+ * @category	test
+ * @link   		Zen Cart
+ * @author    	Rod Roark <rod@sunsetsystems.com>
+ * @author    	Brady Miller <brady.g.miller@gmail.com>
+ * @author    	Robert Down <robertdown@live.com>
+ * @copyright 	Copyright (c) 2016 Rod Roark <rod@sunsetsystems.com>
+ * @copyright 	Copyright (c) 2016 Brady Miller <brady.g.miller@gmail.com>
+ * @copyright 	Copyright (c) 2017 Robert Down <robertdown@live.com>
+ * @license   	https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
  */
 
 

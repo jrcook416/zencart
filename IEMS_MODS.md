@@ -19,6 +19,7 @@ All files where IEMS custom coding has been used should have been marked with th
  */
 ```
 Additionally, each changed code block or line should be marked with a comment as well.  This will make upgrading and troubleshooting easier.
+The Zen Cart standard is that PHPDoc blocks be used at the beginning of the file and every ten lines.
 _**Go into details on upgrading and changing code.**_
 
 1. IEMS specific functions have been added to the extra_functions folders on core and Vector.  Changes to iems.php should be copied to both the core and Vector includes/functions/extra_functions folder.  These function files are included with the repository.
@@ -29,14 +30,13 @@ function unit_lookup() {
 	global $unit_array;
 
 	$unit_array = array();
-	$unit_values = $db->Execute("select unit_description from `units` where unit_description NOT LIKE '%reserve%' order by unit_description");
-
+	$unit_values = $db->Execute("select * from `units`");
 		while (!$unit_values->EOF) {
-			$unit_array[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description']);
+			$unit_array[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description'], 'agency_filter' => $unit_values->fields['unit_filter']);
 			$unit_values->MoveNext();
-			};
+			}; //end while
 	return $unit_array; 
-	}
+	} //end unit_lookup
 ```
 
 * The unit_lookup_filtered() function will pull the current agency list from the unit table, load it into an associative array, and return the array for use in a select. **_For testing purposes, the $filter variable is passed directly in the function.  This should be changed in both files to pass the $filter variable from outside the function after testing is complete.  I may use the Javascript code established in /vector/customers.php to accomplish this in future versions of the code._** 

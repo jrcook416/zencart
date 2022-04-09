@@ -2,7 +2,9 @@ Zen Cart&reg; v1.5.7d built for IEMS Logistics.
 ---------------------
 This is an upgrade/clean install built for Indianapolis EMS Logistics.  
 The previous version, 1.5.6c, was retired from service on March 16, 2022.
-This document was last updated with code changes on 2022-04-05.
+Please read all .md files prior to working on any part of the site.  
+This document was last updated with code changes on 2022-04-09.
+This document (IEMS_MODS.md) covers specific core code changes to the v1.5.7d custom build for Indianapolis EMS Logistics.   
 
 Code Modifications  
 ---------------
@@ -10,8 +12,10 @@ All files where IEMS custom coding has been used should have been marked with th
 ```
 * //IEMS Custom Code - 2022-03-30// 
 ```
+Additionally, each changed code block or line should be marked with a comment as well.  This will make upgrading and troubleshooting easier.
+_**Go into details on upgrading and changing code.**_
 
-1. IEMS specific functions have been added to the extra_functions folders on core and Vector.  iems.php should be copied to both the core and Vector includes/functions/extra_functions folder.  _**I need to make sure that both files are up to date - I found that the Vector and core definitions were different.**_
+1. IEMS specific functions have been added to the extra_functions folders on core and Vector.  Changes to iems.php should be copied to both the core and Vector includes/functions/extra_functions folder.  These function files are included with the repository.
 * The unit_lookup() function will pull the current unit list, with the exception of the IEMS Reserve units, from the unit table, load it into an associative array, and return the array for use in a select.  It will load the unit description in the 'id' and 'text' fields.  The array can then be loaded into 
 ```
 function unit_lookup() {

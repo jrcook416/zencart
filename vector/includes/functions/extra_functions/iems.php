@@ -19,7 +19,7 @@
 /**
  * Queries the unit table in the database and returns an array.
  * 
- * @return array An associative array holding unit descriptions and unit filters.
+ * @return string[] An associative array holding unit descriptions and unit filters.
  */
 function unit_lookup() {
 	global $db;

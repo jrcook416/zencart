@@ -16,14 +16,11 @@
  * @license   	https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
  */
 
-
-
 /**
- * Finds and returns an array of units.
- *
- * @return $unit_array
+ * Queries the unit table in the database and returns an array.
+ * 
+ * @return array|mixed[]
  */
- 
 function unit_lookup() {
 	global $db;
 	global $unit_array;

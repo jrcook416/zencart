@@ -18,27 +18,8 @@
 
 /**
  * Queries the unit table in the database and returns an array.
- * Returns
- * array['md5']            null|string  md5 hash of something
- * array['size']?          null|string  size of audio (should be numeric)
- * array['bit_rate']?      null|string  bit rate
- * array['remote']?        null|string  is it a remote source possible values: "remote", "local" (should be bool)
- * array['url']?           null|string  remote url
- * array['body']           null|string  stream body
- * array['refresh']?       bool         some option
- * array['refreshRate']    int          refresh rate
- * array['data']?          array        audio data
- *      ['playlist']?      array        some playlist data
- *      ['repeat']?        array        some repeat data
- *      ['width']?         int          width of something
- *      ['height']?        int          height of something
- *      ['compression']?   mixed        some compression data
- *      ['delth']?         int          depth value
- *      ['alpha_channel']? int          alpha channel value
- *      ['orientation']?   string       some orientation data
- *      ['url']?           string       url of something
  *
- * @return array|mixed An associative array holding unit descriptions and unit filters.
+ * @return array An associative array ($unit_array) holding unit descriptions and unit filters.
  */
 function unit_lookup() {
 	global $db;

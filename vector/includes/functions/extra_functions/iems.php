@@ -19,7 +19,7 @@
 /**
  * Queries the unit table in the database and returns an array.
  * 
- * @return array|mixed[]
+ * @return mixed[]
  */
 function unit_lookup() {
 	global $db;

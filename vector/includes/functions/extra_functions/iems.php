@@ -9,6 +9,7 @@
  * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
  * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
  * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
  * 
  *
  * @package		admin
@@ -24,7 +25,6 @@
  * Queries the unit table in the database and returns an array.
  *
  * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
- * @see		iems.php Further information on this function is provided in the source file.
  * @var		array $db - the database specified in /vector/includes/configure.php
  * @var		array $unit_array - the associative array that we will load the unit list into.
  * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.

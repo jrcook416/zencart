@@ -17,7 +17,7 @@
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
- * @version 	$Id: Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 
 /**

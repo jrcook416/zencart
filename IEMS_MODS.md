@@ -18,7 +18,7 @@ All files where IEMS custom coding has been used should have been marked with th
  * //IEMS Custom Code - 2022-03-30//
  */
 ```
-**_NOTE: All IEMS code revisions for v1.5.7d will be moving to separate files as per the Zen Cart coding standards._**
+**_NOTE: All IEMS Javascript and CSS revisions for v1.5.7d will be moving to separate files as per the Zen Cart coding standards. Core code modifications will still be documented inline by phpDoc convention._**<br>
 Additionally, each changed code block or line should be marked with a comment as well.  This will make upgrading and troubleshooting easier.
 The Zen Cart standard is that PHPDoc blocks be used at the beginning of the file and every ten lines.
 _**Go into details on upgrading and changing code.**_

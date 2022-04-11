@@ -8,19 +8,55 @@ This document (IEMS_MODS.md) covers specific core code changes to the v1.5.7d cu
 
 Code Modifications  
 ---------------
-All files where IEMS custom coding has been used should have been marked with the following comment line:
+For business continuity and other purposes, the docBlock standard has been adopted for inline code documentation. <br>
+
+All files where IEMS custom coding has been used should have been marked with the following docBlock at the top of the file:
 ```
 /**
- * @copyright Copyright 2022 Indianapolis EMS Logistics
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
- * //IEMS Custom Code - 2022-03-30//
+ * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
+ *
+ *
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
+ * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
+ * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * 
+ *
+ * @package	admin
+ * @category	Indianapolis EMS custom code
+ * @link   	https://iemssupply.net
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 ```
-**_NOTE: All IEMS Javascript and CSS revisions for v1.5.7d will be moving to separate files as per the Zen Cart coding standards. Core code modifications will still be documented inline by phpDoc convention._**<br>
-Additionally, each changed code block or line should be marked with a comment as well.  This will make upgrading and troubleshooting easier.
+This is in addition to .md documentation written during the v1.5.7d clean install and upgrade in 2Q-2022.
+<br>
+**_NOTE: All IEMS Javascript and CSS revisions for v1.5.7d will be moving to separate files as per the Zen Cart coding standards. 
+Core code modifications will still be documented inline by phpDoc convention._**
+<br>
+Individual functions should be documented using the following example: 
+```
+/**
+ * Queries the unit table in the database and returns an array.
+ *
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ *
+ * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
+ * @var		array $db - the database specified in /vector/includes/configure.php
+ * @var		array $unit_array - the associative array that we will load the unit list into.
+ * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
+ */
+```
+Again, individual variables within the function are tagged with the @var tag, but they will not show in the API documentation.
+<br>
+Each changed code block or line should be marked with a comment as well.  This will make upgrading and troubleshooting easier.
 The Zen Cart standard is that PHPDoc blocks be used at the beginning of the file and every ten lines.
+<br>
 _**Go into details on upgrading and changing code.**_
 
 1. IEMS specific functions have been added to the extra_functions folders on core and Vector.  Changes to iems.php should be copied to both the core and Vector includes/functions/extra_functions folder.  These function files are included with the repository.

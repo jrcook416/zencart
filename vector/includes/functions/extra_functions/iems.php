@@ -24,6 +24,8 @@
 /**
  * Queries the unit table in the database and returns an array.
  *
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ *
  * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
  * @var		array $db - the database specified in /vector/includes/configure.php
  * @var		array $unit_array - the associative array that we will load the unit list into.

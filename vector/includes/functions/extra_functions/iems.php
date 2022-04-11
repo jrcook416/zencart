@@ -1,25 +1,32 @@
 <?php
 /**
- * Therapy group data template.
+ * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
  *
  *
- * It needs a summary
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
+ * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
+ * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * 
  *
- * @category	test
+ * @package		admin
+ * @category	Indianapolis EMS custom code
  * @link   		Zen Cart
- * @author    	Rod Roark <rod@sunsetsystems.com>
- * @author    	Brady Miller <brady.g.miller@gmail.com>
- * @author    	Robert Down <robertdown@live.com>
- * @copyright 	Copyright (c) 2016 Rod Roark <rod@sunsetsystems.com>
- * @copyright 	Copyright (c) 2016 Brady Miller <brady.g.miller@gmail.com>
- * @copyright 	Copyright (c) 2017 Robert Down <robertdown@live.com>
- * @license   	https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
+ * @version 	$Id: Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 
 /**
  * Queries the unit table in the database and returns an array.
  *
- * @return mixed An associative array ($unit_array) holding unit descriptions and unit filters.
+ * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
+ * @var		array $db - the database specified in /vector/includes/configure.php
+ * @var		array $unit_array - the associative array that we will load the unit list into.
+ * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
  */
 function unit_lookup() {
 	global $db;

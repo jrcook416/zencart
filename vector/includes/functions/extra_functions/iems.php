@@ -24,6 +24,7 @@
  * Queries the unit table in the database and returns an array.
  *
  * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
+ * @see		Further information on this function is provided in the source file.
  * @var		array $db - the database specified in /vector/includes/configure.php
  * @var		array $unit_array - the associative array that we will load the unit list into.
  * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.

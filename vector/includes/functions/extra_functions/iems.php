@@ -44,6 +44,17 @@ function unit_lookup() {
 	return $unit_array; 
 	} //end unit_lookup
 
+/**
+ * Queries the unit table in the database and returns an array.
+ *
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ *
+ * @return 	mixed An associative array ($filtered_units) holding unit descriptions and unit filters.
+ * @param  	string $filter - used to pass the selected agency to the function.  
+ * @var		array $db - the database specified in /vector/includes/configure.php
+ * @var		array $filtered_units - the associative array that we will load the unit list into.
+ * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
+ */
 function filtered_unit_array($filter) {
 	global $db;
 	global $filtered_units;

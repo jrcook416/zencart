@@ -1,18 +1,36 @@
 <?php
 /**
- * @copyright Copyright 2022 Indianapolis EMS Logistics
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Jeremiah Cook 2022-03-30, modified for ZC v1.5.7d
- * //IEMS Custom Code - 2022-03-30//
+ * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
+ *
+ *
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
+ * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /includes/functions/extra_functions version of this file.
+ * All code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * 
+ *
+ * @package		catalog
+ * @category	Indianapolis EMS custom code
+ * @link   		<https://www.iemssupply.net>
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 
-function test_function(){
-	global $db;
-	echo "This is my test function";
-}
-
-
+/**
+ * Queries the unit table in the database and returns an array of units.
+ *
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ *
+ * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
+ * @var		array $db - the database specified in /vector/includes/configure.php
+ * @var		array $unit_array - the associative array that we will load the unit list into.
+ * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
+ */
 function unit_lookup() {
 	global $db;
 	global $unit_array;
@@ -26,6 +44,17 @@ function unit_lookup() {
 	return $unit_array; 
 	} //end unit_lookup
 
+/**
+ * Queries the unit table in the database and returns an array of units, filtered by the parameter $filter.
+ *
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ *
+ * @return 	mixed An associative array ($filtered_units) holding unit descriptions and unit filters.
+ * @param  	string $filter - used to pass the selected agency to the function.  
+ * @var		array $db - the database specified in /vector/includes/configure.php
+ * @var		array $filtered_units - the associative array that we will load the unit list into.
+ * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table, filtered by the parameter $filter.
+ */
 function filtered_unit_array($filter) {
 	global $db;
 	global $filtered_units;
@@ -41,6 +70,16 @@ function filtered_unit_array($filter) {
 	return $filtered_units; 
 	} // end_filtered_unit_array
 	
+/**
+ * Queries the unit table in the database and returns an array of distinct agency values.
+ *
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ *
+ * @return 	mixed An associative array ($company_array) holding distinct entries in the unit table in `unit_filter`.
+ * @var		array $db - the database specified in /vector/includes/configure.php
+ * @var		array $company_array - the associative array that we will load the unit filter (agency) list into.
+ * @var		string $company_values - the string that holds the MySQL query to pull all distinct agency names from the `units` table.
+ */
 function company_lookup() {
 	global $db;
 	global $company_array;

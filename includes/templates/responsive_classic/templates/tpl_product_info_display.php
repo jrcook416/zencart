@@ -43,7 +43,7 @@ require($template->get_template_dir('/tpl_products_next_previous.php',DIR_WS_TEM
 
 <div id="prod-info-top">
 <!--bof Product Name-->
-<h1 id="productName" class="productGeneral"><?php echo $products_name;?> ( <?php echo $product_price_uom;?> )</h1>
+<h1 id="productName" class="productGeneral"><?php echo $products_name;?> ( <?php echo $products_price_uom;?> )</h1>
 <!--eof Product Name-->
 
 <div id="pinfo-left" class="group">

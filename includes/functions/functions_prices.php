@@ -395,7 +395,7 @@
         }
     }
 
-    return $final_display_price . $product_check['products_price_uom'] . $free_tag . $call_tag;
+    return $final_display_price . $free_tag . $call_tag;
   }
 
 ////

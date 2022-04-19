@@ -1,11 +1,18 @@
 <?php
 /**
- *  product_info main_template_vars.php
+ * product_info main_template_vars.php
  *
- * @copyright Copyright 2003-2020 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: DrByte 2020 Oct 22 Modified in v1.5.7a $
+ * This is a stock Zen Cart file that has been modified for the Indianapolis EMS implementation of Zen Cart v1.5.7d.
+ * The products_price_uom variable definition is in this file.  The unit of measure will be pulled from the database.
+ * 
+ *
+ * @package		catalog
+ * @category	Indianapolis EMS custom code
+ * @link   		<https://www.iemssupply.net>
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 /*
  * Extracts and constructs the data to be used in the product-type template tpl_TYPEHANDLER_info_display.php
@@ -91,6 +98,9 @@
 
     $products_discount_type = $product_info->fields['products_discount_type'];
     $products_discount_type_from = $product_info->fields['products_discount_type_from'];
+	//IEMS CUSTOM CODE//
+	$products_price_uom = $product_info->fields['products_price_uom'];
+	//END IEMS CUSTOM CODE//
   }
 
   require(DIR_WS_MODULES . zen_get_module_directory('product_prev_next.php'));

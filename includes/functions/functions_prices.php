@@ -2,10 +2,16 @@
 /**
  * functions_prices
  *
- * @copyright Copyright 2003-2021 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: DrByte 2021 Jan 08 Modified in v1.5.7c $
+ * This is a stock Zen Cart file that has been modified for the Indianapolis EMS implementation of Zen Cart v1.5.7d.
+ * 
+ *
+ * @package		catalog
+ * @category	Indianapolis EMS custom code
+ * @link   		<https://www.iemssupply.net>
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 
 ////
@@ -216,7 +222,7 @@
     }
 
     // $new_fields = ', product_is_free, product_is_call, product_is_showroom_only';
-    $product_check = $db->Execute("select products_tax_class_id, products_price, products_priced_by_attribute, product_is_free, product_is_call, products_type from " . TABLE_PRODUCTS . " where products_id = '" . (int)$products_id . "'" . " limit 1");
+    $product_check = $db->Execute("select products_tax_class_id, products_price, products_price_uom, products_priced_by_attribute, product_is_free, product_is_call, products_type from " . TABLE_PRODUCTS . " where products_id = '" . (int)$products_id . "'" . " limit 1");
 
     // no prices on Document General
     if ($product_check->fields['products_type'] == 3) {
@@ -389,7 +395,7 @@
         }
     }
 
-    return $final_display_price . $free_tag . $call_tag;
+    return $final_display_price . $product_check['products_price_uom'] . $free_tag . $call_tag;
   }
 
 ////

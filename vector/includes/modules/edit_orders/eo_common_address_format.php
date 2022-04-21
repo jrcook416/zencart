@@ -18,7 +18,15 @@
 //                     contains the to-be-rendered field values.
 // $address_notifier . The notification to be raised at the end of EO's standard address elements.
 //
-?>
+		company_lookup(); 
+		echo iems_pull_down_menu('entry_company',$company_array, $cInfo->entry_company, 'id ="company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');?>
+		<button type="button" class="btn btn-primary btn-lrg add">Load Units for this Agency</button>
+		<?php	
+		$filter = $address_fields['company'];
+		filtered_unit_array($filter);
+		echo iems_pull_down_menu('update_' . $address_name . '_suburb', $filtered_units, $address_fields['suburb'], 'id="update_' . $address_name . '_suburb", class="selectpicker" form-control data-live-search="true" data-width="auto"');
+		?>
+		
 <div role="group" aria-labelledby="sr-<?php echo $address_name; ?>">
     <table class="table">
         <tr>
@@ -40,14 +48,7 @@
             <td><input name="update_<?php echo $address_name; ?>_street_address" size="45" value="<?php echo zen_output_string_protected($address_fields['street_address']); ?>" <?php echo $max_street_address_length; ?> id="update_<?php echo $address_name; ?>_address"></td>
         </tr>
 
-        <tr>
-			<td class="eo-label"><label for="update_<?php echo $address_name; ?>_suburb"><?php echo ENTRY_CUSTOMER_SUBURB; ?></label>:&nbsp;</td>
-			<?php //IEMS Custom Code - 2022-04-09//
-			$filter = $address_fields['company'];
-			filtered_unit_array($filter); ?>
-			<td><?php echo iems_pull_down_menu('update_' . $address_name . '_suburb', $filtered_units, $address_fields['suburb'], 'id="update_' . $address_name . '_suburb", class="selectpicker" form-control data-live-search="true" data-width="auto"');?>
-			</td>	
-        </tr> 
+         
 		
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_city"><?php echo ENTRY_CUSTOMER_CITY; ?></label>:&nbsp;</td>

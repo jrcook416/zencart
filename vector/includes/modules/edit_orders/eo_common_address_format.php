@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_name"><?php echo ENTRY_CUSTOMER_NAME; ?></label>:&nbsp;</td>
-            <td><input name="update_<?php echo $address_name; ?>_name" size="45" value="<?php echo zen_output_string_protected($address_fields['name']); ?>" <?php echo $max_name_length; ?> id="update_<?php echo $address_name; ?>_name"></td>
+            <td><input class="form-control" name="update_<?php echo $address_name; ?>_name" size="45" value="<?php echo zen_output_string_protected($address_fields['name']); ?>" <?php echo $max_name_length; ?> id="update_<?php echo $address_name; ?>_name"></td>
         </tr>
 
         <tr>

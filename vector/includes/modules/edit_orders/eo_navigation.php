@@ -51,14 +51,18 @@ echo zen_draw_hidden_field('action', 'edit');
 echo '</form>';?>
             <div class="input-group-btn"><?php echo $next_button . $order_list_button; ?>
                 <button type="button" class="btn btn-default" onclick="history.back()"><i class="fa fa-undo" aria-hidden="true">&nbsp;</i> <?php echo IMAGE_BACK; ?></button>
-            </div>
-<?php		company_lookup(); 
-echo iems_pull_down_menu('entry_company',$company_array, $cInfo->entry_company, 'id ="company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');?>
-<button type="button" class="btn btn-primary btn-lrg add">Load Units for this Agency</button>
-<?php echo iems_pull_down_menu('entry_suburb', '', $cInfo->entry_suburb, 'id ="suburb" style="background-color:yellow", class="selectpicker" form-control  data-live-search="true"');?>
-<button type="button" class="btn btn-danger btn-lrg remove">Clear the Unit List</button>
-        </div>
-    </div>
+				<br>
+            </div><!--end input-group-btn-->
+        </div><!--end input-group-->
+    </div><!--end col-sm-6 col-lg-4-->
+	<div class="col-sm-6 col-lg-4">
+		<?php
+		company_lookup(); 
+		echo iems_pull_down_menu('entry_company',$company_array, $cInfo->entry_company, 'id ="company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');?>
+		<button type="button" class="btn btn-primary btn-lrg add">Load Units for this Agency</button>
+		<?php echo iems_pull_down_menu('entry_suburb', '', $cInfo->entry_suburb, 'id ="suburb" style="background-color:yellow", class="selectpicker" form-control  data-live-search="true"');?>
+		<button type="button" class="btn btn-danger btn-lrg remove">Clear the Unit List</button>
+`	</div><!--end col-sm-6 col-lg-4-->
     <div class="col-sm-3 col-lg-4 text-right noprint">
         <?php echo $right_side_buttons; ?>
     </div>

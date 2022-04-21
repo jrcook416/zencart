@@ -23,13 +23,10 @@ $(document).ready(function() {
 
 $(document).on('click', '.add', function(){
 	<?php unit_lookup();?>
-    alert("button clicked.");
 	var data = <?php echo json_encode($unit_array, JSON_UNESCAPED_SLASHES); ?>;
-	alert("data variable loaded");
 	var agency = $("#entry_company option:selected").text();
-	alert(agency);
 	var agFilter = data.filter((data) => data.agency_filter === agency);
-	alert("agency data loaded");
+	alert("We have loaded the selected agency's units into the selector.");
 	console.log(data);
 		var html = '';
         for(var count = 0; count < agFilter.length; count++)

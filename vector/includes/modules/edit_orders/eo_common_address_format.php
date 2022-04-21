@@ -2,7 +2,6 @@
 // -----
 // Part of the Edit Orders plugin, v4.5.0 and later, provided by lat9.
 // Copyright 2019-2021, Vinos de Frutas Tropicales.
-//	IEMS Custom Code - 2022-04-09//
 //
 //-Last modified 20210321-lat9 Edit Orders v4.6.0
 //
@@ -18,7 +17,7 @@
 //                     contains the to-be-rendered field values.
 // $address_notifier . The notification to be raised at the end of EO's standard address elements.
 //
-?>		
+?>
 <div role="group" aria-labelledby="sr-<?php echo $address_name; ?>">
     <table class="table">
         <tr>
@@ -40,8 +39,11 @@
             <td><input name="update_<?php echo $address_name; ?>_street_address" size="45" value="<?php echo zen_output_string_protected($address_fields['street_address']); ?>" <?php echo $max_street_address_length; ?> id="update_<?php echo $address_name; ?>_address"></td>
         </tr>
 
-         
-		
+        <tr>
+            <td class="eo-label"><label for="update_<?php echo $address_name; ?>_suburb"><?php echo ENTRY_CUSTOMER_SUBURB; ?></label>:&nbsp;</td>
+            <td><input name="update_<?php echo $address_name; ?>_suburb" size="45" value="<?php echo zen_output_string_protected($address_fields['suburb']); ?>" <?php echo $max_suburb_length; ?> id="update_<?php echo $address_name; ?>_suburb"></td>
+        </tr>
+
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_city"><?php echo ENTRY_CUSTOMER_CITY; ?></label>:&nbsp;</td>
             <td><input name="update_<?php echo $address_name; ?>_city" size="45" value="<?php echo zen_output_string_protected($address_fields['city']); ?>" <?php echo $max_city_length; ?> id="update_<?php echo $address_name; ?>_city"></td>

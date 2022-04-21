@@ -18,15 +18,7 @@
 //                     contains the to-be-rendered field values.
 // $address_notifier . The notification to be raised at the end of EO's standard address elements.
 //
-		company_lookup(); 
-		echo iems_pull_down_menu('entry_company',$company_array, $cInfo->entry_company, 'id ="company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');?>
-		<button type="button" class="btn btn-primary btn-lrg add">Load Units for this Agency</button>
-		<?php	
-		$filter = $address_fields['company'];
-		filtered_unit_array($filter);
-		echo iems_pull_down_menu('update_' . $address_name . '_suburb', $filtered_units, $address_fields['suburb'], 'id="update_' . $address_name . '_suburb", class="selectpicker" form-control data-live-search="true" data-width="auto"');
-		?>
-		
+?>		
 <div role="group" aria-labelledby="sr-<?php echo $address_name; ?>">
     <table class="table">
         <tr>

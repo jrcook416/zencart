@@ -4,13 +4,19 @@
  *
  * Loaded automatically by index.php?main_page=product_info.<br />
  * Displays details of a typical product
+ * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * 
  *
- * @copyright Copyright 2003-2020 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Marco Ponchia 2020 May 20 Modified in v1.5.7 $
+ * @package		catalog
+ * @category	Indianapolis EMS custom code
+ * @link   		https://iemssupply.net
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
-
 //require(DIR_WS_MODULES . '/debug_blocks/product_info_prices.php');
 ?>
 <div class="centerColumn" id="productGeneral">

@@ -31,32 +31,32 @@
 
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_company"><?php echo ENTRY_CUSTOMER_COMPANY; ?></label>:&nbsp;</td>
-            <td><input name="update_<?php echo $address_name; ?>_company" size="45" value="<?php echo zen_output_string_protected($address_fields['company']); ?>" <?php echo $max_company_length; ?> id="update_<?php echo $address_name; ?>_company"></td>
+            <td><input class="form-control" name="update_<?php echo $address_name; ?>_company" size="45" value="<?php echo zen_output_string_protected($address_fields['company']); ?>" <?php echo $max_company_length; ?> id="update_<?php echo $address_name; ?>_company"></td>
         </tr>
 
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_address"><?php echo ENTRY_CUSTOMER_ADDRESS; ?></label>:&nbsp;</td>
-            <td><input name="update_<?php echo $address_name; ?>_street_address" size="45" value="<?php echo zen_output_string_protected($address_fields['street_address']); ?>" <?php echo $max_street_address_length; ?> id="update_<?php echo $address_name; ?>_address"></td>
+            <td><input class="form-control" name="update_<?php echo $address_name; ?>_street_address" size="45" value="<?php echo zen_output_string_protected($address_fields['street_address']); ?>" <?php echo $max_street_address_length; ?> id="update_<?php echo $address_name; ?>_address"></td>
         </tr>
 
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_suburb"><?php echo ENTRY_CUSTOMER_SUBURB; ?></label>:&nbsp;</td>
-            <td><input name="update_<?php echo $address_name; ?>_suburb" size="45" value="<?php echo zen_output_string_protected($address_fields['suburb']); ?>" <?php echo $max_suburb_length; ?> id="update_<?php echo $address_name; ?>_suburb"></td>
+            <td><input class="form-control" name="update_<?php echo $address_name; ?>_suburb" size="45" value="<?php echo zen_output_string_protected($address_fields['suburb']); ?>" <?php echo $max_suburb_length; ?> id="update_<?php echo $address_name; ?>_suburb"></td>
         </tr>
 
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_city"><?php echo ENTRY_CUSTOMER_CITY; ?></label>:&nbsp;</td>
-            <td><input name="update_<?php echo $address_name; ?>_city" size="45" value="<?php echo zen_output_string_protected($address_fields['city']); ?>" <?php echo $max_city_length; ?> id="update_<?php echo $address_name; ?>_city"></td>
+            <td><input class="form-control" name="update_<?php echo $address_name; ?>_city" size="45" value="<?php echo zen_output_string_protected($address_fields['city']); ?>" <?php echo $max_city_length; ?> id="update_<?php echo $address_name; ?>_city"></td>
         </tr>
 
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_state"><?php echo ENTRY_CUSTOMER_STATE; ?></label>:&nbsp;</td>
-            <td><input name="update_<?php echo $address_name; ?>_state" size="45" value="<?php echo zen_output_string_protected($address_fields['state']); ?>" <?php echo $max_state_length; ?> id="update_<?php echo $address_name; ?>_state"></td>
+            <td><input class="form-control" name="update_<?php echo $address_name; ?>_state" size="45" value="<?php echo zen_output_string_protected($address_fields['state']); ?>" <?php echo $max_state_length; ?> id="update_<?php echo $address_name; ?>_state"></td>
         </tr>
 
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_postcode"><?php echo ENTRY_CUSTOMER_POSTCODE; ?></label>:&nbsp;</td>
-            <td><input name="update_<?php echo $address_name; ?>_postcode" size="45" value="<?php echo zen_output_string_protected($address_fields['postcode']); ?>" <?php echo $max_postcode_length; ?> id="update_<?php echo $address_name; ?>_postcode"></td>
+            <td><input class="form-control" name="update_<?php echo $address_name; ?>_postcode" size="45" value="<?php echo zen_output_string_protected($address_fields['postcode']); ?>" <?php echo $max_postcode_length; ?> id="update_<?php echo $address_name; ?>_postcode"></td>
         </tr>
 
         <tr>
@@ -66,7 +66,7 @@
     if (is_array($address_fields['country']) && isset($address_fields['country']['id'])) {
         echo zen_get_country_list('update_' . $address_name . '_country', $address_fields['country']['id'], 'id="update_' . $address_name . '_country"');
     } else {
-        echo '<input name="update_' . $address_name . '_country" size="45" value="' . zen_output_string_protected($address_fields['country']) . '"' . $max_country_length . '" id="update_"' . $address_name . '_country">';
+        echo '<input class="form-control" name="update_' . $address_name . '_country" size="45" value="' . zen_output_string_protected($address_fields['country']) . '"' . $max_country_length . '" id="update_"' . $address_name . '_country">';
     } 
     ?>
             </td>

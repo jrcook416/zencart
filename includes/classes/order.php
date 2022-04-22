@@ -92,6 +92,7 @@ class order extends base {
                         'currency_value' => $order->fields['currency_value'],
                         'payment_method' => $order->fields['payment_method'],
                         'payment_module_code' => $order->fields['payment_module_code'],
+						'po_number' => $order->fields['po_number'],
                         'shipping_method' => $order->fields['shipping_method'],
                         'shipping_module_code' => $order->fields['shipping_module_code'],
                         'coupon_code' => $order->fields['coupon_code'],

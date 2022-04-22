@@ -172,7 +172,7 @@ if (isset($order->info['account_name']) || isset($order->info['account_number'])
 ?>
                             <tr>
                                 <td class="main"><strong><?php echo ENTRY_PURCHASE_ORDER_NUMBER; ?></strong></td>
-                                <td class="main"><?php echo zen_output_string_protected($order->info['po_number']); ?></td>
+								<td class="main"><input class="form-control" name="update_info_cc_expires" size="4" value="<?php echo zen_output_string_protected($order->info['po_number']); ?>" <?php echo $max_expires_length; ?>></td>
                             </tr>
 <?php
     }

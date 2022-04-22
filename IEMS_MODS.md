@@ -170,7 +170,9 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
 
 2. Edit Orders 4.6.1 and Super Orders 5.0.0 add some functionality to IEMS Zen Cart that was hard-coded in ZC 1.5.6c. The administrator/supply technician username (employee ID number) will show in updates to an order out of the box. 
 3. Select boxes for agency (company) and unit selection are now part of the Edit Orders page.
-4. ```
 * Most of this modification is in /vector/includes/modules/edit_orders/eo_common_address_format.php. 
-5. Javascript/AJAX code has been added to the /vector/customers.php file.
+4. Javascript/AJAX code has been added to the /vector/customers.php file.
 * The unit select will filter based upon the agency filter. (Requires Bootstrap-Select CDN link in the customers.php vector/javascript folder.
+5. The specific unit of measure for a product was added to the detailed catalog page in tpl_product_info_display.php.
+6. Provider and Agency selection boxes have been added to the Edit Orders navigation bar.
+7. Support for purchase orders has been enabled. 

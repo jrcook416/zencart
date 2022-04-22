@@ -73,11 +73,11 @@ $zco_notifier->notify('EDIT_ORDERS_ADDITIONAL_CONTACT_INFORMATION', $order, $add
                         <td><table class="eo-pad">
                             <tr>
                                 <td class="main eo-label"><?php echo ENTRY_TELEPHONE_NUMBER; ?></td>
-                                <td class="main"><input name="update_customer_telephone" size="15" value="<?php echo zen_output_string_protected($order->customer['telephone']); ?>" <?php echo $max_telephone_length; ?>></td>
+                                <td class="main"><input class="form-control" name="update_customer_telephone" size="15" value="<?php echo zen_output_string_protected($order->customer['telephone']); ?>" <?php echo $max_telephone_length; ?>></td>
                             </tr>
                             <tr>
                                 <td class="main eo-label"><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
-                                <td class="main"><input name="update_customer_email_address" size="35" value="<?php echo zen_output_string_protected($order->customer['email_address']); ?>" <?php echo $max_email_length; ?>></td>
+                                <td class="main"><input class="form-control" name="update_customer_email_address" size="35" value="<?php echo zen_output_string_protected($order->customer['email_address']); ?>" <?php echo $max_email_length; ?>></td>
                             </tr>
 <?php
 if (is_array($additional_contact_info) && count($additional_contact_info) != 0) {
@@ -109,7 +109,7 @@ $max_payment_length = 'maxlength="' . zen_field_length(TABLE_ORDERS, 'payment_me
                         <td><table class="eo-pad">
                             <tr>
                                 <td class="main eo-label"><?php echo ENTRY_PAYMENT_METHOD; ?></td>
-                                <td class="main"><input name="update_info_payment_method" size="20" value="<?php echo zen_output_string_protected($order->info['payment_method']); ?>" <?php echo $max_payment_length; ?>> <?php echo ($order->info['payment_method'] != 'Credit Card') ? ENTRY_UPDATE_TO_CC : ENTRY_UPDATE_TO_CK; ?></td>
+                                <td class="main"><input class="form-control" name="update_info_payment_method" size="20" value="<?php echo zen_output_string_protected($order->info['payment_method']); ?>" <?php echo $max_payment_length; ?>> <?php echo ($order->info['payment_method'] != 'Credit Card') ? ENTRY_UPDATE_TO_CC : ENTRY_UPDATE_TO_CK; ?></td>
                             </tr>
 <?php 
 if (!empty($order->info['cc_type']) || !empty($order->info['cc_owner']) || $order->info['payment_method'] == "Credit Card" || !empty($order->info['cc_number'])) {
@@ -124,19 +124,19 @@ if (!empty($order->info['cc_type']) || !empty($order->info['cc_owner']) || $orde
                             </tr>
                             <tr>
                                 <td class="main eo-label"><?php echo ENTRY_CREDIT_CARD_TYPE; ?></td>
-                                <td class="main"><input name="update_info_cc_type" size="10" value="<?php echo zen_output_string_protected($order->info['cc_type']); ?>" <?php echo $max_type_length; ?>></td>
+                                <td class="main"><input class="form-control" name="update_info_cc_type" size="10" value="<?php echo zen_output_string_protected($order->info['cc_type']); ?>" <?php echo $max_type_length; ?>></td>
                             </tr>
                             <tr>
                                 <td class="main eo-label"><?php echo ENTRY_CREDIT_CARD_OWNER; ?></td>
-                                <td class="main"><input name="update_info_cc_owner" size="20" value="<?php echo zen_output_string_protected($order->info['cc_owner']); ?>" <?php echo $max_owner_length; ?>></td>
+                                <td class="main"><input class="form-control" name="update_info_cc_owner" size="20" value="<?php echo zen_output_string_protected($order->info['cc_owner']); ?>" <?php echo $max_owner_length; ?>></td>
                             </tr>
                             <tr>
                                 <td class="main eo-label"><?php echo ENTRY_CREDIT_CARD_NUMBER; ?></td>
-                                <td class="main"><input name="update_info_cc_number" size="20" value="<?php echo zen_output_string_protected($order->info['cc_number']); ?>" <?php echo $max_number_length; ?>></td>
+                                <td class="main"><input class="form-control" name="update_info_cc_number" size="20" value="<?php echo zen_output_string_protected($order->info['cc_number']); ?>" <?php echo $max_number_length; ?>></td>
                             </tr>
                             <tr>
                                 <td class="main eo-label"><?php echo ENTRY_CREDIT_CARD_EXPIRES; ?></td>
-                                <td class="main"><input name="update_info_cc_expires" size="4" value="<?php echo zen_output_string_protected($order->info['cc_expires']); ?>" <?php echo $max_expires_length; ?>></td>
+                                <td class="main"><input class="form-control" name="update_info_cc_expires" size="4" value="<?php echo zen_output_string_protected($order->info['cc_expires']); ?>" <?php echo $max_expires_length; ?>></td>
                             </tr>
 <!-- End Credit Card Info Block -->
 <?php 

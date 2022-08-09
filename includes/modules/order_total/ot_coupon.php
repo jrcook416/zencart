@@ -1,11 +1,13 @@
 <?php
 /**
  * ot_coupon order-total module
+ * 
+ * BOOTSTRAP 3.0.0
  *
- * @copyright Copyright 2003-2022 Zen Cart Development Team
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Scott C Wilson 2021 Jun 23 Modified in v1.5.7d $
+ * @version $Id: Scott C Wilson 2020 May 18 Modified in v1.5.7 $
  */
 /**
  * Order Total class  to handle discount coupons
@@ -144,14 +146,21 @@ class ot_coupon {
             $couponLink = '<a href="javascript:couponpopupWindow(\'' . 
               zen_href_link(FILENAME_POPUP_COUPON_HELP, 'cID=' . $_SESSION['cc_id'], $request_type) .
               '\')">' . $coupon_code . '</a>';
+
+//-bof-zca_bootstrap  *** 1 of 1 ***
+            if (function_exists('zca_bootstrap_active') && zca_bootstrap_active()) {
+                $couponLink = '<a data-toggle="modal" data-id="'.$_SESSION['cc_id'].'" href="#couponHelpModal">' . $coupon_code . '</a>';
+            }
+//-eof-zca_bootstrap  *** 1 of 1 ***
+
         }
         // note the placement of the redeem code can be moved within the array on the instructions or the title
         $selection = array(
             'id' => $this->code,
             'module' => $this->title,
             'redeem_instructions' => MODULE_ORDER_TOTAL_COUPON_REDEEM_INSTRUCTIONS .
-                MODULE_ORDER_TOTAL_COUPON_REMOVE_INSTRUCTIONS .
-                '<p>' . MODULE_ORDER_TOTAL_COUPON_TEXT_CURRENT_CODE . $couponLink . '</p><br />',
+                (!empty($coupon_code) ? MODULE_ORDER_TOTAL_COUPON_REMOVE_INSTRUCTIONS : '') .
+                (!empty($coupon_code) ? '<p>' . MODULE_ORDER_TOTAL_COUPON_TEXT_CURRENT_CODE . $couponLink . '</p><br>' : ''),
             'fields' => array(
                 array(
                     'title' => MODULE_ORDER_TOTAL_COUPON_TEXT_ENTER_CODE,
@@ -161,8 +170,8 @@ class ot_coupon {
             )
         );
 
-        return $selection;
-    }
+    return $selection;
+  }
   /**
    * Enter description here...
    *
@@ -205,8 +214,7 @@ class ot_coupon {
 
 
 
-      $sql = "SELECT coupon_id, coupon_amount, coupon_type, coupon_minimum_order, uses_per_coupon, uses_per_user,
-              restrict_to_products, restrict_to_categories, coupon_zone_restriction, coupon_calc_base, coupon_order_limit
+      $sql = "SELECT * 
               FROM " . TABLE_COUPONS . "
               WHERE coupon_code= :couponCodeEntered
               AND coupon_active='Y'
@@ -244,7 +252,7 @@ class ot_coupon {
           $coupon_total = $orderTotalDetails['orderTotal']; // restricted products
         }
         if ($coupon_result->fields['coupon_calc_base'] == 1) {
-          $coupon_total_minimum = $orderTotalDetails['totalFull']; // all products
+          $coupon_total_minimum = $orderTotalDetails['orderTotal']; // restricted products
           $coupon_total = $orderTotalDetails['totalFull']; // all products
         }
 //echo 'Product: ' . $orderTotalDetails['orderTotal'] . ' Order: ' . $orderTotalDetails['totalFull'] . ' $coupon_total: ' . $coupon_total . '<br>';
@@ -456,7 +464,6 @@ class ot_coupon {
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL', true, false));
           }
 
-          // remove if fails address validation
           if ($foundvalid) {
           //      if ($_POST['submit_redeem_coupon_x'] && !$_POST['gv_redeem_code']) zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, 'credit_class_error_code=' . $this->code . '&credit_class_error=' . urlencode(TEST_NO_REDEEM_CODE), 'SSL', true, false));
             $messageStack->add('checkout', TEXT_VALID_COUPON,'success');
@@ -508,7 +515,7 @@ class ot_coupon {
         $coupon_total = $orderTotalDetails['orderTotal']; // restricted products
       }
       if ($coupon->fields['coupon_calc_base'] == 1) {
-        $coupon_total_minimum = $orderTotalDetails['totalFull']; // all products
+        $coupon_total_minimum = $orderTotalDetails['orderTotal']; // restricted products
         $coupon_total = $orderTotalDetails['totalFull']; // all products
       }
 //echo 'ot_coupon coupon_total: ' . $coupon->fields['coupon_calc_base'] . '<br>$orderTotalDetails[orderTotal]: ' . $orderTotalDetails['orderTotal'] . '<br>$orderTotalDetails[totalFull]: ' . $orderTotalDetails['totalFull'] . '<br>$coupon_total: ' . $coupon_total . '<br><br>$coupon->fields[coupon_minimum_order]: ' . $coupon->fields['coupon_minimum_order'] . '<br>$coupon_total_minimum: ' . $coupon_total_minimum . '<br>';

@@ -12,9 +12,9 @@
  * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
  * 
  *
- * @package	admin
+ * @package		admin
  * @category	Indianapolis EMS custom code
- * @link   	https://iemssupply.net
+ * @link   		https://iemssupply.net
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
@@ -279,7 +279,7 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
 	<div class="form-group">
         <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_UOM, 'products_price_uom', 'class="col-sm-3 control-label"'); ?>
       <div class="col-sm-9 col-md-6">
-          <?php echo iems_pull_down_menu('products_price_uom', $uom_array, $pInfo->products_price_uom, 'onkeyup="updateUOM()" class="form-control selectpicker" id="products_price_uom"'); ?>
+          <?php echo iems_pull_down_menu('products_price_uom', $uom_array, $pInfo->products_price_uom, 'onkeyup="updateUOM()" class="form-control selectpicker" id="products_price_uom" data-live-search="true"'); ?>
       </div>
     </div>
 <!--END IEMS CUSTOM CODE-->

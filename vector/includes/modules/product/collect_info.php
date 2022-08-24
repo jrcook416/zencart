@@ -17,6 +17,7 @@ $parameters = [
   'products_model' => '',
   'products_image' => '',
   'products_price' => '0.0000',
+  'products_price_uom' => '',
   'products_virtual' => DEFAULT_PRODUCT_PRODUCTS_VIRTUAL,
   'products_weight' => '0',
   'products_date_added' => '',
@@ -258,6 +259,14 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
           <?php echo zen_draw_input_field('products_price', $pInfo->products_price, 'onkeyup="updateGross()" class="form-control" id="products_price"'); ?>
       </div>
     </div>
+	<!--IEMS CUSTOM CODE-->
+	<div class="form-group">
+        <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_NET, 'products_price_uom', 'class="col-sm-3 control-label"'); ?>
+      <div class="col-sm-9 col-md-6">
+          <?php echo zen_draw_input_field('products_price_uom', $pInfo->products_price_uom, 'onkeyup="updateUOM()" class="form-control" id="products_price_uom"'); ?>
+      </div>
+    </div>
+<!--END IEMS CUSTOM CODE-->
     <div class="form-group">
         <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_GROSS, 'products_price_gross', 'class="col-sm-3 control-label"'); ?>
       <div class="col-sm-9 col-md-6">

@@ -102,7 +102,7 @@ function company_lookup() {
 	$uom_values = $db->Execute("select uom_id, uom from `uom` ");
 
 		while (!$uom_values->EOF) {
-			$uom_array[] = array('text' => $uom_values->fields['uom']);
+			$uom_array[] = array('id' => $uom_values->fields['uom'], 'text' => $uom_values->fields['uom']);
 			$uom_values->MoveNext();
 			};
 	return $uom_array; 

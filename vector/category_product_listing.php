@@ -852,10 +852,6 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 </td>
                 <td class="hidden-sm hidden-xs"><?php echo $product['products_model']; ?></td>
                 <td class="text-right hidden-sm hidden-xs"><?php echo zen_get_products_display_price($product['products_id']); ?></td>
-				<td class="text-right hidden-sm hidden-xs"><?php echo zen_get_products_display_price($product['products_price_uom']); ?></td>
-				
-				
-				
 <?php
               // -----
               // Additional fields can be added into columns before the Quantity column.

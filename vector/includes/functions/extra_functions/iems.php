@@ -93,6 +93,20 @@ function company_lookup() {
 			};
 	return $company_array; 
 	} //end company_array
+	
+	function uom_lookup() {
+	global $db;
+	global $uom_array;
+
+	$uom_array = array();
+	$uom_values = $db->Execute("select uom_id, uom from `uom` ");
+
+		while (!$uom_values->EOF) {
+			$uom_array[] = array('id' => $uom_values->fields['uom_id'], 'text' => $uom_values->fields['uom']);
+			$uom_values->MoveNext();
+			};
+	return $uom_array; 
+	} //end uom_array
 
   /**
  *  Output a form pull down menu

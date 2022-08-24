@@ -1,9 +1,24 @@
 <?php
 /**
- * @copyright Copyright 2003-2020 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: DrByte 2020 May 11 Modified in v1.5.7 $
+ * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
+ *
+ *
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
+ * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
+ * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * 
+ *
+ * @package		admin
+ * @category	Indianapolis EMS custom code
+ * @link   		https://iemssupply.net
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
@@ -17,6 +32,7 @@ $parameters = array(
   'products_model' => '',
   'products_image' => '',
   'products_price' => '0.0000',
+  'products_price_uom' => '',
   'products_virtual' => 0, 
   'products_weight' => '0',
   'products_date_added' => '',
@@ -145,7 +161,8 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
   echo zen_draw_hidden_field('products_quantity_order_units', $pInfo->products_quantity_order_units);
   echo zen_draw_hidden_field('products_quantity', $pInfo->products_quantity) .
        zen_draw_hidden_field('products_model', $pInfo->products_model) .
-       zen_draw_hidden_field('products_price', $pInfo->products_price) .       
+       zen_draw_hidden_field('products_price', $pInfo->products_price) .
+	   zen_draw_hidden_field('products_price_uom', $pInfo->products_price_uom) .
        zen_draw_hidden_field('products_weight', $pInfo->products_weight) .       
        zen_draw_hidden_field('products_virtual', $pInfo->products_virtual) .       
        zen_draw_hidden_field('products_tax_class_id', $pInfo->products_tax_class_id) .       

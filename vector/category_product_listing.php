@@ -591,7 +591,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 <th colspan="2"><?php echo TABLE_HEADING_CATEGORIES_PRODUCTS; ?></th>
                 <?php if ($show_prod_labels) { ?>
                   <th class="hidden-sm hidden-xs"><?php echo TABLE_HEADING_MODEL; ?></th>
-				  <th class="hidden-sm hidden-xs"><?php echo TABLE_HEADING_MODEL; ?></th>
+				  <th class="hidden-sm hidden-xs"><?php echo TABLE_HEADING_UOM; ?></th>
                 <th class="text-right hidden-sm hidden-xs"><?php echo TABLE_HEADING_PRICE; ?></th>
                 <?php }; ?>
 <?php

@@ -63,11 +63,8 @@ IndexIgnore */*
   </IfModule>
 </limit>
 
-
 ## NOTE: If you want even greater security to prevent hackers from running scripts in this folder, uncomment the following line (if your hosting company will allow you to use OPTIONS):
 # OPTIONS -Indexes -ExecCGI
-
-
 
 ##################
 ## Optional caching improvements
@@ -111,8 +108,6 @@ IndexIgnore */*
   ExpiresByType image/svg A2592000
 </ifmodule>
 
-
 #turn off X-PHP-Originating-Script header when sending emails from admin
 #uncomment to activate:
 # php_flag mail.add_x_header Off
-

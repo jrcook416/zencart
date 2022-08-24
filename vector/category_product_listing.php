@@ -576,6 +576,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 <th colspan="2"><?php echo TABLE_HEADING_CATEGORIES_PRODUCTS; ?></th>
                 <?php if ($show_prod_labels) { ?>
                   <th class="hidden-sm hidden-xs"><?php echo TABLE_HEADING_MODEL; ?></th>
+				  <th class="hidden-sm hidden-xs"><?php echo TABLE_HEADING_MODEL; ?></th>
                 <th class="text-right hidden-sm hidden-xs"><?php echo TABLE_HEADING_PRICE; ?></th>
                 <?php }; ?>
 <?php
@@ -773,7 +774,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
             
             $products_query_raw = "SELECT p.products_type, p.products_id, pd.products_name, p.products_quantity,
                                           p.products_price, p.products_status, p.products_model, p.products_sort_order,
-                                          p.master_categories_id";
+                                          p.master_categories_id, p.products_price_uom";
             $products_query_raw .= $extra_select;
 
             $products_query_raw .= " FROM " . TABLE_PRODUCTS . " p";
@@ -851,6 +852,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                     </a>
                 </td>
                 <td class="hidden-sm hidden-xs"><?php echo $product['products_model']; ?></td>
+				<td class="hidden-sm hidden-xs"><?php echo $product['products_price_uom']; ?></td>
                 <td class="text-right hidden-sm hidden-xs"><?php echo zen_get_products_display_price($product['products_id']); ?></td>
 <?php
               // -----

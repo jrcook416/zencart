@@ -1,9 +1,24 @@
 <?php
 /**
- * @copyright Copyright 2003-2020 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: DrByte 2020 May 11 Modified in v1.5.7 $
+ * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
+ *
+ *
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
+ * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
+ * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * 
+ *
+ * @package	admin
+ * @category	Indianapolis EMS custom code
+ * @link   	https://iemssupply.net
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
@@ -17,6 +32,7 @@ $parameters = array(
   'products_model' => '',
   'products_image' => '',
   'products_price' => '0.0000',
+  'products_price_uom' => '',
   'products_virtual' => DEFAULT_PRODUCT_MUSIC_PRODUCTS_VIRTUAL,
   'products_weight' => '0',
   'products_date_added' => '',
@@ -291,12 +307,14 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
           <?php echo zen_draw_input_field('products_price', $pInfo->products_price, 'onkeyup="updateGross()" class="form-control" id="products_price"'); ?>
       </div>
     </div>
-    <div class="form-group">
-        <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_GROSS, 'products_price_gross', 'class="col-sm-3 control-label"'); ?>
+	<!--IEMS CUSTOM CODE-->
+	<div class="form-group">
+        <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_UOM, 'products_price_uom', 'class="col-sm-3 control-label"'); ?>
       <div class="col-sm-9 col-md-6">
-          <?php echo zen_draw_input_field('products_price_gross', $pInfo->products_price, 'onkeyup="updateNet()" class="form-control" id="products_price_gross"'); ?>
+          <?php echo zen_draw_input_field('products_price_uom', $pInfo->products_price_uom, 'onkeyup="updateUOM()" class="form-control" id="products_price_uom"'); ?>
       </div>
     </div>
+<!--END IEMS CUSTOM CODE-->
   </div>
   <script>
     updateGross();

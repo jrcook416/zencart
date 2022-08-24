@@ -276,7 +276,7 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
 	<div class="form-group">
         <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_UOM, 'products_price_uom', 'class="col-sm-3 control-label"'); ?>
       <div class="col-sm-9 col-md-6">
-          <?php echo iems_pull_down_menu('products_price_uom', $uom_array, $pInfo->products_price_uom, 'onkeyup="updateUOM()" class="form-control selectpicker" id="products_price_uom" data-live-search="true"'); ?>
+          <?php echo iems_pull_down_menu('products_price_uom', $uom_array, $pInfo->products_price_uom, 'id="products_price_uom", form-control class="selectpicker"  data-live-search="true"'); ?>
       </div>
     </div>
 <!--END IEMS CUSTOM CODE-->

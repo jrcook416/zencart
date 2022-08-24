@@ -1,10 +1,24 @@
 <?php
-
 /**
- * @copyright Copyright 2003-2020 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: DrByte 2020 Jul 01 Modified in v1.5.7a $
+ * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
+ *
+ *
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
+ * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
+ * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * 
+ *
+ * @package	admin
+ * @category	Indianapolis EMS custom code
+ * @link   	https://iemssupply.net
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
@@ -32,6 +46,7 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
     'products_type' => (int)$_POST['product_type'],
     'products_model' => zen_db_prepare_input($_POST['products_model']),
     'products_price' => convertToFloat($_POST['products_price']),
+	'products_price_uom' => zen_db_prepare_input($_POST['products_price_uom']),
     'products_date_available' => $products_date_available,
     'products_weight' => convertToFloat($_POST['products_weight']),
     'products_status' => (int)$_POST['products_status'],

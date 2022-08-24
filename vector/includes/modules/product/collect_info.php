@@ -373,7 +373,10 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
     if (!empty($pInfo->products_image)) { ?>
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-9 col-md-6">
-                <?php echo zen_info_image($pInfo->products_image, $pInfo->categories_name); ?>
+				<!--
+				IEMS CUSTOM CODE
+				-->
+                <?php echo zen_info_image($pInfo->products_image, $pInfo->categories_name, SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT); ?>
                 <br>
                 <?php echo $pInfo->products_image; ?>
             </div>

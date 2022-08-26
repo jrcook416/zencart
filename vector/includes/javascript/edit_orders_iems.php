@@ -45,6 +45,9 @@ $(document).on('click', '.copy', function(){
 	$('#update_customer_suburb').append(suburb);
 	$('#update_delivery_suburb').append(suburb);
 	$('#update_billing_suburb').append(suburb);
+	$('#update_customer_suburb').refresh;
+	$('#update_delivery_suburb').refresh;
+	$('#update_billing_suburb').refresh;
 	
 }); //end on click
 

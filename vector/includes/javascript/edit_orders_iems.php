@@ -38,6 +38,18 @@ $(document).on('click', '.add', function(){
   
 }); //end on click
 
+$(document).on('click', '.copy', function(){
+	var suburb = $("#entry_suburb option:selected").text();
+	console.log(suburb);
+	$('#update_customer_suburb').append(html);
+	$('#update_customer_suburb').('refresh');
+	$('#update_delivery_suburb').append(html);
+	$('#update_delivery_suburb').('refresh');
+	$('#update_billing_suburb').append(html);
+	$('#update_billing_suburb').('refresh');
+	
+}}; //end on click
+
  $(document).on('click', '.remove', function(){
 	$('#entry_suburb').empty();
 	$('#entry_suburb').selectpicker('refresh');

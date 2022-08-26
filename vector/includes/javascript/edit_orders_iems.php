@@ -41,6 +41,7 @@ $(document).on('click', '.add', function(){
 $(document).on('click', '.copy', function(){
 	var suburb = $("#entry_suburb option:selected").text();
 	console.log(suburb);
+	alert("debugging");
 	$('#update_customer_suburb').append(suburb);
 	$('#update_customer_suburb').('refresh');
 	$('#update_delivery_suburb').append(suburb);

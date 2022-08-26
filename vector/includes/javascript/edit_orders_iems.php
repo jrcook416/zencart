@@ -41,11 +41,11 @@ $(document).on('click', '.add', function(){
 $(document).on('click', '.copy', function(){
 	var suburb = $("#entry_suburb option:selected").text();
 	console.log(suburb);
-	$('#update_customer_suburb').append(html);
+	$('#update_customer_suburb').append(suburb);
 	$('#update_customer_suburb').('refresh');
-	$('#update_delivery_suburb').append(html);
+	$('#update_delivery_suburb').append(suburb);
 	$('#update_delivery_suburb').('refresh');
-	$('#update_billing_suburb').append(html);
+	$('#update_billing_suburb').append(suburb);
 	$('#update_billing_suburb').('refresh');
 	
 }); //end on click

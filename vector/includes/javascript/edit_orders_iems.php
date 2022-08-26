@@ -31,7 +31,7 @@ $(document).on('click', '.add', function(){
 		var html = '';
         for(var count = 0; count < agFilter.length; count++)
         {
-        html += '<option value="'+agFilter[count].text+'">'+agFilter[count].text+' ('+agFilter[count].agency_filter+')</option>';
+        html += '<option value="'+agFilter[count].text+'">'+agFilter[count].text+'</option>';
 		}; //end for
 		$('#entry_suburb').append(html);
 		$('#entry_suburb').selectpicker('refresh');

@@ -42,12 +42,13 @@ $(document).on('click', '.copy', function(){
 	var suburb = $("#entry_suburb option:selected").text();
 	console.log(suburb);
 	alert("debugging");
-	$('#update_customer_suburb').setAttribute('value',(suburb));
-	$('#update_delivery_suburb').setAttribute('value',(suburb));
-	$('#update_billing_suburb').setAttribute('value',(suburb));
+	$('#update_customer_suburb').val(suburb);
 	$('#update_customer_suburb').refresh;
+	$('#update_delivery_suburb').val(suburb);
 	$('#update_delivery_suburb').refresh;
+	$('#update_billing_suburb').val(suburb);
 	$('#update_billing_suburb').refresh;
+	alert("more debugging");
 	
 }); //end on click
 

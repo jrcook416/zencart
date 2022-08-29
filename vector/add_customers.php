@@ -338,7 +338,8 @@ if (ACCOUNT_COMPANY === 'true') {
                     <div class="form-group">
                         <?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_input_field('entry_company', htmlspecialchars($cInfo->entry_company, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', 50) . ' class="form-control"'); ?>
+                            <?php company_lookup();
+							echo iems_pull_down_menu("update_" . $address_name . "_company",$company_array, $address_fields['company'], 'id ="update_' . $address_name .'_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true" data-width="100%"');?>
                         </div>
                     </div>
                 </div>
@@ -359,7 +360,10 @@ if (ACCOUNT_SUBURB === 'true') {
                     <div class="form-group">
                         <?php echo zen_draw_label(ENTRY_SUBURB, 'suburb', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_input_field('entry_suburb', htmlspecialchars($cInfo->entry_suburb, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', 50) . ' class="form-control"'); ?>
+                            <?php 
+							$filter = $address_fields['company'];
+							filtered_unit_array($filter);
+							echo iems_pull_down_menu("update_" . $address_name . "_suburb", $filtered_units, $address_fields['suburb'], 'id ="update_' . $address_name .'_suburb" style="background-color:yellow", form-control class="selectpicker" data-live-search="true" data-width="100%"');?>
                         </div>
                     </div>
 <?php

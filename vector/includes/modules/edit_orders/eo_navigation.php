@@ -54,6 +54,7 @@ echo '</form>';?>
 				<br><br>
             </div><!--end input-group-btn-->
         </div><!--end input-group-->
+		<br><br>
 	<?php
 	company_lookup(); 
 	echo iems_pull_down_menu('entry_company',$company_array, $cInfo->entry_company, 'id ="company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');?>

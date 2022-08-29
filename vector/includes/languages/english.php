@@ -265,7 +265,7 @@ define('ENTRY_COMPANY_ERROR', '');
 define('ENTRY_PRICING_GROUP', 'Discount Pricing Group');
 define('ENTRY_STREET_ADDRESS', 'Street Address:');
 define('ENTRY_STREET_ADDRESS_ERROR', '&nbsp;<span class="errorText">min ' . ENTRY_STREET_ADDRESS_MIN_LENGTH . ' chars</span>');
-define('ENTRY_SUBURB', 'Suburb:');
+define('ENTRY_SUBURB', 'Ordering Unit:');
 define('ENTRY_SUBURB_ERROR', '');
 define('ENTRY_POST_CODE', 'Post Code:');
 define('ENTRY_POST_CODE_ERROR', '&nbsp;<span class="errorText">min ' . ENTRY_POSTCODE_MIN_LENGTH . ' chars</span>');

@@ -34,7 +34,7 @@
 			<label for="update_<?php echo $address_name; ?>_company">
 			<?php echo ENTRY_CUSTOMER_COMPANY; ?></label>:&nbsp;</td>
             <?php company_lookup();
-			echo iems_pull_down_menu("update_". $address_name ."_company",$company_array, $address_fields->company, 'id ='update_'. $address_name .'_company' style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');?>
+			echo iems_pull_down_menu("update_". $address_name ."_company",$company_array, $address_fields->company, "id ='update_'". $address_name ."'_company' style='background-color:yellow', form-control class='selectpicker' data-live-search='true'");?>
 			</td>
         </tr>
 

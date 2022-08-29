@@ -24,7 +24,7 @@ $(document).ready(function() {
 $(document).on('click', '.add', function(){
 	<?php unit_lookup();?>
 	var data = <?php echo json_encode($unit_array, JSON_UNESCAPED_SLASHES); ?>;
-	var agency = $("#update_delivery_company option:selected").text();
+	var agency = $("#entry_company option:selected").text();
 	var agFilter = data.filter((data) => data.agency_filter === agency);
 	alert("We have loaded the selected agency's units into the selector.");
 	console.log(data);

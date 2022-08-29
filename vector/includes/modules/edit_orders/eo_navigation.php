@@ -54,15 +54,6 @@ echo '</form>';?>
 				<br><br>
             </div><!--end input-group-btn-->
         </div><!--end input-group-->
-		<br><br>
-	<?php
-	company_lookup(); 
-	echo iems_pull_down_menu('entry_company',$company_array, $cInfo->company, 'id ="company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');?>
-	<button type="button" class="btn btn-primary btn-lrg add">Load Units for this Agency</button>
-	<?php echo iems_pull_down_menu('entry_suburb', '', $cInfo->suburb, 'id ="suburb" style="background-color:yellow", class="selectpicker" form-control  data-live-search="true"');?>
-	<button type="button" class="btn btn-danger btn-lrg remove">Clear the Unit List</button>
-	<br><br>
-	<button type="button" class="btn btn-danger btn-lrg copy">Copy Selected Unit to Addresses</button>
     </div><!--end col-sm-6 col-lg-4-->
     <div class="col-sm-3 col-lg-4 text-right noprint">
         <?php echo $right_side_buttons; ?>

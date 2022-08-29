@@ -176,38 +176,38 @@ if ($_GET['action'] == 'batch_forms') {
           <div class="col-sm-4">
             <div class="form-group">
                 <?php echo zen_draw_label(HEADING_SEARCH_STATUS, 'status', 'class="control-label col-md-3"'); ?>
-              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('status', array_merge(array(array('id' => '', 'text' => TEXT_ALL_ORDERS)), $orders_statuses), $_GET['status'], 'class="form-control"'); ?></div>
+              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('status', array_merge(array(array('id' => '', 'text' => TEXT_ALL_ORDERS)), $orders_statuses), $_GET['status'], 'class="form-control selectpicker"'); ?></div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(HEADING_SEARCH_PRODUCTS, 'products', 'class="control-label col-md-3"'); ?>
-              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('products', $products, $_GET['products'], 'class="form-control"'); ?></div>
+              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('products', $products, $_GET['products'], 'class="form-control selectpicker"'); ?></div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(HEADING_SEARCH_CUSTOMERS, 'customers', 'class="control-label col-md-3"'); ?>
-              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('customers', $customers, $_GET['customers'], 'class="form-control"'); ?></div>
+              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('customers', $customers, $_GET['customers'], 'class="form-control selectpicker"'); ?></div>
             </div>
             <?php
             /* BEGIN addition added seach by country */
             ?>
             <div class="form-group">
                 <?php echo zen_draw_label(HEADING_SEARCH_COUNTRY, 'countries', 'class="control-label col-md-3"'); ?>
-              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('countries', $countries, $_GET['countries'], 'class="form-control"'); ?></div>
+              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('countries', $countries, $_GET['countries'], 'class="form-control selectpicker"'); ?></div>
             </div>
             <?php /* END addition */ ?>
           </div>
           <div class="col-sm-4">
             <div class="form-group">
                 <?php echo zen_draw_label(HEADING_SEARCH_PAYMENT_METHOD, 'payments', 'class="control-label col-md-3"'); ?>
-              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('payments', $payments, $_GET['payments'], 'class="form-control"'); ?></div>
+              <div class="col-md-9"><?php echo zen_draw_pull_down_menu('payments', $payments, $_GET['payments'], 'class="form-control selectpicker"'); ?></div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(HEADING_SEARCH_ORDER_TOTAL, 'ot_sign', 'class="control-label col-md-3"'); ?>
-              <div class="col-md-5"><?php echo zen_draw_pull_down_menu('ot_sign', $ot_sign, $_GET['ot_sign'], 'class="form-control"'); ?></div>
+              <div class="col-md-5"><?php echo zen_draw_pull_down_menu('ot_sign', $ot_sign, $_GET['ot_sign'], 'class="form-control selectpicker"'); ?></div>
               <div class="col-md-4"><?php echo zen_draw_input_field('order_total', '', 'size="8" class="form-control"'); ?></div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(HEADING_SEARCH_TEXT, 'search', 'class="control-label col-md-3"'); ?>
-              <div class="col-md-9"><?php echo zen_draw_input_field('search', $_GET['search'], 'class="form-control"'); ?></div>
+              <div class="col-md-9"><?php echo zen_draw_input_field('search', $_GET['search'], 'class="form-control selectpicker"'); ?></div>
             </div>
             <?php
             /* BEGIN addition added seach by OrderID Range */
@@ -220,9 +220,9 @@ if ($_GET['action'] == 'batch_forms') {
             ?>
             <div class="form-group">
                 <?php echo zen_draw_label(HEADING_SEARCH_ORDERID_RANGE, 'oid_range_first', 'class="control-label col-md-3"'); ?>
-              <div class="col-md-4"><?php echo zen_draw_input_field('oid_range_first', $_GET['oid_range_first'], 'size="8" class="form-control"'); ?></div>
+              <div class="col-md-4"><?php echo zen_draw_input_field('oid_range_first', $_GET['oid_range_first'], 'size="8" class="form-control selectpicker"'); ?></div>
               <div class="col-md-1"><b>to</b></div>
-              <div class="col-md-4"><?php echo zen_draw_input_field('oid_range_last', $_GET['oid_range_last'], 'size="8" class="form-control"'); ?></div>
+              <div class="col-md-4"><?php echo zen_draw_input_field('oid_range_last', $_GET['oid_range_last'], 'size="8" class="form-control selectpicker"'); ?></div>
             </div>
             <?php /* END addition */ ?>
           </div>

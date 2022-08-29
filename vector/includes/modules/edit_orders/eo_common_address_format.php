@@ -30,8 +30,10 @@
         </tr>
 
         <tr>
-            <td class="eo-label"><label for="update_<?php echo $address_name; ?>_company"><?php echo ENTRY_CUSTOMER_COMPANY; ?></label>:&nbsp;</td>
-            <td><input class="form-control" name="update_<?php echo $address_name; ?>_company" size="45" value="<?php echo zen_output_string_protected($address_fields['company']); ?>" <?php echo $max_company_length; ?> id="update_<?php echo $address_name; ?>_company"></td>
+            <td class="eo-label">
+			<label for="update_<?php echo $address_name; ?>_company">
+			<?php echo ENTRY_CUSTOMER_COMPANY; ?></label>:&nbsp;</td>
+            <td><select class="form-control selectpicker" name="update_<?php echo $address_name; ?>_company" size="45" value="<?php echo zen_output_string_protected($address_fields['company']); ?>" <?php echo $max_company_length; ?> id="update_<?php echo $address_name; ?>_company"></td>
         </tr>
 
         <tr>

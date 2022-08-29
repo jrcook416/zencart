@@ -276,7 +276,7 @@ $customers_authorization_array = [
                     <div class="form-group">
                         <?php echo zen_draw_label(CUSTOMERS_AUTHORIZATION, 'customers_authorization', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_pull_down_menu('customers_authorization', $customers_authorization_array, $cInfo->customers_authorization, 'class="form-control"'); ?>
+                            <?php echo zen_draw_pull_down_menu('customers_authorization', $customers_authorization_array, $cInfo->customers_authorization, 'class="form-control selectpicker"'); ?>
                         </div>
                     </div>
 <?php

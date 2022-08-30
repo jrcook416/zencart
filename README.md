@@ -17,4 +17,7 @@ The following plugins or modules have been added to the 1.5.7d stock code:
 6. One Page Checkout 2.3.12 was installed on 2022-04-08.
 7. Order Comments Boilerplate 1.1.0 was installed on 2022-04-08.
 8. Order Shipping Export Information 1.3.4 was installed on 2022-08-30.
+9. ImageHandler 5.3.0 was installed on 2022-08-30.
+10. InstantSearch 2.1.0 was installed on 2022-08-30.
+11. Clone Template 1.2.1 was installed on 2022-08-30.
 

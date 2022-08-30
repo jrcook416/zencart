@@ -1,9 +1,24 @@
 <?php
 /**
- * @copyright Copyright 2003-2020 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Scott C Wilson 2020 Jun 30 Modified in v1.5.7a $
+ * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
+ *
+ *
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
+ * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
+ * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * 
+ *
+ * @package	admin
+ * @category	Indianapolis EMS custom code
+ * @link   	https://iemssupply.net
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 require('includes/application_top.php');
 
@@ -326,7 +341,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 <span class="input-group-addon">
                     <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?>
                 </span>
-                <?php echo zen_draw_input_field('categories_name[' . $languages[$i]['id'] . ']', htmlspecialchars(zen_get_category_name($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_CATEGORIES_DESCRIPTION, 'categories_name') . ' class="form-control" id=categories_name[' . $languages[$i]['id'] . ']'); ?>
+                <?php echo zen_draw_input_field('categories_name[' . $languages[$i]['id'] . ']', htmlspecialchars(zen_get_category_name($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_CATEGORIES_DESCRIPTION, 'categories_name') . ' class="form-control selectpicker" id=categories_name[' . $languages[$i]['id'] . ']'); ?>
               </div>
               <br>
               <?php
@@ -374,7 +389,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 <span class="input-group-addon" style="vertical-align: top">
                     <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?>
                 </span>
-                <?php echo zen_draw_textarea_field('categories_description[' . $languages[$i]['id'] . ']', 'soft', '100', '5', htmlspecialchars(zen_get_category_description($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="editorHook form-control" id=categories_description[' . $languages[$i]['id'] . ']'); ?>
+                <?php echo zen_draw_textarea_field('categories_description[' . $languages[$i]['id'] . ']', 'soft', '100', '5', htmlspecialchars(zen_get_category_description($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="editorHook form-control selectpicker" id=categories_description[' . $languages[$i]['id'] . ']'); ?>
               </div>
               <br>
               <?php
@@ -409,7 +424,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
         <div class="form-group">
             <p class="col-sm-3 control-label"><strong><?php echo TEXT_EDIT_CATEGORIES_IMAGE; ?></strong></p>
           <div class="col-sm-9 col-md-6">
-              <?php echo zen_draw_file_field('categories_image', '', 'class="form-control"'); ?>
+              <?php echo zen_draw_file_field('categories_image', '', 'class="form-control selectpicker"'); ?>
           </div>
         </div>
         <?php
@@ -419,20 +434,20 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
         <div class="form-group">
             <?php echo zen_draw_label(TEXT_CATEGORIES_IMAGE_DIR, 'img_dir', 'class="col-sm-3 control-label"'); ?>
           <div class="col-sm-9 col-md-6">
-              <?php echo zen_draw_pull_down_menu('img_dir', $dir_info, $default_directory, 'class="form-control" id="img_dir"'); ?>
+              <?php echo zen_draw_pull_down_menu('img_dir', $dir_info, $default_directory, 'class="form-control selectpicker" id="img_dir"'); ?>
           </div>
         </div>
         <div class="form-group">
             <?php echo zen_draw_label(TEXT_CATEGORIES_IMAGE_MANUAL, 'categories_image_manual', 'class="col-sm-3 control-label"'); ?>
           <div class="col-sm-9 col-md-6">
-              <?php echo zen_draw_input_field('categories_image_manual', '', 'class="form-control" id="categories_image_manual"'); ?>
+              <?php echo zen_draw_input_field('categories_image_manual', '', 'class="form-control selectpicker selectpicker" id="categories_image_manual"'); ?>
           </div>
         </div>
         <hr>
         <div class="form-group">
             <?php echo zen_draw_label(TEXT_EDIT_SORT_ORDER, 'sort_order', 'class="col-sm-3 control-label"'); ?>
           <div class="col-sm-9 col-md-6">
-              <?php echo zen_draw_input_field('sort_order', $cInfo->sort_order, 'size="6" class="form-control" id="sort_order"'); ?>
+              <?php echo zen_draw_input_field('sort_order', $cInfo->sort_order, 'size="6" class="form-control selectpicker selectpicker" id="sort_order"'); ?>
           </div>
         </div>
         <div class="floatButton">
@@ -444,7 +459,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_RESTRICT_PRODUCT_TYPE, 'restrict_type', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9 col-md-6">
-                <?php echo zen_draw_pull_down_menu('restrict_type', $type_array, '', 'class="form-control" id="restrict_type"'); ?>
+                <?php echo zen_draw_pull_down_menu('restrict_type', $type_array, '', 'class="form-control selectpicker selectpicker" id="restrict_type"'); ?>
               <br>
               <input type="submit" name="add_type_all" class="btn btn-info" value="<?php echo BUTTON_ADD_PRODUCT_TYPES_SUBCATEGORIES_ON; ?>"> <input type="submit" name="add_type" class="btn btn-info" value="<?php echo BUTTON_ADD_PRODUCT_TYPES_SUBCATEGORIES_OFF; ?>">
             </div>
@@ -499,7 +514,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 ?>
               <div class="input-group">
                 <span class="input-group-addon"><?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?></span>
-                <?php echo zen_draw_input_field('metatags_title[' . $languages[$i]['id'] . ']', htmlspecialchars(zen_get_category_metatags_title($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_METATAGS_CATEGORIES_DESCRIPTION, 'metatags_title') . ' class="form-control" id="metatags_title[' . $languages[$i]['id'] . ']"');
+                <?php echo zen_draw_input_field('metatags_title[' . $languages[$i]['id'] . ']', htmlspecialchars(zen_get_category_metatags_title($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_METATAGS_CATEGORIES_DESCRIPTION, 'metatags_title') . ' class="form-control selectpicker selectpicker" id="metatags_title[' . $languages[$i]['id'] . ']"');
                 ?>
               </div>
               <br>
@@ -516,7 +531,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 ?>
               <div class="input-group">
                 <span class="input-group-addon" style="vertical-align: top;"><?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?></span>
-                <?php echo zen_draw_textarea_field('metatags_keywords[' . $languages[$i]['id'] . ']', 'soft', '100', '3', htmlspecialchars(zen_get_category_metatags_keywords($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="form-control noEditor" id="metatags_keywords[' . $languages[$i]['id'] . ']"');
+                <?php echo zen_draw_textarea_field('metatags_keywords[' . $languages[$i]['id'] . ']', 'soft', '100', '3', htmlspecialchars(zen_get_category_metatags_keywords($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="form-control selectpicker selectpicker noEditor" id="metatags_keywords[' . $languages[$i]['id'] . ']"');
                 ?>
               </div>
               <br>
@@ -533,7 +548,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 ?>
               <div class="input-group">
                 <span class="input-group-addon" style="vertical-align: top"><?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?></span>
-                <?php echo zen_draw_textarea_field('metatags_description[' . $languages[$i]['id'] . ']', 'soft', '100', '7', htmlspecialchars(zen_get_category_metatags_description($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="form-control noEditor" id="metatags_description[' . $languages[$i]['id'] . ']"');
+                <?php echo zen_draw_textarea_field('metatags_description[' . $languages[$i]['id'] . ']', 'soft', '100', '7', htmlspecialchars(zen_get_category_metatags_description($cInfo->categories_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="form-control selectpicker selectpicker noEditor" id="metatags_description[' . $languages[$i]['id'] . ']"');
                 ?>
               </div>
               <br>

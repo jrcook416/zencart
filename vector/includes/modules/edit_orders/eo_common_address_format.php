@@ -35,7 +35,7 @@
 			<?php echo ENTRY_CUSTOMER_COMPANY; ?></label>:&nbsp;</td>
 			<td>
             <?php company_lookup();
-			echo iems_pull_down_menu("update_" . $address_name . "_company",$company_array, $address_fields['company'], 'id ="update_' . $address_name .'_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true" data-width="100%"');?>
+			echo iems_pull_down_menu("update_" . $address_name . "_company",$company_array, $address_fields['company'], 'id ="update_' . $address_name .'_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true" data-width="100%" title="Nothing selected."');?>
 			</td>
         </tr>
 
@@ -50,7 +50,7 @@
             <?php 
             $filter = $address_fields['company'];
             filtered_unit_array($filter);
-			echo iems_pull_down_menu("update_" . $address_name . "_suburb", $filtered_units, $address_fields['suburb'], 'id ="update_' . $address_name .'_suburb" style="background-color:yellow", form-control class="selectpicker" data-live-search="true" data-width="100%"');?>
+			echo iems_pull_down_menu("update_" . $address_name . "_suburb", $filtered_units, $address_fields['suburb'], 'id ="update_' . $address_name .'_suburb" style="background-color:yellow", form-control class="selectpicker" data-live-search="true" data-width="100%" title="Nothing selected."');?>
 			</td>
         </tr>
 

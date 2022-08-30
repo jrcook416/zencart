@@ -1,9 +1,24 @@
 <?php
 /**
- * @copyright Copyright 2003-2020 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Scott C Wilson 2020 Apr 09 Modified in v1.5.7 $
+ * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
+ *
+ *
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
+ * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
+ * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * IEMS documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * 
+ *
+ * @package	admin
+ * @category	Indianapolis EMS custom code
+ * @link   	https://iemssupply.net
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
+ * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
  */
 require('includes/application_top.php');
 
@@ -334,7 +349,7 @@ if (zen_not_null($action)) {
 //  }
                   ?>
               </div>
-              <div class="col-xs-8 col-sm-8 col-md-6 col-lg-4 text-center"><?php echo zen_draw_products_pull_down('products_filter', 'class="form-control"', '', true, $_GET['products_filter'], true, true); ?></div>
+              <div class="col-xs-8 col-sm-8 col-md-6 col-lg-4 text-center"><?php echo zen_draw_products_pull_down('products_filter', 'class="form-control selectpicker"', '', true, $_GET['products_filter'], true, true); ?></div>
               <div class="col-xs-2 col-sm-3 col-md-5 col-lg-7">
                 <button type="submit" class="btn btn-primary"><?php echo IMAGE_DISPLAY; ?></button>
               </div>
@@ -665,7 +680,7 @@ if (zen_not_null($action)) {
               <div class="col-sm-9 col-md-6">
                 <div class="input-group">
                   <div class="input-group-addon"><?php echo zen_image(DIR_WS_IMAGES . 'icon_yellow_on.gif', IMAGE_ICON_LINKED); ?></div>
-                  <?php echo zen_draw_pull_down_menu('master_category', zen_get_master_categories_pulldown($products_filter), $pInfo->master_categories_id, 'class="form-control"'); ?>
+                  <?php echo zen_draw_pull_down_menu('master_category', zen_get_master_categories_pulldown($products_filter), $pInfo->master_categories_id, 'class="form-control selectpicker"'); ?>
                 </div>
               </div>
             </div>
@@ -683,7 +698,7 @@ if (zen_not_null($action)) {
           <div class="well" style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;;padding: 10px 10px 0 0;">
             <div class="form-group"><?php echo zen_draw_label(TEXT_PRODUCTS_TAX_CLASS, 'products_tax_class_id', 'class="col-sm-3 control-label"'); ?>
               <div class="col-sm-9 col-md-6">
-                  <?php echo zen_draw_pull_down_menu('products_tax_class_id', $tax_class_array, $pInfo->products_tax_class_id, 'class="form-control"'.$readonly); ?>
+                  <?php echo zen_draw_pull_down_menu('products_tax_class_id', $tax_class_array, $pInfo->products_tax_class_id, 'class="form-control selectpicker"'.$readonly); ?>
               </div>
             </div>
           </div>
@@ -692,13 +707,13 @@ if (zen_not_null($action)) {
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRICE_NET, 'products_price', 'class="col-sm-3 control-label"'); ?>
               <div class="col-sm-9 col-md-6">
-                  <?php echo zen_draw_input_field('products_price', (isset($pInfo->products_price) ? $pInfo->products_price : ''), 'OnKeyUp="updateGross()" class="form-control"' . $readonly); ?>
+                  <?php echo zen_draw_input_field('products_price', (isset($pInfo->products_price) ? $pInfo->products_price : ''), 'OnKeyUp="updateGross()" class="form-control selectpicker"' . $readonly); ?>
               </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRICE_GROSS, 'products_price_gross', 'class="col-sm-3 control-label"'); ?>
               <div class="col-sm-9 col-md-6">
-                  <?php echo zen_draw_input_field('products_price_gross', (isset($pInfo->products_price) ? $pInfo->products_price : ''), 'OnKeyUp="updateNet()" class="form-control"' . $readonly); ?>
+                  <?php echo zen_draw_input_field('products_price_gross', (isset($pInfo->products_price) ? $pInfo->products_price : ''), 'OnKeyUp="updateNet()" class="form-control selectpicker"' . $readonly); ?>
               </div>
             </div>
           </div>
@@ -727,19 +742,19 @@ if (zen_not_null($action)) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9 col-md-6">
-                <?php echo zen_draw_input_field('products_quantity_order_min', ($pInfo->products_quantity_order_min == 0 ? 1 : $pInfo->products_quantity_order_min), 'size="6" class="form-control"'.$readonly); ?>
+                <?php echo zen_draw_input_field('products_quantity_order_min', ($pInfo->products_quantity_order_min == 0 ? 1 : $pInfo->products_quantity_order_min), 'size="6" class="form-control selectpicker"'.$readonly); ?>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9 col-md-6">
-                <?php echo zen_draw_input_field('products_quantity_order_units', ($pInfo->products_quantity_order_units == 0 ? 1 : $pInfo->products_quantity_order_units), 'size="6" class="form-control"'.$readonly); ?>
+                <?php echo zen_draw_input_field('products_quantity_order_units', ($pInfo->products_quantity_order_units == 0 ? 1 : $pInfo->products_quantity_order_units), 'size="6" class="form-control selectpicker"'.$readonly); ?>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9 col-md-6">
-              <?php echo zen_draw_input_field('products_quantity_order_max', $pInfo->products_quantity_order_max, 'size="6" class="form-control"'.$readonly); ?><span class="help-block"><?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?></span>
+              <?php echo zen_draw_input_field('products_quantity_order_max', $pInfo->products_quantity_order_max, 'size="6" class="form-control selectpicker"'.$readonly); ?><span class="help-block"><?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?></span>
             </div>
           </div>
           <div class="form-group">
@@ -801,13 +816,13 @@ if (zen_not_null($action)) {
               <div class="form-group">
                   <?php echo zen_draw_label(TEXT_SPECIALS_SPECIAL_PRICE_NET, 'specials_price', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('specials_price', (isset($sInfo->specials_new_products_price) ? $sInfo->specials_new_products_price : ''), 'OnKeyUp="updateSpecialsGross()" class="form-control"' . $readonly); ?>
+                    <?php echo zen_draw_input_field('specials_price', (isset($sInfo->specials_new_products_price) ? $sInfo->specials_new_products_price : ''), 'OnKeyUp="updateSpecialsGross()" class="form-control selectpicker"' . $readonly); ?>
                 </div>
               </div>
               <div class="form-group">
                   <?php echo zen_draw_label(TEXT_SPECIALS_SPECIAL_PRICE_GROSS, 'specials_price_gross', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('specials_price_gross', (isset($sInfo->specials_new_products_price) ? $sInfo->specials_new_products_price : ''), 'OnKeyUp="updateSpecialsNet()" class="form-control"' . $readonly); ?>
+                    <?php echo zen_draw_input_field('specials_price_gross', (isset($sInfo->specials_new_products_price) ? $sInfo->specials_new_products_price : ''), 'OnKeyUp="updateSpecialsNet()" class="form-control selectpicker"' . $readonly); ?>
                 </div>
               </div>
             </div>
@@ -981,13 +996,13 @@ if (zen_not_null($action)) {
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_DISCOUNT_TYPE, 'products_discount_type', 'class="control-label col-sm-3"'); ?>
               <div class="col-sm-9 col-md-6">
-                  <?php echo zen_draw_pull_down_menu('products_discount_type', $discount_type_array, $pInfo->products_discount_type, 'class="form-control"'.$readonly); ?>
+                  <?php echo zen_draw_pull_down_menu('products_discount_type', $discount_type_array, $pInfo->products_discount_type, 'class="form-control selectpicker"'.$readonly); ?>
               </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_DISCOUNT_TYPE_FROM, 'products_discount_type_from', 'class="control-label col-sm-3"'); ?>
               <div class="col-sm-9 col-md-6">
-                  <?php echo zen_draw_pull_down_menu('products_discount_type_from', $discount_type_from_array, $pInfo->products_discount_type_from, 'class="form-control"'. $readonly); ?>
+                  <?php echo zen_draw_pull_down_menu('products_discount_type_from', $discount_type_from_array, $pInfo->products_discount_type_from, 'class="form-control selectpicker"'. $readonly); ?>
               </div>
             </div>
            </div>
@@ -1059,8 +1074,8 @@ if (zen_not_null($action)) {
                       ?>
                     <tr>
                       <td class="main"><?php echo TEXT_PRODUCTS_DISCOUNT . ' ' . $discount_name[$i]['id']; ?></td>
-                      <td class="main"><?php echo zen_draw_input_field('discount_qty[' . $discount_name[$i]['id'] . ']', $discount_name[$i]['discount_qty'], 'class="form-control"'.$readonly); ?></td>
-                      <td class="main"><?php echo zen_draw_input_field('discount_price[' . $discount_name[$i]['id'] . ']', $discount_name[$i]['discount_price'], 'class="form-control"' . $readonly); ?></td>
+                      <td class="main"><?php echo zen_draw_input_field('discount_qty[' . $discount_name[$i]['id'] . ']', $discount_name[$i]['discount_qty'], 'class="form-control selectpicker"'.$readonly); ?></td>
+                      <td class="main"><?php echo zen_draw_input_field('discount_price[' . $discount_name[$i]['id'] . ']', $discount_name[$i]['discount_price'], 'class="form-control selectpicker"' . $readonly); ?></td>
                       <?php
                       if (DISPLAY_PRICE_WITH_TAX_ADMIN == 'true') {
                         ?>

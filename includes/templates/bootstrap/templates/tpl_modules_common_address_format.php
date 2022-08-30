@@ -89,8 +89,11 @@ if (!isset($entry) || !is_object($entry)) {
 <?php
   if (ACCOUNT_SUBURB == 'true') {
 ?>
-<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-<?php echo zen_draw_input_field('suburb', $entry->fields['entry_suburb'], zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
+	<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
+		<?php							
+			$filter = '49 IEMS';
+			filtered_unit_array($filter);
+			echo iems_pull_down_menu('suburb', $filtered_units, $entry_fields['entry_suburb'], 'id ="suburb" form-control class="selectpicker" data-live-search="true" data-width="100%"');?>
 <div class="p-2"></div>
 <?php
   }

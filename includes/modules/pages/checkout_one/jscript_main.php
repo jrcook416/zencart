@@ -1,10 +1,10 @@
 <?php
 // -----
 // Part of the One-Page Checkout plugin, provided under GPL 2.0 license by lat9
-// Copyright (C) 2013-2020, Vinos de Frutas Tropicales.  All rights reserved.
+// Copyright (C) 2013-2022, Vinos de Frutas Tropicales.  All rights reserved.
 //
 ?>
-<script type="text/javascript"><!--
+<script>
 <?php
 // -----
 // Introduced in OPC v2.3.0 to identify the template-specific selector for the
@@ -17,6 +17,18 @@ if (!defined('CHECKOUT_ONE_OTTOTAL_SELECTOR')) {
 }
 
 // -----
+// Introduced in OPC v2.4.0 to identify payment methods that handle the form's submittal directly.
+//
+if (!defined('CHECKOUT_ONE_PAYMENT_METHODS_THAT_SUBMIT')) {
+    define('CHECKOUT_ONE_PAYMENT_METHODS_THAT_SUBMIT', 'square_webPay');
+}
+$payments_that_submit = '';
+if (CHECKOUT_ONE_PAYMENT_METHODS_THAT_SUBMIT !== '') {
+    $payments_that_submit = explode(',', str_replace(' ', '', CHECKOUT_ONE_PAYMENT_METHODS_THAT_SUBMIT));
+    $payments_that_submit = '"' . implode('", "', $payments_that_submit) . '"';
+}
+
+// -----
 // The "confirmation_required" array contains a list of payment modules for which, er, confirmation
 // is required.  This is used to determine whether the "confirm-order" or "review-order" button is displayed.
 // The $required_list value is created by the page's header_php.php processing.
@@ -26,11 +38,19 @@ if (!defined('CHECKOUT_ONE_OTTOTAL_SELECTOR')) {
 $show_state_dropdowns = true;
 ?>
 var confirmation_required = [<?php echo $required_list; ?>];
+var paymentsThatSubmit = [<?php echo $payments_that_submit; ?>];
 
 var virtual_order = <?php echo ($is_virtual_order) ? 'true' : 'false'; ?>;
 var timeoutUrl = '<?php echo zen_href_link(FILENAME_LOGIN, '', 'SSL'); ?>';
 var sessionTimeoutErrorMessage = '<?php echo JS_ERROR_SESSION_TIMED_OUT; ?>';
-var ajaxTimeoutErrorMessage = '<?php echo JS_ERROR_AJAX_TIMEOUT; ?>';
+var ajaxTimeoutErrorMessage = '<?php echo JS_ERROR_AJAX_TIMEOUT . JS_ERROR_CONTACT_US; ?>';
+var ajaxTimeoutShippingErrorMessage = '<?php echo JS_ERROR_AJAX_SHIPPING_TIMEOUT . JS_ERROR_CONTACT_US; ?>';
+var ajaxTimeoutPaymentErrorMessage = '<?php echo JS_ERROR_AJAX_PAYMENT_TIMEOUT . JS_ERROR_CONTACT_US; ?>';
+var ajaxTimeoutSetAddressErrorMessage = '<?php echo JS_ERROR_AJAX_SET_ADDRESS_TIMEOUT . JS_ERROR_CONTACT_US; ?>';
+var ajaxTimeoutRestoreAddressErrorMessage = '<?php echo JS_ERROR_AJAX_RESTORE_ADDRESS_TIMEOUT . JS_ERROR_CONTACT_US; ?>';
+var ajaxTimeoutValidateAddressErrorMessage = '<?php echo JS_ERROR_AJAX_VALIDATE_ADDRESS_TIMEOUT . JS_ERROR_CONTACT_US; ?>';
+var ajaxTimeoutRestoreCustomerErrorMessage = '<?php echo JS_ERROR_AJAX_RESTORE_CUSTOMER_TIMEOUT . JS_ERROR_CONTACT_US; ?>';
+var ajaxTimeoutValidateCustomerErrorMessage = '<?php echo JS_ERROR_AJAX_VALIDATE_CUSTOMER_TIMEOUT . JS_ERROR_CONTACT_US; ?>';
 var ajaxNotAvailableMessage = '<?php echo JS_ERROR_OPC_NOT_ENABLED; ?>';
 var checkoutShippingUrl = '<?php echo zen_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL'); ?>';
 var noShippingSelectedError = '<?php echo ERROR_NO_SHIPPING_SELECTED; ?>';
@@ -60,7 +80,7 @@ var additionalShippingInputs = {
 //
 $input_array = 'var shippingInputs = {';
 if (isset($quotes) && is_array($quotes)) {
-    $additional_shipping_inputs = array();
+    $additional_shipping_inputs = [];
     foreach ($quotes as $current_quote) {
         if (isset($current_quote['required_input_names']) && is_array($current_quote['required_input_names'])) {
             foreach ($current_quote['required_input_names'] as $current_input_name => $selection_required) {
@@ -78,9 +98,9 @@ if (isset($quotes) && is_array($quotes)) {
 <?php
 echo $input_array . '};'.PHP_EOL;
 ?>
-//--></script>
+</script>
 <?php
-if (defined('CHECKOUT_ONE_MINIFIED_SCRIPT') && CHECKOUT_ONE_MINIFIED_SCRIPT == 'true') {
+if (defined('CHECKOUT_ONE_MINIFIED_SCRIPT') && CHECKOUT_ONE_MINIFIED_SCRIPT === 'true') {
     $main_script_filename = 'jquery.checkout_one.min.js';
     $addr_script_filename = 'jquery.checkout_one_addr.min.js';
 } else {
@@ -91,7 +111,7 @@ $main_script_filepath = DIR_WS_MODULES . "pages/checkout_one/$main_script_filena
 $main_script_mtime = filemtime($main_script_filepath);
 $main_script_filepath .= "?$main_script_mtime";
 ?>
-<script type="text/javascript" src="<?php echo $main_script_filepath; ?>" defer></script>
+<script src="<?php echo $main_script_filepath; ?>" defer></script>
 <?php
 // -----
 // Check to see if dropdown states are to be displayed, including that processing only
@@ -102,6 +122,6 @@ if ($show_state_dropdowns) {
     $addr_script_mtime = filemtime($addr_script_filepath);
     $addr_script_filepath .= "?$addr_script_mtime";
 ?>
-<script type="text/javascript" src="<?php echo $addr_script_filepath; ?>" defer></script>
+<script src="<?php echo $addr_script_filepath; ?>" defer></script>
 <?php
 }

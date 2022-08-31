@@ -6,6 +6,8 @@
 // This class, instantiated in the current customer session, keeps track of a customer's login and checkout
 // progression with the aid of the OPC's observer- and AJAX-classes.
 //
+// Last updated: OPC v2.4.3.
+//
 class OnePageCheckout extends base
 {
     // -----
@@ -14,7 +16,7 @@ class OnePageCheckout extends base
     //
     const OPC_ERROR_NO_JS   = 'jserr';  //-jQuery/javascript error detected
     const OPC_ERROR_NO_GC   = 'no-gc';  //-Guest checkout can't be used due to a Gift Certificate being present in the cart.
-    
+
     // -----
     // Various protected data elements:
     //
@@ -57,6 +59,7 @@ class OnePageCheckout extends base
               $tempAddressValues,
               $guestCustomerInfo,
               $guestCustomerId,
+              $reset_info,
               $tempBilltoAddressBookId,
               $tempSendtoAddressBookId,
               $dbStringType,
@@ -70,15 +73,16 @@ class OnePageCheckout extends base
               $isVirtualOrder,
               $billtoAddressChangeable,
               $sendtoAddressChangeable;
-    
+
     public function __construct()
     {
         $this->isEnabled = false;
         $this->guestIsActive = false;
         $this->isGuestCheckoutEnabled = false;
         $this->registeredAccounts = false;
+        $this->reset_info = [];
     }
-    
+
     /* -----
     ** This function, called by the OPC's observer-class, provides the common-use debug filename.
     */
@@ -87,7 +91,7 @@ class OnePageCheckout extends base
         $customer_id = (isset($_SESSION['customer_id'])) ? $_SESSION['customer_id'] : 'na';
         return DIR_FS_LOGS . "/one_page_checkout-$customer_id-" . date('Y-m-d') . ".log";
     }
-    
+
     /* -----
     ** This function returns whether (true) or not (false) the overall OPC functionality
     ** is enabled.
@@ -107,14 +111,14 @@ class OnePageCheckout extends base
         //
         $this->isEnabled = false;
         if (defined('CHECKOUT_ONE_ENABLED') && (!isset($_SESSION['opc_error']) || $_SESSION['opc_error'] != self::OPC_ERROR_NO_JS)) {
-            if (CHECKOUT_ONE_ENABLED == 'true') {
+            if (CHECKOUT_ONE_ENABLED === 'true') {
                 $this->isEnabled = true;
-            } elseif (CHECKOUT_ONE_ENABLED == 'conditional' && isset($_SESSION['customer_id'])) {
+            } elseif (CHECKOUT_ONE_ENABLED === 'conditional' && isset($_SESSION['customer_id'])) {
                 if (in_array($_SESSION['customer_id'], explode(',', str_replace(' ', '', CHECKOUT_ONE_ENABLE_CUSTOMERS_LIST)))) {
                     $this->isEnabled = true;
                 }
             }
-            
+
             // -----
             // Perform some OPC-session cleanup if, after starting a paypalwpp-paid order, the
             // customer decides to change payment methods.
@@ -127,14 +131,14 @@ class OnePageCheckout extends base
                     $this->paypalNoShipping
                 ); 
             }
-            
+
             if (empty($this->paypalTotalValueChanged) && $this->isPayPalExpressCheckout()) {
                 $this->isEnabled = false;
             }
         }
         return $this->isEnabled;
     }
-    
+
     // -----
     // Determine whether we're currently in the PayPal Express Checkout's "Express Checkout"
     // handling, using the detection currently (zc156a) present in the paypalwpp::in_special_checkout's
@@ -144,15 +148,15 @@ class OnePageCheckout extends base
     {
         global $current_page_base;
         $is_paypal_express_checkout = false;
-        if ($current_page_base != FILENAME_CHECKOUT_PROCESS && defined('MODULE_PAYMENT_PAYPALWPP_STATUS') && MODULE_PAYMENT_PAYPALWPP_STATUS == 'True') {
-            if (!empty($_SESSION['paypal_ec_token']) && !empty($_SESSION['paypal_ec_payer_id']) && !empty($_SESSION['paypal_ec_payer_info'])) {
+        if ($current_page_base !== FILENAME_CHECKOUT_PROCESS && defined('MODULE_PAYMENT_PAYPALWPP_STATUS') && MODULE_PAYMENT_PAYPALWPP_STATUS === 'True') {
+            if (isset($_SESSION['customer_guest_id']) || (!empty($_SESSION['paypal_ec_token']) && !empty($_SESSION['paypal_ec_payer_id']) && !empty($_SESSION['paypal_ec_payer_info']))) {
                 $this->debugMessage("PayPal Express Checkout, in special checkout.  One Page Checkout is disabled.");
                 $is_paypal_express_checkout = true;
             }
         }
         return $is_paypal_express_checkout;
     }
-    
+
     /* -----
     ** This function returns a boolean indication as to whether (true) or not (false) OPC's
     ** guest-checkout is currently enabled.
@@ -162,17 +166,17 @@ class OnePageCheckout extends base
         $this->initializeGuestCheckout();
         return ($this->isEnabled && $this->isGuestCheckoutEnabled);
     }
-    
+
     /* -----
     ** This function returns a boolean indication as to whether (true) or not (false) the order
     ** is currently being processed with the shipping address, same as billing.
     */    
     public function getShippingBilling()
     {
-        $_SESSION['shipping_billing'] = (isset($_SESSION['shipping_billing'])) ? $_SESSION['shipping_billing'] : true;
+        $_SESSION['shipping_billing'] = (isset($_SESSION['shipping_billing'])) ? $_SESSION['shipping_billing'] : (CHECKOUT_ONE_ENABLE_SHIPPING_BILLING === 'true');
         return $_SESSION['shipping_billing'];
     }
-    
+
     /* -----
     ** This function, present in OPC's observer-class prior to v2.1.0, returns a boolean value
     ** that indicates whether or not the current order qualities for free shipping, as identified
@@ -191,7 +195,7 @@ class OnePageCheckout extends base
         $address_book_id = -1;
         $order_country = -1;
         $pass = $this->isVirtualOrder();
-        if (!$pass && defined('MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING') && MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING == 'true') {
+        if (!$pass && defined('MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING') && MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING === 'true') {
             if ($country_override === false) {
                 $order_country = $order->delivery['country_id'];
             } else {
@@ -241,7 +245,7 @@ class OnePageCheckout extends base
         $this->debugMessage("isOrderFreeShipping($country_override), address_book_id = $address_book_id, order_country = $order_country, returning ($free_shipping).");
         return $free_shipping;
     }
-    
+
     /* -----
     ** Issued by the OPC's observer-class to determine whether order-related notifications need
     ** to be monitored.
@@ -254,7 +258,7 @@ class OnePageCheckout extends base
         $this->initializeGuestCheckout();
         return true;
     }
-    
+
     /* -----
     ** This function returns a boolean indication as to whether (true) or not (false) OPC's
     ** account-registration is enabled.  This is used by the OPC's observer class to determine
@@ -264,7 +268,7 @@ class OnePageCheckout extends base
     {
         return $this->isEnabled && $this->registeredAccounts;
     }
-    
+
     /* -----
     ** This function, called at the end of the checkout_one page's header processing, captures
     ** some processing flags to be used by subsequent calls by the OPC's AJAX processing.
@@ -275,7 +279,7 @@ class OnePageCheckout extends base
         $this->billtoAddressChangeable = !$flagDisablePaymentAddressChange;
         $this->sendtoAddressChangeable = $editShippingButtonLink;
     }
-    
+
     /* -----
     ** These functions, used by the OPC's AJAX class, retrieve those values as saved above.
     */
@@ -291,7 +295,7 @@ class OnePageCheckout extends base
     {
         return $this->sendtoAddressChangeable;
     }
-    
+
     /* -----
     ** This function returns a boolean indication as to whether (true) or not (false) the 
     ** currently-logged-in customer has registered (i.e. no primary address yet provided) or
@@ -323,10 +327,10 @@ class OnePageCheckout extends base
                 $account_needs_primary_address = false;
             }
         }
-        
+
         return $account_needs_primary_address;
     }
-    
+
     /* -----
     ** This function returns a boolean indication as to whether (true) or not (false) OPC's
     ** "temporary addresses" (used for guest-checkout and registered-accounts) is currently
@@ -343,8 +347,10 @@ class OnePageCheckout extends base
     //
     protected function initializeGuestCheckout()
     {
+        global $current_page_base;
+
         $this->checkEnabled();
-        
+
         // -----
         // Give a watching observer the opportunity to disable the guest checkout, e.g. if an unwanted IP address is making the access.
         //
@@ -353,16 +359,18 @@ class OnePageCheckout extends base
         if ($allow_guest_checkout !== true) {
             $this->debugMessage("Guest checkout disabled via observer.");
         }
-        
-        $this->isGuestCheckoutEnabled = $allow_guest_checkout === true && !zen_is_spider_session() && (defined('CHECKOUT_ONE_ENABLE_GUEST') && CHECKOUT_ONE_ENABLE_GUEST == 'true');
-        if (isset($_SESSION['opc_error']) && ($_SESSION['opc_error'] == self::OPC_ERROR_NO_GC || $_SESSION['opc_error'] == self::OPC_ERROR_NO_JS)) {
-            $this->isGuestCheckoutEnabled = false;
+
+        $this->isGuestCheckoutEnabled = $allow_guest_checkout === true && !zen_is_spider_session() && (defined('CHECKOUT_ONE_ENABLE_GUEST') && CHECKOUT_ONE_ENABLE_GUEST === 'true');
+        if (isset($_SESSION['opc_error']) && ($_SESSION['opc_error'] === self::OPC_ERROR_NO_GC || $_SESSION['opc_error'] === self::OPC_ERROR_NO_JS)) {
+            if ($_SESSION['opc_error'] === self::OPC_ERROR_NO_JS || in_array($current_page_base, [FILENAME_LOGIN, FILENAME_CHECKOUT_ONE, FILENAME_CHECKOUT_ONE_CONFIRMATION])) {
+                $this->isGuestCheckoutEnabled = false;
+            }
         }
         $this->guestCustomerId = (defined('CHECKOUT_ONE_GUEST_CUSTOMER_ID')) ? (int)CHECKOUT_ONE_GUEST_CUSTOMER_ID : 0;
         $this->tempBilltoAddressBookId = (defined('CHECKOUT_ONE_GUEST_BILLTO_ADDRESS_BOOK_ID')) ? (int)CHECKOUT_ONE_GUEST_BILLTO_ADDRESS_BOOK_ID : 0;
         $this->tempSendtoAddressBookId = (defined('CHECKOUT_ONE_GUEST_SENDTO_ADDRESS_BOOK_ID')) ? (int)CHECKOUT_ONE_GUEST_SENDTO_ADDRESS_BOOK_ID : 0;
         $this->registeredAccounts = (defined('CHECKOUT_ONE_ENABLE_REGISTERED_ACCOUNTS') && CHECKOUT_ONE_ENABLE_REGISTERED_ACCOUNTS === 'true');
-        
+
         // -----
         // The 'stringIgnoreNull' type of database "bind" type was introduced in ZC1.5.5b; if the store
         // is using an earlier version of Zen Cart, we'll log a debug message and use the 'string'
@@ -375,7 +383,7 @@ class OnePageCheckout extends base
             $this->debugMessage("Using 'string' database types instead of 'stringIgnoreNull' for Zen Cart $zc_version.");
         }
     }
-    
+
     /* -----
     ** This function returns the current value to be used when setting string-type values into the database.
     */
@@ -407,7 +415,7 @@ class OnePageCheckout extends base
     {
         return (!empty($_SESSION['customer_id']));
     }
-    
+
     /* -----
     ** This function resets the guest-related information stored in the current session,
     ** essentially restoring the session to a non-guest-checkout scenario.
@@ -439,7 +447,7 @@ class OnePageCheckout extends base
         $this->resetSessionVariables();
         $this->reset();
     }
-    
+
     /* -----
     ** This function resets the common (guest and account) session variables added to
     ** the session for the One Page Checkout's processing.
@@ -453,7 +461,7 @@ class OnePageCheckout extends base
             unset($_SESSION['opc_error']);
         }
     }
-    
+
     // -----
     // This internal function resets the class' variables to their non-guest-checkout state.
     //
@@ -472,10 +480,16 @@ class OnePageCheckout extends base
             $this->paypalTotalValueChanged,
             $this->paypalNoShipping
         ); 
-        
+
+        // -----
+        // Gather some information about 'who' requested the reset, included when it's
+        // detected that the tempAddressValues are missing.
+        //
+        $this->reset_info[] = debug_backtrace();
+
         $this->initializeGuestCheckout();
     }
-    
+
     /* -----
     ** Issued by OPC's observer class when entry to the shopping_cart page is detected.  Since the
     ** shipping-estimator (present on that page) might make modifications to the order's $_SESSION['sendto'],
@@ -487,7 +501,7 @@ class OnePageCheckout extends base
             $this->sendtoSaved = $_SESSION['sendto'];
         }
     }
-    
+
     /* -----
     ** Issued (currently) by the checkout_one page's header processing to initialize any guest-checkout
     ** processing.  Since the process starts by the login page's form-submittal with the 'guest_checkout'
@@ -514,26 +528,26 @@ class OnePageCheckout extends base
         }
 
         if ($this->guestCheckoutEnabled()) {
-            $redirect_required = ($current_page_base == FILENAME_CHECKOUT_ONE && isset($_POST['guest_checkout']));
+            $redirect_required = ($current_page_base === FILENAME_CHECKOUT_ONE && isset($_POST['guest_checkout']));
             if ($this->isGuestCheckout() || $redirect_required) {
                 $this->guestIsActive = true;
                 if (!isset($this->guestCustomerInfo)) {
                     $this->customerInfoOk = false;
                     $this->billtoTempAddrOk = false;
                     $this->sendtoTempAddrOk = false;
-                    $this->guestCustomerInfo = array(
+                    $this->guestCustomerInfo = [
                         'firstname' => '',
                         'lastname' => '',
                         'email_address' => '',
                         'telephone' => '',
                         'dob' => '',
                         'gender' => '',
-                    );
+                    ];
 
                     // -----
                     // Allow an observer to add fields to the guest-customer's record.
                     //
-                    $additional_guest_fields = array();
+                    $additional_guest_fields = [];
                     $this->notify('NOTIFY_OPC_GUEST_CUSTOMER_INFO_INIT', '', $additional_guest_fields);
                     if (is_array($additional_guest_fields) && count($additional_guest_fields) != 0) {
                         $this->debugMessage('startGuestOnePageCheckout, added fields to customer-info: ' . json_encode($additional_guest_fields));
@@ -554,7 +568,8 @@ class OnePageCheckout extends base
             unset($_SESSION['is_guest_checkout']);
         }
 
-        $this->debugMessage('startGuestOnePageCheckout, exit: sendto: ' . ((isset($_SESSION['sendto'])) ? $_SESSION['sendto'] : 'not set') . ', billto: ' . ((isset($_SESSION['billto'])) ? $_SESSION['billto'] : 'not set') . var_export($this, true));
+        $current_settings = print_r($this, true);
+        $this->debugMessage('startGuestOnePageCheckout, exit: sendto: ' . ((isset($_SESSION['sendto'])) ? $_SESSION['sendto'] : 'not set') . ', billto: ' . ((isset($_SESSION['billto'])) ? $_SESSION['billto'] : 'not set') . PHP_EOL . $current_settings);
 
         if ($redirect_required) {
             zen_redirect(zen_href_link(FILENAME_CHECKOUT_ONE, '', 'SSL'));
@@ -578,7 +593,7 @@ class OnePageCheckout extends base
             $this->reset();
         }
     }
-    
+
     /* -----
     ** This function, called by the guest customer-information block's formatting, returns the
     ** guest's currently-set email address.
@@ -591,7 +606,7 @@ class OnePageCheckout extends base
         }
         return $this->guestCustomerInfo['email_address'];
     }
-   
+
     /* -----
     ** This function, called by the guest customer-information block's formatting, returns the
     ** guest's currently-set telephone number.
@@ -604,7 +619,7 @@ class OnePageCheckout extends base
         }
         return $this->guestCustomerInfo['telephone'];
     }
-    
+
     /* -----
     ** This function, called by the guest customer-information block's formatting, returns the
     ** guest's currently-set date-of-birth.
@@ -615,9 +630,9 @@ class OnePageCheckout extends base
             trigger_error("Guest customer-info not set during guest checkout.", E_USER_ERROR);
             exit();
         }
-        return (isset($this->guestCustomerInfo['dob'])) ? $this->guestCustomerInfo['dob'] : '';
+        return (isset($this->guestCustomerInfo['dob_display'])) ? $this->guestCustomerInfo['dob_display'] : '';
     }
-    
+
     /* -----
     ** This function, called by tpl_modules_opc_credit_selections.php, returns a boolean
     ** indication as to whether (true) or not (false) the specified order-total is
@@ -630,7 +645,7 @@ class OnePageCheckout extends base
     {
         return !($this->isGuestCheckout() && in_array($ot_name, explode(',', str_replace(' ', '', CHECKOUT_ONE_ORDER_TOTALS_DISALLOWED_FOR_GUEST))));
     }
-    
+
     /* -----
     ** This function, called from the OPC's observer class when the ot_coupon handling
     ** needs to know if a limited uses-per-user coupon should be honored, checks through
@@ -647,7 +662,7 @@ class OnePageCheckout extends base
                 $coupon_id = (int)$coupon_info['coupon_id'];
                 $email_address = zen_db_input($this->guestCustomerInfo['email_address']);
                 $uses_per_user++;  //- This value now contains one more than the allowed number of uses!
-                
+
                 // -----
                 // Check the orders that have been granted use of the coupon for those using the
                 // current guest's email-address, stopping the search once we know that the number
@@ -669,7 +684,7 @@ class OnePageCheckout extends base
         }
         return $coupon_uses_per_user_exceeded;
     }
-    
+
     /* -----
     ** This function, called by the checkout_one page's header processing, determines if any
     ** of the currently-enabled payment methods should be disabled due to guest-checkout
@@ -678,7 +693,7 @@ class OnePageCheckout extends base
     public function validateGuestPaymentMethods($enabled_payment_modules)
     {
         if (!is_array($enabled_payment_modules)) {
-            $enabled_payment_modules = array();
+            $enabled_payment_modules = [];
         }
         
         if ($this->isGuestCheckout()) {
@@ -694,10 +709,10 @@ class OnePageCheckout extends base
                 }
             }
         }
-        
+
         return $enabled_payment_modules;
     }
-    
+
     /* -----
     ** This function, called by the billing/shipping address blocks' formatting, instructs
     ** the module whether (true) or not (false) to include the checkbox to add the updated
@@ -723,7 +738,7 @@ class OnePageCheckout extends base
         }
         return $show_add_address;
     }
-    
+
     /* -----
     ** This function, called from the OPC's observer-class, provides any address/tax-basis
     ** update when an order includes one or more temporary addresses (a subset of guest
@@ -731,13 +746,14 @@ class OnePageCheckout extends base
     */
     public function updateOrderAddresses($order, &$taxCountryId, &$taxZoneId)
     {
-        $this->debugMessage("updateOrderAddresses, on entry:" . var_export($order, true) . var_export($this, true));
+        $current_settings = print_r($this, true);
+        $this->debugMessage("updateOrderAddresses, on entry:" . var_export($order, true) . PHP_EOL . $current_settings);
         $this->debugMessage("Current sendto: " . ((isset($_SESSION['sendto'])) ? $_SESSION['sendto'] : 'not set'));
         if (zen_in_guest_checkout()) {
             $address = (array)$order->customer;
             $order->customer = array_merge($address, $this->createOrderAddressFromTemporary('bill'), $this->getGuestCustomerInfo());
         }
-        
+
         $temp_billing_address = $temp_shipping_address = false;
         if (isset($_SESSION['sendto']) && ($_SESSION['sendto'] == $this->tempSendtoAddressBookId || $_SESSION['sendto'] == $this->tempBilltoAddressBookId)) {
             $temp_shipping_address = true;
@@ -762,7 +778,7 @@ class OnePageCheckout extends base
         }
         $this->debugMessage("updateOrderAddresses, $temp_billing_address, $temp_shipping_address, $taxCountryId, $taxZoneId" . PHP_EOL . json_encode($order->customer) . PHP_EOL . json_encode($order->billing) . PHP_EOL . json_encode($order->delivery));
     }
-    
+
     // -----
     // This internal function returns the guest-customer information currently gathered.
     //
@@ -774,7 +790,7 @@ class OnePageCheckout extends base
         }
         return $this->guestCustomerInfo;
     }
-    
+
     // -----
     // This internal function creates an address-array in the format used by the built-in Zen Cart
     // order-class from the selected temporary address.
@@ -794,9 +810,9 @@ class OnePageCheckout extends base
         //
         $country_id = $this->tempAddressValues[$which]['country'];
         if (empty($country_id)) {
-            return array();
+            return [];
         }
-        
+
         $country_info = $db->Execute(
             "SELECT *
                FROM " . TABLE_COUNTRIES . "
@@ -808,8 +824,8 @@ class OnePageCheckout extends base
             trigger_error("Unknown or disabled country present for '$which' address ($country_id).", E_USER_ERROR);
             exit();
         }
-        
-        $address = array(
+
+        $address = [
             'firstname' => $this->tempAddressValues[$which]['firstname'],
             'lastname' => $this->tempAddressValues[$which]['lastname'],
             'company' => $this->tempAddressValues[$which]['company'],
@@ -819,19 +835,19 @@ class OnePageCheckout extends base
             'postcode' => $this->tempAddressValues[$which]['postcode'],
             'state' => ((zen_not_null($this->tempAddressValues[$which]['state'])) ? $this->tempAddressValues[$which]['state'] : $this->tempAddressValues[$which]['zone_name']),
             'zone_id' => $this->tempAddressValues[$which]['zone_id'],
-            'country' => array(
+            'country' => [
                 'id' => $country_id, 
                 'title' => zen_get_country_name($country_id), 
                 'iso_code_2' => $country_info->fields['countries_iso_code_2'], 
                 'iso_code_3' => $country_info->fields['countries_iso_code_3']
-            ),
+            ],
             'country_id' => $country_id,
             'format_id' => (int)$country_info->fields['address_format_id']
-        );
+        ];
         $this->debugMessage("createOrderAddressFromTemporary($which), returning: " . json_encode($address));
         return $address;
     }
-    
+
     // -----
     // This internal function, called when an address-change is detected, determines the current tax-basis
     // used during the checkout process.
@@ -859,7 +875,7 @@ class OnePageCheckout extends base
                     }
                 }
                 break;
-                
+
             case 'Billing':
                if ($use_temp_billing) {
                     $tax_country_id = $this->tempAddressValues['bill']['country'];
@@ -869,12 +885,12 @@ class OnePageCheckout extends base
                     $tax_zone_id = $order->billing['zone_id'];
                 }
                 break;
-                
+
             default:
                 if ($use_temp_billing && $this->tempAddressValues['bill']['zone_id'] == STORE_ZONE) {
                     $tax_country_id = $this->tempAddressValues['bill']['country'];
                     $tax_zone_id = $this->tempAddressValues['bill']['zone_id'];
-                } elseif ((!$use_temp_billing && $order->billing['zone_id'] == STORE_ZONE) || $order->content_type == 'virtual') {
+                } elseif ((!$use_temp_billing && $order->billing['zone_id'] == STORE_ZONE) || $order->content_type === 'virtual') {
                     $tax_country_id = $order->billing['country_id'];
                     $tax_zone_id = $order->billing['zone_id'];
                 } else {
@@ -885,12 +901,12 @@ class OnePageCheckout extends base
         }
         
         $this->debugMessage("recalculateTaxBasis, temp_billing($use_temp_billing), temp_shipping($use_temp_shipping), returning country_id = $tax_country_id, zone_id = $tax_zone_id.");
-        return array(
+        return[
             'tax_country_id' => $tax_country_id,
             'tax_zone_id' => $tax_zone_id
-        );
+        ];
     }
-    
+
     /* -----
     ** This function returns the Zen-Cart formatted address for the specified temporary address.
     */
@@ -902,7 +918,7 @@ class OnePageCheckout extends base
         
         return zen_address_format($address['format_id'], $address, ($use_html === true), '', $eoln);
     }
-    
+
     /* -----
     ** This function validates (true) or not (false) the specified order-related
     ** address ('bill' or 'ship').
@@ -915,11 +931,11 @@ class OnePageCheckout extends base
         global $db;
 
         $this->inputPreCheck($which);
-        
+
         // -----
         // First, determine whether the specified address is/isn't temporary.
         //
-        if ($which == 'bill') {
+        if ($which === 'bill') {
             $address_book_id = $_SESSION['billto'];
             $is_temp_address = ($address_book_id == $this->tempBilltoAddressBookId);
         } else {
@@ -929,7 +945,7 @@ class OnePageCheckout extends base
                 $is_temp_address = $is_temp_address || ($address_book_id == $this->tempBilltoAddressBookId);
             }
         }
-        
+
         // -----
         // Next, determine if a temporary address is valid for the current customer session.
         //
@@ -952,14 +968,14 @@ class OnePageCheckout extends base
                 $is_valid = !$check->EOF;
             }
         }
-        
+
         // -----
         // If the address isn't valid for the current usage, reset the session's address to
         // the customer's default and kill the session-variable previously set for that
         // invalid address.
         //
         if (!$is_valid) {
-            if ($which == 'bill') {
+            if ($which === 'bill') {
                 $_SESSION['billto'] = $_SESSION['customer_default_address_id'];
                 $_SESSION['payment'] = '';
             } else {
@@ -969,7 +985,7 @@ class OnePageCheckout extends base
         }
         return $is_valid;
     }
-    
+
     /* -----
     ** This function, called from OPC's AJAX handler, requests that any temporary shipping
     ** address be reset to the currently-selected billing address, as defined in the session.
@@ -980,7 +996,7 @@ class OnePageCheckout extends base
             trigger_error('Invalid access; $_SESSION[\'billto\'] is not set.', E_USER_ERROR);
             exit();
         }
-        
+
         $address_book_id = $_SESSION['billto'];
         if ($address_book_id == $this->tempBilltoAddressBookId) {
             $address_values = $this->tempAddressValues['bill'];
@@ -989,15 +1005,15 @@ class OnePageCheckout extends base
         }
         $this->tempAddressValues['ship'] = $address_values;
     }
-    
+
     /* -----
     ** This function resets the current session's address to the specified address-book entry.
     */
     public function setAddressFromSavedSelections($which, $address_book_id)
     {
         $this->inputPreCheck($which);
-        
-        if ($which == 'bill') {
+
+        if ($which === 'bill') {
             $_SESSION['billto'] = $address_book_id;
             if ($this->getShippingBilling()) {
                 $_SESSION['sendto'] = $address_book_id;
@@ -1006,13 +1022,13 @@ class OnePageCheckout extends base
             $_SESSION['sendto'] = $address_book_id;
         }
     }
-    
+
     public function getAddressValues($which)
     {
         $this->inputPreCheck($which);
-        
-        $address_book_id = (int)($which == 'bill') ? $_SESSION['billto'] : $_SESSION['sendto'];
-        
+
+        $address_book_id = (int)($which === 'bill') ? $_SESSION['billto'] : $_SESSION['sendto'];
+
         if ($address_book_id == $this->tempBilltoAddressBookId || $address_book_id == $this->tempSendtoAddressBookId) {
             $address_values = $this->tempAddressValues[$which];
         } else {
@@ -1021,16 +1037,16 @@ class OnePageCheckout extends base
         if (!isset($address_values['country_id'])) {
             $address_values['country_id'] = $address_values['country'];
         }
-        
+
         return $this->updateStateDropdownSettings($address_values);
     }
-    
+
     protected function getAddressValuesFromDb($address_book_id)
     {
         global $db;
 
         $address_info_query = 
-            "SELECT ab.*, z.zone_name
+            "SELECT ab.*, z.zone_name, z.zone_code
                FROM " . TABLE_ADDRESS_BOOK . "  ab
                     LEFT JOIN " . TABLE_ZONES . " z
                         ON z.zone_id = ab.entry_zone_id
@@ -1046,7 +1062,7 @@ class OnePageCheckout extends base
             trigger_error("unknown address_book_id (" . $address_book_id . ') for customer_id (' . $_SESSION['customer_id'] . ')', E_USER_ERROR);
             exit();
         }
-        
+
         foreach ($address_info->fields as $key => $value) {
             if (strpos($key, 'entry_') === 0) {
                 $new_key = substr($key, 6);
@@ -1061,34 +1077,19 @@ class OnePageCheckout extends base
         $address_info->fields['error_state_input'] = $address_info->fields['error'] = false;
         $address_info->fields['country_has_zones'] = $this->countryHasZones($address_info->fields['country']);
         $address_info->fields['validated'] = !$this->customerAccountNeedsPrimaryAddress();
-        
+
         $address_info->fields = $this->updateStateDropdownSettings($address_info->fields);
-        
+
         $this->notify('NOTIFY_OPC_INIT_ADDRESS_FROM_DB', $address_book_id, $address_info->fields);
-        
-        $this->debugMessage("getAddressValuesFromDb($address_book_id), returning: " . var_export($address_info->fields, true)); 
-        
+
+        $this->debugMessage("getAddressValuesFromDb($address_book_id), returning: " . json_encode($address_info->fields)); 
+
         return $address_info->fields;
     }
-    
+
     protected function initAddressValuesForGuest()
     {
-        global $db;
-
-        $zone_id = (int)STORE_ZONE;
-        if ($zone_id === 0) {
-            $zone_name = STORE_ZONE;
-        } else {
-            $check = $db->Execute(
-                "SELECT zone_name
-                   FROM " . TABLE_ZONES . "
-                  WHERE zone_country_id = " . (int)STORE_COUNTRY . "
-                    AND zone_id = $zone_id
-                  LIMIT 1"
-            );
-            $zone_name = ($check->EOF) ? '' : $check->fields['zone_name'];
-        }
-        $address_values = array(
+        $address_values = [
             'gender' => '',
             'company' => '',
             'firstname' => '',
@@ -1100,8 +1101,8 @@ class OnePageCheckout extends base
             'state' => '',
             'country' => (int)STORE_COUNTRY,
             'country_id' => (int)STORE_COUNTRY,
-            'zone_id' => $zone_id,
-            'zone_name' => $zone_name,
+            'zone_id' => 0,
+            'zone_name' => '',
             'address_book_id' => 0,
             'selected_country' => (int)STORE_COUNTRY,
             'country_has_zones' => $this->countryHasZones((int)STORE_COUNTRY),
@@ -1110,19 +1111,19 @@ class OnePageCheckout extends base
             'error' => false,
             'error_state_input' => false,
             'validated' => false,
-        );
+        ];
         $address_values = $this->updateStateDropdownSettings($address_values);
-        
+
         $this->notify('NOTIFY_OPC_INIT_ADDRESS_FOR_GUEST', '', $address_values);
-        
+
         return $address_values;
     }
-    
+
     public function formatAddressBookDropdown()
     {
         global $db;
 
-        $select_array = array();
+        $select_array = [];
         if (isset($_SESSION['customer_id']) && !$this->isGuestCheckout() && !$this->customerAccountNeedsPrimaryAddress()) {
             // -----
             // Build up address list input to create a customer-specific selection list of 
@@ -1135,34 +1136,33 @@ class OnePageCheckout extends base
                ORDER BY entry_company ASC, entry_firstname ASC, entry_lastname ASC, address_book_id ASC"
             );
             if (!$addresses->EOF) {
-                $select_array[] = array(
+                $select_array[] = [
                     'id' => 0,
                     'text' => TEXT_SELECT_FROM_SAVED_ADDRESSES
-                );
+                ];
             }
-            while (!$addresses->EOF) {
-                $select_array[] = array( 
-                    'id' => $addresses->fields['address_book_id'],
-                    'text' => str_replace("\n", ', ', zen_address_label($_SESSION['customer_id'], $addresses->fields['address_book_id']))
-                );
-                $addresses->MoveNext();
+            foreach ($addresses as $address) {
+                $select_array[] = [ 
+                    'id' => $address['address_book_id'],
+                    'text' => str_replace("\n", ', ', zen_address_label($_SESSION['customer_id'], $address['address_book_id']))
+                ];
             }
         }
         return $select_array;
     }
-    
+
     public function getAddressDropDownSelection($which)
     {
         $this->inputPreCheck($which);
-        
-        if ($which == 'bill') {
+
+        if ($which === 'bill') {
             $selection = (!isset($_SESSION['billto']) || $_SESSION['billto'] == $this->tempBilltoAddressBookId) ? 0 : $_SESSION['billto'];
         } else {
             $selection = (!isset($_SESSION['sendto']) || $_SESSION['sendto'] == $this->tempSendtoAddressBookId) ? 0 : $_SESSION['sendto'];
         }
         return $selection;
     }
-    
+
     // -----
     // Creates the json-formatted array that maps countries to zones, for use in the
     // customer address-forms when dropdown states are enabled.
@@ -1179,43 +1179,32 @@ class OnePageCheckout extends base
                        AND status = 1
            ORDER BY zone_country_id"
         );
-        
-        $c2z = array();
-        while (!$countries->EOF) {
-            $current_country_id = $countries->fields['zone_country_id'];
-            $c2z[$current_country_id] = array();
 
-            $states = $db->Execute(
-                "SELECT zone_name, zone_id
-                   FROM " . TABLE_ZONES . "
-                  WHERE zone_country_id = $current_country_id
-               ORDER BY zone_name"
-            );
-            while (!$states->EOF) {
-                $c2z[$current_country_id][$states->fields['zone_id']] = $states->fields['zone_name'];
-                $states->MoveNext();
+        $c2z = [];
+        foreach ($countries as $country) {
+            $current_country_id = $country['zone_country_id'];
+            $c2z[$current_country_id] = [];
+
+            $states = zen_get_country_zones($current_country_id);
+            foreach ($states as $state) {
+                $c2z[$current_country_id][$state['id']] = $state['text'];
             }
-            $countries->MoveNext();
         }
-        
-        if (count($c2z) == 0) {
-            $output_string = '';
-        } else {
-            $output_string = 'var c2z = \'' . addslashes(json_encode($c2z)) . '\';' . PHP_EOL;
-        }
+
+        $output_string = 'var c2z = \'' . addslashes(json_encode($c2z)) . '\';' . PHP_EOL;
         return $output_string;
     }
-    
+
     protected function initializeTempAddressValues()
     {
         if (!isset($this->tempAddressValues)) {
-            $this->tempAddressValues = array(
+            $this->tempAddressValues = [
                 'ship' => $this->initAddressValuesForGuest(),
                 'bill' => $this->initAddressValuesForGuest()
-            );
+            ];
         }
     }
-    
+
     protected function countryHasZones($country_id)
     {
         global $db;
@@ -1228,7 +1217,7 @@ class OnePageCheckout extends base
         );
         return !$check->EOF;
     }
-    
+
     // -----
     // Updated for v2.3.2, the state dropdown is *always* displayed, regardless of configuration
     // setting.  Simplifies (and corrects) the OPC address-update processing for stores that have
@@ -1241,7 +1230,7 @@ class OnePageCheckout extends base
         $address_values['state'] = ($show_pulldown_states) ? $address_values['state'] : $address_values['zone_name'];
         $address_values['state_field_label'] = ($show_pulldown_states) ? '' : ENTRY_STATE;
         $address_values['show_pulldown_states'] = $show_pulldown_states;
-        
+
         return $address_values;
     }
 
@@ -1263,9 +1252,9 @@ class OnePageCheckout extends base
         // fill in the proper fields.
         //
         $autocomplete = '';
-        if ($field_name == 'company') {
+        if ($field_name === 'company') {
             $autocomplete = ' autocomplete="organization"';
-        } elseif ($field_name == 'suburb') {
+        } elseif ($field_name === 'suburb') {
             $autocomplete = ' autocomplete="address-line2"';
         }
 
@@ -1283,7 +1272,7 @@ class OnePageCheckout extends base
             $field_label .
             zen_draw_input_field($field_name, $field_value, "$field_len id=\"$field_id\"$autocomplete placeholder=\"$placeholder\" $field_required$field_params");
     }
-    
+
     public function validateAndSaveAjaxPostedAddress($which, &$messages)
     {
         $this->inputPreCheck($which);
@@ -1301,20 +1290,20 @@ class OnePageCheckout extends base
             $add_address = ($this->customerAccountNeedsPrimaryAddress() || (isset($_POST['add_address']) && $_POST['add_address'] === 'true'));
             $this->saveCustomerAddress($address_info, $which, $add_address);
         }
-        
+
         return !$address_info['validated'];
     }
-    
+
     public function validateAndSaveAjaxCustomerInfo()
     {
         if (!isset($_POST['email_address'])) {
             trigger_error('validateAndSaveAjaxCustomerInfo, invalid POST: ' . var_export($_POST, true), E_USER_ERROR);
             exit();
         }
-        
-        $messages = array();
+
+        $messages = [];
         $this->customerInfoOk = false;
-        
+
         $email_address = zen_db_prepare_input(zen_sanitize_string($_POST['email_address']));
         if (strlen($email_address) < ENTRY_EMAIL_ADDRESS_MIN_LENGTH) {
             $messages['email_address'] = ENTRY_EMAIL_ADDRESS_ERROR;
@@ -1322,20 +1311,29 @@ class OnePageCheckout extends base
             $messages['email_address'] = ENTRY_EMAIL_ADDRESS_CHECK_ERROR;
         } elseif (CHECKOUT_ONE_GUEST_EMAIL_CONFIRMATION == 'true') {
             $email_confirm = zen_db_prepare_input(zen_sanitize_string($_POST['email_address_conf']));
-            if ($email_confirm != $email_address) {
+            if ($email_confirm !== $email_address) {
                 $messages['email_address_conf'] = ERROR_EMAIL_MUST_MATCH_CONFIRMATION;
             }
         }
-        
+
         $telephone = zen_db_prepare_input(zen_sanitize_string($_POST['telephone']));
         if (strlen($telephone) < ENTRY_TELEPHONE_MIN_LENGTH) {
             $messages['telephone'] = ENTRY_TELEPHONE_NUMBER_ERROR;
         }
-        
+
+        // -----
+        // For the date-of-birth, some mobile browsers use a popup calendar that might
+        // require the date's display to be in a format other than that used in the database.
+        //
+        // Remember the format returned by the browser and, if found to be valid, use that to
+        // re-display the date value.
+        //
         $dob = '';
-        if (ACCOUNT_DOB == 'true') {
+        $dob_display = '';
+        if (ACCOUNT_DOB === 'true') {
             $dob = zen_db_prepare_input($_POST['dob']);
-            if (ENTRY_DOB_MIN_LENGTH > 0 or !empty($_POST['dob'])) {
+            $dob_display = $dob;
+            if (ENTRY_DOB_MIN_LENGTH > 0 || !empty($_POST['dob'])) {
                 // Support ISO-8601 style date
                 if (preg_match('/^([0-9]{4})(|-|\/)([0-9]{2})\2([0-9]{2})$/', $dob)) {
                     $_POST['dob'] = $dob = date(DATE_FORMAT, strtotime($dob));
@@ -1345,7 +1343,7 @@ class OnePageCheckout extends base
                 }
             }
         }
-        
+
         // -----
         // Give an observer the opportunity to validate any additional fields that might be required
         // for the guest-customer.  If the observer finds issues with any field, the "additional_messages"
@@ -1353,26 +1351,27 @@ class OnePageCheckout extends base
         // to be displayed.  If no issues are found, the "additional_fields" array (also associative) is
         // set to contain the element names ("key") and their associated value.
         //
-        $additional_messages = array();
-        $additional_fields = array();
+        $additional_messages = [];
+        $additional_fields = [];
         $this->notify('NOTIFY_OPC_VALIDATE_SAVE_GUEST_INFO', $messages, $additional_messages, $additional_fields);
-        if (is_array($additional_messages) && count($additional_messages) != 0) {
+        if (is_array($additional_messages) && count($additional_messages) !== 0) {
             $this->debugMessage('validateAndSaveAjaxCustomerInfo, additional messages (' . json_encode($additional_messages) . '), additional fields (' . json_encode($additional_fields) . ')');
             $messages = array_merge($messages, $additional_messages);
         }
-        
-        if (count($messages) == 0) {
+
+        if (count($messages) === 0) {
             $this->customerInfoOk = true;
             $this->guestCustomerInfo['email_address'] = $email_address;
             $this->guestCustomerInfo['telephone'] = $telephone;
             $this->guestCustomerInfo['dob'] = $dob;
+            $this->guestCustomerInfo['dob_display'] = $dob_display;
             if (is_array($additional_fields)) {
                 $this->guestCustomerInfo = array_merge($this->guestCustomerInfo, $additional_fields);
             }
         }
         return $messages;
     }
-    
+
     // -----
     // See if the supplied email-address is present (and banned) within the store's
     // database.  Returns true if present and banned; false otherwise.
@@ -1391,7 +1390,7 @@ class OnePageCheckout extends base
         );
         return !$check->EOF;
     }
-    
+
     // -----
     // Called by various functions with public interfaces to validate the "environment"
     // for the caller's processing.  If either the 'which' (address-value) input is not
@@ -1403,16 +1402,23 @@ class OnePageCheckout extends base
     //
     protected function inputPreCheck($which)
     {
-        if ($which != 'bill' && $which != 'ship') {
+        if ($which !== 'bill' && $which !== 'ship') {
             trigger_error("Unknown address selection ($which) received.", E_USER_ERROR);
             exit();
         }
         if (!isset($this->tempAddressValues)) {
-            trigger_error("Invalid request, tempAddressValues not set.", E_USER_ERROR);
+            // -----
+            // Include the information identifying whether the values were reset (and via
+            // what processing path) as an aid in identifying the source of this occasional
+            // error.
+            //
+            $extra_info = (isset($_SESSION['payment'])) ? $_SESSION['payment'] : 'not set';
+            $extra_info .= ', ' . (isset($_SESSION['shipping'])) ? json_encode($_SESSION['shipping']) : 'not set';
+            trigger_error('Invalid request, tempAddressValues not set: ' . $extra_info . PHP_EOL . json_encode($this), E_USER_ERROR);
             exit();
         }
     }
-    
+
     // -----
     // This internal function validates (and potentially updates) the supplied address-values information,
     // returning an array of messages identifying "issues" found.  If the returned array is
@@ -1427,13 +1433,13 @@ class OnePageCheckout extends base
         $zone_name = '';
         $error_state_input = false;
         $entry_state_has_zones = false;
-        $messages = array();
-        
+        $messages = [];
+
         $message_prefix = ($prepend_which) ? (($which == 'bill') ? ERROR_IN_BILLING : ERROR_IN_SHIPPING) : '';
-        
+
         $this->debugMessage("Start validateUpdatedAddress, which = $which:" . var_export($address_values, true));
-        
-        if ($which == 'bill') {
+
+        if ($which === 'bill') {
             $this->billtoTempAddrOk = false;
             if ($this->getShippingBilling()) {
                 $this->sendtoTempAddrOk = false;
@@ -1441,12 +1447,12 @@ class OnePageCheckout extends base
         } else {
             $this->sendtoTempAddrOk = false;
         }
-        
+
         $gender = false;
         $company = '';
         $suburb = '';
-        
-        if (ACCOUNT_COMPANY == 'true') {
+
+        if (ACCOUNT_COMPANY === 'true') {
             $company = zen_db_prepare_input($address_values['company']);
             if (((int)ENTRY_COMPANY_MIN_LENGTH > 0) && strlen($company) < ((int)ENTRY_COMPANY_MIN_LENGTH)) {
                 $error = true;
@@ -1454,53 +1460,53 @@ class OnePageCheckout extends base
             }
         }
 
-        if (ACCOUNT_GENDER == 'true') {
+        if (ACCOUNT_GENDER === 'true') {
             $gender = (isset($address_values['gender'])) ? zen_db_prepare_input($address_values['gender']) : '';
-            if ($gender != 'm' && $gender != 'f') {
+            if ($gender !== 'm' && $gender !== 'f') {
                 $error = true;
                 $messages['gender'] = $message_prefix . ENTRY_GENDER_ERROR;
             }
         }
-        
+
         $firstname = zen_db_prepare_input(zen_sanitize_string($address_values['firstname']));
         if (strlen($firstname) < ENTRY_FIRST_NAME_MIN_LENGTH) {
             $error = true;
             $messages['firstname'] = $message_prefix . ENTRY_FIRST_NAME_ERROR;
         }
-        
+
         $lastname = zen_db_prepare_input(zen_sanitize_string($address_values['lastname']));
         if (strlen($lastname) < ENTRY_LAST_NAME_MIN_LENGTH) {
             $error = true;
             $messages['lastname'] = $message_prefix . ENTRY_LAST_NAME_ERROR;
         }
-        
+
         $street_address = zen_db_prepare_input($address_values['street_address']);
         if (strlen($street_address) < ENTRY_STREET_ADDRESS_MIN_LENGTH) {
             $error = true;
             $messages['street_address'] = $message_prefix . ENTRY_STREET_ADDRESS_ERROR;
         }
-        
-        if (ACCOUNT_SUBURB == 'true') {
+
+        if (ACCOUNT_SUBURB === 'true') {
             $suburb = zen_db_prepare_input($address_values['suburb']);
         }
-        
+
         $city = zen_db_prepare_input($address_values['city']);
         if (strlen($city) < ENTRY_CITY_MIN_LENGTH) {
             $error = true;
             $messages['city'] = $message_prefix . ENTRY_CITY_ERROR;
         }
-        
+
         $postcode = zen_db_prepare_input($address_values['postcode']);
         if (strlen($postcode) < ENTRY_POSTCODE_MIN_LENGTH) {
             $error = true;
             $messages['postcode'] = $message_prefix . ENTRY_POST_CODE_ERROR;
         }
-        
+
         $country = zen_db_prepare_input($address_values['zone_country_id']);
-        if (!is_numeric($country)) {
+        if (!ctype_digit($country)) {
             $error = true;
             $messages['zone_country_id'] = $message_prefix . ENTRY_COUNTRY_ERROR;
-        } elseif (ACCOUNT_STATE == 'true') {
+        } elseif (ACCOUNT_STATE === 'true') {
             $state = (isset($address_values['state'])) ? trim(zen_db_prepare_input($address_values['state'])) : '';
             $zone_id = (isset($address_values['zone_id'])) ? zen_db_prepare_input($address_values['zone_id']) : 0;
 
@@ -1521,14 +1527,13 @@ class OnePageCheckout extends base
                 $zone = $db->Execute($zone_query);
 
                 //look for an exact match on zone ISO code
-                $found_exact_iso_match = ($zone->RecordCount() == 1);
+                $found_exact_iso_match = ($zone->RecordCount() === 1);
                 if ($zone->RecordCount() > 1) {
-                    while (!$zone->EOF) {
-                        if (strtoupper($zone->fields['zone_code']) == strtoupper($state) ) {
+                    foreach ($zone as $next_zone) {
+                        if (strtoupper($next_zone['zone_code']) === strtoupper($state) ) {
                             $found_exact_iso_match = true;
                             break;
                         }
-                        $zone->MoveNext();
                     }
                 }
 
@@ -1548,7 +1553,7 @@ class OnePageCheckout extends base
                 }
             }
         }
-        
+
         // -----
         // Give an observer the opportunity to check any additional fields that might be used by its
         // customizations, supplying these inputs:
@@ -1571,11 +1576,11 @@ class OnePageCheckout extends base
         // 2) Values in the $additional_address_values array **will override** OPC base values, e.g. if a 'company' key is provided then
         //    that value is used for the address' 'company' entry.
         //
-        $additional_messages = array();
-        $additional_address_values = array();
-        $this->notify('NOTIFY_OPC_ADDRESS_VALIDATION', array('which' => $which, 'address_values' => $address_values), $additional_messages, $additional_address_values);
+        $additional_messages = [];
+        $additional_address_values = [];
+        $this->notify('NOTIFY_OPC_ADDRESS_VALIDATION', ['which' => $which, 'address_values' => $address_values], $additional_messages, $additional_address_values);
         if (count($additional_messages) != 0) {
-            $this->debugMessage('validateUpdatedAddress, observer returned errors: ' . var_export($additional_messages, true));
+            $this->debugMessage('validateUpdatedAddress, observer returned errors: ' . json_encode($additional_messages));
             $error = true;
             $messages = array_merge($messages, $additional_messages);
         }
@@ -1584,11 +1589,11 @@ class OnePageCheckout extends base
             $address_values['validated'] = false;
         } else {
             if (count($additional_address_values) != 0) {
-                $this->debugMessage('validateUpdatedAddress, observer returned additional address values: ' . var_export($additional_address_values, true));
+                $this->debugMessage('validateUpdatedAddress, observer returned additional address values: ' . json_encode($additional_address_values));
             }
             $address_values = array_merge(
                 $address_values,
-                array(
+                [
                     'company' => $company,
                     'gender' => $gender,
                     'firstname' => $firstname,
@@ -1606,11 +1611,11 @@ class OnePageCheckout extends base
                     'show_pulldown_states' => true,
                     'error' => false,
                     'validated' => true
-                ),
+                ],
                 $additional_address_values
             );
             $address_values = $this->updateStateDropdownSettings($address_values);
-            if ($which == 'bill') {
+            if ($which === 'bill') {
                 $this->billtoTempAddrOk = true;
                 if ($this->getShippingBilling()) {
                     $this->sendtoTempAddrOk = true;
@@ -1619,11 +1624,11 @@ class OnePageCheckout extends base
                 $this->sendtoTempAddrOk = true;
             }
         }
-        
-        $this->debugMessage('Exiting validateUpdatedAddress.' . var_export($messages, true) . var_export($address_values, true));
+
+        $this->debugMessage('Exiting validateUpdatedAddress.' . json_encode($messages) . PHP_EOL . json_encode($address_values));
         return $messages;
     }
-    
+
     // -----
     // This internal function saves the requested (and previously validated!) address,
     // either to a temporary, in-session, value or to the database.
@@ -1632,7 +1637,7 @@ class OnePageCheckout extends base
     {
         global $db;
 
-        $this->debugMessage("saveCustomerAddress($which, $add_address), " . (($this->getShippingBilling()) ? 'shipping=billing' : 'shipping!=billing') . ' ' . var_export($address, true));
+        $this->debugMessage("saveCustomerAddress($which, $add_address), " . (($this->getShippingBilling()) ? 'shipping=billing' : 'shipping!=billing') . ' ' . json_encode($address));
 
         // -----
         // If the address is **not** to be added to the customer's address book or if
@@ -1641,7 +1646,7 @@ class OnePageCheckout extends base
         //
         if (!$add_address || $this->isGuestCheckout()) {
             $this->tempAddressValues[$which] = $address;
-            if ($which == 'ship') {
+            if ($which === 'ship') {
                 $_SESSION['sendto'] = $this->tempSendtoAddressBookId;
             } else {
                 if ($this->isGuestCheckout()) {
@@ -1653,12 +1658,18 @@ class OnePageCheckout extends base
                     $_SESSION['customer_last_name'] = $address['lastname'];
                 }
                 $_SESSION['billto'] = $this->tempBilltoAddressBookId;
+                if ($this->isGuestCheckout() && $this->sendtoTempAddrOk === false) {
+                    $this->tempAddressValues['ship'] = $this->tempAddressValues['bill'];
+                    $this->sendtoTempAddrOk = true;
+                }
                 if ($this->getShippingBilling()) {
                     $_SESSION['sendto'] = $this->tempBilltoAddressBookId;
                     $this->tempAddressValues['ship'] = $this->tempAddressValues['bill'];
+                } elseif ($this->isGuestCheckout() && $_SESSION['sendto'] === (int)$this->tempBilltoAddressBookId) {
+                    $_SESSION['sendto'] = $this->tempSendtoAddressBookId;
                 }
             }
-            $this->debugMessage("Updated tempAddressValues[$which], billing=shipping(" . $_SESSION['shipping_billing'] . "), sendto(" . $_SESSION['sendto'] . "), billto(" . $_SESSION['billto'] . "):" . var_export($this->tempAddressValues, true));
+            $this->debugMessage("Updated tempAddressValues[$which], billing=shipping(" . $_SESSION['shipping_billing'] . "), sendto(" . $_SESSION['sendto'] . "), billto(" . $_SESSION['billto'] . "):" . json_encode($this->tempAddressValues));
         // -----
         // Otherwise, the address is to be saved in the database ...
         //
@@ -1666,37 +1677,37 @@ class OnePageCheckout extends base
             // -----
             // Build up the to-be-stored address.
             //
-            $sql_data_array = array(
-                array('fieldName' => 'entry_firstname', 'value' => $address['firstname'], 'type' => $this->dbStringType),
-                array('fieldName' => 'entry_lastname', 'value' => $address['lastname'], 'type' => $this->dbStringType),
-                array('fieldName' => 'entry_street_address', 'value' => $address['street_address'], 'type' => $this->dbStringType),
-                array('fieldName' => 'entry_postcode', 'value' => $address['postcode'], 'type' => $this->dbStringType),
-                array('fieldName' => 'entry_city', 'value' => $address['city'], 'type' => $this->dbStringType),
-                array('fieldName' => 'entry_country_id', 'value' => $address['country'], 'type' => 'integer')
-            );
+            $sql_data_array = [
+                ['fieldName' => 'entry_firstname', 'value' => $address['firstname'], 'type' => $this->dbStringType],
+                ['fieldName' => 'entry_lastname', 'value' => $address['lastname'], 'type' => $this->dbStringType],
+                ['fieldName' => 'entry_street_address', 'value' => $address['street_address'], 'type' => $this->dbStringType],
+                ['fieldName' => 'entry_postcode', 'value' => $address['postcode'], 'type' => $this->dbStringType],
+                ['fieldName' => 'entry_city', 'value' => $address['city'], 'type' => $this->dbStringType],
+                ['fieldName' => 'entry_country_id', 'value' => $address['country'], 'type' => 'integer']
+            ];
 
-            if (ACCOUNT_GENDER == 'true') {
-                $sql_data_array[] = array('fieldName' => 'entry_gender', 'value' => $address['gender'], 'type' => 'enum:m|f');
+            if (ACCOUNT_GENDER === 'true') {
+                $sql_data_array[] = ['fieldName' => 'entry_gender', 'value' => $address['gender'], 'type' => 'enum:m|f'];
             }
-            
-            if (ACCOUNT_COMPANY == 'true') {
-                $sql_data_array[] = array('fieldName' => 'entry_company', 'value' => $address['company'], 'type' => $this->dbStringType);
+
+            if (ACCOUNT_COMPANY === 'true') {
+                $sql_data_array[] = ['fieldName' => 'entry_company', 'value' => $address['company'], 'type' => $this->dbStringType];
             }
-            
-            if (ACCOUNT_SUBURB == 'true') {
-                $sql_data_array[] = array('fieldName' => 'entry_suburb', 'value' => $address['suburb'], 'type' => $this->dbStringType);
+
+            if (ACCOUNT_SUBURB === 'true') {
+                $sql_data_array[] = ['fieldName' => 'entry_suburb', 'value' => $address['suburb'], 'type' => $this->dbStringType];
             }
-            
-            if (ACCOUNT_STATE == 'true') {
+
+            if (ACCOUNT_STATE === 'true') {
                 if ($address['zone_id'] > 0) {
-                    $sql_data_array[] = array('fieldName' => 'entry_zone_id', 'value' => $address['zone_id'], 'type' => 'integer');
-                    $sql_data_array[] = array('fieldName' => 'entry_state', 'value'=> '', 'type' => $this->dbStringType);
+                    $sql_data_array[] = ['fieldName' => 'entry_zone_id', 'value' => $address['zone_id'], 'type' => 'integer'];
+                    $sql_data_array[] = ['fieldName' => 'entry_state', 'value'=> '', 'type' => $this->dbStringType];
                 } else {
-                    $sql_data_array[] = array('fieldName' => 'entry_zone_id', 'value' => '0', 'type' => 'integer');
-                    $sql_data_array[] = array('fieldName' => 'entry_state', 'value' => $address['state'], 'type' => $this->dbStringType);
+                    $sql_data_array[] = ['fieldName' => 'entry_zone_id', 'value' => '0', 'type' => 'integer'];
+                    $sql_data_array[] = ['fieldName' => 'entry_state', 'value' => $address['state'], 'type' => $this->dbStringType];
                 }
             }
-            
+
             // -----
             // If a matching address-book entry is found for this logged-in customer (whose account has
             // a primary address), use that pre-saved address entry.  Otherwise, save the new/updated address for the customer.
@@ -1706,32 +1717,32 @@ class OnePageCheckout extends base
                 $address_book_id = $existing_address_book_id;
             } else {
                 if (!$this->customerAccountNeedsPrimaryAddress()) {
-                    $sql_data_array[] = array('fieldName' => 'customers_id', 'value' => $_SESSION['customer_id'], 'type'=>'integer');
+                    $sql_data_array[] = ['fieldName' => 'customers_id', 'value' => $_SESSION['customer_id'], 'type' => 'integer'];
                     $db->perform(TABLE_ADDRESS_BOOK, $sql_data_array);
                     $address_book_id = $db->Insert_ID();
-                    
-                    $this->notify('NOTIFY_OPC_ADDED_ADDRESS_BOOK_RECORD', array('address_book_id' => $address_book_id), $sql_data_array);
+
+                    $this->notify('NOTIFY_OPC_ADDED_ADDRESS_BOOK_RECORD', ['address_book_id' => $address_book_id], $sql_data_array);
                 } else {
                     $address_book_id = (int)$_SESSION['customer_default_address_id'];
                     $customer_id = (int)$_SESSION['customer_id'];
                     $where_string = "customers_id = $customer_id AND address_book_id = $address_book_id LIMIT 1";
                     $db->perform(TABLE_ADDRESS_BOOK, $sql_data_array, 'update', $where_string);
-                    
-                    $this->notify('NOTIFY_OPC_ADDED_PRIMARY_ADDRESS', array('address_book_id' => $address_book_id), $sql_data_array);
+
+                    $this->notify('NOTIFY_OPC_ADDED_PRIMARY_ADDRESS', ['address_book_id' => $address_book_id], $sql_data_array);
                 }
             }
-            
+
             // -----
             // Update the session's billto/sendto address based on the previous processing.
             //
-            if ($which == 'bill') {
+            if ($which === 'bill') {
                 $_SESSION['billto'] = $address_book_id;
             } else {
                 $_SESSION['sendto'] = $address_book_id;
             }
         }
     }
-    
+
     /* -----
     ** This function, called from the 'checkout_one_confirmation' page to ensure that all temporary
     ** entries (e.g. guest customer information and/or temporary addresses) have been entered and validated.
@@ -1742,13 +1753,13 @@ class OnePageCheckout extends base
     ** script-kiddies from messing with the CSS overlay and attempting to create an order with invalid entries.
     */
     public function validateTemporaryEntries()
-    {       
+    {
         $validated = ($this->validateCustomerInfo() && $this->validateTempBilltoAddress() && $this->validateTempShiptoAddress());
- 
+
         $this->debugMessage("validateTemporaryEntries, on exit ({$this->customerInfoOk}, {$this->billtoTempAddrOk}, {$this->sendtoTempAddrOk}), returning ($validated).");
         return $validated;
     }
-    
+
     /* -----
     ** This series of functions identify whether the various required elements (Guest
     ** Customer Information, Temporary Shipping Address and Temporary Billing Address)
@@ -1783,7 +1794,7 @@ class OnePageCheckout extends base
         }
         return $address_ok;
     }
-    
+
     /* -----
     ** This function, called from the 'checkout_success' OPC header processing, creates a
     ** customer-account from the information associated with the just-placed order.
@@ -1797,7 +1808,7 @@ class OnePageCheckout extends base
             trigger_error("Invalid access ($password_error):" . var_export($this, true), E_USER_ERROR);
             exit();
         }
-        
+
         $customer_id = $this->createCustomerRecordFromGuestInfo($password, $newsletter, $email_format);
         $_SESSION['customer_id'] = $customer_id;
         $db->Execute(
@@ -1806,13 +1817,13 @@ class OnePageCheckout extends base
               WHERE orders_id = " . (int)$order_id . "
               LIMIT 1"
         );
-        
+
         // -----
         // Issue a notification, indicating that the customer's record has been successfully created
         // based on the guest's just-placed order.
         //
-        $this->notify('NOTIFY_OPC_CREATE_ACCOUNT_ORDER_UPDATED', array('customer_id' => $customer_id, 'order_id' => $order_id));
-        
+        $this->notify('NOTIFY_OPC_CREATE_ACCOUNT_ORDER_UPDATED', ['customer_id' => $customer_id, 'order_id' => $order_id]);
+
         $default_address_id = $this->createAddressBookRecord($customer_id, 'bill');
         $db->Execute(
             "UPDATE " . TABLE_CUSTOMERS . "
@@ -1820,13 +1831,13 @@ class OnePageCheckout extends base
               WHERE customers_id = $customer_id
               LIMIT 1"
         );
-        
-        if ($this->tempAddressValues['ship']['firstname'] != '') {
+
+        if ($this->tempAddressValues['ship']['firstname'] !== '') {
             if ($this->addressArrayToString($this->tempAddressValues['ship']) != $this->addressArrayToString($this->tempAddressValues['bill'])) {
                 $this->createAddressBookRecord($customer_id, 'ship');
             }
         }
-        
+
         unset(
             $_SESSION['sendto'], 
             $_SESSION['billto'],
@@ -1834,17 +1845,17 @@ class OnePageCheckout extends base
             $_SESSION['shipping_billing'], 
             $_SESSION['order_placed_by_guest']
         );
-        
+
         $_SESSION['customer_first_name'] = $this->guestCustomerInfo['firstname'];
         $_SESSION['customer_last_name'] = $this->guestCustomerInfo['lastname'];
         $_SESSION['customer_default_address_id'] = $default_address_id;
         $_SESSION['customer_country_id'] = $this->tempAddressValues['bill']['country'];
         $_SESSION['customer_zone_id'] = $this->tempAddressValues['bill']['zone_id'];
         $_SESSION['customers_authorization'] = 0;
-        
+
         $this->reset();
     }
-    
+
     // -----
     // This internal function creates a customer record in the database for the
     // current guest.
@@ -1853,46 +1864,47 @@ class OnePageCheckout extends base
     {
         global $db;
 
-        if ($email_format != 'HTML' && $email_format != 'TEXT') {
-            $email_format = (ACCOUNT_EMAIL_PREFERENCE == '1' ? 'HTML' : 'TEXT');
+        if ($email_format !== 'HTML' && $email_format !== 'TEXT') {
+            $email_format = (ACCOUNT_EMAIL_PREFERENCE === '1' ? 'HTML' : 'TEXT');
         }
-        $sql_data_array = array(
-            array('fieldName' => 'customers_firstname', 'value' => $this->guestCustomerInfo['firstname'], 'type' => $this->dbStringType),
-            array('fieldName' => 'customers_lastname', 'value' => $this->guestCustomerInfo['lastname'], 'type' => $this->dbStringType),
-            array('fieldName' => 'customers_email_address', 'value' => $this->guestCustomerInfo['email_address'], 'type' => $this->dbStringType),
-            array('fieldName' => 'customers_telephone', 'value' => $this->guestCustomerInfo['telephone'], 'type' => $this->dbStringType),
-            array('fieldName' => 'customers_newsletter', 'value' => $newsletter, 'type' => 'integer'),
-            array('fieldName' => 'customers_email_format', 'value' => $email_format, 'type' => $this->dbStringType),
-            array('fieldName' => 'customers_default_address_id', 'value' => 0, 'type' => 'integer'),
-            array('fieldName' => 'customers_password', 'value' => zen_encrypt_password($password), 'type' => $this->dbStringType),
-            array('fieldName' => 'customers_authorization', 'value' => 0, 'type' => 'integer'),
-        );
+        $sql_data_array = [
+            ['fieldName' => 'customers_firstname', 'value' => $this->guestCustomerInfo['firstname'], 'type' => $this->dbStringType],
+            ['fieldName' => 'customers_lastname', 'value' => $this->guestCustomerInfo['lastname'], 'type' => $this->dbStringType],
+            ['fieldName' => 'customers_email_address', 'value' => $this->guestCustomerInfo['email_address'], 'type' => $this->dbStringType],
+            ['fieldName' => 'customers_telephone', 'value' => $this->guestCustomerInfo['telephone'], 'type' => $this->dbStringType],
+            ['fieldName' => 'customers_newsletter', 'value' => $newsletter, 'type' => 'integer'],
+            ['fieldName' => 'customers_email_format', 'value' => $email_format, 'type' => $this->dbStringType],
+            ['fieldName' => 'customers_default_address_id', 'value' => 0, 'type' => 'integer'],
+            ['fieldName' => 'customers_password', 'value' => zen_encrypt_password($password), 'type' => $this->dbStringType],
+            ['fieldName' => 'customers_authorization', 'value' => 0, 'type' => 'integer'],
+        ];
 
-        if (ACCOUNT_GENDER == 'true') {
+        if (ACCOUNT_GENDER === 'true') {
             $gender = $this->guestCustomerInfo['gender'];
-            $sql_data_array[] = array('fieldName' => 'customers_gender', 'value' => $gender, 'type' => $this->dbStringType);
+            $sql_data_array[] = ['fieldName' => 'customers_gender', 'value' => $gender, 'type' => $this->dbStringType];
         }
-        if (ACCOUNT_DOB == 'true') {
+        if (ACCOUNT_DOB === 'true') {
             $dob = $this->guestCustomerInfo['dob'];
-            $dob = (empty($dob) || $dob == '0001-01-01 00:00:00') ? zen_db_prepare_input('0001-01-01 00:00:00') : zen_date_raw($dob);
-            $sql_data_array[] = array('fieldName' => 'customers_dob', 'value' => $dob, 'type' => 'date');
+            $dob = (empty($dob) || $dob === '0001-01-01 00:00:00') ? zen_db_prepare_input('0001-01-01 00:00:00') : zen_date_raw($dob);
+            $sql_data_array[] = ['fieldName' => 'customers_dob', 'value' => $dob, 'type' => 'date'];
         }
 
         $db->perform(TABLE_CUSTOMERS, $sql_data_array);
         $customer_id = $db->Insert_ID();
-        
+
         $db->Execute(
             "INSERT INTO " . TABLE_CUSTOMERS_INFO . "
                     (customers_info_id, customers_info_number_of_logons, customers_info_date_account_created, customers_info_date_of_last_logon)
                 VALUES 
                     ($customer_id, 1, now(), now())"
         );
-        
-        $this->notify('OPC_ADDED_CUSTOMER_RECORD_FOR_GUEST', $customer_id, $sql_data_array);
+
+        $this->notify('OPC_ADDED_CUSTOMER_RECORD_FOR_GUEST', $customer_id, $sql_data_array);    //-DEPRECATED for zc158+
+        $this->notify('NOTIFY_OPC_ADDED_CUSTOMER_RECORD_FOR_GUEST', $customer_id, $sql_data_array);
 
         return $customer_id;
     }
-    
+
     // -----
     // This internal function creates an address-book record in the database using one of the 
     // temporary address-book records.
@@ -1901,33 +1913,33 @@ class OnePageCheckout extends base
     {
         global $db;
 
-        $sql_data_array = array(
-            array('fieldName' => 'customers_id', 'value' => $customer_id, 'type' => 'integer'),
-            array('fieldName' => 'entry_firstname', 'value' => $this->tempAddressValues[$which]['firstname'], 'type' => $this->dbStringType),
-            array('fieldName' => 'entry_lastname', 'value' => $this->tempAddressValues[$which]['lastname'], 'type' => $this->dbStringType),
-            array('fieldName' => 'entry_street_address', 'value' => $this->tempAddressValues[$which]['street_address'], 'type' => $this->dbStringType),
-            array('fieldName' => 'entry_postcode', 'value' => $this->tempAddressValues[$which]['postcode'], 'type' => $this->dbStringType),
-            array('fieldName' => 'entry_city', 'value' => $this->tempAddressValues[$which]['city'], 'type' => $this->dbStringType),
-            array('fieldName' => 'entry_country_id', 'value' => $this->tempAddressValues[$which]['country'], 'type' => 'integer'),
-        );
+        $sql_data_array = [
+            ['fieldName' => 'customers_id', 'value' => $customer_id, 'type' => 'integer'],
+            ['fieldName' => 'entry_firstname', 'value' => $this->tempAddressValues[$which]['firstname'], 'type' => $this->dbStringType],
+            ['fieldName' => 'entry_lastname', 'value' => $this->tempAddressValues[$which]['lastname'], 'type' => $this->dbStringType],
+            ['fieldName' => 'entry_street_address', 'value' => $this->tempAddressValues[$which]['street_address'], 'type' => $this->dbStringType],
+            ['fieldName' => 'entry_postcode', 'value' => $this->tempAddressValues[$which]['postcode'], 'type' => $this->dbStringType],
+            ['fieldName' => 'entry_city', 'value' => $this->tempAddressValues[$which]['city'], 'type' => $this->dbStringType],
+            ['fieldName' => 'entry_country_id', 'value' => $this->tempAddressValues[$which]['country'], 'type' => 'integer'],
+        ];
 
-        if (ACCOUNT_GENDER == 'true') {
-            $sql_data_array[] = array('fieldName' => 'entry_gender', 'value' => $this->tempAddressValues[$which]['gender'], 'type' => $this->dbStringType);
+        if (ACCOUNT_GENDER === 'true') {
+            $sql_data_array[] = ['fieldName' => 'entry_gender', 'value' => $this->tempAddressValues[$which]['gender'], 'type' => $this->dbStringType];
         }
-        if (ACCOUNT_COMPANY == 'true') {
-            $sql_data_array[] = array('fieldName' => 'entry_company', 'value' => $this->tempAddressValues[$which]['company'], 'type' => $this->dbStringType);
+        if (ACCOUNT_COMPANY === 'true') {
+            $sql_data_array[] = ['fieldName' => 'entry_company', 'value' => $this->tempAddressValues[$which]['company'], 'type' => $this->dbStringType];
         }
-        if (ACCOUNT_SUBURB == 'true') {
-            $sql_data_array[] = array('fieldName' => 'entry_suburb', 'value' => $this->tempAddressValues[$which]['suburb'], 'type' => $this->dbStringType);
+        if (ACCOUNT_SUBURB === 'true') {
+            $sql_data_array[] = ['fieldName' => 'entry_suburb', 'value' => $this->tempAddressValues[$which]['suburb'], 'type' => $this->dbStringType];
         }
 
-        if (ACCOUNT_STATE == 'true') {
+        if (ACCOUNT_STATE === 'true') {
             if ($this->tempAddressValues[$which]['zone_id'] > 0) {
-                $sql_data_array[] = array('fieldName' => 'entry_zone_id', 'value' => $this->tempAddressValues[$which]['zone_id'], 'type' => 'integer');
-                $sql_data_array[] = array('fieldName' => 'entry_state', 'value' => '', 'type' => $this->dbStringType);
+                $sql_data_array[] = ['fieldName' => 'entry_zone_id', 'value' => $this->tempAddressValues[$which]['zone_id'], 'type' => 'integer'];
+                $sql_data_array[] = ['fieldName' => 'entry_state', 'value' => '', 'type' => $this->dbStringType];
             } else {
-                $sql_data_array[] = array('fieldName' => 'entry_zone_id', 'value' => 0, 'type' => 'integer');
-                $sql_data_array[] = array('fieldName' => 'entry_state', 'value' => $this->tempAddressValues[$which]['state'], 'type' => $this->dbStringType);
+                $sql_data_array[] = ['fieldName' => 'entry_zone_id', 'value' => 0, 'type' => 'integer'];
+                $sql_data_array[] = ['fieldName' => 'entry_state', 'value' => $this->tempAddressValues[$which]['state'], 'type' => $this->dbStringType];
             }
         }
         $db->perform(TABLE_ADDRESS_BOOK, $sql_data_array);
@@ -1937,7 +1949,7 @@ class OnePageCheckout extends base
 
         return $address_book_id;
     }
-    
+
     // -----
     // This internal function checks the database to see if the specified address already exists
     // for the customer associated with the current session.
@@ -1965,7 +1977,7 @@ class OnePageCheckout extends base
         $sql = $db->bindVars($sql, ':zoneId', $address['zone_id'], 'integer');
         $sql = $db->bindVars($sql, ':stateValue', $address['state'], 'string');
         $sql = $db->bindVars($sql, ':customerId', $_SESSION['customer_id'], 'integer');
-        
+
         // -----
         // Give a watching observer the opportunity to gather additional address-related fields to be
         // used in the address-matching below, writing a debug-message if the information has
@@ -1977,20 +1989,19 @@ class OnePageCheckout extends base
             $this->debugMessage("findAddressBookEntry, sql changed from\n$sql_saved\nto$sql.");
         }
         $possible_addresses = $db->Execute($sql);
-        
+
         $address_book_id = false;  //-Identifies that no match was found
         $address_to_match = $this->addressArrayToString($address);
-        while (!$possible_addresses->EOF) {
-            if ($address_to_match == $this->addressArrayToString($possible_addresses->fields)) {
-                $address_book_id = $possible_addresses->fields['address_book_id'];
+        foreach ($possible_addresses as $next_address) {
+            if ($address_to_match === $this->addressArrayToString($next_address)) {
+                $address_book_id = $next_address['address_book_id'];
                 break;
             }
-            $possible_addresses->MoveNext();
         }
-        $this->debugMessage("findAddressBookEntry, returning ($address_book_id) for '$address_to_match'" . var_export($address, true));
+        $this->debugMessage("findAddressBookEntry, returning ($address_book_id) for '$address_to_match'" . json_encode($address));
         return $address_book_id;
     }
-    
+
     // -----
     // This internal function creates a string containing the address-related values
     // in the specified address-array.
@@ -2000,23 +2011,23 @@ class OnePageCheckout extends base
         $the_address = 
             $address_array['company'] .
             $address_array['gender'] .
-            $address_array['firstname'] . 
-            $address_array['lastname'] . 
-            $address_array['street_address'] . 
-            $address_array['suburb'] . 
-            $address_array['city'] . 
+            $address_array['firstname'] .
+            $address_array['lastname'] .
+            $address_array['street_address'] .
+            $address_array['suburb'] .
+            $address_array['city'] .
             $address_array['postcode'];
-            
+
         // -----
         // Give an observer the chance to include additional address-related fields for the
         // address-match determination.
         //
         $this->notify('NOTIFY_OPC_ADDRESS_ARRAY_TO_STRING', $address_array, $the_address);
-        $the_address = strtolower(str_replace(array("\n", "\t", "\r", "\0", ' ', ',', '.'), '', $the_address));
-        
+        $the_address = strtolower(str_replace(["\n", "\t", "\r", "\0", ' ', ',', '.'], '', $the_address));
+
         return $the_address;
     }
-    
+
     /* -----
     ** This public method is called by the OPC observer-class upon receipt of the indication that
     ** PayPal Express Checkout is preparing to send the order up to PayPal for fulfilment.  If temporary
@@ -2030,10 +2041,10 @@ class OnePageCheckout extends base
     public function createPayPalTemporaryAddressInfo($paypal_options, $order)
     {
         $which = $this->determineTempShippingAddress();       
-        $paypal_temp = array();
+        $paypal_temp = [];
         if ($which !== false) {
             $temp_address = $this->createOrderAddressFromTemporary($which);
-            $paypal_temp = array(
+            $paypal_temp = [
                 'PAYMENTREQUEST_0_SHIPTONAME' => $temp_address['firstname'] . ' ' . $temp_address['lastname'],
                 'PAYMENTREQUEST_0_SHIPTOSTREET' => $temp_address['street_address'],
                 'PAYMENTREQUEST_0_SHIPTOSTREET2' => (!empty($temp_address['suburb'])) ? $temp_address['suburb'] : '',
@@ -2041,7 +2052,7 @@ class OnePageCheckout extends base
                 'PAYMENTREQUEST_0_SHIPTOZIP' => $temp_address['postcode'],
                 'PAYMENTREQUEST_0_SHIPTOSTATE' => zen_get_zone_code($temp_address['country']['id'], $temp_address['zone_id'], $temp_address['state']),
                 'PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE' => $temp_address['country']['iso_code_2']
-            );
+            ];
  
             if ($this->isGuestCheckout()) {
                 $paypal_temp['EMAIL'] = $this->guestCustomerInfo['email_address'];
@@ -2055,7 +2066,7 @@ class OnePageCheckout extends base
         $this->paypalNoShipping = $paypal_options['NOSHIPPING'];
         return $paypal_temp;
     }
-    
+
     /* -----
     ** This public method is called by the OPC observer-class upon receipt of the indication that
     ** PayPal Express Checkout is preparing to check/create the address associated with the PayPal-approved
@@ -2084,7 +2095,7 @@ class OnePageCheckout extends base
         $which = $this->determineTempShippingAddress();
         $bypass_address_creation = false;
         unset($this->paypalAddressOverride);
-        
+
         // -----
         // If a temporary address is currently in use as the shipping address, it was sent
         // to PayPal via the createPayPalTemporaryAddressInfo method.  Check to see that the
@@ -2105,7 +2116,7 @@ class OnePageCheckout extends base
             //
             $temp_address = $this->createOrderAddressFromTemporary($which);
             $temp_address['customer_name'] = $temp_address['firstname'] . ' ' . $temp_address['lastname'];
-            
+
             // -----
             // If the order was submitted to PayPal with 'NOSHIPPING' required, the order is virtual
             // and the PayPal response contains no shipping-address information.  We'll bypass the
@@ -2119,40 +2130,40 @@ class OnePageCheckout extends base
                 // Loop through some of the more 'static' values in the ship-to address (the country and state
                 // will be checked separately).
                 //
-                $compare_fields = array(
+                $compare_fields = [
                     'customer_name' => 'ship_name',
                     'street_address' => 'ship_street_1',
                     'suburb' => 'ship_street_2',
                     'city' => 'ship_city',
                     'postcode' => 'ship_postal_code',
-                );
+                ];
                 $address_match = true;
                 foreach ($compare_fields as $t => $pp) {
-                    if (strtoupper(trim($temp_address[$t])) != strtoupper(trim($paypal_ec_payment_info[$pp]))) {
+                    if (strtoupper(trim($temp_address[$t])) !== strtoupper(trim($paypal_ec_payment_info[$pp]))) {
                         $address_match = false;
                         break;
                     }
                 }
-                
+
                 // -----
                 // If neither the state "code" (e.g. 'FL') nor the full state name (e.g. 'Florida') of the
                 // temporary address matches the state field returned by PayPal, it's not a match.
                 //
                 $state_code = zen_get_zone_code($temp_address['country']['id'], $temp_address['zone_id'], $temp_address['state']);
                 $paypal_state = strtoupper(trim($paypal_ec_payment_info['ship_state']));
-                if ($paypal_state != $state_code && $paypal_state != strtoupper($temp_address['state'])) {
+                if ($paypal_state !== $state_code && $paypal_state !== strtoupper($temp_address['state'])) {
                     $address_match = false;
                 }
-                
+
                 // -----
                 // If neither the country "code" (e.g. 'US') nor the full country name (e.g. 'United States') of
                 // the temporary address matches the country name returned by PayPal, it's not a match.
                 //
                 $country_name = strtoupper(trim($paypal_ec_payment_info['ship_country_name']));
-                if ($country_name != $temp_address['country']['iso_code_2'] && $country_name != strtoupper($temp_address['country']['title'])) {
+                if ($country_name !== $temp_address['country']['iso_code_2'] && $country_name !== strtoupper($temp_address['country']['title'])) {
                     $address_match = false;
                 }
-                
+
                 // -----
                 // If an address mismatch was detected ...
                 //
@@ -2161,19 +2172,19 @@ class OnePageCheckout extends base
                     // 1) Record the as-entered address into the OPC's session data, for use by the identifyPayPalAddressChange method.
                     //
                     $this->paypalAddressOverride = zen_address_format(zen_get_address_format_id($temp_address['country']['id']), $temp_address, false, '', ', ');
-                    
+
                     // -----
                     // 2) Indicate that the shipping/billing addresses don't match.
                     //
                     $_SESSION['shipping_billing'] = false;
-                    
+
                     // -----
                     // 3) Replace the temporary shipping address with the information supplied by PayPal, taking into account that
                     //    it might need to be created -- if the customer hasn't set shipping != billing.  Also make sure that the
                     //    temporary shipping address' status is set to OK!
                     //
                     $_SESSION['sendto'] = $this->tempSendtoAddressBookId;
-                    
+
                     foreach ($compare_fields as $t => $pp) {
                         if ($t == 'customer_name') {
                             $name_pieces = explode(' ', $paypal_ec_payment_info[$pp]);
@@ -2184,20 +2195,20 @@ class OnePageCheckout extends base
                         }
                     }
                     $this->tempAddressValues['ship']['company'] = '';
-                    
+
                     $country_info = $this->getCountryInfoFromIsoCode2($paypal_ec_payment_info['ship_country_code']);
                     $this->tempAddressValues['ship']['country'] = $country_info['id'];
                     $this->tempAddressValues['ship']['country_id'] = $country_info['id'];
                     $this->tempAddressValues['ship']['format_id'] = $country_info['address_format_id'];
-                    
+
                     $zone_info = $this->getZoneInfoFromCode($country_info['id'], $paypal_ec_payment_info['ship_state']);
                     $this->tempAddressValues['ship']['state'] = $zone_info['state'];
                     $this->tempAddressValues['ship']['zone_id'] = $zone_info['zone_id'];
-                    
+
                     $this->sendtoTempAddrOk = true;
                 }
             }
-            
+
             // -----
             // Leave some 'breadcrumbs' in the OPC log to indicate the results of the processing.
             //
@@ -2226,7 +2237,7 @@ class OnePageCheckout extends base
                 $which = 'bill';
             }
         }
-        
+
         // -----
         // If we're currently processing in guest-checkout mode, the shipping address "should"
         // be one of the temporary ship/bill entries -- if not, bail out with an error since
@@ -2238,7 +2249,7 @@ class OnePageCheckout extends base
         }
         return $which;
     }
-    
+
     // -----
     // This internal method returns a country-array containing its id, name, iso-code-2 and iso-code-3
     // values, based on an iso_code_2 value input.
@@ -2258,17 +2269,17 @@ class OnePageCheckout extends base
             trigger_error("Could not locate the country with the iso-code-2 of $iso_code_2.", E_USER_ERROR);
             exit;
         } else {
-            $country = array(
+            $country = [
                 'id' => $country_info->fields['countries_id'],
                 'title' => zen_get_country_name($country_info->fields['countries_id']),
                 'iso_code_2' => $country_info->fields['countries_iso_code_2'],
                 'iso_code_3' => $country_info->fields['countries_iso_code_3'],
                 'format_id' => $country_info->fields['address_format_id'],
-            );
+            ];
         }
         return $country;
     }
-    
+
     // -----
     // This internal method returns a zone/state array containing the zone_id and name of the
     // state associated with the country/code provided.
@@ -2286,12 +2297,12 @@ class OnePageCheckout extends base
                  OR zone_name = '$zone_code'
              LIMIT 1"
         );
-        return array(
+        return [
             'zone_id' => ($zone_info->EOF) ? 0 : $zone_info->fields['zone_id'],
             'state' => $zone_code
-        );
+        ];
     }
-    
+
     /* -----
     ** This public method, called from OPC's observer, determines whether the order's total
     ** value (as represented by the order-object supplied) has changed since the order was
@@ -2305,7 +2316,7 @@ class OnePageCheckout extends base
     {
         $value_changed = (isset($this->paypalTotalValue) && $this->paypalTotalValue != $order->info['total']);
         unset($this->paypalTotalValue);
-        
+
         // -----
         // If the value has changed, OPC's observer class will redirect back to OPC's
         // data-gathering page with a message.  Set a flag to let the opc::checkEnabled method
@@ -2314,7 +2325,7 @@ class OnePageCheckout extends base
         if ($value_changed) {
             $this->paypalTotalValueChanged = true;
         }
-        
+
         return $value_changed;
     }
 
@@ -2338,7 +2349,7 @@ class OnePageCheckout extends base
             $order->info['comments'] .= $message;
         }
     }
-    
+
     /* -----
     ** This public method, called from OPC's observer, provides an override to the order's
     ** tax-locations when temporary addresses are in effect.
@@ -2400,7 +2411,7 @@ class OnePageCheckout extends base
                         $zone_id = $country_zone->fields['entry_zone_id'];
                     }
                 }
-                
+
                 if (!isset($country_id)) {
                     if ($shipping_is_temp) {
                         $country_id = $this->tempAddressValues['ship']['country'];
@@ -2430,14 +2441,14 @@ class OnePageCheckout extends base
                 exit();
                 break;
         }
-        
+
         if (!isset($country_id)) {
             $tax_locations = false;
         } else {
-            $tax_locations = array(
+            $tax_locations = [
                 'country_id' => $country_id,
                 'zone_id' => $zone_id
-            );
+            ];
         }
         $this->debugMessage("getTaxLocations ($billing_is_temp:$shipping_is_temp), " . json_encode($tax_locations));
         return $tax_locations;

@@ -43,6 +43,12 @@ if (DEFINE_CONTACT_US_STATUS <= 1) {
     $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_CONTACT_US, '', 'SSL') . '">' . BOX_INFORMATION_CONTACT . '</a>';
 }
 
+//-bof-one-page-checkout-lat9  *** 1 of 1 ***
+if (defined('FILENAME_ORDER_STATUS') && defined('BOX_INFORMATION_ORDER_STATUS')) {
+    $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_ORDER_STATUS, '', 'SSL') . '">' . BOX_INFORMATION_ORDER_STATUS . '</a>';
+}
+//-eof-one-page-checkout-lat9  *** 1 of 1 ***
+
 // forum/bb link:
 if (!empty($external_bb_url) && !empty($external_bb_text)) {
     $information[] = '<a class="' . $information_classes . '" href="' . $external_bb_url . '" rel="noopener" target="_blank">' . $external_bb_text . '</a>';

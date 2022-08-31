@@ -1,29 +1,42 @@
 <?php
 // -----
 // Part of the One-Page Checkout plugin, provided under GPL 2.0 license by lat9 (cindy@vinosdefrutastropicales.com).
-// Copyright (C) 2018-2021, Vinos de Frutas Tropicales.  All rights reserved.
+// Copyright (C) 2018-2022, Vinos de Frutas Tropicales.  All rights reserved.
 //
 if (!defined('IS_ADMIN_FLAG') || IS_ADMIN_FLAG !== true) {
     die('Illegal Access');
 }
 
-class OnePageCheckoutAdminObserver extends base 
+class OnePageCheckoutAdminObserver extends base
 {
-    function __construct() 
+    public function __construct()
     {
         $this->attach(
-            $this, 
-            array( 
+            $this,
+            [ 
                 /* Issued by /orders.php */
+                'NOTIFY_ADMIN_ORDERS_SEARCH_PARMS',
                 'NOTIFY_ADMIN_ORDERS_MENU_LEGEND', 
                 'NOTIFY_ADMIN_ORDERS_SHOW_ORDER_DIFFERENCE',
-            )
+            ]
         );
     }
-  
-    function update(&$class, $eventID, $p1, &$p2, &$p3, &$p4) 
+
+    public function update(&$class, $eventID, $p1, &$p2, &$p3, &$p4, &$p5, &$p6)
     {
         switch ($eventID) {
+            // -----
+            // Issued by Customers->Orders during the order-listing phase, allows us to identify additional
+            // database fields to pull in for the display.
+            //
+            // On entry (fields of interest only):
+            //
+            // $p4 ... (r/w) A reference to the (string)$new_fields, to which the order's is_guest_order field is added
+            //
+            case 'NOTIFY_ADMIN_ORDERS_SEARCH_PARMS':
+                $p4 .= ', o.is_guest_order';
+                break;
+
             // -----
             // Issued by Customers->Orders during the order-listing phase, allows us to identify
             // the icon used to identify any orders placed by guests.
@@ -35,7 +48,7 @@ class OnePageCheckoutAdminObserver extends base
             case 'NOTIFY_ADMIN_ORDERS_MENU_LEGEND':
                 $p2 .= '&nbsp;' . ICON_GUEST_CHECKOUT . '&nbsp;' . TEXT_GUEST_CHECKOUT;
                 break;
-          
+
             // -----
             // Issued by Customers->Orders, for each listed order, allows us to identify whether the
             // order was placed by a guest.
@@ -47,26 +60,13 @@ class OnePageCheckoutAdminObserver extends base
             // $p4 ... (r/w) A reference to the "extra action icons" string (not used by this processing).
             //
             case 'NOTIFY_ADMIN_ORDERS_SHOW_ORDER_DIFFERENCE':
-                global $db;
-
-                if (isset($p2['is_guest_order'])) {
-                    $is_guest_order = $p2['is_guest_order'];
-                } else {
-                    $check = $db->Execute(
-                        "SELECT is_guest_order
-                           FROM " . TABLE_ORDERS . "
-                          WHERE orders_id = " . $p2['orders_id'] . "
-                          LIMIT 1"
-                    );
-                    $is_guest_order = (!$check->EOF) ? $check->fields['is_guest_order'] : 0;
-                }
-                if ($is_guest_order) {
+                if (!empty($p2['is_guest_order'])) {
                     $p3 .= '&nbsp;' . ICON_GUEST_CHECKOUT;
                 }
                 break;
-                
+
             default:
                 break;
-        }      
+        }
     }
 }

@@ -45,9 +45,4 @@ $(document).on('click', '.add', function(){
  }); //end on click
 }); //end document ready
 
-$('#addressbook').submit(function(e) {
-    $(':disabled').each(function(e) {
-        $(this).removeAttr('disabled');
-    })
-});
 </script>

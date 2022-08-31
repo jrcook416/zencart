@@ -43,6 +43,7 @@ $(document).on('click', '.add', function(){
 	$('#entry_suburb').selectpicker('refresh');
  
  }); //end on click
+ 
 }); //end document ready
 
 </script>

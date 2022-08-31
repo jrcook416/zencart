@@ -93,7 +93,7 @@ if (ACCOUNT_COMPANY === 'true') {
 		<?php							
 			$filter = '49 IEMS';
 			filtered_unit_array($filter);
-			echo iems_pull_down_menu('suburb', $filtered_units, $entry_fields['entry_suburb'], 'id ="suburb" form-control class="selectpicker" data-live-search="true" data-width="100%"');?>
+			echo iems_pull_down_menu('suburb', $filtered_units, $entry->fields['entry_suburb'], 'id ="suburb" form-control class="selectpicker" data-live-search="true" data-width="100%"');?>
 <div class="p-2"></div>
 <?php
   }

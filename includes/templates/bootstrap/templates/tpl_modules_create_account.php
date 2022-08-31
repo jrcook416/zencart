@@ -42,7 +42,7 @@ if (ACCOUNT_COMPANY === 'true') {
         <h4 id="companyDetails-card-header" class="card-header"><?php echo CATEGORY_COMPANY; ?></h4>
         <div id="companyDetails-card-body" class="card-body p-3">
             <label class="inputLabel" for="company"><?php echo ENTRY_COMPANY; ?></label>
-            <?php echo zen_draw_input_field('company', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" autocomplete="organization" placeholder="' . ENTRY_COMPANY_TEXT . '"' . ((int)ENTRY_COMPANY_MIN_LENGTH !== 0 ? ' required readonly' : '')); ?>
+            <?php echo zen_draw_input_field('company', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" autocomplete="organization" placeholder="' . ENTRY_COMPANY_TEXT . '"' . ((int)ENTRY_COMPANY_MIN_LENGTH !== 0 ? ' readonly' : '')); ?>
         </div>
     </div>
 <?php
@@ -131,7 +131,7 @@ if (ACCOUNT_STATE === 'true') {
         <h4 id="contactDetails-card-header" class="card-header"><?php echo TABLE_HEADING_PHONE_FAX_DETAILS; ?></h4>
         <div id="contactDetails-card-body" class="card-body p-3">
             <label class="inputLabel" for="telephone"><?php echo ENTRY_TELEPHONE_NUMBER; ?></label>
-            <?php echo zen_draw_input_field('telephone', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_telephone', '40') . ' id="telephone" placeholder="' . ENTRY_TELEPHONE_NUMBER_TEXT . '"' . ((int)ENTRY_TELEPHONE_MIN_LENGTH > 0 ? ' required readonly' : ''), 'tel'); ?>
+            <?php echo zen_draw_input_field('telephone', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_telephone', '40') . ' id="telephone" placeholder="' . ENTRY_TELEPHONE_NUMBER_TEXT . '"' . ((int)ENTRY_TELEPHONE_MIN_LENGTH > 0 ? ' required' : ''), 'tel'); ?>
 <?php
 if (ACCOUNT_FAX_NUMBER === 'true') {
 ?>

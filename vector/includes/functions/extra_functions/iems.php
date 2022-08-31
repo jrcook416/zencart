@@ -140,10 +140,11 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   }
 
   $field = '<select rel="select"';
-
+/*
   if (strpos($parameters, 'id=') === false) {
     $field .= ' id="' . zen_output_string($name) . '"';
   }
+  */
 
   $field .= ' name="' . zen_output_string($name) . '"';
 

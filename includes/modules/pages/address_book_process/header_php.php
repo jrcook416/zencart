@@ -36,7 +36,7 @@ if (isset($_GET['action']) && ($_GET['action'] == 'deleteconfirm') && isset($_PO
 
   zen_redirect(zen_href_link(FILENAME_ADDRESS_BOOK, '', 'SSL'));
 }
-
+print_r($_POST);
 /**
  * Set some defaults
  */

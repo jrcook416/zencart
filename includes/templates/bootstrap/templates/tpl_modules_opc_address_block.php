@@ -118,7 +118,7 @@ if (ACCOUNT_SUBURB === 'true') {
     $name = "suburb[$which]";
     $id = "suburb-$which";
     filtered_unit_array($filter);
-    echo iems_pull_down_menu($name, $filtered_units, $address['suburb'], 'id="' . $id . '" form-control data-live-search="true" data-width="100%" title="Nothing selected."'
+    echo iems_pull_down_menu($name, $filtered_units, $address['suburb'], 'id="'$id'" form-control data-live-search="true" data-width="100%" title="Nothing selected."'
 }
 
 echo $_SESSION['opc']->formatAddressElement($which, 'city', $address['city'], ENTRY_CITY, TABLE_ADDRESS_BOOK, 'entry_city', ENTRY_CITY_MIN_LENGTH, ENTRY_CITY_TEXT) . $clear_both;

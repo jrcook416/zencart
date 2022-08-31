@@ -44,4 +44,10 @@ $(document).on('click', '.add', function(){
  
  }); //end on click
 }); //end document ready
+
+$('form').submit(function(e) {
+    $(':disabled').each(function(e) {
+        $(this).removeAttr('disabled');
+    })
+});
 </script>

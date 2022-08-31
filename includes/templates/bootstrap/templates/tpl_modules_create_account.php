@@ -86,7 +86,7 @@ if (ACCOUNT_GENDER === 'true') {
 if (ACCOUNT_SUBURB === 'true') {
 ?>
             <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-            <?php echo zen_draw_input_field('suburb', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
+            <?php echo zen_draw_input_field('suburb', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '" readonly'); ?>
             <div class="p-2"></div>
 <?php
 }
@@ -106,14 +106,14 @@ if (ACCOUNT_STATE === 'true') {
     if ($flag_show_pulldown_states === true) {
 ?>
             <label class="inputLabel" for="stateZone" id="zoneLabel"><?php echo ENTRY_STATE; ?></label><?php if (zen_not_null(ENTRY_STATE_TEXT)) echo '<span class="alert">' . ENTRY_STATE_TEXT . '</span>';?>
-            <?php echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone"'); ?>
+            <?php echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone" readonly'); ?>
             <div class="clearfix"></div>
 <?php
     }
 ?>
             <label class="inputLabel" for="state" id="stateLabel"><?php echo $state_field_label; ?></label>
 <?php
-    echo zen_draw_input_field('state', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_state', '40') . ' id="state" class="form-control" placeholder="' . ENTRY_STATE_TEXT . '"');
+    echo zen_draw_input_field('state', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_state', '40') . ' id="state" class="form-control" placeholder="' . ENTRY_STATE_TEXT . '" readonly');
     if ($flag_show_pulldown_states === false) {
         echo zen_draw_hidden_field('zone_id', $zone_name, ' ');
     }

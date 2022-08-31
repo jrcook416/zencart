@@ -132,7 +132,7 @@ if (ACCOUNT_COMPANY === 'true') {
 <div class="p-2"></div>
 
 <label class="inputLabel" for="country"><?php echo ENTRY_COUNTRY; ?></label>
-<?php echo zen_get_country_list('zone_country_id', $entry->fields['entry_country_id'], 'id="country" placeholder="' . ENTRY_COUNTRY_TEXT . '" readonly'); ?>
+<?php echo zen_get_country_list('zone_country_id', $entry->fields['entry_country_id'], 'id="country" placeholder="' . ENTRY_COUNTRY_TEXT . '" disabled'); ?>
 <div class="p-2"></div>
 
 <?php

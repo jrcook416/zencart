@@ -721,6 +721,9 @@ class OnePageCheckout extends base
     ** The field is displayed only during an account-holder checkout, where that customer does
     ** not (yet) have the maximum number of address-book entries.
     */
+	
+	/**IEMS CUSTOM CODE - REMOVED STOCK showAddAddressField function **/
+	/*
     public function showAddAddressField()
     {
         global $db;
@@ -735,6 +738,19 @@ class OnePageCheckout extends base
             if ($check->fields['count'] < (int)MAX_ADDRESS_BOOK_ENTRIES) {
                 $show_add_address = true;
             }
+        }
+        return $show_add_address;
+    }
+	*/
+	/**IEMS CUSTOM CODE - MODIFIED STOCK showAddAddressField **/
+
+	public function showAddAddressField()
+    {
+        global $db;
+
+        $show_add_address = false;
+        if (!zen_in_guest_checkout() && !empty($_SESSION['customer_id']) && !$this->customerAccountNeedsPrimaryAddress()) {
+			$show_add_address = true;
         }
         return $show_add_address;
     }

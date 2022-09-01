@@ -38,7 +38,6 @@ jQuery(document).ready(function() {
     //
     // Note: Monitoring *all* input changes, too, to workaround browsers' autofill processing.
     //
-	
     jQuery(document).on('change', '#country-bill, #checkoutOneBillto input', function(event) {
         if (last_country_bill != jQuery('#country-bill option:selected').val()) {
             last_country_bill = jQuery('#country-bill option:selected').val();
@@ -51,17 +50,6 @@ jQuery(document).ready(function() {
             updateCountryZones('ship', jQuery('#country-ship option:selected').val());
         }
     });
-	
-	$(document).on('change', '#suburb-ship', function(){
-	var suburb = $("#suburb-ship option:selected").text();
-	console.log(suburb);
-	alert("debugging");
-	$('#suburb-ship').val(suburb);
-	$('#suburb-ship').refresh;
-	alert("more debugging");
-	
-	}); //end on click
-	
 
     // -----
     // This function provides the processing needed when a country has been changed.  It makes

@@ -2,32 +2,15 @@
 // -----
 // account_history: Use the template-specific splitPageResults formatting, if the ZCA Bootstrap template is installed and active.
 //
+// Last updated: Bootstrap 3.4.0
+//
 if ($accountHasHistory && function_exists('zca_bootstrap_active') && zca_bootstrap_active()) {
-    $history_split = new zca_splitPageResults($history_query_raw, MAX_DISPLAY_ORDER_HISTORY);
-    $history = $db->Execute($history_split->sql_query);
-
-    $accountHistory = array();
-    while (!$history->EOF) {
-        $products_query = "SELECT count(*) AS count
-                           FROM   " . TABLE_ORDERS_PRODUCTS . "
-                           WHERE  orders_id = :ordersID";
-
-        $products_query = $db->bindVars($products_query, ':ordersID', $history->fields['orders_id'], 'integer');
-        $products = $db->Execute($products_query);
-
-        if (zen_not_null($history->fields['delivery_name'])) {
-            $order_type = TEXT_ORDER_SHIPPED_TO;
-            $order_name = $history->fields['delivery_name'];
-        } else {
-            $order_type = TEXT_ORDER_BILLED_TO;
-            $order_name = $history->fields['billing_name'];
-        }
-        $extras = array(
-            'order_type' => $order_type,
-            'order_name' => $order_name,
-            'product_count' => $products->fields['count']
-        );
-        $accountHistory[] = array_merge($history->fields, $extras);
-        $history->moveNext();
-    }
+    // -----
+    // Retrieve the paginated SQL query from the 'base' split-page collection, stripping off the
+    // trailing 'LIMIT ' clause and submit that to the Bootstrap template's split-pages class
+    // for proper pagination display.
+    //
+    $history_query = $history_split->getSqlQuery();
+    $history_query = substr($history_query, 0, strripos($history_query, ' limit'));
+    $history_split = new zca_splitPageResults($history_query, MAX_DISPLAY_ORDER_HISTORY);
 }

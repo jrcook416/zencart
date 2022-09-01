@@ -2,15 +2,15 @@
 // -----
 // Part of the ZCA Bootstrap template, @zcadditions, @lat9, @marco-pm
 //
-// BOOTSTRAP 3.3.0.
+// BOOTSTRAP 3.4.0.
 //
-class ZcaBootstrapObserver extends base 
+class ZcaBootstrapObserver extends base
 {
     // -----
     // On construction, watch for various notifications ONLY IF the ZCA Bootstrap template
     // is currently active.
     //
-    public function __construct() 
+    public function __construct()
     {
         if (!defined('PRODUCT_INFO_SHOW_BOOTSTRAP_MODAL_POPUPS')) {
             define('PRODUCT_INFO_SHOW_BOOTSTRAP_MODAL_POPUPS', 'Yes');
@@ -19,13 +19,13 @@ class ZcaBootstrapObserver extends base
         if (zca_bootstrap_active()) {
             $this->attach(
                 $this, 
-                array(
+                [
                     //- From /includes/functions/functions_prices.php (zen_get_products_display)
                     'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_SALE',
                     'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_SPECIAL',
                     'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_NORMAL',
                     'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_FREE_OR_CALL',
-                    
+
                     //- From /includes/functions/html_output.php
                     'NOTIFY_ZEN_CSS_BUTTON_SUBMIT',
                     'NOTIFY_ZEN_CSS_BUTTON_BUTTON',
@@ -33,13 +33,19 @@ class ZcaBootstrapObserver extends base
                     'NOTIFY_ZEN_DRAW_SELECTION_FIELD',
                     'NOTIFY_ZEN_DRAW_TEXTAREA_FIELD',
                     'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU',
-                    
+
                     //- From /includes/classes/order.php
                     'NOTIFY_ORDER_COUPON_LINK',
-                    
+
                     //- From /includes/modules{/bootstrap}/additional_images.php
                     'NOTIFY_MODULES_ADDITIONAL_IMAGES_SCRIPT_LINK',
-                )
+
+                    //- From /includes/modules/pages/checkout_confirmation/header_php.php
+                    'NOTIFY_HEADER_END_CHECKOUT_CONFIRMATION',
+
+                    //- From /includes/modules/order_total/ot_coupon.php
+                    'NOTIFY_OT_COUPON_GENERATE_POPUP_LINK',
+                ]
             );
         }
     }
@@ -71,7 +77,7 @@ class ZcaBootstrapObserver extends base
                 $p2 = true;
                 $p3 = $show_sale_discount;
                 break;
-                
+
             case 'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_SPECIAL':
                 $this->setVariables($eventID, $p1);
                 
@@ -96,7 +102,7 @@ class ZcaBootstrapObserver extends base
                 $p4 = $show_special_price;
                 $p5 = $show_sale_price;
                 break;
-                
+
             case 'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_NORMAL':
                 $this->setVariables($eventID, $p1);
                 
@@ -118,7 +124,7 @@ class ZcaBootstrapObserver extends base
                 $p4 = $show_special_price;
                 $p5 = $show_sale_price;
                 break;
-                
+
             case 'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_FREE_OR_CALL':
                 $this->setVariables($eventID, $p1);
                 
@@ -143,7 +149,7 @@ class ZcaBootstrapObserver extends base
                 $p3 = $free_tag;
                 $p4 = $call_tag;
                 break;
-                
+
             case 'NOTIFY_ZEN_CSS_BUTTON_SUBMIT':
                 $this->setVariables($eventID, $p1);
                 if (trim($this->button_name) == trim($this->sec_class)) {
@@ -153,7 +159,7 @@ class ZcaBootstrapObserver extends base
                 $css_button = '<button type="submit" class="btn '. $this->button_name . $this->sec_class . '"' . $this->parameters . '>' . $this->text . '</button>';
                 $p2 = $css_button;
                 break;
-                
+
             case 'NOTIFY_ZEN_CSS_BUTTON_BUTTON':
                 $this->setVariables($eventID, $p1);
                 if (trim($this->button_name) == trim($this->sec_class)) {
@@ -163,7 +169,7 @@ class ZcaBootstrapObserver extends base
                 $css_button = '<button type="button" class="btn '. $this->button_name . $this->sec_class . '"' . $this->parameters . '>' . $this->text . '</button>';
                 $p2 = $css_button;
                 break;
-                
+
             case 'NOTIFY_ZEN_DRAW_INPUT_FIELD':
                 $field = $p2;
                 if (strpos($field, 'class="') !== false) {
@@ -173,7 +179,7 @@ class ZcaBootstrapObserver extends base
                 }
                 $p2 = $field;
                 break;
-                
+
             case 'NOTIFY_ZEN_DRAW_SELECTION_FIELD':
                 $selection = $p2;
                 if (strpos($selection, 'class="') !== false) {
@@ -183,7 +189,7 @@ class ZcaBootstrapObserver extends base
                 }
                 $p2 = $selection;
                 break;
-                
+
             case 'NOTIFY_ZEN_DRAW_TEXTAREA_FIELD':
                 $field = $p2;
                 if (strpos($field, 'class="') !== false) {
@@ -193,24 +199,24 @@ class ZcaBootstrapObserver extends base
                 }
                 $p2 = $field;
                 break;
-                
+
             case 'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU':
                 $field = $p2;
                 if (strpos($field, 'class="') !== false) {
-                    $field = str_replace('class="', 'class="selectpicker ', $field);
+                    $field = str_replace('class="', 'class="custom-select ', $field);
                 } else {
-                    $field = str_replace('<select ', '<select class="selectpicker" ', $field);
+                    $field = str_replace('<select ', '<select class="custom-select" ', $field);
                 }
                 $p2 = $field;
                 break;
-                
+
             case 'NOTIFY_NOTIFY_ORDER_COUPON_LINK':
                 $zc_coupon_link = '<a data-toggle="modal" data-id="'. $p1['coupon_id']. '" href="#couponHelpModal">';
                 $p2 = $zc_coupon_link;
                 break;
 
             case 'NOTIFY_MODULES_ADDITIONAL_IMAGES_SCRIPT_LINK':
-                if (PRODUCT_INFO_SHOW_BOOTSTRAP_MODAL_POPUPS == 'Yes') {
+                if (PRODUCT_INFO_SHOW_BOOTSTRAP_MODAL_POPUPS === 'Yes') {
                     $products_image_large = $p1['products_image_large'];
                     $i = $p1['index'];
                     $link = '<a href="javascript:void(0)" class="imageModal">';
@@ -223,12 +229,31 @@ class ZcaBootstrapObserver extends base
                     $p3 = 'class="card p-3 mb-3"';
                 }
                 break;
-                
+
+            // -----
+            // zc158 adds a variable ($payment_title) for the templates' use in displaying the
+            // payment-method's title.  That's not in zc157, so we'll mimic the zc158 handling so
+            // that the template can play in both versions!
+            //
+            case 'NOTIFY_HEADER_END_CHECKOUT_CONFIRMATION':
+                global $payment_title, $credit_covers;
+                if (!isset($payment_title)) {
+                    $payment_title = ($credit_covers === true) ? PAYMENT_METHOD_GV : ${$_SESSION['payment']}->title;
+                }
+                break;
+
+            // -----
+            // zc158 adds this notification to the core, possibly hand-edited for zc157 installations.
+            //
+            case 'NOTIFY_OT_COUPON_GENERATE_POPUP_LINK':
+                $p2 = '<a data-toggle="modal" data-id="' . $p1['coupon_id'] . '" href="#couponHelpModal">' . $p1['coupon_code'] . '</a>';
+                break;
+
             default:
                 break;
         }
     }
-    
+
     // -----
     // This function creates class variables for each of the elements in the
     // (presumed) associative array received with the notification.
@@ -238,12 +263,12 @@ class ZcaBootstrapObserver extends base
         if (!is_array($updateParms)) {
             trigger_error("Unknown read-only parameters received for $eventID: " . json_encode($updateParms), E_USER_ERROR);
         }
-        
+
         foreach ($updateParms as $key => $value) {
             $this->$key = $value;
         }
     }
-    
+
     // -----
     // This function creates the display of a given price in the current currency.  The caller is PRESUMED
     // to have set $this->products_tax_class_id or a PHP error will result.

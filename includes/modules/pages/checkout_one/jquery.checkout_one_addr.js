@@ -11,8 +11,6 @@
 jQuery(document).ready(function() {
     var last_country_bill = jQuery('#country-bill option:selected').val();
     var last_country_ship = jQuery('#country-ship option:selected').val();
-	var last_suburb_bill = jQuery('#suburb-bill option:selected').val();
-    var last_suburb_ship = jQuery('#suburb-ship option:selected').val();
     
     // -----
     // Initialize the display for the dropdown vs. hand-entry of the state fields.  If the initially-selected
@@ -40,11 +38,6 @@ jQuery(document).ready(function() {
     //
     // Note: Monitoring *all* input changes, too, to workaround browsers' autofill processing.
     //
-	$(document).on('click', '.opc-bill-save',function(){
-	var unit = $("#suburb option:selected").text();
-	console.log(suburb);
-	$('#suburb').val(unit);
-	$('#suburb').refresh;
 	
     jQuery(document).on('change', '#country-bill, #checkoutOneBillto input', function(event) {
         if (last_country_bill != jQuery('#country-bill option:selected').val()) {
@@ -58,33 +51,17 @@ jQuery(document).ready(function() {
             updateCountryZones('ship', jQuery('#country-ship option:selected').val());
         }
     });
-
-    jQuery(document).on('change', '#suburb-bill, #checkoutOneBillto input', function(event) {
-        if (last_suburb_bill != jQuery('#suburb-bill option:selected').val()) {
-            last_suburb_bill = jQuery('#suburb-bill option:selected').val();
-            updateSuburb('bill', jQuery('#suburb-bill option:selected').val());
-        }
-    });
-    jQuery(document).on('change', '#suburb-ship, #checkoutOneSendto input', function(event) {
-        if (last_suburb_ship != jQuery('#suburb-ship option:selected').val()) {
-            last_suburb_ship = jQuery('#suburb-ship option:selected').val();
-            updateSuburb('ship', jQuery('#suburb-ship option:selected').val());
-        }
-    });	
-
-	function updateSuburb(which, selected_suburb)
-    {
-        var suburbHasUnits = false;
-        var suburbUnits = '<option selected="selected" value="">' + textPleaseSelect + '<' + '/option>';
-        jQuery.each(JSON.parse(c2z), function(unit_id, suburbUnits) {
-            if (selected_suburb == unit_id) {
-                suburbHasUnits = true;
-                jQuery.each(suburbUnits, function(unit_id, unit_description) {
-                    suburbUnits += '<option value="' + unit_id + '">' + unit_description + '<' + '/option>';
-                });
-            }
-        });
-    }
+	
+	$(document).on('change', '#suburb-ship', function(){
+	var suburb = $("#suburb-ship option:selected").text();
+	console.log(suburb);
+	alert("debugging");
+	$('#suburb-ship').val(suburb);
+	$('#suburb-ship').refresh;
+	alert("more debugging");
+	
+	}); //end on click
+	
 
     // -----
     // This function provides the processing needed when a country has been changed.  It makes

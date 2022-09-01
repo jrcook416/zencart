@@ -1,14 +1,11 @@
 <?php
 // -----
 // Part of the One-Page Checkout plugin, provided under GPL 2.0 license by lat9
-// Copyright (C) 2013-2022, Vinos de Frutas Tropicales.  All rights reserved.
+// Copyright (C) 2013-2019, Vinos de Frutas Tropicales.  All rights reserved.
 //
 // Note: This formatting has changed in v2.0.0+ of OPC, in support of the guest-checkout path.
 // The $enabled_payment_modules variable must be handled using foreach, since numerical keys
 // might have been removed if the payment method is not supported for guest-checkout!!
-//
-// Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.0
-// Last modified for bs4_opc v1.0.3.
 //
 ?>
 <!--bof payment-method choices -->
@@ -19,9 +16,9 @@
 //
 if ($shipping_module_available && $display_payment_block) {
 ?>
-  <div id="checkoutPaymentMethod" class="card mb-3">
-    <h4 class="card-header"><?php echo TABLE_HEADING_PAYMENT_METHOD; ?></h4>
-    <div class="card-body">
+  <div id="checkoutPaymentMethod" class="floatingBox forward clearRight">
+    <fieldset>
+      <legend><?php echo TABLE_HEADING_PAYMENT_METHOD; ?></legend>
 <?php 
     // ** BEGIN PAYPAL EXPRESS CHECKOUT **
     if (!$payment_modules->in_special_checkout()) {
@@ -35,22 +32,14 @@ if ($shipping_module_available && $display_payment_block) {
           
             }
 ?>
+      <br class="clearBoth" />
 <?php 
-        } 
+    } 
 
         $selection = $enabled_payment_modules;
         $num_selections = count($selection);
 
-        // -----
-        // The 'base' bootstrap classes force a radio-button based on the classes associated with a
-        // selection's label and its input (even if it's hidden).  If only one payment method is available,
-        // don't use those classes as they result in a 'rogue' unclickable radio button.
-        //
-        $payment_div_class = '';
-        $payment_label_class = '';
         if ($num_selections > 1) {
-            $payment_div_class = ' custom-radio';
-            $payment_label_class = ' class="custom-control-label radioButtonLabel"';
 ?>
       <p class="important"><?php echo TEXT_SELECT_PAYMENT_METHOD; ?></p>
 <?php
@@ -64,9 +53,7 @@ if ($shipping_module_available && $display_payment_block) {
         $radio_buttons = 0;
 
         foreach ($selection as $current_method) {
-?>
-      <div class="custom-control<?php echo $payment_div_class; ?> mb-2">
-<?php
+        echo '<div class="custom-control custom-radio">'; 
             $payment_id = $current_method['id'];
             if ($num_selections > 1) {
                 if (empty($current_method['noradio'])) {
@@ -77,7 +64,7 @@ if ($shipping_module_available && $display_payment_block) {
                 echo zen_draw_hidden_field('payment', $payment_id, 'id="pmt-' . $payment_id . '"');
             }
 ?>
-        <label for="pmt-<?php echo $payment_id; ?>"<?php echo $payment_label_class; ?>><?php echo $current_method['module']; ?></label>
+      <label for="pmt-<?php echo $payment_id; ?>" class="custom-control-label radioButtonLabel"><?php echo $current_method['module']; ?></label>
       </div>
 <?php
             if (defined('MODULE_ORDER_TOTAL_COD_STATUS') && MODULE_ORDER_TOTAL_COD_STATUS == 'true' && $payment_id == 'cod') {
@@ -97,6 +84,8 @@ if ($shipping_module_available && $display_payment_block) {
 <?php
             }
 ?>
+      <br class="clearBoth" />
+
 <?php
             if (isset($current_method['error'])) {
 ?>
@@ -124,11 +113,12 @@ if ($shipping_module_available && $display_payment_block) {
                     //
                     echo $current_field['field']; 
 ?>
-
+        <br class="clearBoth" />
 <?php
                 }
 ?>
       </div>
+      <br class="clearBoth" />
 <?php
             }
             $radio_buttons++;
@@ -143,9 +133,10 @@ if ($shipping_module_available && $display_payment_block) {
     }
     // ** END PAYPAL EXPRESS CHECKOUT **
 ?>
-    </div>
+    </fieldset>
   </div>
 <?php
 }  //-Shipping-method available, display payment block.
 ?>
+  <div class="clearBoth"></div>
 <!--eof payment-method choices -->

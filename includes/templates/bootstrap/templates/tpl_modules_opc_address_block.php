@@ -122,6 +122,7 @@ if (ACCOUNT_SUBURB === 'true') {
     $id = "suburb-$which";
     filtered_unit_array($filter);
     echo iems_pull_down_menu($name, $filtered_units, $address['suburb'], 'id="' . $id . '" form-control data-live-search="true" data-width="100%" title="Nothing selected."');
+	$clear_both;
     echo "<br>";
 }
 

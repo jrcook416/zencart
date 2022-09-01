@@ -144,12 +144,13 @@ if (ACCOUNT_SUBURB === 'true') {
     <label class="inputLabel"><?php echo ENTRY_SUBURB;?></label>
     <?php
     $filter = $address['company'];
+    filtered_unit_array($filter);
     $name = "suburb[$which]";
     $id = "suburb-$which";
-    filtered_unit_array($filter);
-    echo iems_pull_down_menu($name, $filtered_units, $address['suburb'], 'id="' . $id . '" form-control data-live-search="true" data-width="100%" title="Nothing selected."');
+    echo iems_pull_down_menu($name, $filtered_units, $address['suburb'], 'id="' . $id . '" class="form-control" data-live-search="true" data-width="100%" title="Nothing selected."');
 	$clear_both;
     echo "<br>";
+    echo $_SESSION['opc']->formatAddressElement($which, 'suburb', $address['suburb'], ENTRY_SUBURB, TABLE_ADDRESS_BOOK, 'entry_suburb', ENTRY_SUBURB_MIN_LENGTH, ENTRY_SUBURB_TEXT) . $clear_both;
 }
 
 echo $_SESSION['opc']->formatAddressElement($which, 'city', $address['city'], ENTRY_CITY, TABLE_ADDRESS_BOOK, 'entry_city', ENTRY_CITY_MIN_LENGTH, ENTRY_CITY_TEXT) . $clear_both;

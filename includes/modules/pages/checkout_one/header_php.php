@@ -9,7 +9,6 @@
 // This should be first line of the script:
 $zco_notifier->notify('NOTIFY_HEADER_START_CHECKOUT_ONE');
 
-print_r(_$SESSION);
 // -----
 // Use "normal" checkout if not enabled.
 //
@@ -35,6 +34,7 @@ if (CHECKOUT_ONE_DEBUG === 'full') {
 if ($_SESSION['cart']->count_contents() <= 0) {
     zen_redirect(zen_href_link(FILENAME_SHOPPING_CART, '', 'NONSSL'));
 }
+print_r($_SESSION);
 
 // -----
 // Check the customer's login status.

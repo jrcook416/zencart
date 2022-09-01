@@ -118,8 +118,8 @@ if (ACCOUNT_SUBURB === 'true') {
     <label class="inputLabel"><?php echo ENTRY_SUBURB;?></label>
     <?php
     $filter = $address['company'];
-    $name = "suburb[$which]select";
-    $id = "suburb-$which-select";
+    $name = "suburb[$which]";
+    $id = "suburb-$which";
     filtered_unit_array($filter);
     echo iems_pull_down_menu($name, $filtered_units, $address['suburb'], 'id="' . $id . '" form-control data-live-search="true" data-width="100%" title="Nothing selected."');
     echo "<br>";

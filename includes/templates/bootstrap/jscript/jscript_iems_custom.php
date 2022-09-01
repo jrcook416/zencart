@@ -38,14 +38,6 @@ $(document).on('click', '.add', function(){
   
 }); //end on click
 
-$(document).on('click', '.opc-bill-save',function(){
-	var unit = $("#suburb option:selected").text();
-	console.log(suburb);
-	$('#suburb').val(unit);
-	$('#suburb').refresh;
-
-}); //end on click
-
  $(document).on('click', '.remove', function(){
 	$('#entry_suburb').empty();
 	$('#entry_suburb').selectpicker('refresh');

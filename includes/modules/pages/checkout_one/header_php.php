@@ -9,6 +9,7 @@
 // This should be first line of the script:
 $zco_notifier->notify('NOTIFY_HEADER_START_CHECKOUT_ONE');
 
+print_r(_$SESSION);
 // -----
 // Use "normal" checkout if not enabled.
 //

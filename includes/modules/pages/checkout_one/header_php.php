@@ -34,7 +34,6 @@ if (CHECKOUT_ONE_DEBUG === 'full') {
 if ($_SESSION['cart']->count_contents() <= 0) {
     zen_redirect(zen_href_link(FILENAME_SHOPPING_CART, '', 'NONSSL'));
 }
-print_r($_SESSION);
 
 // -----
 // Check the customer's login status.
@@ -426,6 +425,10 @@ $flag_disable_right = $flag_disable_left = true;
 //
 $breadcrumb->add(NAVBAR_TITLE_1);
 $breadcrumb->add(NAVBAR_TITLE_2);
+
+print "<pre>";
+print_r($_SESSION);
+print "<pre>";
 
 // This should be last line of the script:
 $zco_notifier->notify('NOTIFY_HEADER_END_CHECKOUT_ONE');

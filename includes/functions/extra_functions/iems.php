@@ -125,7 +125,7 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
     return $field;
   }
 
-  $field = '<select rel="select"';
+  $field = '<select rel="dropdown"';
 /*
   if (strpos($parameters, 'id=') === false) {
     $field .= ' id="select-' . zen_output_string($name) . '"';

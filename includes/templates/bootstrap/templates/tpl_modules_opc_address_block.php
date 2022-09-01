@@ -140,7 +140,6 @@ if (ACCOUNT_COMPANY === 'true') {
 echo $_SESSION['opc']->formatAddressElement($which, 'street_address', $address['street_address'], ENTRY_STREET_ADDRESS, TABLE_ADDRESS_BOOK, 'entry_street_address', ENTRY_STREET_ADDRESS_MIN_LENGTH, ENTRY_STREET_ADDRESS_TEXT) . $clear_both;
 
 if (ACCOUNT_SUBURB === 'true') {
-    /*echo $_SESSION['opc']->formatAddressElement($which, 'suburb', $address['suburb'], ENTRY_SUBURB, TABLE_ADDRESS_BOOK, 'entry_suburb', 0, ENTRY_SUBURB_TEXT) . $clear_both;*/
 	?>
     <label class="inputLabel"><?php echo ENTRY_SUBURB;?></label>
     <?php

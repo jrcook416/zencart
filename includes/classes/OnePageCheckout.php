@@ -1272,36 +1272,6 @@ class OnePageCheckout extends base
             $field_label .
             zen_draw_input_field($field_name, $field_value, "$field_len id=\"$field_id\"$autocomplete placeholder=\"$placeholder\" $field_required$field_params");
     }
-	
-	public function iemsFormatAddressElement($filter, $which, $field_name, $field_value, $field_text, $db_table, $db_fieldname, $min_length, $placeholder, $field_params = '', $label_params = '')
-    {
-        $this->inputPreCheck($which);
-
-        // -----
-        // Special handling for the 'company' and 'suburb' fields, to guide browser autofill operations to
-        // fill in the proper fields.
-        //
-        $autocomplete = '';
-        if ($field_name === 'company') {
-            $autocomplete = ' autocomplete="organization"';
-        } elseif ($field_name === 'suburb') {
-            $autocomplete = ' autocomplete="address-line2"';
-        }
-
-        $field_id = str_replace('_', '-', $field_name) . "-$which";
-        $field_name .= "[$which]";
-        $field_len = zen_set_field_length($db_table, $db_fieldname, '40');
-        $field_required = (((int)$min_length) > 0) ? ' required' : '';
-
-        if ($label_params === '' && !empty($this->label_params)) {
-            $label_params = $this->label_params;
-        }
-        $field_label = (empty($field_text)) ? '' : (zen_draw_label($field_text, $field_id, $label_params) . PHP_EOL);
-        return
-			filtered_unit_array($filter);
-            $field_label .
-			iems_pull_down_menu($field_name, $filtered_units, $field_value,  "$field_len id=\"$field_id\"$autocomplete placeholder=\"$placeholder\" $field_required$field_params class='form-control' data-live-search='true' data-width='100%' title='Nothing selected.'");
-    }
 
     public function validateAndSaveAjaxPostedAddress($which, &$messages)
     {

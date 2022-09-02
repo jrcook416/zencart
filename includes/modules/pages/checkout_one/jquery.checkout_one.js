@@ -860,7 +860,7 @@ jQuery(document).ready(function(){
             firstname = jQuery('input[name="firstname['+which+']"]').val(),
             lastname = jQuery('input[name="lastname['+which+']"]').val(),
             street_address = jQuery('input[name="street_address['+which+']"]').val(),
-            suburb = jQuery('input[name="suburb['+which+']"]').val(),
+            suburb = jQuery('select[name="suburb['+which+']"] option:selected').val(),
             city = jQuery('input[name="city['+which+']"]').val(),
             state = jQuery('input[name="state['+which+']"]').val(),
             zone_id = jQuery('select[name="zone_id['+which+']"] option:selected').val(),
@@ -868,6 +868,8 @@ jQuery(document).ready(function(){
             zone_country_id = jQuery('select[name="zone_country_id['+which+']"] option:selected').val(),
             shipping_billing = jQuery('#shipping_billing').is(':checked'),
             add_address = jQuery('#opc-add-'+which).prop('checked');
+            console.log(suburb);
+            debugger;
 
         zcJS.ajax({
             url: "ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues",

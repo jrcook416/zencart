@@ -1297,9 +1297,8 @@ class OnePageCheckout extends base
             $label_params = $this->label_params;
         }
         $field_label = (empty($field_text)) ? '' : (zen_draw_label($field_text, $field_id, $label_params) . PHP_EOL);
-		filtered_unit_array($filter);
         return
-			
+			filtered_unit_array($filter);
             $field_label .
 			iems_pull_down_menu($field_name, $filtered_units, $field_value,  "$field_len id=\"$field_id\"$autocomplete placeholder=\"$placeholder\" $field_required$field_params class='form-control' data-live-search='true' data-width='100%' title='Nothing selected.'");
     }

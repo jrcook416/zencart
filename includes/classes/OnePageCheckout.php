@@ -1273,7 +1273,7 @@ class OnePageCheckout extends base
             zen_draw_input_field($field_name, $field_value, "$field_len id=\"$field_id\"$autocomplete placeholder=\"$placeholder\" $field_required$field_params");
     }
 	
-	public function iemsFormatAddressElement($which, $field_name, $field_value, $field_text, $db_table, $db_fieldname, $min_length, $placeholder, $field_params = '', $label_params = '')
+	public function iemsFormatAddressElement($filter, $which, $field_name, $field_value, $field_text, $db_table, $db_fieldname, $min_length, $placeholder, $field_params = '', $label_params = '')
     {
         $this->inputPreCheck($which);
 
@@ -1297,8 +1297,6 @@ class OnePageCheckout extends base
             $label_params = $this->label_params;
         }
         $field_label = (empty($field_text)) ? '' : (zen_draw_label($field_text, $field_id, $label_params) . PHP_EOL);
-
-		$filter = $address['company'];
 		filtered_unit_array($filter);
         return
 			

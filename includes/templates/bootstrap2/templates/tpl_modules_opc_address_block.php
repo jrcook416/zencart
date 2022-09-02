@@ -137,8 +137,8 @@ if (ACCOUNT_COMPANY === 'true') {
 echo $_SESSION['opc']->formatAddressElement($which, 'street_address', $address['street_address'], ENTRY_STREET_ADDRESS, TABLE_ADDRESS_BOOK, 'entry_street_address', ENTRY_STREET_ADDRESS_MIN_LENGTH, ENTRY_STREET_ADDRESS_TEXT) . $clear_both;
 
 if (ACCOUNT_SUBURB === 'true') {
-	echo $_SESSION['opc']->iemsFormatAddressElement($which, 'suburb', $address['suburb'], ENTRY_SUBURB, TABLE_ADDRESS_BOOK, 'entry_suburb', ENTRY_STREET_ADDRESS_MIN_LENGTH, ENTRY_STREET_ADDRESS_TEXT) . $clear_both;
-	
+	$filter = $address['company'];
+	echo $_SESSION['opc']->iemsFormatAddressElement($filter, $which, 'suburb', $address['suburb'], ENTRY_SUBURB, TABLE_ADDRESS_BOOK, 'entry_suburb', ENTRY_STREET_ADDRESS_MIN_LENGTH, ENTRY_STREET_ADDRESS_TEXT) . $clear_both;
 }
 
 echo $_SESSION['opc']->formatAddressElement($which, 'city', $address['city'], ENTRY_CITY, TABLE_ADDRESS_BOOK, 'entry_city', ENTRY_CITY_MIN_LENGTH, ENTRY_CITY_TEXT) . $clear_both;

@@ -1300,7 +1300,7 @@ class OnePageCheckout extends base
 
         return
             $field_label .
-			echo iems_pull_down_menu($field_name, $filtered_units, $field_value,  "$field_len id=\"$field_id\"$autocomplete placeholder=\"$placeholder\" $field_required$field_params class='form-control' data-live-search='true' data-width='100%' title='Nothing selected.'");
+			iems_pull_down_menu($field_name, $filtered_units, $field_value,  "$field_len id=\"$field_id\"$autocomplete placeholder=\"$placeholder\" $field_required$field_params class='form-control' data-live-search='true' data-width='100%' title='Nothing selected.'");
     }
 
     public function validateAndSaveAjaxPostedAddress($which, &$messages)

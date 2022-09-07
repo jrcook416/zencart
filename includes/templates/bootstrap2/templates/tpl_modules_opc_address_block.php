@@ -137,11 +137,12 @@ if (ACCOUNT_COMPANY === 'true') {
 echo $_SESSION['opc']->formatAddressElement($which, 'street_address', $address['street_address'], ENTRY_STREET_ADDRESS, TABLE_ADDRESS_BOOK, 'entry_street_address', ENTRY_STREET_ADDRESS_MIN_LENGTH, ENTRY_STREET_ADDRESS_TEXT) . $clear_both;
 
 if (ACCOUNT_SUBURB === 'true') {
-    echo "<br>";
 	$filter = $address['company'];
     $name = "suburb[$which]";
     $id = "suburb-$which";
-    filtered_unit_array($filter);
+    filtered_unit_array($filter);?>
+    <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
+    <?php
     echo iems_pull_down_menu($name, $filtered_units, $address['suburb'], 'id="' . $id . '" form-control data-live-search="true" data-width="100%" title="Nothing selected."');
     echo $clear_both;
 }

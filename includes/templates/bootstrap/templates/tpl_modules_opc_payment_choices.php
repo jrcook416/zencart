@@ -7,19 +7,15 @@
 // The $enabled_payment_modules variable must be handled using foreach, since numerical keys
 // might have been removed if the payment method is not supported for guest-checkout!!
 //
-// Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.0
-// Last modified for bs4_opc v1.0.3.
+// Last updated: OPC v2.4.2/Bootstrap v3.4.0
 //
-?>
-<!--bof payment-method choices -->
-<?php
 // -----
 // Don't display the payment-method block unless there is a shipping method available
 // and the payment-related address is validated.
 //
-if ($shipping_module_available && $display_payment_block) {
+if ($shipping_module_available === true && $display_payment_block === true) {
 ?>
-  <div id="checkoutPaymentMethod" class="card mb-3">
+<div id="checkoutPaymentMethod" class="card mb-3">
     <h4 class="card-header"><?php echo TABLE_HEADING_PAYMENT_METHOD; ?></h4>
     <div class="card-body">
 <?php 
@@ -32,10 +28,7 @@ if ($shipping_module_available && $display_payment_block) {
           
             } elseif (SHOW_ACCEPTED_CREDIT_CARDS == '2') {
                 echo TEXT_ACCEPTED_CREDIT_CARDS . zen_get_cc_enabled('IMAGE_');
-          
             }
-?>
-<?php 
         } 
 
         $selection = $enabled_payment_modules;
@@ -52,11 +45,11 @@ if ($shipping_module_available && $display_payment_block) {
             $payment_div_class = ' custom-radio';
             $payment_label_class = ' class="custom-control-label radioButtonLabel"';
 ?>
-      <p class="important"><?php echo TEXT_SELECT_PAYMENT_METHOD; ?></p>
+        <p class="important"><?php echo TEXT_SELECT_PAYMENT_METHOD; ?></p>
 <?php
         } elseif ($num_selections == 0) {
 ?>
-      <p class="important"><?php echo TEXT_NO_PAYMENT_OPTIONS_AVAILABLE; ?></p>
+        <p class="important"><?php echo TEXT_NO_PAYMENT_OPTIONS_AVAILABLE; ?></p>
 
 <?php
         }
@@ -65,7 +58,7 @@ if ($shipping_module_available && $display_payment_block) {
 
         foreach ($selection as $current_method) {
 ?>
-      <div class="custom-control<?php echo $payment_div_class; ?> mb-2">
+        <div class="custom-control<?php echo $payment_div_class; ?> mb-2">
 <?php
             $payment_id = $current_method['id'];
             if ($num_selections > 1) {
@@ -77,10 +70,10 @@ if ($shipping_module_available && $display_payment_block) {
                 echo zen_draw_hidden_field('payment', $payment_id, 'id="pmt-' . $payment_id . '"');
             }
 ?>
-        <label for="pmt-<?php echo $payment_id; ?>"<?php echo $payment_label_class; ?>><?php echo $current_method['module']; ?></label>
-      </div>
+            <label for="pmt-<?php echo $payment_id; ?>"<?php echo $payment_label_class; ?>><?php echo $current_method['module']; ?></label>
+        </div>
 <?php
-            if (defined('MODULE_ORDER_TOTAL_COD_STATUS') && MODULE_ORDER_TOTAL_COD_STATUS == 'true' && $payment_id == 'cod') {
+            if (defined('MODULE_ORDER_TOTAL_COD_STATUS') && MODULE_ORDER_TOTAL_COD_STATUS === 'true' && $payment_id === 'cod') {
                 if (!defined('TEXT_INFO_COD_FEES')) {
                     // -----
                     // Need to load the 'ot_cod' language file, since it's not pre-loaded during AJAX operations.
@@ -93,20 +86,19 @@ if ($shipping_module_available && $display_payment_block) {
                     }
                 }
 ?>
-      <div class="alert"><?php echo TEXT_INFO_COD_FEES; ?></div>
+        <div class="alert"><?php echo TEXT_INFO_COD_FEES; ?></div>
 <?php
             }
 ?>
 <?php
             if (isset($current_method['error'])) {
 ?>
-      <div><?php echo $current_method['error']; ?></div>
+        <div><?php echo $current_method['error']; ?></div>
 
 <?php
             } elseif (isset($current_method['fields']) && is_array($current_method['fields'])) {
 ?>
-
-      <div class="ccinfo">
+        <div class="ccinfo">
 <?php
                 foreach ($current_method['fields'] as $current_field) {
                     // -----
@@ -115,37 +107,31 @@ if ($shipping_module_available && $display_payment_block) {
                     //
                     if (!empty($current_field['title'])) {
 ?>
-        <label <?php echo (isset($current_field['tag']) ? 'for="' . $current_field['tag'] . '" ' : ''); ?>class="inputLabelPayment"><?php echo $current_field['title']; ?></label>
+            <label <?php echo (isset($current_field['tag']) ? 'for="' . $current_field['tag'] . '" ' : ''); ?>class="inputLabelPayment"><?php echo $current_field['title']; ?></label>
 <?php
                     }
-                    
+
                     // -----
                     // The 'field' value is **always** required; output it.
                     //
                     echo $current_field['field']; 
-?>
-
-<?php
                 }
 ?>
-      </div>
+        </div>
 <?php
             }
             $radio_buttons++;
-
         }
     // ** BEGIN PAYPAL EXPRESS CHECKOUT **
     } else {
 ?>
-    <p><?php echo ${$_SESSION['payment']}->title; ?></p>
-    <input type="hidden" name="payment" value="<?php echo $_SESSION['payment']; ?>" />
+        <p><?php echo ${$_SESSION['payment']}->title; ?></p>
+        <input type="hidden" name="payment" value="<?php echo $_SESSION['payment']; ?>" />
 <?php
     }
     // ** END PAYPAL EXPRESS CHECKOUT **
 ?>
     </div>
-  </div>
+</div>
 <?php
 }  //-Shipping-method available, display payment block.
-?>
-<!--eof payment-method choices -->

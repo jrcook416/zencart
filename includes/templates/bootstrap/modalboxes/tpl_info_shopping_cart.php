@@ -1,7 +1,16 @@
-<?php 
-require DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . zca_get_language_dir('info_shopping_cart.php') . 'info_shopping_cart.php'; 
+<?php
+/**
+ * Override Modal for info_shopping_cart
+ * 
+ * BOOTSTRAP v3.4.0
+ *
+ * @package templateSystem
+ * @copyright Copyright 2003-2016 Zen Cart Development Team
+ * @copyright Portions Copyright 2003 osCommerce
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ */
+zca_load_language_for_modal('info_shopping_cart');
 ?>
-
 <!-- Modal -->
 <div class="modal fade" id="cartHelpModal" tabindex="-1" role="dialog" aria-labelledby="cartHelpModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

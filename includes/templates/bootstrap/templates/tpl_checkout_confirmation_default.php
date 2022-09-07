@@ -2,7 +2,7 @@
 /**
  * Page Template
  * 
- * BOOTSTRAP v3.1.5
+ * BOOTSTRAP v3.4.0
  *
  * Loaded automatically by index.php?main_page=checkout_confirmation.<br />
  * Displays final checkout details, cart, payment and shipping info details.
@@ -20,22 +20,25 @@
 
     <h1 id="checkoutConfirmationDefault-pageHeading" class="pageHeading"><?php echo HEADING_TITLE; ?></h1>
 
-<?php if ($messageStack->size('redemptions') > 0) echo $messageStack->output('redemptions'); ?>
-<?php if ($messageStack->size('checkout_confirmation') > 0) echo $messageStack->output('checkout_confirmation'); ?>
-<?php if ($messageStack->size('checkout') > 0) echo $messageStack->output('checkout'); ?>
-
+<?php
+if ($messageStack->size('redemptions') > 0) {
+    echo $messageStack->output('redemptions');
+}
+if ($messageStack->size('checkout_confirmation') > 0) {
+    echo $messageStack->output('checkout_confirmation');
+}
+if ($messageStack->size('checkout') > 0) {
+    echo $messageStack->output('checkout');
+}
+?>
     <div class="card-columns">  
-  
-<!--bof billing address card-->
         <div id="billingAddress-card" class="card mb-3">
             <h4 id="billingAddress-card-header" class="card-header"><?php echo HEADING_BILLING_ADDRESS; ?></h4>
             <div id="billingAddress-card-body" class="card-body p-3">
                 <div class="card-deck">
-<!--bof bill to address card-->
                     <div id="billToAddress-card" class="card">
                         <div id="billToAddress-card-body" class="card-body">
-                            <address><?php echo zen_address_format($order->billing['format_id'], $order->billing, 1, ' ', '<br />'); ?></address>
-
+                            <address><?php echo zen_address_format($order->billing['format_id'], $order->billing, 1, ' ', '<br>'); ?></address>
 <?php 
 if (!$flagDisablePaymentAddressChange) {
 ?>
@@ -47,19 +50,13 @@ if (!$flagDisablePaymentAddressChange) {
 ?>
                         </div>
                     </div>
-<!--eof bill to address card-->
 
-<!--bof payment method card-->
                     <div id="paymentMethod-card" class="card">
-<?php
-$class =& $_SESSION['payment'];
-?>
                         <h4 id="paymentMethod-card-header" class="card-header"><?php echo HEADING_PAYMENT_METHOD; ?></h4>
                         <div id="paymentMethod-card-body" class="card-body">
-                            <h4 id="paymentMethod-paymentTitle"><?php echo $GLOBALS[$class]->title; ?></h4>
-
+                            <h4 id="paymentMethod-paymentTitle"><?php echo $payment_title; ?></h4>
 <?php
-if (is_array($payment_modules->modules)) {
+if ($credit_covers === false && is_array($payment_modules->modules)) {
     if ($confirmation = $payment_modules->confirmation()) {
 ?>
                             <div id="paymentMethod-content" class="content"><?php echo $confirmation['title']; ?></div>
@@ -83,21 +80,17 @@ if (is_array($payment_modules->modules)) {
 ?>
                         </div>
                     </div>
-<!--eof payment method card-->
                 </div>
             </div>
         </div>
-<!--eof billing address card-->
 
 <?php
 if ($_SESSION['sendto'] != false) {
 ?>
-<!--bof delivery address card-->
         <div id="deliveryAddress-card" class="card mb-3">
             <h4 id="deliveryAddress-card-header" class="card-header"><?php echo HEADING_DELIVERY_ADDRESS; ?></h4>
             <div id="deliveryAddress-card-body" class="card-body p-3">
                 <div class="card-deck">
-<!--bof ship to address card-->    
                     <div id="shipToAddress-card" class="card">
                         <div id="shipToAddress-card-body" class="card-body">
                             <address><?php echo zen_address_format($order->delivery['format_id'], $order->delivery, 1, ' ', '<br>'); ?></address>
@@ -107,11 +100,9 @@ if ($_SESSION['sendto'] != false) {
 
                         </div>
                     </div>
-<!--eof ship to address card-->
 <?php
     if ($order->info['shipping_method']) {
 ?>
-<!--bof shipping method card-->
                     <div id="shippingMethod-card" class="card">
                         <h4 id="shippingMethod-card-header" class="card-header"><?php echo HEADING_SHIPPING_METHOD; ?></h4>
                         <div id="shippingMethod-card-body" class="card-body">
@@ -119,7 +110,6 @@ if ($_SESSION['sendto'] != false) {
 
                         </div>
                     </div>
-<!--eof shipping method card-->
 <?php
     }
 ?>
@@ -137,13 +127,11 @@ if ($_SESSION['sendto'] != false) {
 <?php echo (empty($order->info['comments']) ? NO_COMMENTS_TEXT : nl2br(zen_output_string_protected($order->info['comments'])) . zen_draw_hidden_field('comments', $order->info['comments'])); ?>
 
                 <div id="orderComment-btn-toolbar" class="btn-toolbar justify-content-end mt-3" role="toolbar">
-<?php echo  '<a href="' . zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL') . '">' . zen_image_button(BUTTON_IMAGE_EDIT_SMALL, BUTTON_EDIT_SMALL_ALT) . '</a>'; ?>
+                    <?php echo  '<a href="' . zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL') . '">' . zen_image_button(BUTTON_IMAGE_EDIT_SMALL, BUTTON_EDIT_SMALL_ALT) . '</a>'; ?>
                 </div>
             </div>
         </div>
-<!--eof special instructions or order comments card-->
 
-<!--bof shopping cart contents card-->
         <div id="cartContents-card" class="card mb-3">
             <h4 id="cartContents-card-header" class="card-header"><?php echo HEADING_PRODUCTS; ?></h4>
             <div id="cartContents-card-body" class="card-body p-3">
@@ -243,13 +231,11 @@ if ($flagAnyOutOfStock) {
                 </div>
             </div>
         </div>
-<!--eof shopping cart contents card-->
-
     </div>
 <?php
     echo zen_draw_form('checkout_confirmation', $form_action_url, 'post', 'id="checkout_confirmation" onsubmit="submitonce();"');
 
-    if (is_array($payment_modules->modules)) {
+    if ($credit_covers === false && is_array($payment_modules->modules)) {
         echo $payment_modules->process_button();
     }
 ?>

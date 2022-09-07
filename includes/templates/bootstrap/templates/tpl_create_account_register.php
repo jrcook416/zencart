@@ -1,9 +1,9 @@
 <?php
 // -----
 // Part of the One-Page Checkout plugin, provided under GPL 2.0 license by lat9
-// Copyright (C) 2017-2020, Vinos de Frutas Tropicales.  All rights reserved.
+// Copyright (C) 2017-2022, Vinos de Frutas Tropicales.  All rights reserved.
 //
-// Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.0
+// Last updated: OPC v2.4.2/Bootstrap v3.4.0
 //
 ?>
 <div class="centerColumn" id="registerDefault">
@@ -20,14 +20,14 @@ if ($messageStack->size('create_account') > 0) {
 ?>
     <div class="alert forward"><?php echo FORM_REQUIRED_INFORMATION; ?></div>
 <?php
-if (DISPLAY_PRIVACY_CONDITIONS == 'true') {
+if (DISPLAY_PRIVACY_CONDITIONS === 'true') {
 ?>
-    <div class="card mb-3">
+    <div class="card mb-3 w-100">
         <h4 class="card-header"><?php echo TABLE_HEADING_PRIVACY_CONDITIONS; ?></h4>
         <div class="card-body">
             <div class="information"><?php echo TEXT_PRIVACY_CONDITIONS_DESCRIPTION;?></div>
             <div class="custom-control custom-checkbox mb-3 mt-2">
-                <?php echo zen_draw_checkbox_field('privacy_conditions', '1', false, 'id="privacy"'); ?>
+                <?php echo zen_draw_checkbox_field('privacy_conditions', '1', false, 'id="privacy" required'); ?>
                 <label class="custom-control-label checkboxLabel" for="privacy"><?php echo TEXT_PRIVACY_CONDITIONS_CONFIRM;?></label>
             </div>
         </div>
@@ -35,23 +35,23 @@ if (DISPLAY_PRIVACY_CONDITIONS == 'true') {
 <?php
 }
 
-if (ACCOUNT_COMPANY == 'true') {
+if (ACCOUNT_COMPANY === 'true') {
 ?>
     <div class="card mb-3">
         <h4 class="card-header"><?php echo CATEGORY_COMPANY; ?></h4>
         <div class="card-body">
             <label class="inputLabel" for="company"><?php echo ENTRY_COMPANY; ?></label>
-            <?php echo zen_draw_input_field('company', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" placeholder="' . ENTRY_COMPANY_TEXT . '"'. ((int)ENTRY_COMPANY_MIN_LENGTH != 0 ? ' required' : '')); ?>
+            <?php echo zen_draw_input_field('company', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" placeholder="' . ENTRY_COMPANY_TEXT . '"'. ((int)ENTRY_COMPANY_MIN_LENGTH !== 0 ? ' required' : '')); ?>
         </div>
     </div>
 <?php
-  }
+}
 ?>
     <div class="card mb-3">
         <h4 class="card-header"><?php echo HEADING_CONTACT_DETAILS; ?></h4>
         <div class="card-body">
 <?php
-if (ACCOUNT_GENDER == 'true') {
+if (ACCOUNT_GENDER === 'true') {
 ?>
         <label class="inputLabel"><?php echo ENTRY_GENDER; ?></label><br>
         <div class="custom-control custom-radio custom-control-inline">
@@ -79,14 +79,14 @@ echo zen_draw_input_field('lastname', '', zen_set_field_length(TABLE_CUSTOMERS, 
 echo zen_draw_input_field('telephone', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_telephone', '40') . ' id="telephone" placeholder="' . ENTRY_TELEPHONE_NUMBER_TEXT . '"' . ((int)ENTRY_TELEPHONE_MIN_LENGTH > 0 ? ' required' : ''), 'tel');
 ?>
 <?php
-if (ACCOUNT_DOB == 'true') {
+if (ACCOUNT_DOB === 'true') {
 ?>
             <label class="inputLabel" for="dob"><?php echo ENTRY_DATE_OF_BIRTH; ?></label>
 <?php 
     echo zen_draw_input_field('dob','', 'id="dob" placeholder="' . ENTRY_DATE_OF_BIRTH_TEXT . '"' . (ACCOUNT_DOB == 'true' && (int)ENTRY_DOB_MIN_LENGTH != 0 ? ' required' : '')); 
 }
 
-if ($display_nick_field == true) {
+if ($display_nick_field === true) {
 ?>
             <label class="inputLabel" for="nickname"><?php echo ENTRY_NICK; ?></label>
 <?php 
@@ -95,7 +95,7 @@ if ($display_nick_field == true) {
 ?>
         </div>
     </div>
-        
+
     <div class="card mb-3">
         <h4 class="card-header"><?php echo TABLE_HEADING_LOGIN_DETAILS; ?></h4>
         <div class="card-body">
@@ -111,11 +111,11 @@ echo zen_draw_input_field('email_address_confirm', '', $email_field_length . ' i
 ?>
             <label class="inputLabel"><?php echo ENTRY_EMAIL_FORMAT; ?></label><br>
             <div class="custom-control custom-radio custom-control-inline">
-                <?php echo zen_draw_radio_field('email_format', 'HTML', ($email_format == 'HTML'),'id="email-format-html"'); ?>
+                <?php echo zen_draw_radio_field('email_format', 'HTML', ($email_format === 'HTML'),'id="email-format-html"'); ?>
                 <label class="custom-control-label radioButtonLabel" for="email-format-html"><?php echo ENTRY_EMAIL_HTML_DISPLAY; ?></label>
             </div>
             <div class="custom-control custom-radio custom-control-inline">
-                <?php echo zen_draw_radio_field('email_format', 'TEXT', ($email_format == 'TEXT'), 'id="email-format-text"'); ?>
+                <?php echo zen_draw_radio_field('email_format', 'TEXT', ($email_format === 'TEXT'), 'id="email-format-text"'); ?>
                 <label class="custom-control-label radioButtonLabel" for="email-format-text"><?php echo ENTRY_EMAIL_TEXT_DISPLAY; ?></label>
             </div>
             <div class="clearfix"></div>
@@ -134,7 +134,7 @@ echo zen_draw_password_field('confirmation', '', $password_field_length . ' id="
     </div>
     
 <?php
-if (ACCOUNT_NEWSLETTER_STATUS != 0) {
+if (ACCOUNT_NEWSLETTER_STATUS !== '0') {
 ?>
     <div class="card mb-3">
         <h4 class="card-header"><?php echo ENTRY_EMAIL_PREFERENCE; ?></h4>
@@ -149,7 +149,7 @@ if (ACCOUNT_NEWSLETTER_STATUS != 0) {
 <?php 
 } 
 
-if (CUSTOMERS_REFERRAL_STATUS == 2) {
+if (CUSTOMERS_REFERRAL_STATUS === '2') {
 ?>
     <div class="card mb-3">
         <h4 class="card-header"><?php echo TABLE_HEADING_REFERRAL_DETAILS; ?></div>

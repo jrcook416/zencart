@@ -205,7 +205,7 @@ class ZcaBootstrapObserver extends base
                 if (strpos($field, 'class="') !== false) {
                     $field = str_replace('class="', 'class="custom-select ', $field);
                 } else {
-                    $field = str_replace('<select ', '<select class="selectpicker form-control" ', $field);
+                    $field = str_replace('<select ', '<select class="custom-select" ', $field);
                 }
                 $p2 = $field;
                 break;

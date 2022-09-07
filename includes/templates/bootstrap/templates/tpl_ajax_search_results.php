@@ -3,8 +3,15 @@
 // Template formatting for the Bootstrap template's AJAX search feature.  Required by the
 // template's AJAX search script (/includes/classes/ajax/zcAjaxBootstrapSearch.php).
 //
-// Bootstrap v3.2.0.
+// Bootstrap v3.4.0.
 //
+// -----
+// zc158 redefines the 'advanced_search_result' page as simply 'search_result'.  If that
+// new page's definition is present, the search result will be sent there for viewing;
+// otherwise, it'll be sent to the legacy page.
+//
+$search_result_page = (defined('FILENAME_SEARCH_RESULT')) ? FILENAME_SEARCH_RESULT : FILENAME_ADVANCED_SEARCH_RESULT;
+
 foreach ($products_search as $next) {
 ?>
 <div class="sugg col-md-6">
@@ -22,5 +29,5 @@ foreach ($products_search as $next) {
 }
 ?>
 <div class="row col-12">
-    <div class="col-12 d-flex justify-content-center"><?php echo sprintf(TEXT_AJAX_SEARCH_RESULTS, $search_results_count); ?>&nbsp;<a class="btn btn-default sugg-button" role="button" href="<?php echo zen_href_link(FILENAME_ADVANCED_SEARCH_RESULT); ?>"><?php echo TEXT_AJAX_SEARCH_VIEW_ALL; ?></a></div>
+    <div class="col-12 d-flex justify-content-center"><?php echo sprintf(TEXT_AJAX_SEARCH_RESULTS, $search_results_count); ?>&nbsp;<a class="btn btn-default sugg-button" role="button" href="<?php echo zen_href_link($search_result_page); ?>"><?php echo TEXT_AJAX_SEARCH_VIEW_ALL; ?></a></div>
 </div>

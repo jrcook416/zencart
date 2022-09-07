@@ -2,7 +2,7 @@
 /**
  * Page Template
  *
- * BOOTSTRAP v3.3.0
+ * BOOTSTRAP v3.4.0
  *
  * Loaded automatically by index.php?main_page=checkout_payment.<br />
  * Displays the allowed payment modules, for selection by customer.
@@ -23,18 +23,23 @@
     <?php echo zen_draw_hidden_field('action', 'submit'); ?>
 
         <h1 id="checkoutPaymentDefault-pageHeading" class="pageHeading"><?php echo HEADING_TITLE; ?></h1>
+<?php
+if ($messageStack->size('redemptions') > 0) {
+    echo $messageStack->output('redemptions');
+}
+if ($messageStack->size('checkout') > 0) {
+    echo $messageStack->output('checkout');
+}
+if ($messageStack->size('checkout_payment') > 0) {
+    echo $messageStack->output('checkout_payment');
+}
 
-        <?php if ($messageStack->size('redemptions') > 0) echo $messageStack->output('redemptions'); ?>
-        <?php if ($messageStack->size('checkout') > 0) echo $messageStack->output('checkout'); ?>
-        <?php if ($messageStack->size('checkout_payment') > 0) echo $messageStack->output('checkout_payment'); ?>
-<?php 
 // ** BEGIN PAYPAL EXPRESS CHECKOUT **
 if (!$payment_modules->in_special_checkout()) {
 // ** END PAYPAL EXPRESS CHECKOUT ** 
 ?>
         <div class="card-columns">
-    
-<!--bof billing address card-->    
+
             <div id="billingAddress-card" class="card mb-3">
                 <h4 class="card-header"><?php echo TITLE_BILLING_ADDRESS; ?></h4>    
                 <div class="card-body p-3">
@@ -57,14 +62,12 @@ if (!$payment_modules->in_special_checkout()) {
                     </div>
                 </div>
             </div>
-<!--eof billing address card-->
 
 <?php 
 // ** BEGIN PAYPAL EXPRESS CHECKOUT **
 }
 // ** END PAYPAL EXPRESS CHECKOUT ** ?>
 
-<!--bof your total card--> 
             <div id="yourTotal-card" class="card mb-3">
                 <h4 class="card-header"><?php echo TEXT_YOUR_TOTAL; ?></h4> 
                 <div class="card-body p-3">
@@ -82,7 +85,6 @@ if (!$payment_modules->in_special_checkout()) {
 ?>
                 </div>
             </div>  
-<!--eof your total card--> 
 
 <?php
     $selection =  $order_total_modules->credit_selection();
@@ -95,7 +97,6 @@ if (!$payment_modules->in_special_checkout()) {
             }
             for ($j = 0, $n2 = (isset($selection[$i]['fields']) ? count($selection[$i]['fields']) : 0); $j < $n2; $j++) {
 ?>
-<!--bof discount coupon card-->
             <div class="card mb-3">
                 <h4 class="card-header"><?php echo $selection[$i]['module']; ?></h4> 
                 <div class="card-body p-3">
@@ -132,24 +133,28 @@ if (!$payment_modules->in_special_checkout()) {
 ?>
                 </div>  
             </div>
-<!--eof discount coupon card-->
 <?php
             }
         }
     }
 // ** BEGIN PAYPAL EXPRESS CHECKOUT **
     if (!$payment_modules->in_special_checkout()) {
-// ** END PAYPAL EXPRESS CHECKOUT ** ?>
-
-<!--bof payment method card-->      
+        // -----
+        // zc158 removes 'TABLE_HEADING_PAYMENT_METHOD' and replaces it with
+        // 'HEADING_PAYMENT_METHOD'.  Use the former if defines, otherwise fall
+        // back to the legacy definition.
+        //
+        $payment_method_heading = (defined('HEADING_PAYMENT_METHOD')) ? HEADING_PAYMENT_METHOD : TABLE_HEADING_PAYMENT_METHOD;
+// ** END PAYPAL EXPRESS CHECKOUT **
+?>
             <div id="paymentMethod-card" class="card mb-3">
-                <h4 class="card-header"><?php echo TABLE_HEADING_PAYMENT_METHOD; ?></h4> 
+                <h4 class="card-header"><?php echo $payment_method_heading; ?></h4> 
                 <div class="card-body p-3">
 <?php
-        if (SHOW_ACCEPTED_CREDIT_CARDS != '0') {
-            if (SHOW_ACCEPTED_CREDIT_CARDS == '1') {
+        if (SHOW_ACCEPTED_CREDIT_CARDS !== '0') {
+            if (SHOW_ACCEPTED_CREDIT_CARDS === '1') {
                 echo TEXT_ACCEPTED_CREDIT_CARDS . zen_get_cc_enabled();
-            } elseif (SHOW_ACCEPTED_CREDIT_CARDS == '2') {
+            } elseif (SHOW_ACCEPTED_CREDIT_CARDS === '2') {
                 echo TEXT_ACCEPTED_CREDIT_CARDS . zen_get_cc_enabled('IMAGE_');
             }
 ?>
@@ -193,7 +198,7 @@ if (!$payment_modules->in_special_checkout()) {
                             </div>
                         </div>
 <?php
-            if (defined('MODULE_ORDER_TOTAL_COD_STATUS') && MODULE_ORDER_TOTAL_COD_STATUS == 'true' and $selection[$i]['id'] == 'cod') {
+            if (defined('MODULE_ORDER_TOTAL_COD_STATUS') && MODULE_ORDER_TOTAL_COD_STATUS === 'true' && $selection[$i]['id'] === 'cod') {
 ?>
 <div class="alert alert-danger" role="alert"><?php echo TEXT_INFO_COD_FEES; ?></div>
 <?php
@@ -230,7 +235,6 @@ if (!$payment_modules->in_special_checkout()) {
 ?>
                 </div>
             </div>
-<!--eof payment method card--> 
 
 <?php // ** BEGIN PAYPAL EXPRESS CHECKOUT **
       } else {
@@ -238,20 +242,23 @@ if (!$payment_modules->in_special_checkout()) {
             <input type="hidden" name="payment" value="<?php echo $_SESSION['payment']; ?>" />
 <?php
       }
-      // ** END PAYPAL EXPRESS CHECKOUT ** ?>
+      // ** END PAYPAL EXPRESS CHECKOUT **
 
-<!--bof order comments card--> 
+      // -----
+      // zc158 removes 'TABLE_HEADING_COMMENTS' and uses 'HEADING_ORDER_COMMENTS' instead.
+      // Use the new definition, if present, otherwise fall back to the legacy definition.
+      //
+      $comments_heading = (defined('HEADING_ORDER_COMMENTS')) ? HEADING_ORDER_COMMENTS : TABLE_HEADING_COMMENTS;
+?>
             <div id="orderComments-card" class="card mb-3">
-                <h4 class="card-header"><?php echo TABLE_HEADING_COMMENTS; ?></h4>
+                <h4 class="card-header"><?php echo $comments_heading; ?></h4>
                 <div class="card-body p-3">
-<?php echo zen_draw_textarea_field('comments', '45', '3', (isset($comments) ? $comments : ''), 'aria-label="' . TABLE_HEADING_COMMENTS . '"'); ?>
+                    <?php echo zen_draw_textarea_field('comments', '45', '3', (isset($comments) ? $comments : ''), 'aria-label="' . $comments_heading . '"'); ?>
                 </div>
             </div>
-<!--eof order comments card--> 
 <?php
-    if (DISPLAY_CONDITIONS_ON_CHECKOUT == 'true') {
+    if (DISPLAY_CONDITIONS_ON_CHECKOUT === 'true') {
 ?>
-<!--bof conditions card--> 
             <div id="conditions-card" class="card mb-3">
                 <h4 class="card-header"><?php echo TABLE_HEADING_CONDITIONS; ?></h4>
                 <div class="card-body p-3">
@@ -263,7 +270,6 @@ if (!$payment_modules->in_special_checkout()) {
 
                 </div>
             </div>
-<!--eof conditions card--> 
 <?php
     }
 ?>
@@ -271,12 +277,12 @@ if (!$payment_modules->in_special_checkout()) {
     
         <div id="paymentSubmit" class="btn-toolbar justify-content-between" role="toolbar">
             <?php echo TITLE_CONTINUE_CHECKOUT_PROCEDURE . '<br />' . TEXT_CONTINUE_CHECKOUT_PROCEDURE; ?>
-            <?php echo zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT, 'onclick="submitFunction('.zen_user_has_gv_account($_SESSION['customer_id']).','.$order->info['total'].')"'); ?>
+            <?php echo zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT, 'onclick="submitFunction(' . zen_user_has_gv_account($_SESSION['customer_id']) . ',' . $order->info['total'] . ')"'); ?>
         </div>
     <?php echo '</form>'; ?>
 
 <?php
-    if (defined('MODULE_ORDER_TOTAL_COUPON_STATUS') && MODULE_ORDER_TOTAL_COUPON_STATUS == 'true') {
+    if (defined('MODULE_ORDER_TOTAL_COUPON_STATUS') && MODULE_ORDER_TOTAL_COUPON_STATUS === 'true') {
         require $template->get_template_dir('tpl_coupon_help.php',DIR_WS_TEMPLATE, $current_page_base, 'modalboxes') . '/tpl_coupon_help.php';
     }
 ?>

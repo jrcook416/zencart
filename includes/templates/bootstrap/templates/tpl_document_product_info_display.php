@@ -2,9 +2,9 @@
 /**
  * Page Template
  *
- * BOOTSTRAP v3.1.4
+ * BOOTSTRAP v3.4.0
  *
- * Loaded automatically by index.php?main_page=document_product_info.<br />
+ * Loaded automatically by index.php?main_page=document_product_info.
  * Displays template according to "document-product" product-type needs
  *
  * @copyright Copyright 2003-2020 Zen Cart Development Team
@@ -20,7 +20,11 @@
 <?php echo zen_draw_form('cart_quantity', zen_href_link(zen_get_info_page($_GET['products_id']), zen_get_all_get_params(array('action')) . 'action=add_product', $request_type), 'post', 'enctype="multipart/form-data"') . "\n"; ?>
 <!--eof Form start-->
 
-<?php if ($messageStack->size('product_info') > 0) echo $messageStack->output('product_info'); ?>
+<?php
+if ($messageStack->size('product_info') > 0) {
+    echo $messageStack->output('product_info');
+}
+?>
 
 <!--bof Category Icon -->
 <?php if ($module_show_categories != 0) {?>
@@ -55,7 +59,7 @@ require($template->get_template_dir('/tpl_products_next_previous.php',DIR_WS_TEM
 
 <!--bof Main Product Image -->
 <?php
-  if (zen_not_null($products_image)) {
+  if (!empty($products_image)) {
   ?>
 <div id="documentProductInfo-productMainImage" class="productMainImage pt-3 text-center">
 <?php
@@ -192,7 +196,7 @@ if ($flag_show_ask_a_question) {
 <?php } ?>
 <!--eof Product Price block above Attributes -->
 
-<div id="documentProductInfo-productAttributes" class="productAttributes">
+<div id="productAttributes">
 
 <?php
 /**
@@ -260,7 +264,7 @@ if (CUSTOMERS_APPROVAL == 3 and TEXT_LOGIN_FOR_PRICE_BUTTON_REPLACE_SHOWROOM == 
     $display_qty = ($flag_show_product_info_in_cart_qty == 1 && $_SESSION['cart']->in_cart($_GET['products_id'])) ? '<p>' . PRODUCTS_ORDER_QTY_TEXT_IN_CART . $_SESSION['cart']->get_quantity($_GET['products_id']) . '</p>' : '';
     if ($products_qty_box_status == 0 || $products_quantity_order_max == 1) {
       // hide the quantity box and default to 1
-      $the_button = '<input type="hidden" name="cart_quantity" value="1" />' . zen_draw_hidden_field('products_id', (int)$_GET['products_id']) . zen_image_submit(BUTTON_IMAGE_IN_CART, BUTTON_IN_CART_ALT);
+      $the_button = '<input type="hidden" name="cart_quantity" value="1">' . zen_draw_hidden_field('products_id', (int)$_GET['products_id']) . zen_image_submit(BUTTON_IMAGE_IN_CART, BUTTON_IN_CART_ALT);
     } else {
         // show the quantity box
         $the_button = '<div class="input-group mb-3">';
@@ -283,7 +287,7 @@ if (CUSTOMERS_APPROVAL == 3 and TEXT_LOGIN_FOR_PRICE_BUTTON_REPLACE_SHOWROOM == 
 <!--bof add to cart card-->  
 <div id="addToCart-card" class="card border-success mb-3">
   <div id="addToCart-card-header" class="card-header text-white bg-success"><?php echo PRODUCTS_ORDER_QTY_TEXT; ?></div>
-  <div id="addToCart-card-body" class="card-body text-center">
+  <div id="cartAdd" class="card-body text-center">
 <?php
     
       echo $display_qty;
@@ -342,7 +346,7 @@ if (CUSTOMERS_APPROVAL == 3 and TEXT_LOGIN_FOR_PRICE_BUTTON_REPLACE_SHOWROOM == 
 
 <!--bof Product URL -->
 <?php
-  if (zen_not_null($products_url)) {
+  if (!empty($products_url)) {
     if ($flag_show_product_info_url == 1) {
 ?>
 <p id="documentProductInfo-productUrl" class="productUrl text-center">
@@ -376,5 +380,3 @@ if (CUSTOMERS_APPROVAL == 3 and TEXT_LOGIN_FOR_PRICE_BUTTON_REPLACE_SHOWROOM == 
     <?php echo '</form>'; ?>
 <!--bof Form close-->
 </div>
-
-

@@ -66,10 +66,7 @@ echo zen_display_banner('static', $banner);
 <!--eof-banner #5 display -->
 
 <!--bof- site copyright display -->
-<!--
-IEMS CUSTOM CODE
-<div id="siteinfoLegal" class="legalCopyright text-center"><?php /*echo FOOTER_TEXT_BODY; */ ?></div>
--->
+<div id="siteinfoLegal" class="legalCopyright text-center"><?php echo FOOTER_TEXT_BODY; ?></div>
 <!--eof- site copyright display -->
 
 

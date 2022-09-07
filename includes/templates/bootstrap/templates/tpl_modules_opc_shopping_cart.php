@@ -8,7 +8,7 @@
 //
 // Provide an in-script override for the case it's not defined.
 //
-// Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.0
+// Last updated: OPC v2.4.2/Bootstrap v3.4.0
 //
 if (!defined('TEXT_OPTION_DIVIDER')) define('TEXT_OPTION_DIVIDER', '&nbsp;-&nbsp;');
 
@@ -19,7 +19,6 @@ $display_tax_column = (count($order->info['tax_groups']) > 1);
 //
 $_SESSION['zca_bootstrap_ot_colspan'] = ($display_tax_column) ? '3' : '2';
 ?>
-<!--bof shopping-cart block -->
 <div class="table-responsive card mb-3">
     <h4 class="card-header"><?php echo HEADING_PRODUCTS; ?></h4>
     <div class="card-body">
@@ -33,7 +32,7 @@ $_SESSION['zca_bootstrap_ot_colspan'] = ($display_tax_column) ? '3' : '2';
                     <th scope="col" id="ccProductsHeading"><?php echo TABLE_HEADING_PRODUCTS; ?></th>
 <?php
 // If there are tax groups, display the tax columns for price breakdown
-if ($display_tax_column) {
+if ($display_tax_column === true) {
 ?>
                     <th scope="col" id="ccTaxHeading"><?php echo HEADING_TAX; ?></th>
 <?php
@@ -52,7 +51,7 @@ for ($i = 0, $n = count($order->products); $i < $n; $i++) {
                     <td class="cartProductDisplay"><?php echo $order->products[$i]['name'] . $stock_check[$i]; ?>
 <?php 
 // if there are attributes, loop thru them and display one per line
-    if (isset ($order->products[$i]['attributes']) && count ($order->products[$i]['attributes']) > 0 ) {
+    if (isset($order->products[$i]['attributes']) && count($order->products[$i]['attributes']) > 0) {
 ?>
                         <ul class="cartAttribsList">
 <?php
@@ -108,4 +107,3 @@ if (MODULE_ORDER_TOTAL_INSTALLED) {
         </table>
     </div>
 </div>
-<!--eof shopping-cart block -->

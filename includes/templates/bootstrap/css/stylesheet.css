@@ -1,7 +1,7 @@
 /**
  * Main Template CSS Stylesheet
  * 
- * BOOTSTRAP v3.1.4
+ * BOOTSTRAP v3.4.0
  *
  */
 .clearBoth {
@@ -76,6 +76,10 @@ table.tabTable td {
 }
 #productsListing-bottomRow {
     margin-top: 1rem;
+}
+
+.sideBoxContent select {
+    margin-bottom: 1rem;
 }
 
 /* These CSS media queries control how many columns of cards display on the login, checkout_shipping, checkout_payment & checkout_confirmation pages */

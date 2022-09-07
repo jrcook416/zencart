@@ -2,7 +2,7 @@
 /**
  * Module Template
  *
- * BOOTSTRAP v3.0.0
+ * BOOTSTRAP v3.3.1
  *
  * Template used to render attribute display/input fields
  *
@@ -33,7 +33,7 @@
 ?>
 
 <!--bof attribute options card-->
-<div id="attributeOptions<?php echo $options_html_id[$i]; ?>-card" class="card mb-3">
+<div id="attributeOptions<?php echo $options_html_id[$i]; ?>-card" class="card mb-3 wrapperAttribsOptions">
 <h4 id="attributeOptions<?php echo $options_html_id[$i]; ?>-card-header" class="card-header optionName"><?php echo $options_name[$i]; ?></h4>
 <div id="attributeOptions<?php echo $options_html_id[$i]; ?>-card-body" class="card-body p-3">
 <?php echo "\n" . $options_menu[$i]; ?>

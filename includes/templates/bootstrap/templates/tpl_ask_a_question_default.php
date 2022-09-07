@@ -1,6 +1,6 @@
 <?php
 /**
- * BOOTSTRAP v3.0.0
+ * BOOTSTRAP v3.4.0
  *
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
@@ -55,6 +55,12 @@ require $define_page;
             <div class="p-2"></div>
 <?php
     }
+
+    // -----
+    // zc158 adds a new definition for telephone-number labels; use that if present, otherwise
+    // fall-back to the previous definition.
+    //
+    $telephone_label = (defined('ENTRY_TELEPHONE_NUMBER')) ? ENTRY_TELEPHONE_NUMBER : ENTRY_TELEPHONE;
 ?>
             <label class="inputLabel" for="contactname"><?php echo ENTRY_NAME; ?></label>
             <?php echo zen_draw_input_field('contactname', $name, ' size="40" id="contactname" placeholder="' . ENTRY_REQUIRED_SYMBOL . '" autofocus required'); ?>
@@ -64,7 +70,7 @@ require $define_page;
             <?php echo zen_draw_input_field('email', ($email_address), ' size="40" id="email-address" autocomplete="off" placeholder="' . ENTRY_REQUIRED_SYMBOL . '" required', 'email'); ?>
             <div class="p-2"></div>
 
-            <label class="inputLabel" for="telephone"><?php echo ENTRY_TELEPHONE; ?></label>
+            <label class="inputLabel" for="telephone"><?php echo $telephone_label; ?></label>
             <?php echo zen_draw_input_field('telephone', ($telephone), ' size="20" id="telephone" autocomplete="off" placeholder="' . ENTRY_REQUIRED_SYMBOL . '" required', 'telephone'); ?>
             <div class="p-2"></div>
 

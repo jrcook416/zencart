@@ -2,7 +2,7 @@
 /**
  * Page Template
  *
- * BOOTSTRAP v3.1.6
+ * BOOTSTRAP v3.4.0
  *
  * Loaded automatically by index.php?main_page=create_account.<br />
  * Displays Create Account form.
@@ -16,7 +16,7 @@ if ($messageStack->size('create_account') > 0) {
     echo $messageStack->output('create_account');
 }
 ?>
-<div class="required readonly-info text-right"><?php echo FORM_REQUIRED_INFORMATION; ?></div>
+<div class="required-info text-right"><?php echo FORM_REQUIRED_INFORMATION; ?></div>
 <div class="card-columns">
 <?php
 if (DISPLAY_PRIVACY_CONDITIONS === 'true') {
@@ -42,7 +42,7 @@ if (ACCOUNT_COMPANY === 'true') {
         <h4 id="companyDetails-card-header" class="card-header"><?php echo CATEGORY_COMPANY; ?></h4>
         <div id="companyDetails-card-body" class="card-body p-3">
             <label class="inputLabel" for="company"><?php echo ENTRY_COMPANY; ?></label>
-            <?php echo zen_draw_input_field('company', '49 IEMS', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" autocomplete="organization" placeholder="' . ENTRY_COMPANY_TEXT . '"' . ((int)ENTRY_COMPANY_MIN_LENGTH !== 0 ? 'readonly' : '')); ?>
+            <?php echo zen_draw_input_field('company', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" autocomplete="organization" placeholder="' . ENTRY_COMPANY_TEXT . '"' . ((int)ENTRY_COMPANY_MIN_LENGTH !== 0 ? ' required' : '')); ?>
         </div>
     </div>
 <?php
@@ -73,12 +73,8 @@ if (ACCOUNT_GENDER === 'true') {
             <?php echo zen_draw_input_field('lastname', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_lastname', '40') . ' id="lastname" placeholder="' . ENTRY_LAST_NAME_TEXT . '"'. ((int)ENTRY_LAST_NAME_MIN_LENGTH > 0 ? ' required' : '')); ?>
             <div class="p-2"></div>
 
-            <label class="inputLabel" for="country"><?php echo ENTRY_COUNTRY; ?></label><?php if (zen_not_null(ENTRY_COUNTRY_TEXT) ? '<span class="alert">' . ENTRY_COUNTRY_TEXT . '</span>': ''); ?>
-            <?php echo zen_get_country_list('zone_country_id', $selected_country, 'id="country"'); ?>
-            <div class="p-2"></div>
-
             <label class="inputLabel" for="street-address"><?php echo ENTRY_STREET_ADDRESS; ?></label>
-            <?php echo zen_draw_input_field('street_address', '3930 Georgetown Road', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address', '40') . ' id="street-address" placeholder="' . ENTRY_STREET_ADDRESS_TEXT . '"'. ((int)ENTRY_STREET_ADDRESS_MIN_LENGTH > 0 ? ' required readonly' : '')); ?>
+            <?php echo zen_draw_input_field('street_address', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address', '40') . ' id="street-address" placeholder="' . ENTRY_STREET_ADDRESS_TEXT . '"'. ((int)ENTRY_STREET_ADDRESS_MIN_LENGTH > 0 ? ' required' : '')); ?>
             <div class="p-2"></div>
 
             <?php echo zen_draw_input_field($antiSpamFieldName, '', ' size="40" id="CAAS" style="visibility:hidden; display:none;" autocomplete="off"'); ?>
@@ -86,13 +82,28 @@ if (ACCOUNT_GENDER === 'true') {
 if (ACCOUNT_SUBURB === 'true') {
 ?>
             <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-            <?php echo zen_draw_input_field('suburb', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '" readonly'); ?>
+            <?php echo zen_draw_input_field('suburb', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
             <div class="p-2"></div>
 <?php
 }
 ?>
             <label class="inputLabel" for="city"><?php echo ENTRY_CITY; ?></label>
-            <?php echo zen_draw_input_field('city', 'Indianapolis', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)ENTRY_CITY_MIN_LENGTH > 0 ? ' required readonly' : '')); ?>
+            <?php echo zen_draw_input_field('city', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)ENTRY_CITY_MIN_LENGTH > 0 ? ' required' : '')); ?>
+            <div class="p-2"></div>
+<?php
+// -----
+// zc158 introduces a common jQuery handler for the dropdown states' selection based
+// on the country chosen.  When running on a zc158 (or later) 'core', use that handler instead
+// of the legacy one provided by the Bootstrap template.
+//
+// When running a Zen Cart version prior to zc158, make sure that the 'stateLabel' field contains
+// the required text.
+//
+$onchange_for_zc158 = ($flag_show_pulldown_states === true && zen_get_zcversion() >= '1.5.8') ? ' onchange="update_zone(this.form);"' : '';
+$state_field_label = (zen_get_zcversion() >= '1.5.8') ? $state_field_label : ENTRY_STATE;
+?>
+            <label class="inputLabel" for="country"><?php echo ENTRY_COUNTRY; ?></label><?php if (zen_not_null(ENTRY_COUNTRY_TEXT) ? '<span class="alert">' . ENTRY_COUNTRY_TEXT . '</span>': ''); ?>
+            <?php echo zen_get_country_list('zone_country_id', $selected_country, 'id="country"' . $onchange_for_zc158); ?>
             <div class="p-2"></div>
 <?php
 // -----
@@ -106,14 +117,14 @@ if (ACCOUNT_STATE === 'true') {
     if ($flag_show_pulldown_states === true) {
 ?>
             <label class="inputLabel" for="stateZone" id="zoneLabel"><?php echo ENTRY_STATE; ?></label><?php if (zen_not_null(ENTRY_STATE_TEXT)) echo '<span class="alert">' . ENTRY_STATE_TEXT . '</span>';?>
-            <?php echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone" readonly'); ?>
+            <?php echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone"'); ?>
             <div class="clearfix"></div>
 <?php
     }
 ?>
             <label class="inputLabel" for="state" id="stateLabel"><?php echo $state_field_label; ?></label>
 <?php
-    echo zen_draw_input_field('state', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_state', '40') . ' id="state" class="form-control" placeholder="' . ENTRY_STATE_TEXT . '" readonly');
+    echo zen_draw_input_field('state', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_state', '40') . ' id="state" class="form-control" placeholder="' . ENTRY_STATE_TEXT . '"');
     if ($flag_show_pulldown_states === false) {
         echo zen_draw_hidden_field('zone_id', $zone_name, ' ');
     }
@@ -122,7 +133,7 @@ if (ACCOUNT_STATE === 'true') {
             <div class="p-2"></div>
 
             <label class="inputLabel" for="postcode"><?php echo ENTRY_POST_CODE; ?></label>
-            <?php echo zen_draw_input_field('postcode', '46254', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_postcode', '40') . ' id="postcode" placeholder="' . ENTRY_POST_CODE_TEXT . '"' . ((int)ENTRY_POSTCODE_MIN_LENGTH > 0 ? ' required readonly' : '')); ?>
+            <?php echo zen_draw_input_field('postcode', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_postcode', '40') . ' id="postcode" placeholder="' . ENTRY_POST_CODE_TEXT . '"' . ((int)ENTRY_POSTCODE_MIN_LENGTH > 0 ? ' required' : '')); ?>
             <div class="p-2"></div>
         </div>
     </div>
@@ -150,7 +161,7 @@ if (ACCOUNT_DOB === 'true') {
         <h4 id="verifyAge-card-header" class="card-header"><?php echo TABLE_HEADING_DATE_OF_BIRTH; ?></h4>
         <div id="verifyAge-card-body" class="card-body p-3">
             <label class="inputLabel" for="dob"><?php echo ENTRY_DATE_OF_BIRTH; ?></label>
-            <?php echo zen_draw_input_field('dob','', zen_set_field_length(TABLE_CUSTOMERS, 'customers_dob', '20') . ' id="dob" placeholder="' . ENTRY_DATE_OF_BIRTH_TEXT . '"' . ((int)ENTRY_DOB_MIN_LENGTH != 0 ? ' required readonly' : '')); ?>
+            <?php echo zen_draw_input_field('dob','', zen_set_field_length(TABLE_CUSTOMERS, 'customers_dob', '20') . ' id="dob" placeholder="' . ENTRY_DATE_OF_BIRTH_TEXT . '"' . ((int)ENTRY_DOB_MIN_LENGTH != 0 ? ' required' : '')); ?>
 
         </div>
     </div>

@@ -1,19 +1,18 @@
 <?php
 // -----
 // Part of the One-Page Checkout plugin, provided under GPL 2.0 license by lat9
-// Copyright (C) 2013-2019, Vinos de Frutas Tropicales.  All rights reserved.
+// Copyright (C) 2013-2022, Vinos de Frutas Tropicales.  All rights reserved.
 //
-// Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.0
+// Last updated: OPC v2.4.2/Bootstrap v3.4.0
 //
 ?>
-<!--bof shipping-method choices -->
-  <div id="checkoutShippingMethod" class="card mb-3">
+<div id="checkoutShippingMethod" class="card mb-3">
 <?php
 // -----
 // If the order contains only virtual products, the shipping block contains only a hidden field that
 // identifies the "free" shipping method; otherwise, display the full shipping block.
 //
-if ($is_virtual_order) {
+if ($is_virtual_order === true) {
     echo zen_draw_hidden_field('shipping', $_SESSION['shipping']['id']) . PHP_EOL;
 } else {
     if (zen_count_shipping_modules() > 0) {
@@ -24,26 +23,22 @@ if ($is_virtual_order) {
         if (count($quotes) > 1 && count($quotes[0]) > 1) {
             $checkout_one->debug_message("CHECKOUT_ONE_TEMPLATE_SHIPPING_QUOTES:\n" . var_export($_SESSION['shipping'], true) . "\n" . var_export($quotes, true));
 ?>
-
         <div id="checkoutShippingContentChoose" class="important"><?php echo TEXT_CHOOSE_SHIPPING_METHOD; ?></div>
-
 <?php
         } elseif ($free_shipping == false) {
 ?>
         <div id="checkoutShippingContentChoose" class="important"><?php echo TEXT_ENTER_SHIPPING_INFORMATION; ?></div>
-
 <?php
         }
 ?>
 <?php
-        if ($free_shipping == true) {
+        if ($free_shipping === true) {
 ?>
         <div id="freeShip" class="important" ><?php echo FREE_SHIPPING_TITLE; ?></div>
         <div id="defaultSelected">
-            <?php if (!empty(MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER)) echo sprintf(FREE_SHIPPING_DESCRIPTION, $currencies->format(MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER)); ?>
+            <?php echo (!empty(MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER)) ? sprintf(FREE_SHIPPING_DESCRIPTION, $currencies->format(MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER)) : ''; ?>
         </div>
         <?php echo zen_draw_hidden_field('shipping', 'free_free'); ?>
-
 <?php
         } else {
 ?>
@@ -77,5 +72,4 @@ if ($is_virtual_order) {
     }
 }  //-Order is not "virtual", display full shipping-method block
 ?>
-  </div>
-<!--eof shipping-method choices -->
+</div>

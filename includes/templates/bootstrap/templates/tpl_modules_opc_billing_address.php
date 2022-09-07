@@ -1,20 +1,19 @@
 <?php
 // -----
 // Part of the One-Page Checkout plugin, provided under GPL 2.0 license by lat9 (cindy@vinosdefrutastropicales.com).
-// Copyright (C) 2013-2021, Vinos de Frutas Tropicales.  All rights reserved.
+// Copyright (C) 2013-2022, Vinos de Frutas Tropicales.  All rights reserved.
 //
-// Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.2
+// Last updated: OPC v2.4.2/Bootstrap v3.4.0
 //
 ?>
-<!--bof billing-address block -->
-    <div id="checkoutOneBillto" class="card mb-3<?php echo ($flagDisablePaymentAddressChange) ? ' opc-base' : ''; ?>">
-      <h4 class="card-header" id="opc-billing-title"><?php echo ($shipping_billing) ? TITLE_BILLING_SHIPPING_ADDRESS : TITLE_BILLING_ADDRESS; ?></h4>
-      <div class="card-body">
+<div id="checkoutOneBillto" class="card mb-3<?php echo ($flagDisablePaymentAddressChange) ? ' opc-base' : ''; ?>">
+    <h4 class="card-header" id="opc-billing-title"><?php echo ($shipping_billing) ? TITLE_BILLING_SHIPPING_ADDRESS : TITLE_BILLING_ADDRESS; ?></h4>
+    <div class="card-body">
 
 <?php
 $opc_address_type = 'bill';
 $opc_disable_address_change = $flagDisablePaymentAddressChange;
-require $template->get_template_dir('tpl_modules_opc_address_block.php', DIR_WS_TEMPLATE, $current_page_base, 'templates'). '/tpl_modules_opc_address_block.php';
+require $template->get_template_dir('tpl_modules_opc_address_block.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_opc_address_block.php';
 
 if (!$flagDisablePaymentAddressChange) {
     $cancel_title = 'title="' . BUTTON_CANCEL_CHANGES_TITLE . '"';
@@ -23,9 +22,8 @@ if (!$flagDisablePaymentAddressChange) {
     $parameters = ($show_add_address) ? '' : ' class="hiddenField"';
 ?>
         <div class="opc-buttons">
-
 <?php
-    if ($show_add_address) {
+    if ($show_add_address === true) {
 ?>
             <div class="custom-control custom-checkbox">
                 <?php echo zen_draw_checkbox_field("add_address['bill']", '1', false, 'id="opc-add-bill"' . $parameters); ?>
@@ -42,11 +40,9 @@ if (!$flagDisablePaymentAddressChange) {
 <?php 
 } 
 ?>
-      </div>
-
-      <div class="opc-overlay<?php echo ($flagDisablePaymentAddressChange) ? ' active' : ''; ?>"></div>
-
     </div>
+    <div class="opc-overlay<?php echo ($flagDisablePaymentAddressChange) ? ' active' : ''; ?>"></div>
+</div>
 <?php
 // -----
 // If not in guest-checkout, see if the checkout is on behalf of a registered-account
@@ -55,8 +51,6 @@ if (!$flagDisablePaymentAddressChange) {
 //
 if (!zen_in_guest_checkout() && $_SESSION['opc']->customerAccountNeedsPrimaryAddress()) {
 ?>
-    <span id="opc-need-primary-address">&nbsp;</span>
+<span id="opc-need-primary-address">&nbsp;</span>
 <?php
 }
-?>
-<!--eof billing-address block -->

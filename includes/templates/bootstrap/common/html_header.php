@@ -2,7 +2,7 @@
 /**
  * Common Template
  *
- * BOOTSTRAP v3.3.0
+ * BOOTSTRAP v3.4.0
  *
  * outputs the html header. i,e, everything that comes before the \</head\> tag <br />
  *
@@ -24,18 +24,49 @@ header('X-Frame-Options:SAMEORIGIN');
 /**
  * load the module for generating page meta-tags
  */
-require(DIR_WS_MODULES . zen_get_module_directory('meta_tags.php'));
-/**
- * output main page HEAD tag and related headers/meta-tags, etc
- */
+require DIR_WS_MODULES . zen_get_module_directory('meta_tags.php');
+
+// -----
+// Define a set of preloaded css/js files.  Done here in array since it's
+// important that the preload matches the actual <link>/<script> parameters.
+//
+$preloads = [
+    'jquery' => [
+        'link' => 'https://code.jquery.com/jquery-3.5.1.min.js',
+        'integrity' => 'sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=',
+    ],
+    'bscss' => [
+        'link' => 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css',
+        'integrity' => 'sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l',
+    ],
+    'bsjs' => [
+        'link' => 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js',
+        'integrity' => 'sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns',
+    ],
+    'fa' => [
+        'link' => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css',
+        'integrity' => 'sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==',
+    ],
+];
 ?>
 <!DOCTYPE html>
 <html <?php echo HTML_PARAMS; ?>>
   <head>
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="https://code.jquery.com">
-
+<?php
+// -----
+// Provide an easy way for a site to disable the preload, if they want to ensure
+// that it's working properly.  Just create a .php file in either /extra_configures or
+// /extra_datafiles that sets $bs4_no_preloading to a 'truthy' value.
+//
+if (!empty($bs4_no_preloading)) {
+?>
+    <link rel="preload" href="<?php echo $preloads['bscss']['link']; ?>" integrity="<?php echo $preloads['bscss']['integrity']; ?>" crossorigin="anonymous" as="style" />
+    <link rel="preload" href="<?php echo $preloads['fa']['link']; ?>" integrity="<?php echo $preloads['fa']['integrity']; ?>" crossorigin="anonymous" as="style" />
+    <link rel="preload" href="<?php echo $preloads['jquery']['link']; ?>" integrity="<?php echo $preloads['jquery']['integrity']; ?>" crossorigin="anonymous" as="script" />
+    <link rel="preload" href="<?php echo $preloads['bsjs']['link']; ?>" integrity="<?php echo $preloads['bsjs']['integrity']; ?>" crossorigin="anonymous" as="script" />
+<?php
+}
+?>
     <meta charset="<?php echo CHARSET; ?>">
     <title><?php echo META_TAG_TITLE; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -69,10 +100,9 @@ require(DIR_WS_MODULES . zen_get_module_directory('meta_tags.php'));
     // EOF hreflang for multilingual sites
     // Important to load Bootstrap CSS First...
     ?>
-<!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?php echo $preloads['bscss']['link']; ?>" integrity="<?php echo $preloads['bscss']['integrity']; ?>" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="<?php echo $preloads['fa']['link']; ?>" integrity="<?php echo $preloads['fa']['integrity']; ?>" crossorigin="anonymous" />
 
     <?php
     /**
@@ -146,13 +176,13 @@ require(DIR_WS_MODULES . zen_get_module_directory('meta_tags.php'));
 
     /** CDN for jQuery core * */
     ?>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="<?php echo $preloads['jquery']['link']; ?>" integrity="<?php echo $preloads['jquery']['integrity']; ?>" crossorigin="anonymous"></script>
 <?php
 /*
     <script>window.jQuery || document.write(unescape('%3Cscript src="<?php echo $template->get_template_dir('.js', DIR_WS_TEMPLATE, $current_page_base, 'jscript'); ?>/jquery.min.js"%3E%3C/script%3E'));</script>
 */
 ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <script src="<?php echo $preloads['bsjs']['link']; ?>" integrity="<?php echo $preloads['bsjs']['integrity']; ?>" crossorigin="anonymous"></script>
 
 <?php
     /**

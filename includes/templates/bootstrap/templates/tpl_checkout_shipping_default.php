@@ -22,11 +22,12 @@
 
     <h1 class="pageHeading"><?php echo HEADING_TITLE; ?></h1>
 
-    <?php if ($messageStack->size('checkout_shipping') > 0) echo $messageStack->output('checkout_shipping'); ?>
-
+<?php
+if ($messageStack->size('checkout_shipping') > 0) {
+    echo $messageStack->output('checkout_shipping');
+}
+?>
     <div class="card-columns">
-  
-<!--bof shipping information card-->
         <div id="shippingInformation-card" class="card mb-3">
             <h4 class="card-header"><?php echo TITLE_SHIPPING_ADDRESS; ?></h4>
             <div class="card-body p-3">
@@ -35,26 +36,30 @@
                         <address><?php echo zen_address_label($_SESSION['customer_id'], $_SESSION['sendto'], true, ' ', '<br>'); ?></address>      
                     </div>
                     <div class="col-sm-7">
-<?php echo TEXT_CHOOSE_SHIPPING_DESTINATION; ?>
-<?php if ($displayAddressEdit) { ?>
-
+                        <?php echo TEXT_CHOOSE_SHIPPING_DESTINATION; ?>
+<?php
+if ($displayAddressEdit) {
+?>
                         <div class="btn-toolbar justify-content-end mt-3" role="toolbar">
-<?php echo '<a href="' . $editShippingButtonLink . '">' . zen_image_button(BUTTON_IMAGE_CHANGE_ADDRESS, BUTTON_CHANGE_ADDRESS_ALT) . '</a>'; ?>
+                            <?php echo '<a href="' . $editShippingButtonLink . '">' . zen_image_button(BUTTON_IMAGE_CHANGE_ADDRESS, BUTTON_CHANGE_ADDRESS_ALT) . '</a>'; ?>
                         </div>
-
-<?php } ?>
+<?php
+}
+?>
                     </div>
                 </div>
             </div>
         </div>
-<!--eof shipping information card-->
- 
 <?php
 if (zen_count_shipping_modules() > 0) {
+    // -----
+    // zc158 replaces 'TABLE_HEADING_SHIPPING_METHOD' with simply 'HEADING_SHIPPING_METHOD'.  Use
+    // that definition, if present, otherwise falling back to the legacy definition.
+    //
+    $shipping_method_heading = defined('HEADING_SHIPPING_METHOD') ? HEADING_SHIPPING_METHOD : TABLE_HEADING_SHIPPING_METHOD;
 ?>
-<!--bof shipping method card-->
         <div id="shippingMethod-card" class="card mb-3">
-            <h4 class="card-header"><?php echo TABLE_HEADING_SHIPPING_METHOD; ?></h4>
+            <h4 class="card-header"><?php echo $shipping_method_heading; ?></h4>
             <div class="card-body p-3">
 <?php
     if (count($quotes) > 1 && count($quotes[0]) > 1) {
@@ -62,14 +67,14 @@ if (zen_count_shipping_modules() > 0) {
                 <div id="shippingMethod-content" class="content"><?php echo TEXT_CHOOSE_SHIPPING_METHOD; ?></div>
  
 <?php
-    } elseif ($free_shipping == false) {
+    } elseif ($free_shipping === false) {
 ?>
                 <div id="shippingMethod-content-one" class="content"><?php echo TEXT_ENTER_SHIPPING_INFORMATION; ?></div>
 <?php
     }
 ?>
 <?php
-    if ($free_shipping == true) {
+    if ($free_shipping === true) {
 ?>
                 <div id="shippingMethod-content-two" class="content"><?php echo FREE_SHIPPING_TITLE . (isset($quotes[$i]['icon']) ? '&nbsp;' . $quotes[$i]['icon'] : ''); ?></div>
 
@@ -125,40 +130,39 @@ if (zen_count_shipping_modules() > 0) {
 ?>
                     </div>
                 </div>
-<!--eof shipping method option card-->
 <?php
             }
-// eof: field set
         }
     }
 ?>
             </div>
         </div>
-<!--eof shipping method card-->
 <?php
 } else {
 ?>
-<!--bof noShipping method card-->
         <div id="noShipping-card" class="card mb-3">
             <div class="card-body p-3">
                 <h2 class="pageHeading"><?php echo TITLE_NO_SHIPPING_AVAILABLE; ?></h2>
                 <div class="content"><?php echo TEXT_NO_SHIPPING_AVAILABLE; ?></div>
             </div>
         </div>
-<!--eof noShipping method card-->
 <?php
 }
+
+// -----
+// zc158 replaces 'TABLE_HEADING_COMMENTS' with 'HEADING_ORDER_COMMENTS'.  Use
+// that definition, if present, otherwise falling back to the legacy definition.
+//
+$comments_heading = defined('HEADING_ORDER_COMMENTS') ? HEADING_ORDER_COMMENTS : TABLE_HEADING_COMMENTS;
 ?>
-<!--bof order comments card--> 
         <div id="orderComments-card" class="card mb-3">
-            <h4 class="card-header"><?php echo TABLE_HEADING_COMMENTS; ?></h4>
+            <h4 class="card-header"><?php echo $comments_heading; ?></h4>
             <div class="card-body p-3">
-                <?php echo zen_draw_textarea_field('comments', '45', '3', (isset($comments) ? $comments : ''), 'aria-label="' . TABLE_HEADING_COMMENTS . '"'); ?>
+                <?php echo zen_draw_textarea_field('comments', '45', '3', $comments ?? '', 'aria-label="' . $comments_heading . '"'); ?>
             </div>
         </div>
-<!--eof order comments card--> 
     </div>  
-  
+
     <div id="checkoutShippingDefault-btn-toolbar1" class="btn-toolbar justify-content-between" role="toolbar">
         <?php echo '<strong>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</strong><br>' . TEXT_CONTINUE_CHECKOUT_PROCEDURE; ?>
         <?php echo zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT); ?>

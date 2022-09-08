@@ -1,0 +1,98 @@
+.resultsContainer {
+    box-sizing: border-box;
+    display: none;
+    position: absolute;
+    z-index: 10000;
+    text-align: left;
+    float: left;
+    vertical-align: bottom;
+    font-size: .8rem;
+    background: #fff;
+    min-width: 250px;
+    border: 1px solid #ccc;
+    margin: 0;
+    padding: .31rem;
+    -moz-box-shadow: 0 2px 8px #000;
+    -webkit-box-shadow: 0 2px 8px #000;
+    box-shadow: 0 2px 8px #000;
+}
+
+.resultsContainer a {
+    display: block;
+    color: #000;
+    background-color: #fff;
+    padding: 0.3em 0.4em;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.resultsContainer a:hover {
+    background-color: #eee;
+    color: #000;
+}
+
+.resultsContainer a:not(:first-child) {
+    margin-top: .5rem;
+}
+
+.resultWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.resultWrapper__img {
+    float: left;
+}
+
+.resultWrapper__img img {
+    height: 40px;
+    max-width: 40px;
+    margin-right: 10px;
+}
+
+.resultWrapper__infoWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.resultsContainer--lg .resultWrapper__infoWrapper {
+    flex-direction: row;
+    align-items: center;
+    column-gap: .5rem;
+    width: 100%;
+}
+
+.resultsContainer--lg .resultWrapper__infoWrapper__nameModelWrapper {
+    width: 65%;
+}
+
+.resultsContainer--lg .resultWrapper__infoWrapper__priceCountWrapper {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+}
+
+.resultWrapper__infoWrapper__nameModelWrapper__model {
+    font-size: .8em;
+}
+
+.resultWrapper__infoWrapper__priceCountWrapper {
+    font-size: .95em;
+    padding-right: .5rem;
+}
+
+.resultWrapper__infoWrapper__priceCountWrapper br {
+    display: none;
+}
+
+.resultWrapper__infoWrapper__priceCountWrapper > span {
+    font-size: .95em !important;
+    margin: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+}
+
+.resultWrapper__infoWrapper__priceCountWrapper__count {
+    opacity: 0.75;
+}

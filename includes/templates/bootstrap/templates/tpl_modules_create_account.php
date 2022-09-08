@@ -42,7 +42,7 @@ if (ACCOUNT_COMPANY === 'true') {
         <h4 id="companyDetails-card-header" class="card-header"><?php echo CATEGORY_COMPANY; ?></h4>
         <div id="companyDetails-card-body" class="card-body p-3">
             <label class="inputLabel" for="company"><?php echo ENTRY_COMPANY; ?></label>
-            <?php echo zen_draw_input_field('company', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" autocomplete="organization" placeholder="' . ENTRY_COMPANY_TEXT . '"' . ((int)ENTRY_COMPANY_MIN_LENGTH !== 0 ? ' required' : '')); ?>
+            <?php echo zen_draw_input_field('company', '49 IEMS', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" autocomplete="organization" placeholder="' . ENTRY_COMPANY_TEXT . '"' . ((int)ENTRY_COMPANY_MIN_LENGTH !== 0 ? ' required readonly' : '')); ?>
         </div>
     </div>
 <?php
@@ -74,7 +74,7 @@ if (ACCOUNT_GENDER === 'true') {
             <div class="p-2"></div>
 
             <label class="inputLabel" for="street-address"><?php echo ENTRY_STREET_ADDRESS; ?></label>
-            <?php echo zen_draw_input_field('street_address', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address', '40') . ' id="street-address" placeholder="' . ENTRY_STREET_ADDRESS_TEXT . '"'. ((int)ENTRY_STREET_ADDRESS_MIN_LENGTH > 0 ? ' required' : '')); ?>
+            <?php echo zen_draw_input_field('street_address', '3930 Georgetown Road', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address', '40') . ' id="street-address" placeholder="' . ENTRY_STREET_ADDRESS_TEXT . '"'. ((int)ENTRY_STREET_ADDRESS_MIN_LENGTH > 0 ? ' required readonly' : '')); ?>
             <div class="p-2"></div>
 
             <?php echo zen_draw_input_field($antiSpamFieldName, '', ' size="40" id="CAAS" style="visibility:hidden; display:none;" autocomplete="off"'); ?>
@@ -82,13 +82,13 @@ if (ACCOUNT_GENDER === 'true') {
 if (ACCOUNT_SUBURB === 'true') {
 ?>
             <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-            <?php echo zen_draw_input_field('suburb', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
+            <?php echo zen_draw_input_field('suburb', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '" readonly'); ?>
             <div class="p-2"></div>
 <?php
 }
 ?>
             <label class="inputLabel" for="city"><?php echo ENTRY_CITY; ?></label>
-            <?php echo zen_draw_input_field('city', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)ENTRY_CITY_MIN_LENGTH > 0 ? ' required' : '')); ?>
+            <?php echo zen_draw_input_field('city', 'Indianapolis', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)ENTRY_CITY_MIN_LENGTH > 0 ? ' required readonly' : '')); ?>
             <div class="p-2"></div>
 <?php
 // -----
@@ -133,7 +133,7 @@ if (ACCOUNT_STATE === 'true') {
             <div class="p-2"></div>
 
             <label class="inputLabel" for="postcode"><?php echo ENTRY_POST_CODE; ?></label>
-            <?php echo zen_draw_input_field('postcode', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_postcode', '40') . ' id="postcode" placeholder="' . ENTRY_POST_CODE_TEXT . '"' . ((int)ENTRY_POSTCODE_MIN_LENGTH > 0 ? ' required' : '')); ?>
+            <?php echo zen_draw_input_field('postcode', '46254', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_postcode', '40') . ' id="postcode" placeholder="' . ENTRY_POST_CODE_TEXT . '"' . ((int)ENTRY_POSTCODE_MIN_LENGTH > 0 ? ' required readonly' : '')); ?>
             <div class="p-2"></div>
         </div>
     </div>

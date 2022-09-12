@@ -1110,8 +1110,10 @@ foreach ($predefinedCommentsArray as $value) {
               ?>
               <tr class="dataTableRow">
                 <td class="dataTableContent text-left">
-				  <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-                  <?php echo $order->products[$i]['qty']; ?>&nbsp;x
+				  <input type="checkbox" id="checkbox-<?php echo $order->products[$i]?>" name="checkbox-<?php echo $order->products[$i]?>" value="checkbox-<?php echo $order->products[$i]">
+                </td>
+				<td class="dataTableContent text-right">
+				  <?php echo $order->products[$i]['qty']; ?>
                 </td>
                 <td class="dataTableContent">
                 <?php

@@ -1109,9 +1109,11 @@ foreach ($predefinedCommentsArray as $value) {
               }
               ?>
               <tr class="dataTableRow">
-                <td class="dataTableContent text-right">
+                <td class="dataTableContent text-left">
 				  <input type="checkbox" id="checkbox-<?php echo $order->products[$i];?>" name="checkbox-<?php echo $order->products[$i];?>" value="checkbox-<?php echo $order->products[$i];?>">
 				  x<?php echo $order->products[$i]['qty']; ?>
+				</td>
+				<td class="dataTableContent">
                 <?php
                     echo $order->products[$i]['name'];
                     if (isset($order->products[$i]['attributes']) && (sizeof($order->products[$i]['attributes']) > 0)) {

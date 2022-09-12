@@ -1787,7 +1787,7 @@ foreach ($predefinedCommentsArray as $value) {
                     echo '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $orders->fields['customers_id'] . '&action=edit', 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_cust_info.gif', MINI_ICON_INFO) . '</a>&nbsp;';
                     echo '<a href="' . zen_href_link(FILENAME_ORDERS, 'cID=' . $orders->fields['customers_id'], 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_cust_orders.gif', MINI_ICON_ORDERS) . '</a>&nbsp;';
                     echo '<a href="' . zen_href_link(FILENAME_MAIL, 'origin=' . FILENAME_ORDERS . '&customer=' . $orders->fields['customers_email_address'] . '&cID=' . $orders->fields['customers_id']) . '">' 
-                        . $orders->fields['customers_name'] . ($orders->fields['delivery_suburb'] != '' ? '<br />' . $orders->fields['customers_suburb'] : '') . '</a>'; ?>
+                        . $orders->fields['customers_name'] . ($orders->fields['customer_suburb'] != '' ? '<br />' . $orders->fields['delivery_suburb'] : '') . '</a>'; ?>
                 </td>
                 <?php /* EOF Super Orders 16 of 21 */ ?>
                 <td class="dataTableContent text-right" title="<?php echo zen_output_string($product_details, array('"' => '&quot;', "'" => '&#39;', '<br />' => '', '<hr>' => "----\n")); ?>">

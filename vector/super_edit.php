@@ -656,7 +656,7 @@ if ($update_status_history->fields['customer_notified'] == -1) {
       if (sizeof($order->products) > 1) {
         echo '          <td class="dataTableContent smalltext" valign="top" align="center">' . zen_draw_checkbox_field('split_products[' . $i . ']', $orders_products_id) . NL;
       }
-      echo '          <td class="dataTableContent smalltext" valign="top" align="left">' . $order->products[$i]['qty'] . '&nbsp;x&nbsp;' . $order->products[$i]['name'];
+      echo '          <td class="dataTableContent smalltext" valign="top" align="left"><input type="checkbox">' . $order->products[$i]['qty'] . '&nbsp;x&nbsp;' . $order->products[$i]['name'];
 
       if (isset($order->products[$i]['attributes']) && (sizeof($order->products[$i]['attributes']) > 0)) {
         for ($j = 0, $k = sizeof($order->products[$i]['attributes']); $j < $k; $j++) {

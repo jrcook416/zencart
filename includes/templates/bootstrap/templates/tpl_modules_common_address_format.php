@@ -94,7 +94,7 @@ if (ACCOUNT_SUBURB === 'true') {
     $filter = $address['entry_company'];
     filtered_unit_array($filter);?>
     <?php
-	echo iems_pull_down_menu('entry_suburb', $filtered_units, $cInfo->entry_suburb, 'id ="entry_suburb", class="selectpicker" form-control  data-live-search="true"');?>
+	echo iems_pull_down_menu('suburb', $filtered_units, $cInfo->entry_suburb, 'id ="entry_suburb", class="selectpicker" form-control data-live-search="true"');?>
 <div class="p-2"></div>
 <?php
 }
@@ -117,6 +117,7 @@ $onchange_for_zc158 = ($flag_show_pulldown_states === true && zen_get_zcversion(
 $state_field_label = (zen_get_zcversion() >= '1.5.8') ? $state_field_label : ENTRY_STATE;
 ?>
 <label class="inputLabel" for="country"><?php echo ENTRY_COUNTRY; ?></label>
+<br>
 <?php echo zen_get_country_list('zone_country_id', $entry->fields['entry_country_id'], 'id="country" placeholder="' . ENTRY_COUNTRY_TEXT . '"' . $onchange_for_zc158); ?>
 <div class="p-2"></div>
 

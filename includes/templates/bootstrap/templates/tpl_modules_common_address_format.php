@@ -91,9 +91,9 @@ if (ACCOUNT_SUBURB === 'true') {
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
 	<br>
 	<?php
-    $filter = $address['entry_company'];
+    $filter = $entry->fields['entry_company'];
     filtered_unit_array($filter);
-	echo iems_pull_down_menu('suburb', $filtered_units, $cInfo->entry_suburb, 'id ="entry_suburb", class="selectpicker" form-control data-live-search="true"');?>
+	echo iems_pull_down_menu('suburb', $filtered_units, $entry->fields['entry_suburb'], 'id ="entry_suburb", form-control data-live-search="true"');?>
 <div class="p-2"></div>
 <?php
 }

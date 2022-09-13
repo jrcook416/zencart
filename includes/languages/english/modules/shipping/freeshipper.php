@@ -6,6 +6,6 @@
  * @version $Id: freeshipper.php 18697 2011-05-04 14:35:20Z wilt $
  */
 
-define('MODULE_SHIPPING_FREESHIPPER_TEXT_TITLE', 'Deliver to Indianapolis EMS Unit or Location');
-define('MODULE_SHIPPING_FREESHIPPER_TEXT_DESCRIPTION', 'Deliver to Indianapolis EMS Unit or Location');
-define('MODULE_SHIPPING_FREESHIPPER_TEXT_WAY', 'IEMS Delivery');
+define('MODULE_SHIPPING_FREESHIPPER_TEXT_TITLE', 'Free Shipping');
+define('MODULE_SHIPPING_FREESHIPPER_TEXT_DESCRIPTION', 'Free Shipping');
+define('MODULE_SHIPPING_FREESHIPPER_TEXT_WAY', 'Free Shipping');

@@ -7,7 +7,7 @@
  * @version $Id: freeoptions.php 3830 2006-06-21 23:47:16Z ajeh $
  */
 
-define('MODULE_SHIPPING_FREEOPTIONS_TEXT_TITLE', 'Free Shipping Options - Test');
+define('MODULE_SHIPPING_FREEOPTIONS_TEXT_TITLE', 'Deliver to IEMS Location');
 define('MODULE_SHIPPING_FREEOPTIONS_TEXT_DESCRIPTION', '
 Free Options is used to display a Free Shipping option when other Shipping Modules are displayed.
 It can be based on: Always show, Order Total, Order Weight or Order Item Count.
@@ -17,6 +17,6 @@ NOTE: Leaving all settings for Total, Weight and Item count blank will deactivat
 NOTE: Free Shipping Options does not display if Free Shipping is used based on 0 weight is Free Shipping.
 See: freeshipper
 ');
-define('MODULE_SHIPPING_FREEOPTIONS_TEXT_WAY', 'Free Shipping - Test');
+define('MODULE_SHIPPING_FREEOPTIONS_TEXT_WAY', 'Deliver to IEMS Location');
 
 ?>

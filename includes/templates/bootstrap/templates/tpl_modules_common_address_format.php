@@ -90,9 +90,7 @@ if (ACCOUNT_SUBURB === 'true') {
 ?>
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
 	<?php
-    $filter = $address['company'];
-    $name = "suburb[$which]";
-    $id = "suburb-$which";
+    $filter = $address['entry_company'];
     filtered_unit_array($filter);?>
     <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
     <?php

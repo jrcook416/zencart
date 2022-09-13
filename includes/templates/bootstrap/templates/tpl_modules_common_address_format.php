@@ -92,8 +92,7 @@ if (ACCOUNT_SUBURB === 'true') {
 	<br>
 	<?php
     $filter = $address['entry_company'];
-    filtered_unit_array($filter);?>
-    <?php
+    filtered_unit_array($filter);
 	echo iems_pull_down_menu('suburb', $filtered_units, $cInfo->entry_suburb, 'id ="entry_suburb", class="selectpicker" form-control data-live-search="true"');?>
 <div class="p-2"></div>
 <?php

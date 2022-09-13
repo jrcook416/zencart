@@ -6,7 +6,7 @@
  * @version $Id: DrByte 2020 Sep 29 Modified in v1.5.7a $
  */
 //
-  class freeshipper {
+  class iemsdelivery {
     var $code, $title, $description, $icon, $enabled;
 
     function __construct() {

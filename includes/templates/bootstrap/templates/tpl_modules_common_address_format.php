@@ -95,7 +95,7 @@ if (ACCOUNT_SUBURB === 'true') {
     <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
     <?php
     echo iems_pull_down_menu($name, $filtered_units, $entry->fields['entry_suburb'], 'id="' . $id . '" form-control data-live-search="true" data-width="100%" title="Nothing selected."');
-    echo $clear_both;
+    echo $clear_both;?>
 <div class="p-2"></div>
 <?php
 }

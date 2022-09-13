@@ -6,7 +6,7 @@
  * @version $Id: DrByte 2020 Sep 29 Modified in v1.5.7a $
  */
 
-  class freeoptions extends base {
+  class freeoptions-test extends base {
     var $code, $title, $description, $icon, $enabled;
     var $ck_freeoptions_total, $ck_freeoptions_weight, $ck_freeoptions_items;
 

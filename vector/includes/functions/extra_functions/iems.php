@@ -85,7 +85,7 @@ function company_lookup() {
 	global $company_array;
 
 	$company_array = array();
-	$company_values = $db->Execute("select distinct agency from `units` ");
+	$company_values = $db->Execute("select masterCountyID, distinct agency from `units` ");
 
 		while (!$company_values->EOF) {
 			$company_array[] = array('id' => $company_values->fields['agency'], 'text' => $company_values->fields['agency']);

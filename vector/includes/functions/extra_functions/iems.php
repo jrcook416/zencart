@@ -93,6 +93,20 @@ function company_lookup() {
 			};
 	return $company_array; 
 	} //end company_array
+	
+function county_lookup() {
+	global $db;
+	global $county_array;
+
+	$county_array = array();
+	$county_values = $db->Execute("select distinct `units`.`county`, `countyName` from `units` left join county ON `units`.`county` = `county`.`countyCode`");
+
+		while (!$county_values->EOF) {
+			$county_array[] = array('id' => $company_values->fields['county'] . " " . $company_values->fields['countyName'], 'text' => $county_values->fields['county'] . " " . $company_values->fields['countyName']);
+			$county_values->MoveNext();
+			};
+	return $county_array;	
+	} //end county_array
 
   /**
  *  Output a form pull down menu

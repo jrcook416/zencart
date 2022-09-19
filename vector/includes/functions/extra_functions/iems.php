@@ -102,7 +102,7 @@ function county_lookup() {
 	$county_values = $db->Execute("select distinct `units`.`county`, `countyName` from `units` left join county ON `units`.`county` = `county`.`countyCode`");
 
 		while (!$county_values->EOF) {
-			$county_array[] = array('id' => $company_values->fields['county'] . " " . $company_values->fields['countyName'], 'text' => $county_values->fields['county'] . " " . $company_values->fields['countyName']);
+			$county_array[] = array('id' => $county_values->fields['county'] . " " . $county_values->fields['countyName'], 'text' => $county_values->fields['county'] . " " . $county_values->fields['countyName']);
 			$county_values->MoveNext();
 			};
 	return $county_array;	

@@ -94,6 +94,20 @@ function company_lookup() {
 	return $company_array; 
 	} //end company_array
 	
+function filtered_agency_lookup() {
+	global $db;
+	global $agency_array;
+
+	$agency_array = array();
+	$agency_values = $db->Execute("select distinct `agency`, `county`  from `units` where county LIKE '" .  $filter . "' order by unit");
+
+		while (!$agency_values->EOF) {
+			$agency_array[] = array('id' => $agency_values->fields['county'] . " " . $agency_values->fields['agency'], 'text' => $agency_values->fields['county'] . " " . $agency_values->fields['agency']);
+			$agency_values->MoveNext();
+			};
+	return $agency_array; 
+	} //end company_array
+	
 function county_lookup() {
 	global $db;
 	global $county_array;

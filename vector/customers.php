@@ -734,8 +734,8 @@ if (zen_not_null($action)) {
 							} else {
 								/*IEMS Custom Code - adding iems_pull_down_menu for Agency
 								This box should be populated so that the unit selector will pull the proper units based upon the agency select's value. */
-								company_lookup(); 
-								echo iems_pull_down_menu('entry_company',$company_array, $cInfo->entry_company, 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
+								agency_lookup(); 
+								echo iems_pull_down_menu('entry_company','', $cInfo->entry_company, 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
 								?>
 								<button type="button" class="btn btn-primary btn-lrg add">Load Units for this Agency</button>
 							<?php } //end else

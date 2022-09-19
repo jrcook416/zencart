@@ -712,13 +712,13 @@ if (zen_not_null($action)) {
 			<div class="row formAreaTitle"><?php echo CATEGORY_COMPANY; ?></div>
 				<div class="formArea">
 					<div class="form-group">
-						<?php 
-						county_lookup();
-						echo iems_pull_down_menu('entry_county',$county_array, '', 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
-								?>
-								<button type="button" class="btn btn-primary btn-lrg add">Load Units for this County</button>
-						<?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
 						<div class="col-sm-9 col-md-6">
+							<?php 
+							county_lookup();
+							echo iems_pull_down_menu('entry_county',$county_array, '', 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
+							?>
+							<button type="button" class="btn btn-primary btn-lrg add">Load Units for this County</button>
+						<?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
 						<?php
 							if ($error == true) {
 								if ($entry_company_error == true) {

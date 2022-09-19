@@ -84,7 +84,7 @@ if (ACCOUNT_SUBURB === 'true') {
             <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
 				<br>
 				<?php
-				$filter = $entry->fields['company'];
+				$filter = '049 IEMS';
 				filtered_unit_array($filter);
 				echo iems_pull_down_menu('suburb', $filtered_units, $entry->fields['entry_suburb'], 'id ="entry_suburb", form-control data-live-search="true" readonly');?>
             <div class="p-2"></div>

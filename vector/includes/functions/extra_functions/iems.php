@@ -6,13 +6,13 @@
  * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
  * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
  * copied to each of those directories and maintained within Git version control.
- * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
+ * For the sake of argument, this is the /includes/functions/extra_functions version of this file.
  * All code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
  * IEMS documentation.
  * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
  * 
  *
- * @package		admin
+ * @package		catalog
  * @category	Indianapolis EMS custom code
  * @link   		<https://www.iemssupply.net>
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
@@ -38,7 +38,7 @@ function unit_lookup() {
 	$unit_array = array();
 	$unit_values = $db->Execute("select * from `units`");
 		while (!$unit_values->EOF) {
-			$unit_array[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description'], 'agency_filter' => $unit_values->fields['unit_filter']);
+			$unit_array[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit'], 'agency_filter' => $unit_values->fields['unit_filter']);
 			$unit_values->MoveNext();
 			}; //end while
 	return $unit_array; 
@@ -61,15 +61,15 @@ function filtered_unit_array($filter) {
 	global $filter;
 
 	$filtered_units = array();
-	$unit_values = $db->Execute("select unit_description from `units` where unit_filter LIKE '" .  $filter . "' order by unit_description");
+	$unit_values = $db->Execute("select unit from `units` where unit_filter LIKE '" .  $filter . "' order by unit");
 
 		while (!$unit_values->EOF) {
-			$filtered_units[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description']);
+			$filtered_units[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit']);
 			$unit_values->MoveNext();
 			};
 	return $filtered_units; 
 	} // end_filtered_unit_array
-
+	
 /**
  * Queries the unit table in the database and returns an array of distinct agency values.
  *
@@ -85,28 +85,14 @@ function company_lookup() {
 	global $company_array;
 
 	$company_array = array();
-	$company_values = $db->Execute("select distinct unit_filter from `units` ");
+	$company_values = $db->Execute("select distinct agency from `units` ");
 
 		while (!$company_values->EOF) {
-			$company_array[] = array('id' => $company_values->fields['unit_filter'], 'text' => $company_values->fields['unit_filter']);
+			$company_array[] = array('id' => $company_values->fields['agency'], 'text' => $company_values->fields['agency']);
 			$company_values->MoveNext();
 			};
 	return $company_array; 
 	} //end company_array
-	
-	function uom_lookup() {
-	global $db;
-	global $uom_array;
-
-	$uom_array = array();
-	$uom_values = $db->Execute("select uom_id, uom from `uom` ");
-
-		while (!$uom_values->EOF) {
-			$uom_array[] = array('id' => $uom_values->fields['uom'], 'text' => $uom_values->fields['uom']);
-			$uom_values->MoveNext();
-			};
-	return $uom_array; 
-	} //end uom_array
 
   /**
  *  Output a form pull down menu
@@ -139,12 +125,12 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
     return $field;
   }
 
-  $field = '<select rel="select"';
+  $field = '<select rel="dropdown"';
 /*
   if (strpos($parameters, 'id=') === false) {
-    $field .= ' id="' . zen_output_string($name) . '"';
+    $field .= ' id="select-' . zen_output_string($name) . '"';
   }
-  */
+*/
 
   $field .= ' name="' . zen_output_string($name) . '"';
 

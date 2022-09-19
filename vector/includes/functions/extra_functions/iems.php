@@ -55,6 +55,21 @@ function unit_lookup() {
  * @var		array $filtered_units - the associative array that we will load the unit list into.
  * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table, filtered by the parameter $filter.
  */
+ function county_lookup() {
+	global $db;
+	global $county_array;
+
+	$county_array = array();
+	$county_values = $db->Execute("select distinct `units`.`county`, `countyName` from `units` left join county ON `units`.`county` = `county`.`countyCode`");
+
+		while (!$county_values->EOF) {
+			$county_array[] = array('id' => $county_values->fields['county'], 'text' => $county_values->fields['county'] . " " . $county_values->fields['countyName']);
+			$county_values->MoveNext();
+			};
+	return $county_array;	
+	} //end county_array
+ 
+ 
 function filtered_unit_array($filter) {
 	global $db;
 	global $filtered_units;
@@ -108,19 +123,7 @@ function filtered_agency_lookup() {
 	return $agency_array; 
 	} //end company_array
 	
-function county_lookup() {
-	global $db;
-	global $county_array;
 
-	$county_array = array();
-	$county_values = $db->Execute("select distinct `units`.`county`, `countyName` from `units` left join county ON `units`.`county` = `county`.`countyCode`");
-
-		while (!$county_values->EOF) {
-			$county_array[] = array('id' => $county_values->fields['county'] . " " . $county_values->fields['countyName'], 'text' => $county_values->fields['county'] . " " . $county_values->fields['countyName']);
-			$county_values->MoveNext();
-			};
-	return $county_array;	
-	} //end county_array
 
   /**
  *  Output a form pull down menu

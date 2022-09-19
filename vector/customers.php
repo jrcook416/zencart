@@ -715,7 +715,7 @@ if (zen_not_null($action)) {
 						<div class="col-sm-9 col-md-6">
 							<?php 
 							county_lookup();
-							echo iems_pull_down_menu('entry_county',$county_array, '', 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
+							echo iems_pull_down_menu('entry_county',$county_array, '', 'id ="entry_county", form-control class="selectpicker" data-live-search="true"');
 							?>
 							<button type="button" class="btn btn-primary btn-lrg add">Load Units for this County</button>
 						</div>

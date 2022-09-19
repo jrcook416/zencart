@@ -711,8 +711,9 @@ if (zen_not_null($action)) {
 				<?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></div>
 			<div class="row formAreaTitle"><?php echo CATEGORY_COMPANY; ?></div>
 				<div class="formArea">
-					<div class="form-group">
+					<div class="form-group" id="county">
 						<div class="col-sm-9 col-md-6">
+							<?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
 							<?php 
 							county_lookup();
 							echo iems_pull_down_menu('entry_county', $county_array, '', 'id ="entry_county", form-control class="selectpicker" data-live-search="true"');
@@ -720,7 +721,7 @@ if (zen_not_null($action)) {
 							<button type="button" class="btn btn-primary btn-lrg add">Load Units for this County</button>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" id="company">
 						<div class="col-sm-9 col-md-6">
 							<?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
 							<?php

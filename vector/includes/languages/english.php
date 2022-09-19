@@ -261,6 +261,7 @@ define('ENTRY_EMAIL_ADDRESS_ERROR', '&nbsp;<span class="errorText">min ' . ENTRY
 define('ENTRY_EMAIL_ADDRESS_CHECK_ERROR', '&nbsp;<span class="errorText">The email address doesn\'t appear to be valid!</span>');
 define('ENTRY_EMAIL_ADDRESS_ERROR_EXISTS', '&nbsp;<span class="errorText">This email address already exists!</span>');
 define('ENTRY_COMPANY', 'Company name:');
+define('ENTRY_COUNTY', 'Agency\'s County:');
 define('ENTRY_COMPANY_ERROR', '');
 define('ENTRY_PRICING_GROUP', 'Discount Pricing Group');
 define('ENTRY_STREET_ADDRESS', 'Street Address:');

@@ -88,7 +88,7 @@ function company_lookup() {
 	$company_values = $db->Execute("select distinct `agency`, `county`  from `units` ");
 
 		while (!$company_values->EOF) {
-			$company_array[] = array('id' => $company_values->fields['county'] . " " . $company_values->fields['agency'], 'text' => $company_values->fields['agency']);
+			$company_array[] = array('id' => $company_values->fields['county'] . " " . $company_values->fields['agency'], 'text' => $company_values->fields['county'] . " " . $company_values->fields['agency']);
 			$company_values->MoveNext();
 			};
 	return $company_array; 

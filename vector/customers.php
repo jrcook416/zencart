@@ -718,7 +718,7 @@ if (zen_not_null($action)) {
 							county_lookup();
 							echo iems_pull_down_menu('entry_county', $county_array, '', 'id ="entry_county", form-control class="selectpicker" data-live-search="true"');
 							?>
-							<button type="button" class="btn btn-primary btn-lrg add">Load Units for this County</button>
+							<button type="button" class="btn btn-primary btn-lrg addAgency">Load Units for this County</button>
 						</div>
 					</div>
 					<div class="form-group" id="company">
@@ -737,7 +737,7 @@ if (zen_not_null($action)) {
 								filtered_agency_lookup(); 
 								echo iems_pull_down_menu('entry_company','', $cInfo->entry_company, 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
 								?>
-								<button type="button" class="btn btn-primary btn-lrg add">Load Units for this Agency</button>
+								<button type="button" class="btn btn-primary btn-lrg addSuburb">Load Units for this Agency</button>
 							<?php } //end else
 		} //end company/agency bootstrap-select code ?>
 						</div> <!--end div class="col-sm-9 col-md-6"--> 

@@ -82,11 +82,7 @@ if (ACCOUNT_GENDER === 'true') {
 if (ACCOUNT_SUBURB === 'true') {
 ?>
             <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-				<br>
-				<?php
-				$filter = '049 IEMS';
-				filtered_unit_array($filter);
-				echo iems_pull_down_menu('suburb', $filtered_units, $entry->fields['entry_suburb'], 'id ="entry_suburb", form-control data-live-search="true" readonly');?>
+				<?php echo zen_draw_input_field('suburb', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" placeholder="' . ENTRY_SUBURB_TEXT . '"'. ((int)ENTRY_SUBURB_MIN_LENGTH > 0 ? ' required readonly' : '')); ?>
             <div class="p-2"></div>
 <?php
 }

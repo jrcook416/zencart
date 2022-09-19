@@ -718,8 +718,12 @@ if (zen_not_null($action)) {
 							echo iems_pull_down_menu('entry_county',$county_array, '', 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
 							?>
 							<button type="button" class="btn btn-primary btn-lrg add">Load Units for this County</button>
-						<?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
-						<?php
+						</div>
+					</div>
+					<div class ="form-group">
+						<div class="col-sm-9 col-md-6">
+							<?php echo zen_draw_label(ENTRY_COMPANY, 'customers_email_address', 'class="col-sm-3 control-label"'); ?>
+							<?php
 							if ($error == true) {
 								if ($entry_company_error == true) {
 								echo zen_draw_input_field('entry_company', htmlspecialchars($cInfo->entry_company, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', 50) . ' class="form-control"') . '&nbsp;' . ENTRY_COMPANY_ERROR;
@@ -733,6 +737,7 @@ if (zen_not_null($action)) {
 								echo iems_pull_down_menu('entry_company',$company_array, $cInfo->entry_company, 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
 								?>
 								<button type="button" class="btn btn-primary btn-lrg add">Load Units for this Agency</button>
+								
 							<?php } //end else
 		} //end company/agency bootstrap-select code ?>
 						</div> <!--end div class="col-sm-9 col-md-6"--> 

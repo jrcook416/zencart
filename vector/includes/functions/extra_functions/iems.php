@@ -38,7 +38,11 @@ function unit_lookup() {
 	$unit_array = array();
 	$unit_values = $db->Execute("select * from `units`");
 		while (!$unit_values->EOF) {
-			$unit_array[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit'], 'agency_filter' => $unit_values->fields['unit_filter']);
+			$unit_array[] = array(	'id' => $unit_values->fields['unit'],
+									'text' => $unit_values->fields['unit'], 
+									'county' => $unit_values->fields['county'],
+									'agency' => $unit_values->fields['agency'],
+									'unit_filter' => $unit_values->fields['unit_filter']);
 			$unit_values->MoveNext();
 			}; //end while
 	return $unit_array; 

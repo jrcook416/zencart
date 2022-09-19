@@ -61,7 +61,7 @@ function filtered_unit_array($filter) {
 	global $filter;
 
 	$filtered_units = array();
-	$unit_values = $db->Execute("select unit from `units` where agency LIKE '" .  $filter . "' order by unit_description");
+	$unit_values = $db->Execute("select unit from `units` where agency LIKE '" .  $filter . "' order by unit");
 
 		while (!$unit_values->EOF) {
 			$filtered_units[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit']);

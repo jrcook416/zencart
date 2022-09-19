@@ -38,7 +38,7 @@ function unit_lookup() {
 	$unit_array = array();
 	$unit_values = $db->Execute("select * from `units`");
 		while (!$unit_values->EOF) {
-			$unit_array[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description'], 'agency_filter' => $unit_values->fields['unit_filter']);
+			$unit_array[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit'], 'agency_filter' => $unit_values->fields['agency']);
 			$unit_values->MoveNext();
 			}; //end while
 	return $unit_array; 
@@ -61,10 +61,10 @@ function filtered_unit_array($filter) {
 	global $filter;
 
 	$filtered_units = array();
-	$unit_values = $db->Execute("select unit_description from `units` where unit_filter LIKE '" .  $filter . "' order by unit_description");
+	$unit_values = $db->Execute("select unit_description from `units` where agency LIKE '" .  $filter . "' order by unit_description");
 
 		while (!$unit_values->EOF) {
-			$filtered_units[] = array('id' => $unit_values->fields['unit_description'], 'text' => $unit_values->fields['unit_description']);
+			$filtered_units[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit']);
 			$unit_values->MoveNext();
 			};
 	return $filtered_units; 
@@ -85,10 +85,10 @@ function company_lookup() {
 	global $company_array;
 
 	$company_array = array();
-	$company_values = $db->Execute("select distinct unit_filter from `units` ");
+	$company_values = $db->Execute("select distinct agency from `units` ");
 
 		while (!$company_values->EOF) {
-			$company_array[] = array('id' => $company_values->fields['unit_filter'], 'text' => $company_values->fields['unit_filter']);
+			$company_array[] = array('id' => $company_values->fields['agency'], 'text' => $company_values->fields['agency']);
 			$company_values->MoveNext();
 			};
 	return $company_array; 

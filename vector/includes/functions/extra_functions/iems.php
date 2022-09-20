@@ -12,14 +12,14 @@
  * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
  * 
  *
- * @package		catalog
- * @subpackage	catalog
+ * @package		IEMSCustomFiles
+ * @subpackage	Vector
  * @category	Indianapolis EMS custom code
  * @link   		<https://www.iemssupply.net>
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
- * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
+ * @version 	Jeremiah Cook 2022-09-20, modified for ZC v1.5.7d
  */
 
 /**

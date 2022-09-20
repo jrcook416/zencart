@@ -140,9 +140,9 @@ if (ACCOUNT_SUBURB === 'true') {
 	?>
 	<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
 	<?php 
-            $filter = $address_fields['company'];
+            $filter = $address['company'];
             filtered_unit_array($filter);
-			echo iems_pull_down_menu("update_" . $address_name . "_suburb", $filtered_units, $address_fields['suburb'], 'id ="update_' . $address_name .'_suburb" style="background-color:yellow",  class="form-control" data-live-search="true" data-width="100%" title="Nothing selected."');
+			echo iems_pull_down_menu("update_" . $address_name . "_suburb", $filtered_units, $address['suburb'], 'id ="suburb['$which']", class="form-control" data-live-search="true" data-width="100%" title="Nothing selected."');
 }
 
 echo $_SESSION['opc']->formatAddressElement($which, 'city', $address['city'], ENTRY_CITY, TABLE_ADDRESS_BOOK, 'entry_city', ENTRY_CITY_MIN_LENGTH, ENTRY_CITY_TEXT) . $clear_both;

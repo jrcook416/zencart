@@ -90,11 +90,13 @@ if (zen_not_null($action)) {
       $customers_email_address = zen_db_prepare_input($_POST['customers_email_address']);
       $customers_telephone = zen_db_prepare_input($_POST['customers_telephone']);
       $customers_fax = zen_db_prepare_input($_POST['customers_fax']);
-	  $customers_extrafield = zen_db_prepare_input($_POST['customers_extrafield']);
-	  $customers_extrafield2 = zen_db_prepare_input($_POST['customers_extrafield2']);
-      $customers_extrafield3 = zen_db_prepare_input($_POST['customers_extrafield3']);
-	  $customers_extrafield4 = zen_db_prepare_input($_POST['customers_extrafield4']);
-	  $customers_newsletter = zen_db_prepare_input($_POST['customers_newsletter']);
+		//start extrafield
+		$customers_extrafield = zen_db_prepare_input($_POST['customers_extrafield']);
+		$customers_extrafield2 = zen_db_prepare_input($_POST['customers_extrafield2']);
+		$customers_extrafield3 = zen_db_prepare_input($_POST['customers_extrafield3']);
+		$customers_extrafield4 = zen_db_prepare_input($_POST['customers_extrafield4']);
+		//end extrafield
+      $customers_newsletter = zen_db_prepare_input($_POST['customers_newsletter']);
       $customers_group_pricing = (int)zen_db_prepare_input($_POST['customers_group_pricing']);
       $customers_email_format = zen_db_prepare_input($_POST['customers_email_format']);
       $customers_gender = !empty($_POST['customers_gender']) ? zen_db_prepare_input($_POST['customers_gender']) : '';
@@ -720,15 +722,9 @@ if (zen_not_null($action)) {
                       echo $cInfo->entry_company . zen_draw_hidden_field('entry_company');
                     }
                   } else {
-                    	/*IEMS Custom Code - adding iems_pull_down_menu for Agency
-						This box should be populated so that the unit selector will pull the proper units based upon the agency select's value. */
-						filtered_agency_lookup(); 
-						echo iems_pull_down_menu('entry_company', $company_array, $cInfo->entry_company, 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
-						?>
-						<button type="button" class="btn btn-primary btn-lrg addSuburb">Load Units for this Agency</button>
-						<button type="button" class="btn btn-danger btn-lrg removeAgency">Clear the Agency List</button>
-					<?php } //end else
-				} //end company/agency bootstrap-select code ?>
+                    echo zen_draw_input_field('entry_company', htmlspecialchars($cInfo->entry_company, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', 50) . ' class="form-control"');
+                  }
+                  ?>
               </div>
             </div>
             <?php
@@ -797,7 +793,7 @@ if (zen_not_null($action)) {
                       echo $cInfo->entry_suburb . zen_draw_hidden_field('entry_suburb');
                     }
                   } else {
-                    echo iems_pull_down_menu('entry_suburb', unit_lookup(), $cInfo->entry_suburb, 'id ="entry_suburb" style="background-color:yellow", class="selectpicker" form-control data-live-search="true"');
+                    echo zen_draw_input_field('entry_suburb', htmlspecialchars($cInfo->entry_suburb, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', 50) . ' class="form-control"');
                   }
                   ?>
               </div>
@@ -1067,9 +1063,6 @@ if (zen_not_null($action)) {
 </div>  </div>  </div>                            
 <?php } ?>
 <!-- end extrafield --> 
-
-
-
 
         <div class="row"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></div>
         <div class="row text-right">
@@ -1557,7 +1550,73 @@ if (zen_not_null($action)) {
 
 <!-- // begin ver comentario  --> 
 <div id="commentnew">
+<?php
+  if (DISPLAY_EXTRAFIELD4 == 'true') {
+?>          
+          
+<div class="messageStackWarning">
+<?php
+$sql_data_array = array('customers_firstname' => $customers_firstname,
+                                'customers_lastname' => $customers_lastname,
+								// start extrafield
+								'customers_extrafield' => $customers_extrafield,
+								'customers_extrafield2' => $customers_extrafield2,
+								'customers_extrafield3' => $customers_extrafield3,
+								'customers_extrafield4' => $customers_extrafield4,
+								// end extrafield
+                                'customers_group_pricing' => $customers_group_pricing,
+                                'customers_newsletter' => $customers_newsletter,
+                                'customers_email_format' => $customers_email_format,
+                                'customers_authorization' => $customers_authorization,
+                                'customers_referral' => $customers_referral
+                                );
 
+$customers = $db->Execute("select c.customers_id, c.customers_gender, c.customers_firstname,
+                                          c.customers_lastname, c.customers_dob, c.customers_email_address,
+                                          a.entry_company, a.entry_street_address, a.entry_suburb,
+                                          a.entry_postcode, a.entry_city, a.entry_state, a.entry_zone_id,
+                                          a.entry_country_id, c.customers_telephone, c.customers_fax, c.customers_extrafield, c.customers_extrafield2, c.customers_extrafield3, c.customers_extrafield4,
+                                          c.customers_newsletter, c.customers_default_address_id,
+                                          c.customers_email_format, c.customers_group_pricing,
+                                          c.customers_authorization, c.customers_referral
+                                  from " . TABLE_CUSTOMERS . " c left join " . TABLE_ADDRESS_BOOK . " a
+                                  on c.customers_default_address_id = a.address_book_id
+                                  where a.customers_id = c.customers_id
+                                  and c.customers_id = '" . (int)$customers_id . "'");
+
+        $cInfo = new objectInfo($customers->fields);
+
+  if ($processed == true) {
+    echo $cInfo->customers_extrafield4 . zen_draw_hidden_field('customers_extrafield4');
+  } else {
+    echo '            <p><p>' . "\n";
+echo ENTRY_EXTRAFIELD2, $cInfo->customers_extrafield2,'&nbsp;|&nbsp;'.ENTRY_EXTRAFIELD3, $cInfo->customers_extrafield3;
+    echo '        <br><br>' . "\n";
+echo '<img border="0" title=" Advertencia " alt="Advertencia" src="images/icons/warning.gif">&nbsp' . ENTRY_EXTRAFIELD4, nl2br($cInfo->customers_extrafield4);
+    echo '            <br>' . "\n";
+echo '<br>'. ENTRY_TELEPHONE_NUMBER, $cInfo->customers_telephone;
+echo '<br>'. OFFICE_EMAIL,'<a href="mailto:' . $cInfo->customers_email_address . '">'. $cInfo->customers_email_address. '</a>';
+
+echo '<p>'. TEXT_INFO_COUNTRY, $cInfo->countries_name;
+
+echo  '&nbsp|&nbsp' . $cInfo->entry_state;
+
+echo  '&nbsp|&nbsp' . $cInfo->entry_city;
+
+  }
+?></div>       </div>                       
+<?php } ?>
+
+
+<?php
+    echo '            </td>' . "\n";
+
+
+
+?>
+<!-- //eof ver comentario --> 
+          </div>
+        </div>
         <div class="row">
           <table class="table">
             <tr>

@@ -1,27 +1,13 @@
 <?php
 /**
  * Header code file for the customer's Account-Edit page
-/**
- * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
  *
- *
- * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
- * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
- * copied to each of those directories and maintained within Git version control.
- * For the sake of argument, this is the /vector/includes/functions/extra_functions version of this file.
- * As a standard, all code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
- * IEMS documentation.
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- * 
- *
- * @package	admin
- * @category	Indianapolis EMS custom code
- * @link   	https://iemssupply.net
- * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
- * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
- * @license   	https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License 2
- * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
+ * @copyright Portions Copyright 2003 osCommerce
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: Scott C Wilson 2020 Mar 18 Modified in v1.5.7 $
  */
+// This should be first line of the script:
 $zco_notifier->notify('NOTIFY_HEADER_START_ACCOUNT_EDIT');
 
 if (!zen_is_logged_in()) {
@@ -40,11 +26,6 @@ if (isset($_POST['action']) && ($_POST['action'] == 'process')) {
   $telephone = zen_db_prepare_input($_POST['telephone']);
   $fax = isset($_POST['fax']) ? zen_db_prepare_input($_POST['fax']) : '';
   $email_format = in_array($_POST['email_format'], array('HTML', 'TEXT', 'NONE', 'OUT'), true) ? $_POST['email_format'] : 'TEXT';
-  
-  $extrafield = zen_db_prepare_input($_POST['extrafield']);
-  $extrafield2 = zen_db_prepare_input($_POST['extrafield2']);
-  $extrafield3 = zen_db_prepare_input($_POST['extrafield3']);
-  $extrafield4 = zen_db_prepare_input($_POST['extrafield4']);
 
   if (CUSTOMERS_REFERRAL_STATUS == '2' and $_POST['customers_referral'] != '') $customers_referral = zen_db_prepare_input($_POST['customers_referral']);
 
@@ -131,12 +112,6 @@ if (isset($_POST['action']) && ($_POST['action'] == 'process')) {
                             array('fieldName'=>'customers_email_address', 'value'=>$email_address, 'type'=>'stringIgnoreNull'),
                             array('fieldName'=>'customers_telephone', 'value'=>$telephone, 'type'=>'stringIgnoreNull'),
                             array('fieldName'=>'customers_fax', 'value'=>$fax, 'type'=>'stringIgnoreNull'),
-							// start extrafield
-							array('fieldName'=>'customers_extrafield', 'value'=>$extrafield, 'type'=>'stringIgnoreNull'),
-							array('fieldName'=>'customers_extrafield2', 'value'=>$extrafield2, 'type'=>'stringIgnoreNull'),
-							array('fieldName'=>'customers_extrafield3', 'value'=>$extrafield3, 'type'=>'stringIgnoreNull'),
-							array('fieldName'=>'customers_extrafield4', 'value'=>$extrafield4, 'type'=>'stringIgnoreNull'),
-							// end extrafield
                             array('fieldName'=>'customers_email_format', 'value'=>$email_format, 'type'=>'stringIgnoreNull')
     );
 

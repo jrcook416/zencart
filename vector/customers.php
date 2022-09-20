@@ -90,13 +90,11 @@ if (zen_not_null($action)) {
       $customers_email_address = zen_db_prepare_input($_POST['customers_email_address']);
       $customers_telephone = zen_db_prepare_input($_POST['customers_telephone']);
       $customers_fax = zen_db_prepare_input($_POST['customers_fax']);
-
-
-
-
-
-		
-      $customers_newsletter = zen_db_prepare_input($_POST['customers_newsletter']);
+	  $customers_extrafield = zen_db_prepare_input($_POST['customers_extrafield']);
+	  $customers_extrafield2 = zen_db_prepare_input($_POST['customers_extrafield2']);
+      $customers_extrafield3 = zen_db_prepare_input($_POST['customers_extrafield3']);
+	  $customers_extrafield4 = zen_db_prepare_input($_POST['customers_extrafield4']);
+	  $customers_newsletter = zen_db_prepare_input($_POST['customers_newsletter']);
       $customers_group_pricing = (int)zen_db_prepare_input($_POST['customers_group_pricing']);
       $customers_email_format = zen_db_prepare_input($_POST['customers_email_format']);
       $customers_gender = !empty($_POST['customers_gender']) ? zen_db_prepare_input($_POST['customers_gender']) : '';

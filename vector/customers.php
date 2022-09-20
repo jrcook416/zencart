@@ -271,11 +271,6 @@ if (zen_not_null($action)) {
           array('fieldName' => 'customers_email_format', 'value' => $customers_email_format, 'type' => 'stringIgnoreNull'),
           array('fieldName' => 'customers_authorization', 'value' => $customers_authorization, 'type' => 'stringIgnoreNull'),
           array('fieldName' => 'customers_referral', 'value' => $customers_referral, 'type' => 'stringIgnoreNull'),
-		array('fieldName' => 'customers_extrafield', 'value'=>$customers_extrafield, 'type' => 'stringIgnoreNull'),
-		array('fieldName' => 'customers_extrafield2', 'value'=>$customers_extrafield2, 'type' => 'stringIgnoreNull'),
-		array('fieldName' => 'customers_extrafield3', 'value'=>$customers_extrafield3, 'type' => 'stringIgnoreNull'),
-		array('fieldName' => 'customers_extrafield4', 'value'=>$customers_extrafield4, 'type' => 'stringIgnoreNull'),
-		// end extrafield
         );
 
         if (ACCOUNT_GENDER == 'true') {
@@ -1016,72 +1011,6 @@ if (zen_not_null($action)) {
             </div>
           </div>
         </div>
-		<!-- start extrafield -->
-
-<?php
-  if (DISPLAY_EXTRAFIELD == 'true') {
-?>
-
-       <div class="row"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></div>
-        <div class="row formAreaTitle"><?php echo ENTRY_EXTRAFIELD_IITLLE; ?></div>
- 		 <div class="formArea">
-          <div class="form-group"><?php echo zen_draw_label(ENTRY_EXTRAFIELD, 'entry_extrafield', 'class="col-sm-3 control-label"'); ?> 
-	    	<div class="col-sm-9 col-md-6">  
-<?php
-  if ($processed == true) {
-    echo $cInfo->customers_extrafield . zen_draw_hidden_field('customers_extrafield');
-  } else {
-    echo zen_draw_input_field('customers_extrafield', $cInfo->customers_extrafield, zen_set_field_length(TABLE_CUSTOMERS, 'customers_extrafield', 15) . ' class="form-control"');
-  }
-?>
-</div></div>
-<?php } ?>         
-<?php
-  if (DISPLAY_EXTRAFIELD2 == 'true') {
-?>   
-           <div class="form-group"><?php echo zen_draw_label(ENTRY_EXTRAFIELD2, 'entry_extrafield2', 'class="col-sm-3 control-label"'); ?> 
-	    	<div class="col-sm-9 col-md-6"> 
-<?php
-  if ($processed == true) {
-    echo $cInfo->customers_extrafield2 . zen_draw_hidden_field('customers_extrafield2');
-  } else {
-    echo zen_draw_input_field('customers_extrafield2', $cInfo->customers_extrafield2, zen_set_field_length(TABLE_CUSTOMERS, 'customers_extrafield2', 15) . ' class="form-control"');
-  }
-?>
-</div></div>
-<?php } ?>         
-<?php
-  if (DISPLAY_EXTRAFIELD3 == 'true') {
-?>          
-
-           <div class="form-group"><?php echo zen_draw_label(ENTRY_EXTRAFIELD3, 'entry_extrafield3', 'class="col-sm-3 control-label"'); ?> 
-	    	<div class="col-sm-9 col-md-6"> 
-<?php
-  if ($processed == true) {
-    echo $cInfo->customers_extrafield3 . zen_draw_hidden_field('customers_extrafield3');
-  } else {
-    echo zen_draw_input_field('customers_extrafield3', $cInfo->customers_extrafield3, zen_set_field_length(TABLE_CUSTOMERS, 'customers_extrafield3', 15) . ' class="form-control"');
-  }
-?>
-</div></div>
-          
-<?php } ?>         
-<?php
-  if (DISPLAY_EXTRAFIELD4 == 'true') {
-?>          
-   
-           <div class="form-group"><?php echo zen_draw_label(ENTRY_EXTRAFIELD4, 'entry_extrafield4', 'class="col-sm-3 control-label"'); ?> 
-	    	<div class="col-sm-9 col-md-6"> 
-<?php
-  if ($processed == true) {
-    echo $cInfo->customers_extrafield4 . zen_draw_hidden_field('customers_extrafield4');
-  } else {
-    echo zen_draw_textarea_field('customers_extrafield4', '', '30', '7', $cInfo->customers_extrafield4);
-  }
-?>
-</div>  </div>  </div>                            
-<?php } ?>
-<!-- end extrafield -->
         <div class="row"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></div>
         <div class="row text-right">
           <button type="submit" class="btn btn-primary"><?php echo IMAGE_UPDATE; ?></button> <a href="<?php echo zen_href_link(FILENAME_CUSTOMERS, zen_get_all_get_params(array('action'))); ?>" class="btn btn-default"><?php echo IMAGE_CANCEL; ?></a>

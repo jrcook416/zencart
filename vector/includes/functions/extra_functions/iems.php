@@ -31,6 +31,8 @@
  * @var		array $unit_array - the associative array that we will load the unit list into.
  * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
  */
+ 
+ 
 function unit_lookup() {
 	global $db;
 	global $unit_array;
@@ -47,18 +49,18 @@ function unit_lookup() {
 			}; //end while
 	return $unit_array; 
 	} //end unit_lookup
-
+	
+	
 /**
- * Queries the unit table in the database and returns an array of units, filtered by the parameter $filter.
+ * Queries the unit table in the database and returns an array of units.
  *
  * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
  *
- * @return 	mixed An associative array ($filtered_units) holding unit descriptions and unit filters.
- * @param  	string $filter - used to pass the selected agency to the function.  
+ * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
  * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $filtered_units - the associative array that we will load the unit list into.
- * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table, filtered by the parameter $filter.
- */
+ * @var		array $unit_array - the associative array that we will load the unit list into.
+ * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
+ */	
  function county_lookup() {
 	global $db;
 	global $county_array;
@@ -72,8 +74,17 @@ function unit_lookup() {
 			};
 	return $county_array;	
 	} //end county_array
- 
- 
+/**
+ * Queries the unit table in the database and returns an array of units, filtered by the parameter $filter.
+ *
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ *
+ * @return 	mixed An associative array ($filtered_units) holding unit descriptions and unit filters.
+ * @param  	string $filter - used to pass the selected agency to the function.  
+ * @var		array $db - the database specified in /vector/includes/configure.php
+ * @var		array $filtered_units - the associative array that we will load the unit list into.
+ * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table, filtered by the parameter $filter.
+ */
 function filtered_unit_array($filter) {
 	global $db;
 	global $filtered_units;
@@ -107,7 +118,10 @@ function company_lookup() {
 	$company_values = $db->Execute("select distinct `agency`, `county`  from `units` ");
 
 		while (!$company_values->EOF) {
-			$company_array[] = array('id' => $company_values->fields['county'] . " " . $company_values->fields['agency'], 'text' => $company_values->fields['county'] . " " . $company_values->fields['agency']);
+			$company_array[] = array(
+			        'id' => $company_values->fields['county'] . " " . $company_values->fields['agency'],
+			        'county' =>$company_values->fields['county'],
+			        'text' => $company_values->fields['county'] . " " . $company_values->fields['agency']);
 			$company_values->MoveNext();
 			};
 	return $company_array; 

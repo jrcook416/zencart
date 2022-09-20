@@ -735,9 +735,10 @@ if (zen_not_null($action)) {
 								/*IEMS Custom Code - adding iems_pull_down_menu for Agency
 								This box should be populated so that the unit selector will pull the proper units based upon the agency select's value. */
 								filtered_agency_lookup(); 
-								echo iems_pull_down_menu('entry_company','', $cInfo->entry_company, 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
+								echo iems_pull_down_menu('entry_company', $company_array, $cInfo->entry_company, 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
 								?>
 								<button type="button" class="btn btn-primary btn-lrg addSuburb">Load Units for this Agency</button>
+								<button type="button" class="btn btn-danger btn-lrg removeAgency">Clear the Agency List</button>
 							<?php } //end else
 		} //end company/agency bootstrap-select code ?>
 						</div> <!--end div class="col-sm-9 col-md-6"--> 
@@ -757,7 +758,7 @@ if (zen_not_null($action)) {
                   } else {
 					/*IEMS Custom Code - adding iems_pull_down_menu for Suburb.
 						This should stay as an empty pull_down_menu - the Javascript will pull the options in. */
-					echo iems_pull_down_menu('entry_suburb', '', $cInfo->entry_suburb, 'id ="entry_suburb" style="background-color:yellow", class="selectpicker" form-control  data-live-search="true"');
+					echo iems_pull_down_menu('entry_suburb', unit_lookup(), $cInfo->entry_suburb, 'id ="entry_suburb" style="background-color:yellow", class="selectpicker" form-control  data-live-search="true"');
 			 } //end suburb bootstrap-select code.?>
 			 <button type="button" class="btn btn-danger btn-lrg remove">Clear the Unit List</button>
 		  </div>

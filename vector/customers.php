@@ -722,7 +722,13 @@ if (zen_not_null($action)) {
                       echo $cInfo->entry_company . zen_draw_hidden_field('entry_company');
                     }
                   } else {
-                    echo zen_draw_input_field('entry_company', htmlspecialchars($cInfo->entry_company, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', 50) . ' class="form-control"');
+                        filtered_agency_lookup(); 
+						echo iems_pull_down_menu('entry_company', $company_array, $cInfo->entry_company, 'id ="entry_company" class = "form-control" data-live-search="true"');?>
+						<br><button type="button" class="btn btn-primary btn-lrg addSuburb">Load Units for this Agency</button>
+								<!--
+								<button type="button" class="btn btn-danger btn-lrg removeAgency">Clear the Agency List</button>
+								-->
+				<?php
                   }
                   ?>
               </div>
@@ -793,7 +799,9 @@ if (zen_not_null($action)) {
                       echo $cInfo->entry_suburb . zen_draw_hidden_field('entry_suburb');
                     }
                   } else {
-                    echo zen_draw_input_field('entry_suburb', htmlspecialchars($cInfo->entry_suburb, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', 50) . ' class="form-control"');
+                    echo iems_pull_down_menu('entry_suburb', unit_lookup(), $cInfo->entry_suburb, 'id ="entry_suburb" class="form-control" data-live-search="true"');?>
+                    <br><button type="button" class="btn btn-danger btn-lrg remove">Clear the Unit List</button>
+                <?php
                   }
                   ?>
               </div>

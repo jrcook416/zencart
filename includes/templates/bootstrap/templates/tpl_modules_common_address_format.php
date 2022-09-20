@@ -93,7 +93,7 @@ if (ACCOUNT_SUBURB === 'true') {
 	<?php
     $filter = $entry->fields['entry_company'];
     filtered_unit_array($filter);
-	echo iems_pull_down_menu('suburb', $filtered_units, $entry->fields['entry_suburb'], 'id ="entry_suburb", form-control data-live-search="true"');?>
+	echo iems_pull_down_menu('suburb', $filtered_units, $entry->fields['entry_suburb'], 'id ="entry_suburb", class="form-control" data-live-search="true"');?>
 <div class="p-2"></div>
 <?php
 }

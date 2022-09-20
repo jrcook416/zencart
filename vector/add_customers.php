@@ -361,7 +361,7 @@ if (ACCOUNT_SUBURB === 'true') {
                         <?php echo zen_draw_label(ENTRY_SUBURB, 'suburb', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
                             <?php							
-							$filter = '49 IEMS';
+							$filter = '049 IEMS';
 							filtered_unit_array($filter);
 							echo iems_pull_down_menu("update_" . $address_name . "_suburb", $filtered_units, $address_fields['suburb'], 'id ="update_' . $address_name .'_suburb" style="background-color:yellow", form-control class="selectpicker" data-live-search="true" data-width="100%"');?>
                         </div>

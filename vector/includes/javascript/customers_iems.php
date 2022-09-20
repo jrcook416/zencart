@@ -21,11 +21,35 @@ $(document).ready(function() {
     	    liveSearch:true,
     	});  //end select initialize
 
-$(document).on('click', '.add', function(){
+$(document).on('click', '.addAgency', function(){
+	<?php company_lookup();?>
+	var data = <?php echo json_encode($company_array, JSON_UNESCAPED_SLASHES); ?>;
+	var agency = $("#entry_county option:selected").val();
+	console.log(agency);
+	console.log(data);
+	var agFilter = data.filter((data) => data.county === agency);
+	alert("We have loaded the selected agency's units into the selector.");
+		var html = '';
+        for(var count = 0; count < agFilter.length; count++)
+        {
+        html += '<option value="'+agFilter[count].text+'">'+agFilter[count].text+'</option>';
+		}; //end for
+		$('#entry_company').append(html);
+		$('#entry_company').selectpicker('refresh');
+  
+}); //end on click
+
+$(document).on('click', '.removeAgency', function(){
+	$('#entry_company').empty();
+	$('#entry_company').selectpicker('refresh');
+	
+}); //end on click
+
+$(document).on('click', '.addSuburb', function(){
 	<?php unit_lookup();?>
 	var data = <?php echo json_encode($unit_array, JSON_UNESCAPED_SLASHES); ?>;
 	var agency = $("#entry_company option:selected").text();
-	var agFilter = data.filter((data) => data.agency_filter === agency);
+	var agFilter = data.filter((data) => data.unit_filter === agency);
 	alert("We have loaded the selected agency's units into the selector.");
 	console.log(data);
 		var html = '';

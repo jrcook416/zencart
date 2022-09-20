@@ -14,15 +14,15 @@ define('OTHER_IMAGE_BLACK_SEPARATOR', 'pixel_black.gif');
 define('OTHER_IMAGE_BOX_NOTIFY_REMOVE', 'box_products_notifications_remove.gif');
 define('OTHER_IMAGE_BOX_NOTIFY_YES', 'box_products_notifications.gif');
 define('OTHER_IMAGE_BOX_WRITE_REVIEW', 'box_write_review.gif');
-define('OTHER_IMAGE_CALL_FOR_PRICE', 'call_for_prices.jpg');
-define('OTHER_IMAGE_DOWN_FOR_MAINTENANCE', 'down_for_maintenance.gif');
-define('OTHER_IMAGE_PRICE_IS_FREE', 'free.gif');
+define('OTHER_IMAGE_CALL_FOR_PRICE', 'call_for_prices.png');
+define('OTHER_IMAGE_DOWN_FOR_MAINTENANCE', 'down_for_maintenance.png');
+define('OTHER_IMAGE_PRICE_IS_FREE', 'free.png');
 define('OTHER_IMAGE_CUSTOMERS_AUTHORIZATION', 'customer_authorization.gif');
-define('OTHER_IMAGE_REVIEWS_RATING_STARS_FIVE', 'stars_5_small.gif');
-define('OTHER_IMAGE_REVIEWS_RATING_STARS_FOUR', 'stars_4_small.gif');
-define('OTHER_IMAGE_REVIEWS_RATING_STARS_THREE', 'stars_3_small.gif');
-define('OTHER_IMAGE_REVIEWS_RATING_STARS_TWO', 'stars_2_small.gif');
-define('OTHER_IMAGE_REVIEWS_RATING_STARS_ONE', 'stars_1_small.gif');
+define('OTHER_IMAGE_REVIEWS_RATING_STARS_FIVE', 'stars_5_small.png');
+define('OTHER_IMAGE_REVIEWS_RATING_STARS_FOUR', 'stars_4_small.png');
+define('OTHER_IMAGE_REVIEWS_RATING_STARS_THREE', 'stars_3_small.png');
+define('OTHER_IMAGE_REVIEWS_RATING_STARS_TWO', 'stars_2_small.png');
+define('OTHER_IMAGE_REVIEWS_RATING_STARS_ONE', 'stars_1_small.png');
 //define('OTHER_IMAGE_', '');
 
 /*
@@ -40,4 +40,3 @@ define('OTHER_REVIEWS_RATING_STARS_THREE_ALT', 'Three Stars');
 define('OTHER_REVIEWS_RATING_STARS_TWO_ALT', 'Two Stars');
 define('OTHER_REVIEWS_RATING_STARS_ONE_ALT', 'One Star');
 //define('OTHER_xxx_ALT', '');
-

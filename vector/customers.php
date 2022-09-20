@@ -720,9 +720,15 @@ if (zen_not_null($action)) {
                       echo $cInfo->entry_company . zen_draw_hidden_field('entry_company');
                     }
                   } else {
-                    echo zen_draw_input_field('entry_company', htmlspecialchars($cInfo->entry_company, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', 50) . ' class="form-control"');
-                  }
-                  ?>
+                    	/*IEMS Custom Code - adding iems_pull_down_menu for Agency
+						This box should be populated so that the unit selector will pull the proper units based upon the agency select's value. */
+						filtered_agency_lookup(); 
+						echo iems_pull_down_menu('entry_company', $company_array, $cInfo->entry_company, 'id ="entry_company" style="background-color:yellow", form-control class="selectpicker" data-live-search="true"');
+						?>
+						<button type="button" class="btn btn-primary btn-lrg addSuburb">Load Units for this Agency</button>
+						<button type="button" class="btn btn-danger btn-lrg removeAgency">Clear the Agency List</button>
+					<?php } //end else
+				} //end company/agency bootstrap-select code ?>
               </div>
             </div>
             <?php
@@ -791,7 +797,7 @@ if (zen_not_null($action)) {
                       echo $cInfo->entry_suburb . zen_draw_hidden_field('entry_suburb');
                     }
                   } else {
-                    echo zen_draw_input_field('entry_suburb', htmlspecialchars($cInfo->entry_suburb, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', 50) . ' class="form-control"');
+                    echo iems_pull_down_menu('entry_suburb', unit_lookup(), $cInfo->entry_suburb, 'id ="entry_suburb" style="background-color:yellow", class="selectpicker" form-control data-live-search="true"');
                   }
                   ?>
               </div>

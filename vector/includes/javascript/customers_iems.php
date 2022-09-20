@@ -24,12 +24,10 @@ $(document).ready(function() {
 $(document).on('click', '.addAgency', function(){
 	<?php unit_lookup();?>
 	var data = <?php echo json_encode($unit_array, JSON_UNESCAPED_SLASHES); ?>;
-	var lookup = $("#entry_county option:selected").county();
-	console.log(lookup);
-	alert("County logged.");
-	var agFilter = data.filter((data) => data.county === lookup);
-	alert("We have loaded the selected county's agencies into the selector."));
-	console.log(data);
+	var agency = $("#entry_county option:selected").val();
+	console.log(agency);
+	var agFilter = data.filter((data) => data.county === agency);
+	alert("We have loaded the selected agency's units into the selector.");
 		var html = '';
         for(var count = 0; count < agFilter.length; count++)
         {

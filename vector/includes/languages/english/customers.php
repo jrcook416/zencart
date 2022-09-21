@@ -72,8 +72,8 @@ define('EMP_BUTTON_PLACEORDER_ALT', 'Place an order for this customer');
 define('EMP_BUTTON_PLACEORDER', 'Place Order');
 
 //start extrafield
-define('ENTRY_EXTRAFIELD', 'EXTRAFIELD 1');
-define('ENTRY_EXTRAFIELD2', 'EXTRAFIELD 2');
-define('ENTRY_EXTRAFIELD3', 'EXTRAFIELD 3');
-define('ENTRY_EXTRAFIELD4', 'EXTRAFIELD 4');
+define('ENTRY_EXTRAFIELD', 'Customer Extrafield 1');
+define('ENTRY_EXTRAFIELD2', 'Customer Extrafield 2');
+define('ENTRY_EXTRAFIELD3', 'Customer Extrafield 3');
+define('ENTRY_EXTRAFIELD4', 'Customer Extrafield 4');
 //end extrafield

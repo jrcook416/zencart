@@ -119,6 +119,7 @@ if (zen_not_null($action)) {
 
       $entry_company = zen_db_prepare_input($_POST['entry_company']);
       $entry_company_error = false;
+      $entry_county = zen_db_prepare_input($_POST['entry_county']);
       $entry_state = zen_db_prepare_input($_POST['entry_state']);
       if (isset($_POST['entry_zone_id'])) $entry_zone_id = zen_db_prepare_input($_POST['entry_zone_id']);
 
@@ -287,7 +288,7 @@ if (zen_not_null($action)) {
           array('fieldName' => 'entry_postcode', 'value' => $entry_postcode, 'type' => 'stringIgnoreNull'),
           array('fieldName' => 'entry_city', 'value' => $entry_city, 'type' => 'stringIgnoreNull'),
           array('fieldName' => 'entry_country_id', 'value' => $entry_country_id, 'type' => 'integer'),
-        );
+          array('fieldName' => 'entry_county', 'value' => $entry_county, 'type' => 'stringIgnoreNull'));
 
         if (ACCOUNT_COMPANY == 'true') {
           $sql_data_array[] = array('fieldName' => 'entry_company', 'value' => $entry_company, 'type' => 'stringIgnoreNull');
@@ -418,7 +419,7 @@ if (zen_not_null($action)) {
     default:
       $customers = $db->Execute("SELECT c.customers_id, c.customers_gender, c.customers_firstname,
                                         c.customers_lastname, c.customers_dob, c.customers_email_address,
-                                        a.entry_company, a.entry_street_address, a.entry_suburb,
+                                        a.entry_company, a.entry_county, a.entry_street_address, a.entry_suburb,
                                         a.entry_postcode, a.entry_city, a.entry_state, a.entry_zone_id,
                                         a.entry_country_id, c.customers_telephone, c.customers_fax, c.customers_extrafield, c.customers_extrafield2, c.customers_extrafield3, c.customers_extrafield4,
                                         c.customers_newsletter, c.customers_default_address_id,
@@ -716,12 +717,14 @@ if (zen_not_null($action)) {
                       echo $cInfo->entry_company . zen_draw_hidden_field('entry_company');
                     }
                   } else {
+                        county_lookup();
+                        echo iems_pull_down_menu('entry_county', $county_array, $cInfo->entry_county, 'id ="entry_county" class = "form-control" data-live-search="true"');?>
+						<br><button type="button" class="btn btn-primary btn-lrg addAgency">Load This County's Agencies into the Agency Selector</button>
+						<?php
                         filtered_agency_lookup(); 
 						echo iems_pull_down_menu('entry_company', $company_array, $cInfo->entry_company, 'id ="entry_company" class = "form-control" data-live-search="true"');?>
 						<br><button type="button" class="btn btn-primary btn-lrg addSuburb">Load Units for this Agency</button>
-								<!--
 								<button type="button" class="btn btn-danger btn-lrg removeAgency">Clear the Agency List</button>
-								-->
 				<?php
                   }
                   ?>

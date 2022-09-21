@@ -234,4 +234,18 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   );
   return $field;
 } // end iems_pull_down_menu()
+
+	function uom_lookup() {
+	global $db;
+	global $uom_array;
+	$uom_array = array();
+	$uom_values = $db->Execute("select uom_id, uom from `uom` ");
+
+		while (!$uom_values->EOF) {
+			$uom_array[] = array('id' => $uom_values->fields['uom'], 'text' => $uom_values->fields['uom']);
+			$uom_values->MoveNext();
+			};
+	return $uom_array; 
+	} //end uom_array
+
 ?>

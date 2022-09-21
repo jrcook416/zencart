@@ -249,6 +249,7 @@ if ($flag_show_ask_a_question) {
 
 <?php
   echo $one_time . ((zen_has_product_attributes_values((int)$_GET['products_id']) and $flag_show_product_info_starting_at == 1) ? TEXT_BASE_PRICE : '') . zen_get_products_display_price((int)$_GET['products_id']);
+  echo $products_price_uom;
 ?>
 </h2>
   </div>

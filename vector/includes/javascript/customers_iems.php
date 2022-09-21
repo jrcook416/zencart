@@ -30,6 +30,7 @@ $(document).on('click', '.addAgency', function(){
 	var agFilter = data.filter((data) => data.county === agency);
 	alert("We have loaded the selected agency's units into the selector.");
 		var html = '';
+		html += '<option disabled="disabled" selected="selected">Select an option.</option>';
         for(var count = 0; count < agFilter.length; count++)
         {
         html += '<option value="'+agFilter[count].text+'">'+agFilter[count].text+'</option>';
@@ -53,6 +54,7 @@ $(document).on('click', '.addSuburb', function(){
 	alert("We have loaded the selected agency's units into the selector.");
 	console.log(data);
 		var html = '';
+		html += '<option disabled="disabled" selected="selected">Select an option.</option>';
         for(var count = 0; count < agFilter.length; count++)
         {
         html += '<option value="'+agFilter[count].text+'">'+agFilter[count].text+'</option>';

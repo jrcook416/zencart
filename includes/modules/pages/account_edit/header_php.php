@@ -26,6 +26,12 @@ if (isset($_POST['action']) && ($_POST['action'] == 'process')) {
   $telephone = zen_db_prepare_input($_POST['telephone']);
   $fax = isset($_POST['fax']) ? zen_db_prepare_input($_POST['fax']) : '';
   $email_format = in_array($_POST['email_format'], array('HTML', 'TEXT', 'NONE', 'OUT'), true) ? $_POST['email_format'] : 'TEXT';
+    // start extrafield
+  $extrafield = zen_db_prepare_input($_POST['extrafield']);
+  $extrafield2 = zen_db_prepare_input($_POST['extrafield2']);
+  $extrafield3 = zen_db_prepare_input($_POST['extrafield3']);
+  $extrafield4 = zen_db_prepare_input($_POST['extrafield4']);
+  // end extrafield
 
   if (CUSTOMERS_REFERRAL_STATUS == '2' and $_POST['customers_referral'] != '') $customers_referral = zen_db_prepare_input($_POST['customers_referral']);
 
@@ -112,6 +118,12 @@ if (isset($_POST['action']) && ($_POST['action'] == 'process')) {
                             array('fieldName'=>'customers_email_address', 'value'=>$email_address, 'type'=>'stringIgnoreNull'),
                             array('fieldName'=>'customers_telephone', 'value'=>$telephone, 'type'=>'stringIgnoreNull'),
                             array('fieldName'=>'customers_fax', 'value'=>$fax, 'type'=>'stringIgnoreNull'),
+// start extrafield
+							array('fieldName'=>'customers_extrafield', 'value'=>$extrafield, 'type'=>'stringIgnoreNull'),
+							array('fieldName'=>'customers_extrafield2', 'value'=>$extrafield2, 'type'=>'stringIgnoreNull'),
+							array('fieldName'=>'customers_extrafield3', 'value'=>$extrafield3, 'type'=>'stringIgnoreNull'),
+							array('fieldName'=>'customers_extrafield4', 'value'=>$extrafield4, 'type'=>'stringIgnoreNull'),
+							// end extrafield
                             array('fieldName'=>'customers_email_format', 'value'=>$email_format, 'type'=>'stringIgnoreNull')
     );
 

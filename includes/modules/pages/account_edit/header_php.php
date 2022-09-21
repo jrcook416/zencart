@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Scott C Wilson 2020 Mar 18 Modified by MAUARI to v1.5.7 $ EXTRAFIEND
+ * @version $Id: Scott C Wilson 2020 Mar 18 Modified in v1.5.7 $
  */
 // This should be first line of the script:
 $zco_notifier->notify('NOTIFY_HEADER_START_ACCOUNT_EDIT');
@@ -23,17 +23,15 @@ if (isset($_POST['action']) && ($_POST['action'] == 'process')) {
   $nick = (!empty($_POST['nick']) ? zen_db_prepare_input($_POST['nick']) : '');
   if (ACCOUNT_DOB == 'true') $dob = (empty($_POST['dob']) ? zen_db_prepare_input('0001-01-01 00:00:00') : zen_db_prepare_input($_POST['dob']));
   $email_address = zen_db_prepare_input($_POST['email_address']);
-  $email_address_confirm = zen_db_prepare_input($_POST['email_address_confirm']);
   $telephone = zen_db_prepare_input($_POST['telephone']);
   $fax = isset($_POST['fax']) ? zen_db_prepare_input($_POST['fax']) : '';
+  $email_format = in_array($_POST['email_format'], array('HTML', 'TEXT', 'NONE', 'OUT'), true) ? $_POST['email_format'] : 'TEXT';
     // start extrafield
   $extrafield = zen_db_prepare_input($_POST['extrafield']);
   $extrafield2 = zen_db_prepare_input($_POST['extrafield2']);
   $extrafield3 = zen_db_prepare_input($_POST['extrafield3']);
   $extrafield4 = zen_db_prepare_input($_POST['extrafield4']);
   // end extrafield
-    $email_format = in_array($_POST['email_format'], array('HTML', 'TEXT', 'NONE', 'OUT'), true) ? $_POST['email_format'] : 'TEXT';
- 
 
   if (CUSTOMERS_REFERRAL_STATUS == '2' and $_POST['customers_referral'] != '') $customers_referral = zen_db_prepare_input($_POST['customers_referral']);
 
@@ -80,11 +78,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'process')) {
   if (!zen_validate_email($email_address)) {
     $error = true;
     $messageStack->add('account_edit', ENTRY_EMAIL_ADDRESS_CHECK_ERROR);
-  } //added by STEVE for second field
-  elseif ($email_address != $email_address_confirm) {
-      $error = true;
-      $messageStack->add('account_edit', ENTRY_EMAIL_ADDRESS_CONFIRM_NOT_MATCHING);
-    }
+  }
 
   $check_email_query = "SELECT count(*) AS total
                         FROM   " . TABLE_CUSTOMERS . "
@@ -124,7 +118,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'process')) {
                             array('fieldName'=>'customers_email_address', 'value'=>$email_address, 'type'=>'stringIgnoreNull'),
                             array('fieldName'=>'customers_telephone', 'value'=>$telephone, 'type'=>'stringIgnoreNull'),
                             array('fieldName'=>'customers_fax', 'value'=>$fax, 'type'=>'stringIgnoreNull'),
-							// start extrafield
+// start extrafield
 							array('fieldName'=>'customers_extrafield', 'value'=>$extrafield, 'type'=>'stringIgnoreNull'),
 							array('fieldName'=>'customers_extrafield2', 'value'=>$extrafield2, 'type'=>'stringIgnoreNull'),
 							array('fieldName'=>'customers_extrafield3', 'value'=>$extrafield3, 'type'=>'stringIgnoreNull'),

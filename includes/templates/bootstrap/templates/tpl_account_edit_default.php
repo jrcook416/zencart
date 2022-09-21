@@ -85,7 +85,7 @@ if (ACCOUNT_FAX_NUMBER == 'true' ) {
   if (DISPLAY_EXTRAFIELD == 'true') {
 ?>
 <label class="inputLabel" for="extrafield"><?php echo ENTRY_EXTRAFIELD; ?></label>
-<?php echo zen_draw_input_field('extrafield', $account->fields['customers_extrafield'], 'id="extrafield"') . (zen_not_null(ENTRY_EXTRAFIELD_TEXT) ? '<span class="alert">' . ENTRY_EXTRAFIELD_TEXT . '</span>': ''); ?>
+    <?php echo zen_draw_input_field('extrafield', $account->fields['customers_extrafield'], 'id="extrafield" readonly');?>
 <br class="clearBoth" />
 <?php
 }
@@ -95,7 +95,7 @@ if (ACCOUNT_FAX_NUMBER == 'true' ) {
   if (DISPLAY_EXTRAFIELD2 == 'true') {
 ?>
 <label class="inputLabel" for="extrafield2"><?php echo ENTRY_EXTRAFIELD2; ?></label>
-<?php echo zen_draw_input_field('extrafield2', $account->fields['customers_extrafield2'], 'id="extrafield2"') . (zen_not_null(ENTRY_EXTRAFIELD2_TEXT) ? '<span class="alert">' . ENTRY_EXTRAFIELD2_TEXT . '</span>': ''); ?>
+<?php echo zen_draw_input_field('extrafield2', $account->fields['customers_extrafield2'], 'id="extrafield2" readonly'); ?>
 <br class="clearBoth" />
 <?php
 }
@@ -105,7 +105,7 @@ if (ACCOUNT_FAX_NUMBER == 'true' ) {
   if (DISPLAY_EXTRAFIELD3 == 'true') {
 ?>
 <label class="inputLabel" for="extrafield3"><?php echo ENTRY_EXTRAFIELD3; ?></label>
-<?php echo zen_draw_input_field('extrafield3', $account->fields['customers_extrafield3'], 'id="extrafield3"') . (zen_not_null(ENTRY_EXTRAFIELD3_TEXT) ? '<span class="alert">' . ENTRY_EXTRAFIELD3_TEXT . '</span>': ''); ?>
+<?php echo zen_draw_input_field('extrafield3', $account->fields['customers_extrafield3'], 'id="extrafield3" readonly');?>
 <br class="clearBoth" />
 <?php
 }
@@ -115,18 +115,12 @@ if (ACCOUNT_FAX_NUMBER == 'true' ) {
   if (DISPLAY_EXTRAFIELD4 == 'true') {
 ?>
 <label class="inputLabel" for="extrafield4"><?php echo ENTRY_EXTRAFIELD4; ?></label>
-<?php echo zen_draw_textarea_field('extrafield4', '30','7', $account->fields['customers_extrafield4'], 'id="extrafield4"') . (zen_not_null(ENTRY_EXTRAFIELD4_TEXT) ? '<span class="alert">' . ENTRY_EXTRAFIELD4_TEXT . '</span>': ''); ?>
+<?php echo zen_draw_textarea_field('extrafield4', '30','7', $account->fields['customers_extrafield4'], 'id="extrafield4" readonly'); ?>
 <br class="clearBoth" />
 <?php
 }
 ?>
 <!-- end extrafield -->
-
-
-
-
-
-
 
 <?php
   if (CUSTOMERS_REFERRAL_STATUS == 2 and $customers_referral == '') {

@@ -6,21 +6,20 @@
  * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
  * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
  * copied to each of those directories and maintained within Git version control.
- * For the sake of argument, this is the /includes/functions/extra_functions version of this file.
  * All code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
  * IEMS documentation.
  * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
  * 
  *
- * @package		catalog
+ * @package	IEMSCustomFiles
+ * @subpackage	Vector
  * @category	Indianapolis EMS custom code
- * @link   		<https://www.iemssupply.net>
+ * @link   	<https://www.iemssupply.net>
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
- * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
+ * @version 	Jeremiah Cook 2022-09-20, modified for ZC v1.5.7d
  */
-
 /**
  * Queries the unit table in the database and returns an array of units.
  *

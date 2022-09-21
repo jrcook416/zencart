@@ -12,13 +12,14 @@
  * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
  * 
  *
- * @package		catalog
+ * @package		IEMSCustomFiles
+ * @subpackage	Vector
  * @category	Indianapolis EMS custom code
  * @link   		<https://www.iemssupply.net>
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
- * @version 	Jeremiah Cook 2022-04-11, modified for ZC v1.5.7d
+ * @version 	Jeremiah Cook 2022-09-20, modified for ZC v1.5.7d
  */
 
 /**
@@ -31,7 +32,6 @@
  * @var		array $unit_array - the associative array that we will load the unit list into.
  * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
  */
- 
  
 function unit_lookup() {
 	global $db;
@@ -49,8 +49,7 @@ function unit_lookup() {
 			}; //end while
 	return $unit_array; 
 	} //end unit_lookup
-	
-	
+		
 /**
  * Queries the unit table in the database and returns an array of units.
  *
@@ -74,6 +73,7 @@ function unit_lookup() {
 			};
 	return $county_array;	
 	} //end county_array
+	
 /**
  * Queries the unit table in the database and returns an array of units, filtered by the parameter $filter.
  *
@@ -110,6 +110,7 @@ function filtered_unit_array($filter) {
  * @var		array $company_array - the associative array that we will load the unit filter (agency) list into.
  * @var		string $company_values - the string that holds the MySQL query to pull all distinct agency names from the `units` table.
  */
+ 
 function company_lookup() {
 	global $db;
 	global $company_array;
@@ -126,6 +127,17 @@ function company_lookup() {
 			};
 	return $company_array; 
 	} //end company_array
+
+/**
+ * Queries the unit table in the database and returns an array of distinct agency values.
+ *
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ *
+ * @return 	mixed An associative array ($company_array) holding distinct entries in the unit table in `unit_filter`.
+ * @var		array $db - the database specified in /vector/includes/configure.php
+ * @var		array $company_array - the associative array that we will load the unit filter (agency) list into.
+ * @var		string $company_values - the string that holds the MySQL query to pull all distinct agency names from the `units` table.
+ */
 	
 function filtered_agency_lookup() {
 	global $db;

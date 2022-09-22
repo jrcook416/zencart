@@ -1910,9 +1910,9 @@ foreach ($predefinedCommentsArray as $value) {
                     $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_ORDERS_INVOICE, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button">' . IMAGE_ORDERS_INVOICE . '</a> <a href="' . zen_href_link(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button">' . IMAGE_ORDERS_PACKINGSLIP . '</a>');
                     /* BOF Super Orders 18 of 21 */
                     // Begin - Add Edit Order button to order order list page
-                    if (SO_EDIT_ORDERS_SWITCH == 'True') {
+                    /*if (SO_EDIT_ORDERS_SWITCH == 'True') {
                       $contents[] = array('align' => 'center', 'text' => '<a href="' . zen_href_link(FILENAME_EDIT_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=edit', 'NONSSL') . '">' . zen_image_button('button_edit.gif', ICON_ORDER_EDIT) . '</a>');
-                    }
+                    }*/
                     $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_SUPER_DATA_SHEET, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button"><i class="fa fa-lg fa-print" aria-hidden="true"></i> ' . SUPER_IMAGE_ORDER_PRINT . '</a>');
                     /*$contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_SUPER_SHIPPING_LABEL, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button">' . SUPER_IMAGE_SHIPPING_LABEL . '</a>');*/
                     // End - Add Edit Order button to order order list page

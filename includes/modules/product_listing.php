@@ -110,6 +110,7 @@ if ($listing_split->number_of_rows > 0) {
         $lc_price = zen_get_products_display_price($listing->fields['products_id']) . '<br />';
         $lc_align = 'right';
         $lc_text =  $lc_price;
+		$lc_text .= $listing->fields['products_price_uom'];
 
         // more info in place of buy now
         $lc_button = '';

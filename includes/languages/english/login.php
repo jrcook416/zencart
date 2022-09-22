@@ -18,7 +18,7 @@ define('TEXT_NEW_CUSTOMER_INTRODUCTION_SPLIT', 'Have a PayPal account? Want to p
 define('TEXT_NEW_CUSTOMER_POST_INTRODUCTION_DIVIDER', '<span class="larger">Or</span><br />');
 define('TEXT_NEW_CUSTOMER_POST_INTRODUCTION_SPLIT', 'Create a Customer Profile with <strong>' . STORE_NAME . '</strong> which allows you to shop faster, track the status of your current orders, review your previous orders and take advantage of our other member\'s benefits.');
 
-define('HEADING_RETURNING_CUSTOMER', 'Returning Customers: Please Log In');
+define('HEADING_RETURNING_CUSTOMER', 'Indianapolis EMS Providers: Please Log In:');
 define('HEADING_RETURNING_CUSTOMER_SPLIT', 'Returning Customers');
 
 define('TEXT_RETURNING_CUSTOMER_SPLIT', 'In order to continue, please login to your <strong>' . STORE_NAME . '</strong> account.');

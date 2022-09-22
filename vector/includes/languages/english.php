@@ -29,8 +29,8 @@ define('CONNECTION_TYPE_UNKNOWN', '\'%s\' is not a valid connection type for gen
 
 // added defines for header alt and text
 define('HEADER_ALT_TEXT', 'Admin Powered by Zen Cart :: The Art of E-Commerce');
-define('HEADER_LOGO_WIDTH', '166');
-define('HEADER_LOGO_HEIGHT', '165');
+define('HEADER_LOGO_WIDTH', '75');
+define('HEADER_LOGO_HEIGHT', '75');
 define('HEADER_LOGO_IMAGE', 'logo.gif');
 
 // look in your $PATH_LOCALE/locale directory for available locales..

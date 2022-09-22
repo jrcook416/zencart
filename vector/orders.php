@@ -710,26 +710,25 @@ foreach ($predefinedCommentsArray as $value) {
              <?php echo $right_side_buttons; ?>
           </div>
         </div>
-        <div class="row noprint"><?php echo zen_draw_separator(); ?></div>
-        <div class="row">
+        <div class="row"><?php echo zen_draw_separator(); ?></div>
           <div class="col-sm-4">
             <table class="table">
               <tr>
-                <td><strong><?php echo ENTRY_CUSTOMER_ADDRESS; ?></strong></td>
-                <td><?php echo zen_address_format($order->customer['format_id'], $order->customer, 1, '', '<br>'); ?></td>
+                <td><strong><?php echo ENTRY_SHIPPING_ADDRESS; ?></strong></td>
+                <td><?php echo zen_address_format($order->delivery['format_id'], $order->delivery, 1, '', '<br>'); ?></td>
               </tr>
               <tr>
-                <td>&nbsp;</td>
-                <td class="noprint"><a href="https://maps.google.com/maps/search/?api=1&amp;query=<?php echo urlencode($order->customer['street_address'] . ',' . $order->customer['city'] . ',' .  $order->customer['state'] . ',' . $order->customer['postcode']); ?>" rel="noreferrer" target="map"><i class="fa fa-map">&nbsp;</i> <u><?php echo TEXT_MAP_CUSTOMER_ADDRESS; ?></u></a></td>
+                <td class="noprint">&nbsp;</td>
+                <td class="noprint"><a href="https://maps.google.com/maps/search/?api=1&amp;query=<?php echo urlencode($order->delivery['street_address'] . ',' . $order->delivery['city'] . ',' . $order->delivery['state'] . ',' . $order->delivery['postcode']); ?>" rel="noreferrer" target="map"><i class="fa fa-map">&nbsp;</i> <u><?php echo TEXT_MAP_SHIPPING_ADDRESS; ?></u></a></td>
               </tr>
-<?php
-  $address_footer_suffix = '';
-  $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_ADDRESS_FOOTERS', 'customer', $address_footer_suffix, $order->customer);
+                <?php
+                $address_footer_suffix = '';
+                $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_ADDRESS_FOOTERS', 'customer', $address_footer_suffix, $order->customer);
   if (!empty($address_footer_suffix)) {
   ?>
                 <tr><td>&nbsp;</td><td><?php echo $address_footer_suffix; ?></td></tr>
 <?php } ?>
-              <tr class="noprint">
+              <tr>
                 <td colspan="2"><?php echo zen_draw_separator('pixel_trans.gif', '1', '5'); ?></td>
               </tr>
               <tr>
@@ -749,7 +748,7 @@ foreach ($predefinedCommentsArray as $value) {
                   //$whois_url = 'https://whois.domaintools.com/' . $lookup_ip;
                   $zco_notifier->notify('ADMIN_ORDERS_IP_LINKS', $lookup_ip, $whois_url);
                   ?>
-                  <td class="noprint"><a href="<?php echo $whois_url; ?>" rel="noreferrer noopener" target="_blank"><?php echo $order->info['ip_address']; ?></a></td>
+                  <td><a href="<?php echo $whois_url; ?>" rel="noreferrer noopener" target="_blank"><?php echo $order->info['ip_address']; ?></a></td>
                 <?php } else { ?>
                   <td><?php echo TEXT_UNKNOWN; ?></td>
                 <?php } ?>
@@ -761,18 +760,18 @@ foreach ($predefinedCommentsArray as $value) {
             </table>
           </div>
           <div class="col-sm-4">
-            <table class="table">
-              <tr>
-                <td><strong><?php echo ENTRY_SHIPPING_ADDRESS; ?></strong></td>
-                <td><?php echo zen_address_format($order->delivery['format_id'], $order->delivery, 1, '', '<br>'); ?></td>
+             <table class="table">
+            <tr class="noprint">
+                <td><strong><?php echo ENTRY_CUSTOMER_ADDRESS; ?></strong></td>
+                <td><?php echo zen_address_format($order->customer['format_id'], $order->customer, 1, '', '<br>'); ?></td>
               </tr>
               <tr>
                 <td>&nbsp;</td>
-                <td class="noprint"><a href="https://maps.google.com/maps/search/?api=1&amp;query=<?php echo urlencode($order->delivery['street_address'] . ',' . $order->delivery['city'] . ',' . $order->delivery['state'] . ',' . $order->delivery['postcode']); ?>" rel="noreferrer" target="map"><i class="fa fa-map">&nbsp;</i> <u><?php echo TEXT_MAP_SHIPPING_ADDRESS; ?></u></a></td>
+                <td class="noprint"><a href="https://maps.google.com/maps/search/?api=1&amp;query=<?php echo urlencode($order->customer['street_address'] . ',' . $order->customer['city'] . ',' .  $order->customer['state'] . ',' . $order->customer['postcode']); ?>" rel="noreferrer" target="map"><i class="fa fa-map">&nbsp;</i> <u><?php echo TEXT_MAP_CUSTOMER_ADDRESS; ?></u></a></td>
               </tr>
-<?php
+              <?php
   $address_footer_suffix = '';
-  $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_ADDRESS_FOOTERS', 'delivery', $address_footer_suffix, $order->delivery);
+  $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_ADDRESS_FOOTERS', 'customer', $address_footer_suffix, $order->billing);
   if (!empty($address_footer_suffix)) {
   ?>
                 <tr><td>&nbsp;</td><td><?php echo $address_footer_suffix; ?></td></tr>
@@ -781,12 +780,12 @@ foreach ($predefinedCommentsArray as $value) {
           </div>
           <div class="col-sm-4">
             <table class="table">
-              <tr>
+              <tr class="noprint">
                 <td><strong><?php echo ENTRY_BILLING_ADDRESS; ?></strong></td>
                 <td><?php echo zen_address_format($order->billing['format_id'], $order->billing, 1, '', '<br>'); ?></td>
               </tr>
               <tr>
-                <td>&nbsp;</td>
+                <td class="noprint">&nbsp;</td>
                 <td class="noprint"><a href="https://maps.google.com/maps/search/?api=1&amp;query=<?php echo urlencode($order->billing['street_address'] . ',' . $order->billing['city'] . ',' . $order->billing['state'] . ',' . $order->billing['postcode']); ?>" rel="noreferrer" target="map"><i class="fa fa-map">&nbsp;</i> <u><?php echo TEXT_MAP_BILLING_ADDRESS; ?></u></a></td>
               </tr>
 <?php
@@ -794,13 +793,13 @@ foreach ($predefinedCommentsArray as $value) {
   $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_ADDRESS_FOOTERS', 'billing', $address_footer_suffix, $order->billing);
   if (!empty($address_footer_suffix)) {
   ?>
-                <tr><td>&nbsp;</td><td><?php echo $address_footer_suffix; ?></td></tr>
+                <tr class = "noprint"><td>&nbsp;</td><td><?php echo $address_footer_suffix; ?></td></tr>
 <?php } ?>
             </table>
           </div>
         </div>
         <div class="row noprint"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></div>
-        <div class="row"><strong><?php echo ENTRY_ORDER_ID . $oID; ?></strong></div>
+        <div class="row noprint"><strong><?php echo ENTRY_ORDER_ID . $oID; ?></strong></div>
         <div class="row">
           <table>
             <tr>
@@ -808,7 +807,7 @@ foreach ($predefinedCommentsArray as $value) {
               <td class="main"><?php echo zen_date_long($order->info['date_purchased']); ?></td>
             </tr>
             <tr>
-              <td class="main"><strong><?php echo ENTRY_PAYMENT_METHOD; ?></strong></td>
+              <td class="main noprint"><strong><?php echo ENTRY_PAYMENT_METHOD; ?></strong></td>
               <td class="main"><?php echo $order->info['payment_method']; ?></td>
             </tr>
             <?php
@@ -853,7 +852,7 @@ foreach ($predefinedCommentsArray as $value) {
           <table class="table">
             <tr>
               <td class="main"><strong><i class="fa fa-2x fa-money"></i><?php echo '&nbsp;' . (!$so->payment && !$so->refund && !$so->purchase_order && !$so->po_payment ? TEXT_NO_PAYMENT_DATA : TEXT_PAYMENT_DATA); ?></strong></td>
-              <td class="text-right" colspan="6">
+              <td class="text-right noprint" colspan="6">
                 <?php echo $so->button_add('payment'); ?>
                 <?php echo $so->button_add('purchase_order'); ?>
                 <?php echo $so->button_add('refund'); ?>
@@ -1915,7 +1914,7 @@ foreach ($predefinedCommentsArray as $value) {
                       $contents[] = array('align' => 'center', 'text' => '<a href="' . zen_href_link(FILENAME_EDIT_ORDERS, zen_get_all_get_params(array('oID', 'action')) . 'oID=' . $oInfo->orders_id . '&action=edit', 'NONSSL') . '">' . zen_image_button('button_edit.gif', ICON_ORDER_EDIT) . '</a>');
                     }
                     $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_SUPER_DATA_SHEET, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button"><i class="fa fa-lg fa-print" aria-hidden="true"></i> ' . SUPER_IMAGE_ORDER_PRINT . '</a>');
-                    $contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_SUPER_SHIPPING_LABEL, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button">' . SUPER_IMAGE_SHIPPING_LABEL . '</a>');
+                    /*$contents[] = array('align' => 'text-center', 'text' => '<a href="' . zen_href_link(FILENAME_SUPER_SHIPPING_LABEL, 'oID=' . $oInfo->orders_id) . '" target="_blank" class="btn btn-info" role="button">' . SUPER_IMAGE_SHIPPING_LABEL . '</a>');*/
                     // End - Add Edit Order button to order order list page
                     /* EOF Super Orders 18 of 21 */
                     $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_MENU_BUTTONS', $oInfo, $contents);

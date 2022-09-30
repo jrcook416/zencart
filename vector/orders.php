@@ -1303,6 +1303,7 @@ foreach ($predefinedCommentsArray as $value) {
                   <th class="invoiceHeading"><strong><?php echo TABLE_HEADING_FINAL_STATUS; ?></strong></th>
                 </tr>
               </thead>
+              <!---
               <tbody>
                 <tr>
                   <td>
@@ -1315,6 +1316,7 @@ foreach ($predefinedCommentsArray as $value) {
                   </td>
                 </tr>
               </tbody>
+              --->
             </table>
           <?php } ?>
         </div>

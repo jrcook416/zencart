@@ -235,7 +235,7 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   return $field;
 } // end iems_pull_down_menu()
 
-	function uom_lookup() {
+function uom_lookup() {
 	global $db;
 	global $uom_array;
 	$uom_array = array();

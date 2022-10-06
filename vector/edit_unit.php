@@ -17,3 +17,4 @@ require DIR_WS_INCLUDES . 'footer.php';
 <?php
 unset($_SESSION['customer_id'], $_SESSION['customer_country_id'], $_SESSION['customer_zone_id'], $_SESSION['cart'], $_SESSION['shipping'], $_SESSION['payment']);
 require DIR_WS_INCLUDES . 'application_bottom.php';
+?>

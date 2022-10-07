@@ -29,22 +29,47 @@
 	$county_array = array();
 	$county_values = $db->Execute("select * from county");
     	while (!$county_values->EOF) {
-			$county_array[] = array('id' => $county_values->fields['countyID'],
-			                        'code' => $county_values->fields['countyCode'],       
-			                            'text' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName']);
+			$county_array[] = array(
+			    'id' => $county_values->fields['countyID'],
+			    'code' => $county_values->fields['countyCode'],       
+			    'text' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName']);
 			$county_values->MoveNext();
 			};
 	return $county_array;	
 	} //end county_array
 
+function filtered_agency_lookup($filter) {
+	global $db;
+	global $agency_array;
+	global $agency_filter;
 
+	$agency_array = array();
+	$agency_values = $db->Execute("select * from `agency` where masterCountyID LIKE '" .  $agency_filter . "' order by masterAgency");
+	    print_r($agency_array);
+		while (!$agency_values->EOF) {
+			$agency_array[] = array(
+			    'id' => $agency_values->fields['masterAgencyID'], 
+			    'text' => $agency_values->fields['masterAgency'] . " " .
+			        $agency_values['masterAgencyDescription']);
+			$agency_values->MoveNext();
+			};
+	return $agency_array; 
+	} // end_filtered_agency_lookup
 
+function filtered_unit_lookup() {
+	global $db;
+	global $unit_array;
+	global $unit_filter;
 
-
-
-
-
-
+	$unit_array = array();
+	$unit_values = $db->Execute("select * from `unit` where masterAgencyID LIKE '" . $unit_filter . "' order by masterUnitDescription");
+		while (!$unit_values->EOF) {
+			$unit_array[] = array(	'id' => $unit_values->fields['masterUnitID'],
+									'text' => $unit_values->fields['masterUnitDescription']);
+			$unit_values->MoveNext();
+			}; //end while
+	return $unit_array; 
+	} //end unit_lookup
 
   /**
  *  Output a form pull down menu

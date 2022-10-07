@@ -18,6 +18,7 @@
 <script>
 $(document).ready(function() {
   	$('select').selectpicker({
+  	        width: '450px',
     	    liveSearch:true,
     	});  //end select initialize
 }); //end document ready

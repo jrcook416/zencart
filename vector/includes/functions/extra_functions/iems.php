@@ -22,137 +22,28 @@
  * @version 	Jeremiah Cook 2022-09-20, modified for ZC v1.5.7d
  */
 
-/**
- * Queries the unit table in the database and returns an array of units.
- *
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- *
- * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
- * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $unit_array - the associative array that we will load the unit list into.
- * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
- */
- 
-function unit_lookup() {
-	global $db;
-	global $unit_array;
-
-	$unit_array = array();
-	$unit_values = $db->Execute("select * from `units`");
-		while (!$unit_values->EOF) {
-			$unit_array[] = array(	'id' => $unit_values->fields['unit'],
-									'text' => $unit_values->fields['unit'], 
-									'county' => $unit_values->fields['county'],
-									'agency' => $unit_values->fields['agency'],
-									'unit_filter' => $unit_values->fields['unit_filter']);
-			$unit_values->MoveNext();
-			}; //end while
-	return $unit_array; 
-	} //end unit_lookup
-		
-/**
- * Queries the unit table in the database and returns an array of units.
- *
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- *
- * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
- * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $unit_array - the associative array that we will load the unit list into.
- * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
- */	
  function county_lookup() {
 	global $db;
 	global $county_array;
 
 	$county_array = array();
-	$county_values = $db->Execute("select distinct `units`.`county`, `countyName` from `units` left join county ON `units`.`county` = `county`.`countyCode`");
-
-		while (!$county_values->EOF) {
-			$county_array[] = array('id' => $county_values->fields['county'], 'text' => $county_values->fields['county'] . " " . $county_values->fields['countyName']);
+	$county_values = $db->Execute("select * from county");
+    	while (!$county_values->EOF) {
+			$county_array[] = array('id' => $county_values->fields['countyID'],
+			                        'code' => $county_values->fields['countyCode'],       
+			                            'text' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName']);
 			$county_values->MoveNext();
 			};
 	return $county_array;	
 	} //end county_array
-	
-/**
- * Queries the unit table in the database and returns an array of units, filtered by the parameter $filter.
- *
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- *
- * @return 	mixed An associative array ($filtered_units) holding unit descriptions and unit filters.
- * @param  	string $filter - used to pass the selected agency to the function.  
- * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $filtered_units - the associative array that we will load the unit list into.
- * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table, filtered by the parameter $filter.
- */
-function filtered_unit_array($filter) {
-	global $db;
-	global $filtered_units;
-	global $filter;
 
-	$filtered_units = array();
-	$unit_values = $db->Execute("select unit from `units` where unit_filter LIKE '" .  $filter . "' order by unit");
 
-		while (!$unit_values->EOF) {
-			$filtered_units[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit']);
-			$unit_values->MoveNext();
-			};
-	return $filtered_units; 
-	} // end_filtered_unit_array
-	
-/**
- * Queries the unit table in the database and returns an array of distinct agency values.
- *
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- *
- * @return 	mixed An associative array ($company_array) holding distinct entries in the unit table in `unit_filter`.
- * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $company_array - the associative array that we will load the unit filter (agency) list into.
- * @var		string $company_values - the string that holds the MySQL query to pull all distinct agency names from the `units` table.
- */
- 
-function company_lookup() {
-	global $db;
-	global $company_array;
 
-	$company_array = array();
-	$company_values = $db->Execute("select distinct `agency`, `county`  from `units` ");
 
-		while (!$company_values->EOF) {
-			$company_array[] = array(
-			        'id' => $company_values->fields['county'] . " " . $company_values->fields['agency'],
-			        'county' =>$company_values->fields['county'],
-			        'text' => $company_values->fields['county'] . " " . $company_values->fields['agency']);
-			$company_values->MoveNext();
-			};
-	return $company_array; 
-	} //end company_array
 
-/**
- * Queries the unit table in the database and returns an array of distinct agency values.
- *
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- *
- * @return 	mixed An associative array ($company_array) holding distinct entries in the unit table in `unit_filter`.
- * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $company_array - the associative array that we will load the unit filter (agency) list into.
- * @var		string $company_values - the string that holds the MySQL query to pull all distinct agency names from the `units` table.
- */
-	
-function filtered_agency_lookup() {
-	global $db;
-	global $agency_array;
 
-	$agency_array = array();
-	$agency_values = $db->Execute("select distinct `agency`, `county`  from `units` where county LIKE '" .  $filter . "' order by unit");
 
-		while (!$agency_values->EOF) {
-			$agency_array[] = array('id' => $agency_values->fields['county'] . " " . $agency_values->fields['agency'], 'text' => $agency_values->fields['county'] . " " . $agency_values->fields['agency']);
-			$agency_values->MoveNext();
-			};
-	return $agency_array; 
-	} //end company_array
-	
+
 
 
   /**

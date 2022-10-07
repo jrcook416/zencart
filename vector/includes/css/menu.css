@@ -42,7 +42,6 @@
     .upperMenuItems{
         display: none !important;
     }
-}
 .navbar-default {
     background-color: #d7d6cc;
 }
@@ -50,18 +49,6 @@
     font-size: 1.2em;
     color: #333;
 }
-
-/* for help button placement */
-.navbar {
-  margin-bottom: 8px;
-}
-.btn-help {
-  margin-right: 4px;
-  margin-bottom: 8px;
-  background-color: #337ab7; 
-  color: white; 
-}
-
 @media (min-width: 768px) {
     .navbar-nav>li>a {
         padding-top: 5px;
@@ -70,4 +57,7 @@
     .navbar {
         min-height: 30px;
     }
+}
+.nav-pills > .active > a, .nav-pills > .active > a:hover {
+    background-color: red;
 }

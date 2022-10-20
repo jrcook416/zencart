@@ -27,7 +27,7 @@
 	global $county_array;
 
 	$county_array = array();
-	$county_values = $db->Execute("select * from county");
+	$county_values = $db->Execute("select * from master_county");
     	while (!$county_values->EOF) {
 			$county_array[] = array(
 			    'id' => $county_values->fields['countyID'],
@@ -44,7 +44,7 @@ function filtered_agency_lookup($filter) {
 	global $agency_filter;
 
 	$agency_array = array();
-	$agency_values = $db->Execute("select * from `agency` where masterCountyID LIKE '" .  $agency_filter . "' order by masterAgency");
+	$agency_values = $db->Execute("select * from `master_agency` where masterCountyID LIKE '" .  $agency_filter . "' order by masterAgency");
 	    print_r($agency_array);
 		while (!$agency_values->EOF) {
 			$agency_array[] = array(
@@ -62,7 +62,7 @@ function filtered_unit_lookup() {
 	global $unit_filter;
 
 	$unit_array = array();
-	$unit_values = $db->Execute("select * from `unit` where masterAgencyID LIKE '" . $unit_filter . "' order by masterUnitDescription");
+	$unit_values = $db->Execute("select * from `master_unit` where masterAgencyID LIKE '" . $unit_filter . "' order by masterUnitDescription");
 		while (!$unit_values->EOF) {
 			$unit_array[] = array(	'id' => $unit_values->fields['masterUnitID'],
 									'text' => $unit_values->fields['masterUnitDescription']);

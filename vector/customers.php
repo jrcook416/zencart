@@ -723,7 +723,7 @@ if (zen_not_null($action)) {
 						<?php
 						$filter = '%';
                         filtered_agency_lookup($filter); 
-						echo iems_pull_down_menu('entry_company', $company_array, $cInfo->entry_company, 'id ="entry_company" class = "form-control" data-live-search="true"');?>
+						echo iems_pull_down_menu('entry_company', $agency_array, $cInfo->entry_company, 'id ="entry_company" class = "form-control" data-live-search="true"');?>
 						<br><button type="button" class="btn btn-primary btn-lrg addSuburb">Load Units for this Agency</button>
 								<button type="button" class="btn btn-danger btn-lrg removeAgency">Clear the Agency List</button>
 				<?php

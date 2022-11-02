@@ -783,23 +783,7 @@ if (!empty($action)) {
                     <?php
                 }
                 ?>
-                <div class="form-group">
-                    <?php
-                    echo zen_draw_label(ENTRY_POST_CODE, 'entry_postcode', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9 col-md-6">
-                        <?php
-                        echo zen_draw_input_field(
-                            'entry_postcode',
-                            htmlspecialchars($cInfo->postcode, ENT_COMPAT, CHARSET, true),
-                            zen_set_field_length(
-                                TABLE_ADDRESS_BOOK,
-                                'entry_postcode',
-                                10
-                            ) . ' class="form-control" id="entry_postcode" minlength="' . ENTRY_POSTCODE_MIN_LENGTH . '"',
-                            true
-                        ); ?>
-                    </div>
-                </div>
+				<!--###IEMS EDITED CODE###-->
                 <div class="form-group">
                     <?php
                     echo zen_draw_label(ENTRY_CITY, 'entry_city', 'class="col-sm-3 control-label"'); ?>
@@ -865,6 +849,24 @@ if (!empty($action)) {
                     </div>
                 <?php
                 } ?>
+				<!--###IEMS EDITED CODE###-->
+				<div class="form-group">
+                    <?php
+                    echo zen_draw_label(ENTRY_POST_CODE, 'entry_postcode', 'class="col-sm-3 control-label"'); ?>
+                    <div class="col-sm-9 col-md-6">
+                        <?php
+                        echo zen_draw_input_field(
+                            'entry_postcode',
+                            htmlspecialchars($cInfo->postcode, ENT_COMPAT, CHARSET, true),
+                            zen_set_field_length(
+                                TABLE_ADDRESS_BOOK,
+                                'entry_postcode',
+                                10
+                            ) . ' class="form-control" id="entry_postcode" minlength="' . ENTRY_POSTCODE_MIN_LENGTH . '"',
+                            true
+                        ); ?>
+                    </div>
+                </div>
                 <div class="form-group">
                     <?php
                     echo zen_draw_label(ENTRY_COUNTRY, 'entry_country_id', 'class="col-sm-3 control-label"'); ?>

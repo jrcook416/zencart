@@ -26,7 +26,9 @@
             <div id="myAccount-card-body" class="card-body p-3">
                 <ul id="myAccount-list-group" class="list-group list-group-flush">
                     <li class="list-group-item"><?php echo ' <a href="' . zen_href_link(FILENAME_ACCOUNT_EDIT, '', 'SSL') . '"><button class="btn btn-primary">' . MY_ACCOUNT_INFORMATION . '</button></a>'; ?></li>
+					<!--##IEMS EDITED CODE##--
                     <li class="list-group-item"><?php echo ' <a href="' . zen_href_link(FILENAME_ADDRESS_BOOK, '', 'SSL') . '"><button class="btn btn-primary">' . MY_ACCOUNT_ADDRESS_BOOK . '</button></a>'; ?></li>
+					##IEMS EDITED CODE##-->
                     <li class="list-group-item"><?php echo ' <a href="' . zen_href_link(FILENAME_ACCOUNT_PASSWORD, '', 'SSL') . '"><button class="btn btn-primary">' . MY_ACCOUNT_PASSWORD . '</button></a>'; ?></li>
                 </ul>
             </div>

@@ -39,7 +39,10 @@ if (DEFINE_MAIN_PAGE_STATUS === '1' || DEFINE_MAIN_PAGE_STATUS === '2') {
     /**
      * require the html_define for the index/categories page
      */
-    require $define_page;
+     /* ###IEMS EDITED CODE###
+	 require $define_page;
+	 ### IEMS EDITED CODE ###
+	 */
 ?>
     </div>
 <?php

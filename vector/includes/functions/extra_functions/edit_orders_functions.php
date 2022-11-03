@@ -90,6 +90,7 @@ if(!function_exists('zen_get_country_list')) {
             $countries_array[] = ['id' => $val, 'text' => zen_get_country_name($val)];
         }
         // now add anything not in the defaults list:
+		/*
         foreach ($countries as $country) {
             $alreadyInList = false;
             foreach ($countriesAtTopOfList as $key => $val) {
@@ -103,6 +104,7 @@ if(!function_exists('zen_get_country_list')) {
                 $countries_array[] = $country;
             }
         }
+		*/
         return zen_draw_pull_down_menu($name, $countries_array, $selected, $parameters);
     }
 }

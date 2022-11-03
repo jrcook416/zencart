@@ -13,7 +13,7 @@
 if ($order->info['payment_module_code']) {
     if (file_exists(DIR_FS_CATALOG_MODULES . 'payment/' . $order->info['payment_module_code'] . '.php')) {
         require DIR_FS_CATALOG_MODULES . 'payment/' . $order->info['payment_module_code'] . '.php';
-        require DIR_FS_CATALOG_LANGUAGES . $_SESSION['language'] . '/modules/payment/' . $order->info['payment_module_code'] . '.php';
+        require DIR_FS_CATALOG_LANGUAGES . $_SESSION['language'] . '/modules/payment/lang.' . $order->info['payment_module_code'] . '.php';
         $module = new $order->info['payment_module_code'];
     }
 }

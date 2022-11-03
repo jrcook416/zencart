@@ -293,7 +293,7 @@ if (!function_exists('zen_get_multiple_tax_rates')) {
         return $rates_array;
     }
 }
-
+/*
 if (function_exists ('zen_get_tax_locations')) {
     trigger_error ('Pre-existing zen_get_tax_locations function detected.', E_USER_ERROR);
     exit ();
@@ -341,6 +341,7 @@ if (function_exists ('zen_get_tax_locations')) {
         ];
     }
 }
+*/
 if (!function_exists('is_product_valid')) {
     function is_product_valid($product_id, $coupon_id) {
         global $db;

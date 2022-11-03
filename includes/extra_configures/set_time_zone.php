@@ -9,7 +9,7 @@
  * Set time zone
 */
   // put your timezone here. Refer to http://www.php.net/manual/en/timezones.php
-  $TZ = '';  // eg: 'Europe/Oslo'
+  $TZ = 'America/Indianapolis';  // eg: 'Europe/Oslo'
 
 
 

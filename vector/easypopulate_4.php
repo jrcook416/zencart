@@ -43,7 +43,7 @@ if (!defined('EP4_SHOW_ALL_FILETYPES')) {
   define('EP4_SHOW_ALL_FILETYPES', 'true');
 }
 /* Configuration Variables from Admin Interface  */
-$tempdir = defined('EASYPOPULATE_4_CONFIG_TEMP_DIR') ? EASYPOPULATE_4_CONFIG_TEMP_DIR : 'EASYPOPULATE_4_CONFIG_TEMP_DIR'; // This ideally should not actually include the Admin Directory in the variable.
+$tempdir = defined('EASYPOPULATE_4_CONFIG_TEMP_DIR') ? EASYPOPULATE_4_CONFIG_TEMP_DIR : 'temp'; // This ideally should not actually include the Admin Directory in the variable.
 $ep_date_format = defined('EASYPOPULATE_4_CONFIG_FILE_DATE_FORMAT') ? EASYPOPULATE_4_CONFIG_FILE_DATE_FORMAT : 'm-d-y';
 $ep_raw_time = defined('EASYPOPULATE_4_CONFIG_DEFAULT_RAW_TIME') ? EASYPOPULATE_4_CONFIG_DEFAULT_RAW_TIME : '09:00:00';
 $ep_debug_logging = ((!defined('EASYPOPULATE_4_CONFIG_DEBUG_LOGGING') || EASYPOPULATE_4_CONFIG_DEBUG_LOGGING !== 'false') ? true : false);

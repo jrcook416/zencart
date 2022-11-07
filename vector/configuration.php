@@ -104,7 +104,7 @@ if ($gID == 7) {
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 configurationColumnLeft">
 
-          <table class="table table-hover">
+          <table class="table table-hover table-striped">
             <thead>
               <tr class="dataTableHeadingRow">
                 <th class="dataTableHeadingContent"><?php echo TABLE_HEADING_CONFIGURATION_TITLE; ?></th>

@@ -2579,13 +2579,6 @@ select[multiple].input - lg, textarea.input - lg {
 }
 .form - group - sm.form - control + .form - control - feedback, .input - group - sm + .form - control - feedback, .input - sm + .form - control - feedback {
     width: 30px;
-}
-.infoBoxContent {
-    background-color: #e7e6e0;
-    color: #333;
-    padding: 5px;
-    word-break: break-word; 
-}
     height: 30px;
     line - height: 30px
 }
@@ -6017,5 +6010,11 @@ after {
     .hidden - print {
         display: none!important
     }
+}
+.infoBoxContent {
+    background-color: #e7e6e0;
+    color: #333;
+    padding: 5px;
+    word-break: break-word; 
 }
 /*# sourceMappingURL=bootstrap.min.css.map */

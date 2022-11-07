@@ -217,7 +217,7 @@ if (!$lng_exists) {
           $filename = $_SESSION['language'] . '.php';
           ?>
           <div class="row">
-            <table class="table">
+           <table class="table-striped">
               <tr>
                 <td><a href="<?php echo zen_href_link($_GET['filename'], 'lngdir=' . $_SESSION['language'] . '&filename=' . $filename); ?>"><strong><?php echo $filename; ?></strong></a></td>
                       <?php

@@ -946,7 +946,7 @@ if (zen_not_null($action)) {
         example: Copy Color Red to products with Size Small
         -->
         <div class="table-responsive" style="border: 2px solid #999;">
-          <table class="table">
+          <table class="table-striped">
             <tr>
               <td colspan="4"><?php echo TEXT_OPTION_VALUE_COPY_ALL; ?></td>
             </tr>
@@ -981,7 +981,7 @@ if (zen_not_null($action)) {
         example: Delete Color Red
         -->
         <div class="table-responsive" style="border: 2px solid #999;">
-          <table class="table">
+          <table class="table-striped">
             <tr>
               <td colspan="3"><?php echo TEXT_OPTION_VALUE_DELETE_ALL; ?></td>
             </tr>
@@ -1012,7 +1012,7 @@ if (zen_not_null($action)) {
         example: Copy Color Red to products with Size Small
         -->
         <div class="table-responsive" style="border: 2px solid #999;">
-          <table class="table">
+          <table class="table-striped">
             <tr>
               <td colspan="4"><?php echo TEXT_OPTION_VALUE_COPY_OPTIONS_TO; ?></td>
             </tr>

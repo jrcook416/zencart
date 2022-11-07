@@ -219,7 +219,7 @@ if (zen_not_null($action)) {
 // bof: split page control and search filter
       ?>
       <div class="row">
-        <table class="table">
+       <table class="table-striped">
           <tr>
             <td><?php echo $products_downloads_split->display_count($products_downloads_query_numrows, MAX_DISPLAY_SEARCH_RESULTS_DOWNLOADS_MANAGER, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_PRODUCTS_DOWNLOADS_MANAGER); ?></td>
             <!--

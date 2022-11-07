@@ -574,7 +574,7 @@ function translate_type_to_name($opt_type)
                                 $inputs2 .= '</div>';
                             }
                             ?>
-                            <table class="table">
+                            <table class="table-striped">
                                 <tr>
                                     <td class="text-center"><?php echo $options_name['products_options_id'];
                                         echo zen_draw_hidden_field('option_id', $options_name['products_options_id']); ?>

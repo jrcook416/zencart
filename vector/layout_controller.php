@@ -332,7 +332,7 @@ if (!empty($_GET['action'])) {
         <!-- end of display -->
       </div>
       <div class="row">
-        <table class="table">
+        <table class="table-striped">
           <tr>
             <td>
                 <?php echo '<br>' . TEXT_INFO_RESET_TEMPLATE_SORT_ORDER . '<strong>' . $template_dir . '</strong>'; ?>

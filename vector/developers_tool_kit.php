@@ -903,7 +903,7 @@ if ($found == false) {
           $groupChanged = FALSE;
           ?>
           <div class="table-responsive">
-            <table class="table">
+           <table class="table-striped">
               <thead>
                 <tr class="dataTableHeadingRow">
                   <th class="dataTableHeadingContent"><?php echo SEARCH_CFG_KEYS_TABLE_SECTION; ?></th>

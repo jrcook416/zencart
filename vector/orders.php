@@ -713,7 +713,7 @@ foreach ($predefinedCommentsArray as $value) {
         <div class="row noprint"><?php echo zen_draw_separator(); ?></div>
         <div class="row">
           <div class="col-sm-4">
-            <table class="table">
+            <table class="table-striped">
               <tr>
                 <td><strong><?php echo ENTRY_CUSTOMER_ADDRESS; ?></strong></td>
                 <td><?php echo zen_address_format($order->customer['format_id'], $order->customer, 1, '', '<br>'); ?></td>
@@ -761,7 +761,7 @@ foreach ($predefinedCommentsArray as $value) {
             </table>
           </div>
           <div class="col-sm-4">
-            <table class="table">
+            <table class="table-striped">
               <tr>
                 <td><strong><?php echo ENTRY_SHIPPING_ADDRESS; ?></strong></td>
                 <td><?php echo zen_address_format($order->delivery['format_id'], $order->delivery, 1, '', '<br>'); ?></td>
@@ -780,7 +780,7 @@ foreach ($predefinedCommentsArray as $value) {
             </table>
           </div>
           <div class="col-sm-4">
-            <table class="table">
+            <table class="table-striped">
               <tr>
                 <td><strong><?php echo ENTRY_BILLING_ADDRESS; ?></strong></td>
                 <td><?php echo zen_address_format($order->billing['format_id'], $order->billing, 1, '', '<br>'); ?></td>
@@ -850,7 +850,7 @@ foreach ($predefinedCommentsArray as $value) {
            <?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?>
         </div>
         <div class="row">
-          <table class="table">
+          <table class="table-striped">
             <tr>
               <td class="main"><strong><i class="fa fa-2x fa-money"></i><?php echo '&nbsp;' . (!$so->payment && !$so->refund && !$so->purchase_order && !$so->po_payment ? TEXT_NO_PAYMENT_DATA : TEXT_PAYMENT_DATA); ?></strong></td>
               <td class="text-right" colspan="6">
@@ -1072,7 +1072,7 @@ foreach ($predefinedCommentsArray as $value) {
         <!-- End Split Order Details //-->
         <?php /* EOF Super Order 8 of 21 */ ?>
         <div class="row">
-          <table class="table">
+          <table class="table-striped">
             <tr class="dataTableHeadingRow">
               <th class="dataTableHeadingContent" colspan="2"><?php echo TABLE_HEADING_PRODUCTS; ?></th>
               <th class="dataTableHeadingContent hidden-xs"><?php echo TABLE_HEADING_PRODUCTS_MODEL; ?></th>
@@ -1863,7 +1863,7 @@ foreach ($predefinedCommentsArray as $value) {
               ?>
               </tbody>
             </table>
-            <table class="table">
+            <table class="table-striped">
               <tr>
                   <td><?php echo $orders_split->display_count($orders_query_numrows, MAX_DISPLAY_SEARCH_RESULTS_ORDERS, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_ORDERS); ?></td>
                   <td class="text-right"><?php echo $orders_split->display_links($orders_query_numrows, MAX_DISPLAY_SEARCH_RESULTS_ORDERS, MAX_DISPLAY_PAGE_LINKS, $_GET['page'],

@@ -405,7 +405,7 @@ if (zen_not_null($action)) {
           </div>
         </div>
         <div class="row">
-          <table class="table">
+          <table class="table-striped">
             <tr>
               <td><?php echo $reviews_split->display_count($reviews_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_REVIEWS); ?></td>
               <td class="text-right"><?php echo $reviews_split->display_links($reviews_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, MAX_DISPLAY_PAGE_LINKS, $_GET['page'], zen_get_all_get_params(array('page', 'rID'))); ?></td>

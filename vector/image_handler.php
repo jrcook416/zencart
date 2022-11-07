@@ -313,7 +313,7 @@ if ($ih_page === 'admin') {
         <div class="row">
             <p class="text-center"><?php echo TEXT_TABLE_CAPTION_INSTRUCTIONS; ?></p>
             <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 configurationColumnLeft">
-                <table class="table">
+               <table class="table-striped">
                     <tr class="dataTableHeadingRow">
                         <th class="dataTableHeadingContent"><?php echo TABLE_HEADING_PHOTO_NAME; ?></th>
                         <th class="dataTableHeadingContent"><?php echo TABLE_HEADING_FILETYPE; ?></th><?php //added nigel ?>
@@ -755,7 +755,7 @@ if ($ih_page === 'admin') {
       $images['gifmedium'] = $gifimage->get_resized_image($ihConf['medium']['width'], $ihConf['medium']['height'], 'medium');
       $images['giflarge'] = $gifimage->get_resized_image($ihConf['large']['width'], $ihConf['large']['height'], 'large');
 ?>
-        <table class="table">
+       <table class="table-striped">
             <tr>
                 <th><?php echo IH_SOURCE_TYPE; ?></th>
                 <th><?php echo IH_SOURCE_IMAGE; ?></th>

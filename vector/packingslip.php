@@ -118,7 +118,7 @@ if (($batched == true) and ($batch_item > 1) and (($batch_item % $forms_per_page
 } ?>
       <div class="container">
         <!-- body_text //-->
-        <table class="table">
+        <table class="table-striped">
           <tr>
             <td class="pageHeading"><?php echo nl2br(STORE_NAME_ADDRESS); ?></td>
             <td class="pageHeading" align="right">
@@ -131,7 +131,7 @@ if (($batched == true) and ($batch_item > 1) and (($batch_item % $forms_per_page
           </tr>
         </table>
         <div><?php echo zen_draw_separator(); ?></div>
-        <table class="table">
+        <table class="table-striped">
           <tr>
             <?php
             if ($show_customer == true) { ?>

@@ -164,7 +164,7 @@ $listingURL = FILENAME_WHOS_ONLINE . '.php?' . zen_get_all_get_params(['q', 't',
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 configurationColumnLeft">
           <div class="table-responsive">
-            <table class="table">
+            <table class="table-striped">
               <thead>
                 <tr class="dataTableHeadingRowWhois">
                   <th class="dataTableHeadingContentWhois"><?php echo TABLE_HEADING_ONLINE; ?></th>

@@ -165,7 +165,7 @@ for ($i = 0; $i < $report->size; $i++) {
     <div class="container-fluid">
       <h1><?php echo $report_desc . ' ' . HEADING_TITLE; ?></h1>
       <!-- body_text //-->
-      <table class="table">
+      <table class="table-striped">
         <tr>
           <td class="menuBoxHeading text-right">
             <a href="<?php echo zen_href_link(FILENAME_STATS_SALES_REPORT_GRAPHS, 'report=1' . $sales_report_filter_link); ?>"><?php echo REPORT_TEXT_HOURLY; ?></a> | <a href="<?php echo zen_href_link(FILENAME_STATS_SALES_REPORT_GRAPHS, 'report=2' . $sales_report_filter_link); ?>"><?php echo REPORT_TEXT_DAILY; ?></a> | <a href="<?php echo zen_href_link(FILENAME_STATS_SALES_REPORT_GRAPHS, 'report=3' . $sales_report_filter_link); ?>"><?php echo REPORT_TEXT_WEEKLY; ?></a> | <a href="<?php echo zen_href_link(FILENAME_STATS_SALES_REPORT_GRAPHS, 'report=4' . $sales_report_filter_link); ?>"><?php echo REPORT_TEXT_MONTHLY; ?></a> | <a href="<?php echo zen_href_link(FILENAME_STATS_SALES_REPORT_GRAPHS, 'report=5' . $sales_report_filter_link); ?>"><?php echo REPORT_TEXT_YEARLY; ?></a>
@@ -254,7 +254,7 @@ for ($i = 0; $i < $report->size; $i++) {
             </tfoot>
           </table>
         </div>
-        <table class="table">
+        <table class="table-striped">
             <?php if (!empty($order_cnt)) { /* This section of code does not appear to be executed */
               ?>
             <tr class="dataTableRow">

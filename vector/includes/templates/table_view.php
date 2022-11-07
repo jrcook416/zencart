@@ -61,7 +61,7 @@
 
 
         <div class="row">
-            <table class="table">
+           <table class="table-striped">
                 <tr>
                     <td>
                     <?php echo $tableController->getSplitPage()->display_count(TEXT_DISPLAY_NUMBER_OF_GENERIC); ?>

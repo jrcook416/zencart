@@ -609,7 +609,7 @@ if (zen_not_null($action)) {
           <div class="row"><?php echo TEXT_PRODUCT_INFO; ?> #<?php echo $pInfo->products_id; ?>&nbsp;&nbsp;<?php echo $pInfo->products_name; ?>&nbsp;&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_MODEL; ?> <?php echo $pInfo->products_model; ?></div>
           <div class="row"><?php echo zen_draw_separator('pixel_black.gif', '100%', '2'); ?></div>
           <?php if ($action == 'delete_special') { ?>
-            <table class="table">
+            <table class="table-striped">
               <tr class="pageHeading">
                 <td class="alert text-center"><?php echo TEXT_SPECIALS_CONFIRM_DELETE; ?></td>
               </tr>
@@ -623,7 +623,7 @@ if (zen_not_null($action)) {
             </table>
           <?php } ?>
           <?php if ($action == 'delete_featured') { ?>
-            <table class="table">
+            <table class="table-striped">
               <tr class="pageHeading">
                 <td class="alert text-center"><?php echo TEXT_FEATURED_CONFIRM_DELETE; ?></td>
               </tr>
@@ -652,7 +652,7 @@ if (zen_not_null($action)) {
 //          echo zen_draw_hidden_field('discounts_list', $discounts_qty);
           ?>
 
-          <table class="table">
+          <table class="table-striped">
               <?php if ($action == '') { ?>
               <tr>
                 <td class="pageHeading text-center">
@@ -1107,7 +1107,7 @@ if (zen_not_null($action)) {
             <?php } ?> 
           <?php } ?>
           <div class="row"><?php echo zen_draw_separator('pixel_black.gif', '100%', '2'); ?></div>
-          <table class="table">
+          <table class="table-striped">
               <?php if ($action == '') { ?>
               <tr>
                 <td class="pageHeading text-center">

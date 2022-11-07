@@ -84,7 +84,7 @@ $paypal_ipn_sort_order_array = [
    </div>
        <div class="row">
            <div class="col-sm-12 col-md-9 configurationColumnLeft">
-              <table class="table">
+              <table class="table-striped">
               <tr class="dataTableHeadingRow">
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_ORDER_NUMBER; ?></td>
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_PAYPAL_ID; ?></td>

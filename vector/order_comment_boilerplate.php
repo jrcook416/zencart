@@ -322,7 +322,7 @@ if (zen_not_null($action)) {
         </div>
 
         <div class="row">
-          <table class="table">
+          <table class="table-striped">
             <tr>
               <td><?php echo $oc_split->display_count($oc_query_numrows, $maxDisplaySearchResults, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_COUPONS); ?></td>
               <td class="text-right"><?php echo $oc_split->display_links($oc_query_numrows, $maxDisplaySearchResults, MAX_DISPLAY_PAGE_LINKS, $_GET['page'], (isset($_GET['status']) ? '&status=' . $_GET['status'] : '')); ?></td>

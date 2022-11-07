@@ -282,7 +282,7 @@ if (zen_not_null($action)) {
             ?>
         </div>
       </div>
-      <table class="table">
+      <table class="table-striped">
         <tr>
           <td><?php echo $record_company_split->display_count($record_company_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_RECORD_COMPANIES); ?></td>
           <td class="text-right"><?php echo $record_company_split->display_links($record_company_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, MAX_DISPLAY_PAGE_LINKS, $_GET['page']); ?></td>

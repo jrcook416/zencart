@@ -385,7 +385,7 @@ if ($_GET['action'] == 'batch_forms') {
                 <?php echo zen_draw_separator(); ?>
             </div>
             <div class="row">
-              <table class="table">
+              <table class="table-striped">
                 <tr>
                   <td>
                     <?php echo TEXT_TOTAL_ORDERS; ?><strong><?php echo $orders->RecordCount(); ?></strong>&nbsp;&nbsp;<button class="btn btn-default btn-sm" type="button" onclick="checkByParent('ordersList');"><?php echo BUTTON_CHECK_ALL; ?></button>

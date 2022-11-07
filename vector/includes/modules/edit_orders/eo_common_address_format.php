@@ -19,7 +19,7 @@
 //
 ?>
 <div role="group" aria-labelledby="sr-<?php echo $address_name; ?>">
-    <table class="table">
+   <table class="table-striped">
         <tr>
             <td aria-hidden="true"><?php echo zen_image(DIR_WS_IMAGES . $address_icon, $address_label); ?></td>
             <td class="eo-label" id="sr-<?php echo $address_name; ?>" role="heading" aria-level="2"><?php echo $address_label; ?></td>

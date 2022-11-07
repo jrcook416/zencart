@@ -190,7 +190,7 @@ if (zen_not_null($action)) {
             ?>
         </div>
       </div>
-      <table class="table">
+      <table class="table-striped">
         <tr>
           <td><?php echo $music_genre_split->display_count($music_genre_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_MUSIC_GENRES); ?></td>
           <td class="text-right"><?php echo $music_genre_split->display_links($music_genre_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, MAX_DISPLAY_PAGE_LINKS, $_GET['page']); ?></td>

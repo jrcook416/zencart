@@ -91,7 +91,7 @@ $userDetails = $userList[0];
             echo zen_draw_hidden_field('action', $formAction);
         }
     ?>
-    <table class="table">
+    <table class="table-striped">
         <thead>
         <tr class="headingRow">
             <th class="name"><?php echo TEXT_ADMIN_NAME ?></th>

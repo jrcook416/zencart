@@ -404,7 +404,7 @@ if (zen_not_null($action)) {
         </div>
       </div>
       <div class="row">
-        <table class="table">
+        <table class="table-striped">
           <tr>
             <td><?php echo $languages_split->display_count($languages_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_LANGUAGES); ?></td>
             <td class="text-right"><?php echo $languages_split->display_links($languages_query_numrows, MAX_DISPLAY_SEARCH_RESULTS, MAX_DISPLAY_PAGE_LINKS, $_GET['page']); ?></td>

@@ -10,12 +10,16 @@ Zen Cart&reg; v1.5.8 is an update with several bugfix patches applied on top of 
 
 It's free software, with free community-driven support available 24/7 on the Zen Cart&reg; Support Site forums at [zen-cart.com/forum](https://www.zen-cart.com/forum.php)
 
---------------------
-
-
-Zen Cart&reg; v1.5.8-dev
 ---------------------
 
+Zen Cart&reg; v158-clean for Indianapolis EMS Logistics
+---------------------
+Zen Cart branch v158-clean is a base repository holding the stock Zen Cart&reg; v158 code from upstream/v158. 
+Changes to the repository that are not stock Zen Cart&reg; v158 code should be made in a separate branch on a suitable development machine.  Changes to the repository should be tracked and documented in the commitlog; major changes including modules, software patches, and other non-standard code changes should be documented in an appropriate Markdown document and included within the branch revision history.
+
+Projects exist in the repository to track major code development milestones.  All changes should be documented in this manner. 
+
+----------------------
 Compatibility
 -------------
 Zen Cart v1.5.8 is designed for:

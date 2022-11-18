@@ -1,5 +1,6 @@
 configure.php
 local/configure*.php
+vector/includes/configure*.php
 /vendor
 
 *.php1

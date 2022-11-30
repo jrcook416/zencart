@@ -283,7 +283,7 @@ class paypalwpp extends base {
     require_once DIR_FS_CATALOG . DIR_WS_MODULES . 'payment/paypal/paypal_currency_check.php';
     if (paypalUSDCheck($order->info['total']) === false) {
       $this->enabled = false;
-      $this->zcLog('update_status', 'Module disabled because purchase price (' . $order_amount . ') exceeds PayPal-imposed maximum limit of 10,000 USD or equivalent.');
+      $this->zcLog('update_status', 'Module disabled because purchase price (' . $order->info['total']. ') exceeds PayPal-imposed maximum limit of 10,000 USD or equivalent.');
     }
     if ($order->info['total'] == 0) {
       $this->enabled = false;
@@ -2745,6 +2745,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
 
     // now try and find the zone_id (state/province code)
     // use the country id above
+    $zone_id = 0;
     if ($check_zone) {
       $sql = "SELECT zone_id
                     FROM " . TABLE_ZONES . "
@@ -2758,8 +2759,6 @@ if (false) { // disabled until clarification is received about coupons in PayPal
       if (!$zone->EOF) {
         // grab the id
         $zone_id = $zone->fields['zone_id'];
-      } else {
-        $zone_id = 0;
       }
     }
 
@@ -3147,13 +3146,13 @@ if (false) { // disabled until clarification is received about coupons in PayPal
 
           // some other error condition
           $errorText = MODULE_PAYMENT_PAYPALWPP_INVALID_RESPONSE;
-          $errorNum = urldecode($response['L_ERRORCODE0'] . $response['RESULT']);
+          $errorNum = urldecode($response['L_ERRORCODE0'] . ($response['RESULT'] ?? ''));
           if ($response['L_ERRORCODE0'] == 10415) $errorText = MODULE_PAYMENT_PAYPALWPP_TEXT_ORDER_ALREADY_PLACED_ERROR;
           if ($response['L_ERRORCODE0'] == 10417) $errorText = MODULE_PAYMENT_PAYPALWPP_TEXT_INSUFFICIENT_FUNDS_ERROR;
           if ($response['L_ERRORCODE0'] == 10474) $errorText .= urldecode($response['L_LONGMESSAGE0']);
 
-          $detailedMessage = ($errorText == MODULE_PAYMENT_PAYPALWPP_INVALID_RESPONSE || (int)trim($errorNum) > 0 || $this->enableDebugging || $response['CURL_ERRORS'] != '' || $this->emailAlerts) ? $errorNum . ' ' . urldecode(' ' . $response['L_SHORTMESSAGE0'] . ' - ' . $response['L_LONGMESSAGE0'] . $response['RESULT'] . ' ' . $response['CURL_ERRORS']) : '';
-          $detailedEmailMessage = ($detailedMessage == '') ? '' : $errorInfo . MODULE_PAYMENT_PAYPALWPP_TEXT_EMAIL_ERROR_MESSAGE . urldecode($response['L_ERRORCODE0'] . "\n" . $response['L_SHORTMESSAGE0'] . "\n" . $response['L_LONGMESSAGE0'] . $response['L_ERRORCODE1'] . "\n" . $response['L_SHORTMESSAGE1'] . "\n" . $response['L_LONGMESSAGE1'] . $response['L_ERRORCODE2'] . "\n" . $response['L_SHORTMESSAGE2'] . "\n" . $response['L_LONGMESSAGE2'] . ($response['CURL_ERRORS'] != '' ? "\n" . $response['CURL_ERRORS'] : '') . "\n\n" . 'Zen Cart message: ' . $errorText);
+          $detailedMessage = ($errorText == MODULE_PAYMENT_PAYPALWPP_INVALID_RESPONSE || (int)trim($errorNum) > 0 || $this->enableDebugging || $response['CURL_ERRORS'] != '' || $this->emailAlerts) ? $errorNum . ' ' . urldecode(' ' . $response['L_SHORTMESSAGE0'] . ' - ' . $response['L_LONGMESSAGE0'] . ($response['RESULT'] ?? '') . ' ' . $response['CURL_ERRORS']) : '';
+          $detailedEmailMessage = ($detailedMessage == '') ? '' : $errorInfo . MODULE_PAYMENT_PAYPALWPP_TEXT_EMAIL_ERROR_MESSAGE . urldecode($response['L_ERRORCODE0'] . "\n" . $response['L_SHORTMESSAGE0'] . "\n" . $response['L_LONGMESSAGE0'] . ($response['L_ERRORCODE1'] ?? '') . "\n" . ($response['L_SHORTMESSAGE1'] ?? '') . "\n" . ($response['L_LONGMESSAGE1'] ?? '') . ($response['L_ERRORCODE2'] ?? '') . "\n" . ($response['L_SHORTMESSAGE2'] ?? '') . "\n" . ($response['L_LONGMESSAGE2'] ?? '') . ($response['CURL_ERRORS'] != '' ? "\n" . $response['CURL_ERRORS'] : '') . "\n\n" . 'Zen Cart message: ' . $errorText);
           if (!isset($response['L_ERRORCODE0']) && isset($response['RESULT'])) $detailedEmailMessage .= "\n\n" . print_r($response, TRUE);
           if ($detailedEmailMessage != '') zen_mail(STORE_NAME, STORE_OWNER_EMAIL_ADDRESS, MODULE_PAYMENT_PAYPALWPP_TEXT_EMAIL_ERROR_SUBJECT . ' (' . $this->uncomment($errorNum) . ')', $this->uncomment($detailedEmailMessage), STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS, array('EMAIL_MESSAGE_HTML'=>$this->uncomment($detailedMessage)), 'paymentalert');
           $this->terminateEC(($detailedEmailMessage == '' ? $errorText . ' (' . urldecode($response['L_SHORTMESSAGE0'] . $response['RESULT']) . ') ' : $detailedMessage), true);

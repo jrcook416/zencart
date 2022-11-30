@@ -306,9 +306,12 @@ if (!empty($action)) {
     case 'attribute_features_copy_to_category':
       break;
     default:
-      $zco_notifier->notify('NOTIFY_ADMIN_PROD_LISTING_DEFAULT_ACTION');
-      $action = $_GET['action'] = '';
-      break;
+        $clearAction = true;
+        $zco_notifier->notify('NOTIFY_ADMIN_PROD_LISTING_DEFAULT_ACTION', $action, $clearAction);
+        if ($clearAction === true) {
+            $action = '';
+        }
+        unset($clearAction);
   }
 }
 
@@ -829,10 +832,10 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
               if ($check_page->RecordCount() > $max_results) {
                 $check_count = 0;
                 foreach ($check_page as $item) {
+                  $check_count++;
                   if ((int)$item['products_id'] === (int)$_GET['pID']) {
                     break;
                   }
-                  $check_count++;
                 }
                 $_GET['page'] = round((($check_count / $max_results) + (fmod_round($check_count, $max_results) != 0 ? .5 : 0)));
                 $page = $_GET['page'];
@@ -1161,6 +1164,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
             $contents[] = ['align' => 'center', 'text' => '<button type="submit" class="btn btn-primary">' . IMAGE_COPY_TO . '</button> <a href="' . zen_href_link(FILENAME_CATEGORY_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')) . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>'];
             break;
         }
+        $zco_notifier->notify('NOTIFY_ADMIN_PROD_LISTING_DEFAULT_INFOBOX', $action, $heading, $contents);
         if (!empty($heading) && !empty($contents)) {
           $box = new box;
           echo '<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 configurationColumnRight">';

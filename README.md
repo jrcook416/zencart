@@ -15,6 +15,9 @@ Zen Cart&reg; v158-dev-new for Indianapolis EMS Logistics
 ---------------------
 Zen Cart branch v158-dev-new is an abandoned branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v158 release.  It contains the following modifications:
 1. An initial commit of the v158 stock code as referenced from upstream/v158.
+2. Updated v158 stock code on 2022-12-01.
+3. [ZCA Bootstrap Template v3.4.1](https://www.zen-cart.com/downloads.php?do=file&id=2191) on 2022-12-01.
+4. [ImageHandler 5](https://www.zen-cart.com/downloads.php?do=file&id=2169) on 2022-12-01.
 
 ----------------------
 Compatibility

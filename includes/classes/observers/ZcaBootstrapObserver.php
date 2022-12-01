@@ -4,6 +4,7 @@
 //
 // BOOTSTRAP 3.4.0.
 //
+//<!--IEMS CUSTOM CODE-->
 class ZcaBootstrapObserver extends base
 {
     protected
@@ -265,17 +266,17 @@ class ZcaBootstrapObserver extends base
                 }
                 $p2 = $field;
                 break;
-
+//<!--IEMS CUSTOM CODE BLOCK STARTS-->
             case 'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU':
                 $field = $p2;
                 if (strpos($field, 'class="') !== false) {
-                    $field = str_replace('class="', 'class="custom-select ', $field);
+                    $field = str_replace('class="', 'class="select ', $field);
                 } else {
-                    $field = str_replace('<select ', '<select class="custom-select" ', $field);
+                    $field = str_replace('<select ', '<select class="select" ', $field);
                 }
                 $p2 = $field;
                 break;
-
+//<!--IEMS CUSTOM CODE BLOCK ENDS-->
             case 'NOTIFY_NOTIFY_ORDER_COUPON_LINK':
                 $zc_coupon_link = '<a data-toggle="modal" data-id="'. $p1['coupon_id']. '" href="#couponHelpModal">';
                 $p2 = $zc_coupon_link;

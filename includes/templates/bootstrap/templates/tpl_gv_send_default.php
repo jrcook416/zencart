@@ -2,7 +2,7 @@
 /**
  * Page Template
  * 
- * BOOTSTRAP v3.4.0
+ * BOOTSTRAP v3.4.1
  *
  * Template used to collect/display details of sending a GV to a friend from own GV balance. <br />
  *
@@ -19,9 +19,9 @@
         <div id="giftCertificateAccount-card-body" class="card-body p-3">   
             <?php echo TEXT_BALANCE_IS . $gv_current_balance; ?>
 <?php
-$action = $_GET['action'] ?? '';
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 $to_name = (isset($_POST['to_name'])) ? zen_output_string_protected($_POST['to_name']) : '';
-$error ??= false;
+$error = isset($error) ? $error : false;
 if ($gv_result->fields['amount'] > 0 && $action === 'doneprocess') {
 ?>
             <div id="giftCertificateAccount-content" class="content"><?php echo TEXT_SEND_ANOTHER; ?></div>

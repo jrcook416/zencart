@@ -1,6 +1,6 @@
 <?php
 /**
- * BOOTSTRAP v3.4.0
+ * BOOTSTRAP v3.4.1
  *
  * Displays the FAQ pages for the Gift-Certificate/Voucher system.<br />
  *
@@ -22,8 +22,8 @@ if (!empty($customer_has_gv_balance)) {
 // containing the value; previous versions provided the information via
 // a language define.
 //
-$subHeadingTitle ??= SUB_HEADING_TITLE;
-$subHeadingText ??= SUB_HEADING_TEXT;
+$subHeadingTitle = (isset($subHeadingTitle)) ? $subHeadingTitle : SUB_HEADING_TITLE;
+$subHeadingText = (isset($subHeadingText)) ? $subHeadingText : SUB_HEADING_TEXT;
 ?>
     <div id="giftCertificateFaq-card" class="card mb-3">
         <h4 id="giftCertificateFaq-card-header" class="card-header"><?php echo HEADING_TITLE; ?></h4>

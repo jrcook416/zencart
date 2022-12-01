@@ -2,7 +2,7 @@
 /**
  * Page Template
  * 
- * BOOTSTRAP v3.4.0
+ * BOOTSTRAP v3.4.1
  *
  * Loaded by main_page=index<br />
  * Displays category/sub-category listing<br />
@@ -30,22 +30,19 @@ if ($show_welcome === true) {
     <h3 id="indexCategories-greeting" class="greeting"><?php echo zen_customer_greeting(); ?></h3>
 <?php
     }
-}
 
-if (DEFINE_MAIN_PAGE_STATUS === '1' || DEFINE_MAIN_PAGE_STATUS === '2') {
+    if (DEFINE_MAIN_PAGE_STATUS === '1' || DEFINE_MAIN_PAGE_STATUS === '2') {
 ?>
     <div id="indexCategories-defineContent" class="defineContent">
 <?php
-    /**
-     * require the html_define for the index/categories page
-     */
-     /* ###IEMS EDITED CODE###
-	 require $define_page;
-	 ### IEMS EDITED CODE ###
-	 */
+        /**
+         * require the html_define for the index/categories page
+         */
+        require $define_page;
 ?>
     </div>
 <?php
+    }
 } else {
 ?>
     <h1 id="indexCategories-pageHeading" class="pageHeading"><?php echo $current_categories_name; ?></h1>

@@ -2,7 +2,7 @@
 /**
  * Page Template
  * 
- * BOOTSTRAP v3.1.0
+ * BOOTSTRAP v3.4.1
  *
  * Loaded automatically by index.php?main_page=checkout_shipping.<br>
  * Displays allowed shipping modules for selection by customer.
@@ -91,7 +91,12 @@ if (zen_count_shipping_modules() > 0) {
 <!--bof shipping method option card-->
                 <div class="card mb-3">
                     <div class="card-header">
-                        <?php echo $quotes[$i]['module']; ?>&nbsp;<?php if (isset($quotes[$i]['icon']) && zen_not_null($quotes[$i]['icon'])) { echo $quotes[$i]['icon']; } ?>
+                        <?php echo $quotes[$i]['module']; ?>&nbsp;
+<?php
+                if (!empty($quotes[$i]['icon'])) {
+                    echo $quotes[$i]['icon'];
+                }
+?>
                     </div>
                     <div class="card-body p-3">
 <?php
@@ -154,11 +159,12 @@ if (zen_count_shipping_modules() > 0) {
 // that definition, if present, otherwise falling back to the legacy definition.
 //
 $comments_heading = defined('HEADING_ORDER_COMMENTS') ? HEADING_ORDER_COMMENTS : TABLE_HEADING_COMMENTS;
+$comments = (isset($comments)) ? $comments : '';
 ?>
         <div id="orderComments-card" class="card mb-3">
             <h4 class="card-header"><?php echo $comments_heading; ?></h4>
             <div class="card-body p-3">
-                <?php echo zen_draw_textarea_field('comments', '45', '3', $comments ?? '', 'aria-label="' . $comments_heading . '"'); ?>
+                <?php echo zen_draw_textarea_field('comments', '45', '3', $comments, 'aria-label="' . $comments_heading . '"'); ?>
             </div>
         </div>
     </div>  

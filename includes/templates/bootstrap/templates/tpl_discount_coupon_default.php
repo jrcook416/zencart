@@ -2,7 +2,7 @@
 /**
  * Page Template
  *
- * BOOTSTRAP v3.4.0
+ * BOOTSTRAP v3.4.1
  *
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
@@ -29,7 +29,7 @@ if ((DEFINE_DISCOUNT_COUPON_STATUS === '1' || DEFINE_DISCOUNT_COUPON_STATUS === 
             <h4 id="lookupDiscountCoupon-card-header" class="card-header"><?php echo TEXT_DISCOUNT_COUPON_ID_INFO; ?></h4>
             <div id="lookupDiscountCoupon-card-body" class="card-body">
                 <label class="inputLabel" for="lookup-discount-coupon"><?php echo TEXT_DISCOUNT_COUPON_ID; ?></label>
-                <?php echo zen_draw_input_field('lookup_discount_coupon', $_POST['lookup_discount_coupon'] ?? '', 'size="40" id="lookup-discount-coupon" autofocus', 'search');?>
+                <?php echo zen_draw_input_field('lookup_discount_coupon', isset($_POST['lookup_discount_coupon']) ? $_POST['lookup_discount_coupon'] : '', 'size="40" id="lookup-discount-coupon" autofocus', 'search'); ?>
 
                 <div id="lookupDiscountCoupon-btn-toolbar" class="btn-toolbar justify-content-end mt-3" role="toolbar">
 <?php

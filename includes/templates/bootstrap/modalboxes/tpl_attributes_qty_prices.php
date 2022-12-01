@@ -2,17 +2,22 @@
 /**
  * Override Modal for popup_attributes_qty_prices
  * 
- * BOOTSTRAP v3.0.0
+ * BOOTSTRAP v3.4.1
  *
  * @package templateSystem
  * @copyright Copyright 2003-2016 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  */
+// -----
+// Issue a notification, just in case an override is needed.
+//
+$processing_completed = false;
+$zco_notifier->notify('NOTIFY_BOOTSTRAP_ATTRIBUTES_QTY_PRICES', $products_tax_class_id, $processing_completed);
+if ($processing_completed === true) {
+    return;
+}
 ?>
-
-
-<!-- Modal -->
 <div class="modal fade" id="attributesQtyPricesModal" tabindex="-1" role="dialog" aria-labelledby="attributesQtyPricesModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -23,181 +28,189 @@
         </button>
       </div>
       <div class="modal-body">
-
 <?php
-$show_onetime= 'false';
+$show_onetime = 'false';
+
 // attributes_qty_price
-      if (PRODUCTS_OPTIONS_SORT_ORDER=='0') {
-        $options_order_by= ' order by LPAD(popt.products_options_sort_order,11,"0")';
-      } else {
-        $options_order_by= ' order by popt.products_options_name';
-      }
+if (PRODUCTS_OPTIONS_SORT_ORDER == '0') {
+    $options_order_by = ' ORDER BY LPAD(popt.products_options_sort_order,11,"0")';
+} else {
+    $options_order_by = ' ORDER BY popt.products_options_name';
+}
 
-      $sql = "select distinct popt.products_options_id, popt.products_options_name, popt.products_options_sort_order,
-                              popt.products_options_type, popt.products_options_length, popt.products_options_comment, popt.products_options_size
-              from        " . TABLE_PRODUCTS_OPTIONS . " popt, " . TABLE_PRODUCTS_ATTRIBUTES . " patrib
-              where           patrib.products_id='" . (int)$_GET['products_id'] . "'
-              and             patrib.options_id = popt.products_options_id
-              and             popt.language_id = '" . (int)$_SESSION['languages_id'] . "' " .
-              $options_order_by;
+$sql =
+    "SELECT DISTINCT popt.products_options_id, popt.products_options_name, popt.products_options_sort_order,
+                     popt.products_options_type, popt.products_options_length, popt.products_options_comment, popt.products_options_size
+       FROM " . TABLE_PRODUCTS_OPTIONS . " popt, " . TABLE_PRODUCTS_ATTRIBUTES . " patrib
+      WHERE patrib.products_id = " . (int)$_GET['products_id'] . "
+        AND patrib.options_id = popt.products_options_id
+        AND popt.language_id = " . (int)$_SESSION['languages_id'] .
+      $options_order_by;
+$products_options_names_lookup = $db->Execute($sql);
 
-      $products_options_names_lookup = $db->Execute($sql);
+if (PRODUCTS_OPTIONS_SORT_BY_PRICE === '1') {
+    $order_by = ' ORDER BY LPAD(pa.products_options_sort_order,11,"0"), pov.products_options_values_name';
+} else {
+    $order_by = ' ORDER BY LPAD(pa.products_options_sort_order,11,"0"), pa.options_values_price';
+}
+foreach ($products_options_names_lookup as $next_option) {
+    $sql =
+        "SELECT pov.products_options_values_id, pov.products_options_values_name, pa.*
+           FROM " . TABLE_PRODUCTS_ATTRIBUTES . " pa, " . TABLE_PRODUCTS_OPTIONS_VALUES . " pov
+          WHERE pa.products_id = " . (int)$_GET['products_id'] . "
+            AND pa.options_id = " . $next_option['products_options_id'] . "
+            AND pa.options_values_id = pov.products_options_values_id
+            AND pov.language_id = " . (int)$_SESSION['languages_id'] .
+          $order_by;
+    $products_options_lookup = $db->Execute($sql);
 
-      while (!$products_options_names_lookup->EOF) {
+    foreach ($products_options_lookup as $next_option_value) {
+        $cnt_qty_prices = 0;
 
-        if ( PRODUCTS_OPTIONS_SORT_BY_PRICE =='1' ) {
-          $order_by= ' order by LPAD(pa.products_options_sort_order,11,"0"), pov.products_options_values_name';
-        } else {
-          $order_by= ' order by LPAD(pa.products_options_sort_order,11,"0"), pa.options_values_price';
+        // set for attributes_qty_prices_onetime
+        if (!empty($next_option_value['attributes_qty_prices_onetime'])) {
+            $show_onetime = 'true';
         }
 
-        $sql = "select    pov.products_options_values_id,
-                          pov.products_options_values_name,
-                          pa.*
-                from      " . TABLE_PRODUCTS_ATTRIBUTES . " pa, " . TABLE_PRODUCTS_OPTIONS_VALUES . " pov
-                where     pa.products_id = '" . (int)$_GET['products_id'] . "'
-                and       pa.options_id = '" . (int)$products_options_names_lookup->fields['products_options_id'] . "'
-                and       pa.options_values_id = pov.products_options_values_id
-                and       pov.language_id = '" . (int)$_SESSION['languages_id'] . "' " .
-                $order_by;
+        if (!empty($next_option_value['attributes_qty_prices'])) {
+            $attribute_quantity = '';
+            $attribute_quantity_price = '';
+            $attribute_table_cost = preg_split('/[:,]/' , str_replace(' ', '', $next_option_value['attributes_qty_prices']));
 
-        $products_options_lookup = $db->Execute($sql);
+            // -----
+            // An attributes_qty_prices layout is expected to be of the form
+            //
+            // qty:price[,qty:price]...
+            //
+            // If the count of the attribute's cost table is *not* a multiple of 2, then something's awry
+            // with the configuration and a PHP notice is logged.
+            //
+            $size = count($attribute_table_cost);
+            if (($size % 2) !== 0) {
+                trigger_error('Malformed attributes_qty_prices for products_id #' . (int)$_GET['products_id'] . ', attribute id #' . $next_option_value['products_attributes_id'] . ': ' . $next_option_value['attributes_qty_prices'] . '.', E_USER_NOTICE);
+            }
+            for ($i = 0, $n = $size; $i < $n; $i += 2) {
+                // -----
+                // For the last entry, the quantity is ignored and the associated price applies to all
+                // quantities >= the next-to-last entry's quantity.
+                //
+                if (($i + 2) >= $n) {
+                    $zc_disp_qty = $attribute_table_cost[$i - 2] + 1 . '+';
 
-        while (!$products_options_lookup->EOF) {
-          $cnt_qty_prices= 0;
+                // -----
+                // For the first entry, the quantity is either a singular '1' (if that's the quantity indicated) or
+                // a range from '1' to the entry's quantity.  Use a 'lazy' comparison, in case a store uses fractional
+                // quantities!
+                //
+                } elseif ($i === 0) {
+                    $zc_disp_qty = (($attribute_table_cost[$i] == 1) ? '' : '1-') . $attribute_table_cost[$i];
 
-          // set for attributes_qty_prices_onetime
-          if ($products_options_lookup->fields['attributes_qty_prices_onetime'] != '') {
-            $show_onetime= 'true';
-          }
-
-          if ($products_options_lookup->fields['attributes_qty_prices'] != '') {
-            $attribute_quantity= '';
-            $attribute_quantity_price= '';
-            $attribute_table_cost = preg_split("/[:,]/" , $products_options_lookup->fields['attributes_qty_prices']);
-            $size = sizeof($attribute_table_cost);
-            for ($i=0, $n=$size; $i<$n; $i+=2) {
-//                $attribute_quantity .= '<td class="alignCenter">' . (($i <= 1 and $attribute_table_cost[$i] != 1) ? '1-' . $attribute_table_cost[$i] : $attribute_table_cost[$i] . '+') . '</td>';
-                $zc_disp_qty = '';
-                switch (true) {
-                  case ($i+2==$n):
-                    $zc_disp_qty = $attribute_table_cost[$i-2]+1 . '+';
-                    break;
-                  case ($i <= 1 and $attribute_table_cost[$i] == 1):
-                    $zc_disp_qty = '1';
-                    break;
-                  case ($i <= 1 and $attribute_table_cost[$i] != 1):
-                    $zc_disp_qty = '1-' . $attribute_table_cost[$i];
-                    break;
-                  case ($i > 1 and $attribute_table_cost[$i-2]+1 != $attribute_table_cost[$i]):
-                    $zc_disp_qty = $attribute_table_cost[$i-2]+1 . '-' . $attribute_table_cost[$i];
-                    break;
-                  case ($i > 1 and $attribute_table_cost[$i-2]+1 == $attribute_table_cost[$i]):
+                // -----
+                // Otherwise, this is an intermediary entry which will display either as a quantity
+                // range (from the previous entry's quantity +1 to the current entry's quantity) or a singular quantity (if the
+                // previous entry's quantity is specifically 1 less than this entry's quantity).  Again, use a lazy
+                // comparison in case the store uses fractional quantities.
+                //
+                } elseif ($attribute_table_cost[$i - 2] + 1 != $attribute_table_cost[$i]) {
+                    $zc_disp_qty = $attribute_table_cost[$i - 2] + 1 . '-' . $attribute_table_cost[$i];
+                } else {
                     $zc_disp_qty = $attribute_table_cost[$i];
-                    break;
                 }
-//                $attribute_quantity .= '<td class="alignCenter">' . (($i <= 1 and $attribute_table_cost[$i] != 1) ? '1-' . $attribute_table_cost[$i] : $attribute_table_cost[$i-2]+1 . '-' . $attribute_table_cost[$i]) . '</td>';
+
                 $attribute_quantity .= '<td class="text-center">' . $zc_disp_qty . '</td>';
-                $attribute_quantity_price .= '<td class="text-right">' . $currencies->display_price($attribute_table_cost[$i+1], zen_get_tax_rate($_GET['products_tax_class_id'])) . '</td>';
+                $attribute_quantity_price .= '<td class="text-right">' . $currencies->display_price($attribute_table_cost[$i + 1], zen_get_tax_rate($products_tax_class_id)) . '</td>';
                 $cnt_qty_prices++;
             }
-            echo '<div class="table-responsive">'; 
-            echo '<table class="table table-bordered table-striped">';
-            echo '  <tr><td colspan="' . ($cnt_qty_prices + 1) . '">' . $products_options_names_lookup->fields['products_options_name'] . ' ' . $products_options_lookup->fields['products_options_values_name'] . '</td></tr>';
-            echo '  <tr>';
-            echo '    <td>' . TABLE_ATTRIBUTES_QTY_PRICE_QTY . '</td>' . $attribute_quantity;
-            echo '  </tr>';
-            echo '  <tr>';
-            echo '    <td>' . TABLE_ATTRIBUTES_QTY_PRICE_PRICE . '</td>' . $attribute_quantity_price;
-            echo '  </tr>';
-            echo '</table>';
-            echo '</div>';
-          }
-          $products_options_lookup->MoveNext();
-        }
-        $products_options_names_lookup->MoveNext();
-      }
 ?>
-
-
-
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <tr>
+              <td colspan="<?php echo $cnt_qty_prices + 1; ?>">
+                <b><?php echo $next_option['products_options_name']; ?></b>: <em><?php echo $next_option_value['products_options_values_name']; ?></em>
+              </td>
+            </tr>
+            <tr>
+              <td><?php echo TABLE_ATTRIBUTES_QTY_PRICE_QTY; ?></td>
+              <?php echo $attribute_quantity; ?>
+            </tr>
+            <tr>
+              <td><?php echo TABLE_ATTRIBUTES_QTY_PRICE_PRICE; ?></td>
+              <?php echo $attribute_quantity_price; ?>
+            </tr>
+          </table>
+        </div>
 <?php
-  if ($show_onetime == 'true') {
-?>
-
-<h2 class="pageHeading"><?php echo TEXT_ATTRIBUTES_QTY_PRICES_ONETIME_HELP ?></h2>
-
-<?php
-// attributes_qty_price_onetime
-      if (PRODUCTS_OPTIONS_SORT_ORDER=='0') {
-        $options_order_by= ' order by LPAD(popt.products_options_sort_order,11,"0")';
-      } else {
-        $options_order_by= ' order by popt.products_options_name';
-      }
-
-      $sql = "select distinct popt.products_options_id, popt.products_options_name, popt.products_options_sort_order,
-                              popt.products_options_type, popt.products_options_length, popt.products_options_comment, popt.products_options_size
-              from        " . TABLE_PRODUCTS_OPTIONS . " popt, " . TABLE_PRODUCTS_ATTRIBUTES . " patrib
-              where           patrib.products_id='" . (int)$_GET['products_id'] . "'
-              and             patrib.options_id = popt.products_options_id
-              and             popt.language_id = '" . (int)$_SESSION['languages_id'] . "' " .
-              $options_order_by;
-
-      $products_options_names_lookup = $db->Execute($sql);
-
-      while (!$products_options_names_lookup->EOF) {
-
-        if ( PRODUCTS_OPTIONS_SORT_BY_PRICE =='1' ) {
-          $order_by= ' order by LPAD(pa.products_options_sort_order,11,"0"), pov.products_options_values_name';
-        } else {
-          $order_by= ' order by LPAD(pa.products_options_sort_order,11,"0"), pa.options_values_price';
         }
+    }
+}
 
-        $sql = "select    pov.products_options_values_id,
-                          pov.products_options_values_name,
-                          pa.*
-                from      " . TABLE_PRODUCTS_ATTRIBUTES . " pa, " . TABLE_PRODUCTS_OPTIONS_VALUES . " pov
-                where     pa.products_id = '" . (int)$_GET['products_id'] . "'
-                and       pa.options_id = '" . (int)$products_options_names_lookup->fields['products_options_id'] . "'
-                and       pa.options_values_id = pov.products_options_values_id
-                and       pov.language_id = '" . (int)$_SESSION['languages_id'] . "' " .
-                $order_by;
-
+// -----
+// If there is one or more onetime price discount ...
+//
+if ($show_onetime === 'true') {
+?>
+        <h2 class="pageHeading"><?php echo TEXT_ATTRIBUTES_QTY_PRICES_ONETIME_HELP ?></h2>
+<?php
+    foreach ($products_options_names_lookup as $next_option) {
+        $sql =
+            "SELECT pov.products_options_values_id, pov.products_options_values_name, pa.*
+               FROM " . TABLE_PRODUCTS_ATTRIBUTES . " pa, " . TABLE_PRODUCTS_OPTIONS_VALUES . " pov
+              WHERE pa.products_id = " . (int)$_GET['products_id'] . "
+                AND pa.options_id = " . $next_option['products_options_id'] . "
+                AND pa.options_values_id = pov.products_options_values_id
+                AND pov.language_id = " . (int)$_SESSION['languages_id'] .
+              $order_by;
         $products_options_lookup = $db->Execute($sql);
 
-        while (!$products_options_lookup->EOF) {
-          $cnt_qty_prices= 0;
-          if ($products_options_lookup->fields['attributes_qty_prices_onetime'] != '') {
-            $attribute_quantity= '';
-            $attribute_quantity_price= '';
-            $attribute_table_cost = preg_split("/[:,]/" , $products_options_lookup->fields['attributes_qty_prices_onetime']);
-            $size = sizeof($attribute_table_cost);
-            for ($i=0, $n=$size; $i<$n; $i+=2) {
-                $attribute_quantity .= '<td class="text-center">' . $attribute_table_cost[$i] . '</td>';
-//                $attribute_quantity_price .= '<td class="alignRight">' . $attribute_table_cost[$i+1] . '</td>';
-                $attribute_quantity_price .= '<td class="text-right">' . $currencies->display_price($attribute_table_cost[$i+1], zen_get_tax_rate($_GET['products_tax_class_id'])) . '</td>';
-                $cnt_qty_prices++;
-            }
-            echo '<div class="table-responsive">';
-            echo '<table class="table table-bordered table-striped">';
-            echo '  <tr><td colspan="' . ($cnt_qty_prices + 1) . '">' . $products_options_names_lookup->fields['products_options_name'] . ' ' . $products_options_lookup->fields['products_options_values_name'] . '</td></tr>';
-            echo '  <tr>';
-            echo '    <td>' . TABLE_ATTRIBUTES_QTY_PRICE_QTY . '</td>' . $attribute_quantity;
-            echo '  </tr>';
-            echo '  <tr>';
-            echo '    <td>' . TABLE_ATTRIBUTES_QTY_PRICE_PRICE . '</td>' . $attribute_quantity_price;
-            echo '  </tr>';
-            echo '</table>';
-            echo '</div>';
-          }
-          $products_options_lookup->MoveNext();
-        }
-          $products_options_names_lookup->MoveNext();
-      }
+        foreach ($products_options_lookup as $next_option_value) {
+            $cnt_qty_prices = 0;
 
+            if (!empty($next_option_value['attributes_qty_prices_onetime'])) {
+                $attribute_quantity = '';
+                $attribute_quantity_price = '';
+                $attribute_table_cost = preg_split("/[:,]/" , $next_option_value['attributes_qty_prices_onetime']);
+                
+                // -----
+                // An attributes_qty_prices layout is expected to be of the form
+                //
+                // qty:price[,qty:price]...
+                //
+                // If the count of the attribute's cost table is *not* a multiple of 2, then something's awry
+                // with the configuration and a PHP notice is logged.
+                //
+                $size = count($attribute_table_cost);
+                if (($size % 2) !== 0) {
+                    trigger_error('Malformed attributes_qty_prices_onetime for products_id #' . (int)$_GET['products_id'] . ', attribute id #' . $next_option_value['products_attributes_id'] . ': ' . $next_option_value['attributes_qty_prices_onetime'] . '.', E_USER_NOTICE);
+                }
+                for ($i = 0, $n = $size; $i < $n; $i += 2) {
+                    $attribute_quantity .= '<td class="text-center">' . $attribute_table_cost[$i] . '</td>';
+                    $attribute_quantity_price .= '<td class="text-right">' . $currencies->display_price($attribute_table_cost[$i + 1], zen_get_tax_rate($products_tax_class_id)) . '</td>';
+                    $cnt_qty_prices++;
+                }
 ?>
-
-<?php } // show onetime ?>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <tr>
+              <td colspan="<?php echo $cnt_qty_prices + 1; ?>">
+                <b><?php echo $next_option['products_options_name']; ?></b>: <em><?php echo $next_option_value['products_options_values_name']; ?></em>
+              </td>
+            </tr>
+            <tr>
+              <td><?php echo TABLE_ATTRIBUTES_QTY_PRICE_QTY; ?></td>
+              <?php echo $attribute_quantity; ?>
+            </tr>
+            <tr>';
+              <td><?php echo TABLE_ATTRIBUTES_QTY_PRICE_PRICE; ?></td>
+              <?php echo $attribute_quantity_price; ?>
+            </tr>
+          </table>
+        </div>
+<?php
+            }
+        }
+    }
+} // show onetime
+?>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo TEXT_MODAL_CLOSE; ?></button>

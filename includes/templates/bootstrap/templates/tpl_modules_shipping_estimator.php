@@ -2,7 +2,7 @@
 /**
  * Module Template - for shipping-estimator display
  *
- * BOOTSTRAP v3.4.0
+ * BOOTSTRAP v3.4.1
  *
  * @copyright Copyright 2003-2022 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
@@ -73,7 +73,7 @@ if ($_SESSION['cart']->count_contents() !== 0) {
             //
             if (zen_get_zcversion() >= '1.5.8') {
                 $onchange_for_zc158 = ($flag_show_pulldown_states === true) ? ' onchange="update_zone(this.form);"' : '';
-                $state_field_label = $state_field_label ?? '';
+                $state_field_label = isset($state_field_label) ? $state_field_label : '';
             } else {
                 $onchange_for_zc158 = '';
                 $state_field_label = ENTRY_STATE;

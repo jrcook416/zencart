@@ -1,0 +1,23 @@
+/**
+ * Image Carousel Stylesheet
+ * 
+ * BOOTSTRAP v3.0.0
+ *
+ */
+
+.carousel-indicators {
+    position: static;
+    left: initial;
+    width: initial;
+    margin-left: initial;
+}
+
+.carousel-indicators > li {
+    width: initial;
+    height: initial;
+    text-indent: initial;
+}
+
+.carousel-indicators > li.active img {
+    opacity: 0.7;
+}

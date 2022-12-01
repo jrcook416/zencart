@@ -11,21 +11,11 @@ Zen Cart&reg; v1.5.8 is an update with several bugfix patches applied on top of 
 It's free software, with free community-driven support available 24/7 on the Zen Cart&reg; Support Site forums at [zen-cart.com/forum](https://www.zen-cart.com/forum.php)
 
 ---------------------
-Zen Cart&reg; v158-dev-old for Indianapolis EMS Logistics
+Zen Cart&reg; v158-clean for Indianapolis EMS Logistics
 ---------------------
-Zen Cart branch v158-dev-old is an abandoned branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v158 release.  It contains the following modifications:
-1. An initial commit of the v158 stock code as referenced from upstream/v158.
-2. Installation of the ZCA-Bootstrap-Template-3.4.0 plugin.
-3. Removal of the create account tab from the main login page, thereby preventing customers to create their own accounts using self-service options available on the ZCA Bootstrap Template.
-4. Merge of the v158-clean branch into this branch.
-5. Reverting changes to the customers.php file made in v157-dev.
-6. Installation of the Edit Orders 4.6.2 module, whereby I found that using v157 stable modules would be impossible due to programming function changes in PHP8.
-7. Removal of custom IEMS JavaScript files from the administrative directory in an attempt to fix the PHP8 issues and other issues that I found.
-8. Setting the proper time zone override. 
-9. Installation of EasyPopulate 4, at which time active development on this branch was abandoned.
+Zen Cart branch v158-clean is a branch that holds the current, stock work completed on the Zen Cart&reg; v158 release branch.  It contains stock Zen Cart v158 code pulled directly from the main Zen Cart GitHub repository. 
 
-**DO NOT DEVELOP IN THIS BRANCH.**  It remains active in this repository to show the work that was completed and provide a roadmap for further development.
-The project attached to this branch is closed, and all benchmarks on that project will move to the new development branch.
+**DO NOT DEVELOP IN THIS BRANCH.**  It is meant as a holding place for the current v158 code base.
 
 ----------------------
 Compatibility

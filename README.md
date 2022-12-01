@@ -13,7 +13,7 @@ It's free software, with free community-driven support available 24/7 on the Zen
 ---------------------
 Zen Cart&reg; v158-dev-new for Indianapolis EMS Logistics
 ---------------------
-Zen Cart branch v158-dev-old is an abandoned branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v158 release.  It contains the following modifications:
+Zen Cart branch v158-dev-new is an abandoned branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v158 release.  It contains the following modifications:
 1. An initial commit of the v158 stock code as referenced from upstream/v158.
 
 ----------------------

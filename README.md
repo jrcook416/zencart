@@ -11,7 +11,6 @@ Zen Cart&reg; v1.5.8 is an update with several bugfix patches applied on top of 
 It's free software, with free community-driven support available 24/7 on the Zen Cart&reg; Support Site forums at [zen-cart.com/forum](https://www.zen-cart.com/forum.php)
 
 ---------------------
-
 Zen Cart&reg; v158-dev-old for Indianapolis EMS Logistics
 ---------------------
 Zen Cart branch v158-dev-old is an abandoned branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v158 release.  It contains the following modifications:
@@ -29,7 +28,6 @@ Zen Cart branch v158-dev-old is an abandoned branch that holds work completed on
 The project attached to this branch is closed, and all benchmarks on that project will move to the new development branch.
 
 ----------------------
-
 Compatibility
 -------------
 Zen Cart v1.5.8 is designed for:

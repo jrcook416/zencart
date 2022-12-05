@@ -18,6 +18,7 @@ Zen Cart branch v158-dev-new is an abandoned branch that holds work completed on
 2. Updated v158 stock code on 2022-12-01.
 3. [ZCA Bootstrap Template v3.4.1](https://www.zen-cart.com/downloads.php?do=file&id=2191) on 2022-12-01.
 4. [ImageHandler 5](https://www.zen-cart.com/downloads.php?do=file&id=2169) on 2022-12-01.
+5. [One Page Checkout v2.4.4](https://www.zen-cart.com/downloads.php?do=file&id=2095) on 2022-12-01.
 
 ----------------------
 Compatibility

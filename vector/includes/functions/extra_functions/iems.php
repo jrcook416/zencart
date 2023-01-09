@@ -30,7 +30,7 @@
 	$county_values = $db->Execute("select * from iems_counties");
     	while (!$county_values->EOF) {
 			$county_array[] = array(
-			    'id' => $county_values->fields['countyID'],
+			    'id' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName'],
 			    'code' => $county_values->fields['countyCode'],       
 			    'text' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName']);
 			$county_values->MoveNext();
@@ -46,7 +46,7 @@ function agency_lookup() {
 	$agency_values = $db->Execute("select * from iems_agencies");
 		while (!$agency_values->EOF) {
 			$agency_array[] = array(
-			    'id' => $agency_values->fields['masterAgencyID'],
+			    'id' => $agency_values->fields['masterAgency'] . " " . $agency_values->fields['masterAgencyDescription'],
 			    'text' => $agency_values->fields['masterAgency'] . " " . $agency_values->fields['masterAgencyDescription']);
 			$agency_values->MoveNext();
 			};

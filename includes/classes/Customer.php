@@ -464,6 +464,8 @@ class Customer extends base
                        entry_suburb AS suburb, entry_city AS city, entry_postcode AS postcode,
                        entry_state AS state,
                        entry_zone_id AS zone_id,
+					   entry_agency AS agency, 
+					   entry_county AS county,
                        zone_name, zone_code AS zone_iso,
                        entry_country_id AS country_id,
                        countries_name AS country_name,

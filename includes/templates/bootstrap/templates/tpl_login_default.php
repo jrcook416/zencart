@@ -89,7 +89,7 @@ if (USE_SPLIT_LOGIN_MODE === 'True' || $ec_button_enabled) {
     <nav class="pt-3">
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-login-tab" data-toggle="tab" href="#nav-login" role="tab" tabindex="1" aria-controls="nav-home" aria-selected="true"><?php echo HEADING_RETURNING_CUSTOMER; ?></a>
-            <!--<a class="nav-item nav-link" id="nav-create-tab" data-toggle="tab" href="#nav-create" role="tab" tabindex="1" aria-controls="nav-profile" aria-selected="false"><?php /*echo HEADING_NEW_CUSTOMER; */?></a>
+            <a class="nav-item nav-link hidden" id="nav-create-tab" data-toggle="tab" href="#nav-create" role="tab" tabindex="1" aria-controls="nav-profile" aria-selected="false"><?php HEADING_NEW_CUSTOMER;?></a>
         </div>
     </nav>
 

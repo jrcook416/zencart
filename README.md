@@ -19,6 +19,11 @@ Zen Cart branch v158-dev-new is an abandoned branch that holds work completed on
 3. [ZCA Bootstrap Template v3.4.1](https://www.zen-cart.com/downloads.php?do=file&id=2191) on 2022-12-01.
 4. [ImageHandler 5](https://www.zen-cart.com/downloads.php?do=file&id=2169) on 2022-12-01.
 5. [One Page Checkout v2.4.4](https://www.zen-cart.com/downloads.php?do=file&id=2095) on 2022-12-01.
+6. Updated vector/customers.php to handle the addition of county, unit, and agency identifiers to the customer record on 2023-01-09. 
+7. Updated vector/includes/functions/extra_functions/iems.php to handle changes to the agency and county unit identifier query functions on 2023-01-09.
+8. Updated includes/classes/Customer.php on 2023-01-09 to handle custom changes to the Customer class involving the address book on 2023-01-09.
+9. Updated the MySQL schema with the addition of database tables for agency, county, and unit identifiers on 2023-01-10. 
+10. Updated the README.md file with coding changes made between 2022-12-01 to 2023-01-10 on 2023-01-10. 
 
 ----------------------
 Compatibility

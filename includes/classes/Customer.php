@@ -3,6 +3,8 @@
  * @copyright Copyright 2003-2022 Zen Cart Development Team
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: lat9 2022 Jul 26 Modified in v1.5.8-alpha2 $
+ * File Modified for Indianapolis EMS 2023 Jan 09
+ * IEMS EDITED FILE
  */
 
 class Customer extends base
@@ -459,11 +461,18 @@ class Customer extends base
         if (empty($customer_id)) return [];
 
         $sql = "SELECT address_book_id,
-                       entry_firstname AS firstname, entry_lastname AS lastname,
-                       entry_company AS company, entry_street_address AS street_address,
-                       entry_suburb AS suburb, entry_city AS city, entry_postcode AS postcode,
+                       entry_firstname AS firstname, 
+					   entry_lastname AS lastname,
+                       entry_company AS company, 
+					   entry_street_address AS street_address,
+                       entry_suburb AS suburb, 
+					   entry_city AS city, 
+					   entry_postcode AS postcode,
                        entry_state AS state,
                        entry_zone_id AS zone_id,
+					   entry_agency AS agency, 
+					   entry_county AS county,
+					   entry_unit AS unit,
                        zone_name, zone_code AS zone_iso,
                        entry_country_id AS country_id,
                        countries_name AS country_name,

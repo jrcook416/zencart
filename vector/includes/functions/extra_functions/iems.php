@@ -27,10 +27,10 @@
 	global $county_array;
 
 	$county_array = array();
-	$county_values = $db->Execute("select * from master_county");
+	$county_values = $db->Execute("select * from iems_counties");
     	while (!$county_values->EOF) {
 			$county_array[] = array(
-			    'id' => $county_values->fields['countyID'],
+			    'id' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName'],
 			    'code' => $county_values->fields['countyCode'],       
 			    'text' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName']);
 			$county_values->MoveNext();
@@ -38,23 +38,20 @@
 	return $county_array;	
 	} //end county_array
 
-function filtered_agency_lookup($filter) {
+function agency_lookup() {
 	global $db;
 	global $agency_array;
-	global $agency_filter;
 
 	$agency_array = array();
-	$agency_values = $db->Execute("select * from `master_agency` where masterCountyID LIKE '" .  $agency_filter . "' order by masterAgency");
-	    print_r($agency_array);
+	$agency_values = $db->Execute("select * from iems_agencies");
 		while (!$agency_values->EOF) {
 			$agency_array[] = array(
-			    'id' => $agency_values->fields['masterAgencyID'], 
-			    'text' => $agency_values->fields['masterAgency'] . " " .
-			        $agency_values['masterAgencyDescription']);
+			    'id' => $agency_values->fields['masterAgency'] . " " . $agency_values->fields['masterAgencyDescription'],
+			    'text' => $agency_values->fields['masterAgency'] . " " . $agency_values->fields['masterAgencyDescription']);
 			$agency_values->MoveNext();
 			};
 	return $agency_array; 
-	} // end_filtered_agency_lookup
+	} // end_agency_lookup
 
 function filtered_unit_lookup() {
 	global $db;

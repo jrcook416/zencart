@@ -126,6 +126,8 @@ if (!empty($action)) {
             $entry_suburb = !empty($_POST['entry_suburb']) ? zen_db_prepare_input($_POST['entry_suburb']) : '';
             $entry_postcode = zen_db_prepare_input($_POST['entry_postcode']);
             $entry_city = zen_db_prepare_input($_POST['entry_city']);
+			$entry_county = !empty($_POST['entry_county']) ? zen_db_prepare_input($_POST['entry_county']) : '';
+			$entry_agency = !empty($_POST['entry_agency']) ? zen_db_prepare_input($_POST['entry_agency']) : '';
             $entry_country_id = zen_db_prepare_input($_POST['entry_country_id']);
             $entry_company = !empty($_POST['entry_company']) ? zen_db_prepare_input($_POST['entry_company']) : '';
             $entry_state = !empty($_POST['entry_state']) ? zen_db_prepare_input($_POST['entry_state']) : '';
@@ -237,7 +239,7 @@ if (!empty($action)) {
                         'fieldName' => 'customers_referral',
                         'value' => $customers_referral,
                         'type' => 'stringIgnoreNull'
-                    ),
+                    )
                 );
 
                 if (ACCOUNT_GENDER == 'true') {
@@ -289,6 +291,8 @@ if (!empty($action)) {
                     array('fieldName' => 'entry_postcode', 'value' => $entry_postcode, 'type' => 'stringIgnoreNull'),
                     array('fieldName' => 'entry_city', 'value' => $entry_city, 'type' => 'stringIgnoreNull'),
                     array('fieldName' => 'entry_country_id', 'value' => $entry_country_id, 'type' => 'integer'),
+					array('fieldName' => 'entry_agency', 'value' => $entry_agency, 'type' => 'stringIgnoreNull'),
+					array('fieldName' => 'entry_county', 'value' => $entry_county, 'type' => 'stringIgnoreNull')
                 );
 
                 if (ACCOUNT_COMPANY == 'true') {
@@ -711,9 +715,23 @@ if (!empty($action)) {
                     echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?>
                 </div>
                 <div class="row formAreaTitle"><?php
-                    echo CATEGORY_COMPANY; ?></div>
+                    echo 'County and Agency Affiliation' ?></div>
                 <div class="formArea">
-                    <div class="form-group">
+					<div class="form-group">
+                        <?php
+                        echo zen_draw_label('County', 'entry_county', 'class="col-sm-3 control-label"'); ?>
+                        <div class="col-sm-9 col-md-6">
+                            <?php
+							county_lookup();
+							echo zen_draw_pull_down_menu(
+                            'entry_county',
+                            $county_array,
+                            $cInfo->county,
+                            'class="form-control" id="entry_county"'
+                            ); ?>
+                        </div>
+                    </div>
+					<div class="form-group">
                         <?php
                         echo zen_draw_label(ENTRY_COMPANY, 'entry_company', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
@@ -726,6 +744,20 @@ if (!empty($action)) {
                                     'entry_company',
                                     50
                                 ) . ' class="form-control" id="entry_company" minlength="' . ENTRY_COMPANY_MIN_LENGTH . '"'
+                            ); ?>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <?php
+                        echo zen_draw_label('Agency', 'entry_agency', 'class="col-sm-3 control-label"'); ?>
+                        <div class="col-sm-9 col-md-6">
+							<?php
+							agency_lookup();
+							echo zen_draw_pull_down_menu(
+                            'entry_agency',
+                            $agency_array,
+                            $cInfo->agency,
+                            'class="form-control" id="entry_agency"'
                             ); ?>
                         </div>
                     </div>
@@ -766,17 +798,15 @@ if (!empty($action)) {
                     ?>
                     <div class="form-group">
                         <?php
-                        echo zen_draw_label(ENTRY_SUBURB, 'entry_suburb', 'class="col-sm-3 control-label"'); ?>
+                        echo zen_draw_label('THIS WILL BE UNIT', 'entry_suburb', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php
-                            echo zen_draw_input_field(
-                                'entry_suburb',
-                                htmlspecialchars($cInfo->suburb, ENT_COMPAT, CHARSET, true),
-                                zen_set_field_length(
-                                    TABLE_ADDRESS_BOOK,
-                                    'entry_suburb',
-                                    50
-                                ) . ' class="form-control" id="entry_suburb"'
+							<?php
+							agency_lookup();
+							echo zen_draw_pull_down_menu(
+                            'entry_suburb',
+                            $agency_array,
+                            $cInfo->suburb,
+                            'class="form-control" id="entry_suburb"'
                             ); ?>
                         </div>
                     </div>

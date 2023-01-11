@@ -665,9 +665,9 @@ class editOrders extends base
     public function eoGetOrderTotalSortOrder($order_total_code)
     {
         $sort_order = false;
-        $module_file = $order_total_code . '.php';
         
-        $lang_file = zen_get_file_directory(DIR_FS_CATALOG . DIR_WS_LANGUAGES . $_SESSION['language'] . '/modules/order_total/', $module_file, 'false');
+        $lang_file = DIR_FS_CATALOG . DIR_WS_LANGUAGES . $_SESSION['language'] . '/modules/order_total/lang.' . $order_total_code . '.php';
+		//print $lang_file;
         if (@file_exists($lang_file)) {
             include_once $lang_file;
         }

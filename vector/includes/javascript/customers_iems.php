@@ -21,15 +21,58 @@ $(document).ready(function() {
 		<?php agency_lookup();?>
 		var data = <?php echo json_encode($agency_array, JSON_UNESCAPED_SLASHES); ?>;
 		var county = $("#entry_county option:selected").val();
+		alert("You have selected county code " + county);
 		var agFilter = data.filter((data) => data.masterCountyID === county);
-		var html = '';
+		var html = '<option value="">Please Make a Selection</option>';
         	for(var count = 0; count < agFilter.length; count++)
         	{
-        		html += '<option value="'+agFilter[count].text+'">'+agFilter[count].text+'</option>';
+        		html += '<option value="'+agFilter[count].id+'">'+agFilter[count].text+'</option>';
 		}; //end for
-		$('#entry_agency').selectpicker('empty')
+		$('#entry_agency').empty();
 		$('#entry_agency').append(html);
+		$('#entry_agency').prop('disabled',false);
 		$('#entry_agency').selectpicker('refresh');
+		alert("Please select an agency.");
+	});//end document on change
+	$(document).on('change', '#entry_agency', function(){
+		<?php unit_lookup();?>
+		var data = <?php echo json_encode($unit_array, JSON_UNESCAPED_SLASHES); ?>;
+		var agency = $("#entry_agency option:selected").val();
+		alert("You have selected agency code " + agency);
+		var agFilter = data.filter((data) => data.masterAgencyID === agency);
+		var html = '<option value="">Please Make a Selection</option>';
+        	for(var count = 0; count < agFilter.length; count++)
+        	{
+        		html += '<option value="'+agFilter[count].id+'">'+agFilter[count].text+'</option>';
+		}; //end for
+		$('#entry_unit').empty();
+		$('#entry_unit').append(html);
+		$('#entry_unit').prop('disabled',false);
+		$('#entry_unit').selectpicker('refresh');
+		alert("Select an Ordering Unit.");
+	});//end document on change
+	$(document).on('click', '#updateAgency', function(){
+		<?php agency_lookup();?>
+		var agency = $("#entry_agency option:selected").val();
+		var data = <?php echo json_encode($agency_array, JSON_UNESCAPED_SLASHES); ?>;
+		var ag2Filter = data.filter((data) => data.id == agency);
+			for(var count = 0; count < ag2Filter.length; count++)
+			{
+        	var text = ag2Filter[count].masterCountyID + " " + ag2Filter[count].masterAgency;
+			}; //end for
+		$('#entry_company').empty();
+		$('#entry_company').val(text);
+	});//end document on change
+	$(document).on('click', '#resetAffiliations', function(){
+		alert("Clearing the customer's affiliations from the database...");
+		$('#entry_county').val('default');
+		$('#entry_county').selectpicker('refresh');
+		$('#entry_agency').val('default');
+		$('#entry_agency').selectpicker('refresh');
+		$('#entry_unit').val('default');
+		$('#entry_unit').selectpicker('refresh');
+		$('#entry_company').empty();
+		alert("Select a County...");
 	});//end document on change
 });
 </script>

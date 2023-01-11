@@ -128,6 +128,7 @@ if (!empty($action)) {
             $entry_city = zen_db_prepare_input($_POST['entry_city']);
 			$entry_county = !empty($_POST['entry_county']) ? zen_db_prepare_input($_POST['entry_county']) : '';
 			$entry_agency = !empty($_POST['entry_agency']) ? zen_db_prepare_input($_POST['entry_agency']) : '';
+			$entry_unit = !empty($_POST['entry_unit']) ? zen_db_prepare_input($_POST['entry_unit']) : '';
             $entry_country_id = zen_db_prepare_input($_POST['entry_country_id']);
             $entry_company = !empty($_POST['entry_company']) ? zen_db_prepare_input($_POST['entry_company']) : '';
             $entry_state = !empty($_POST['entry_state']) ? zen_db_prepare_input($_POST['entry_state']) : '';
@@ -291,8 +292,9 @@ if (!empty($action)) {
                     array('fieldName' => 'entry_postcode', 'value' => $entry_postcode, 'type' => 'stringIgnoreNull'),
                     array('fieldName' => 'entry_city', 'value' => $entry_city, 'type' => 'stringIgnoreNull'),
                     array('fieldName' => 'entry_country_id', 'value' => $entry_country_id, 'type' => 'integer'),
-					array('fieldName' => 'entry_agency', 'value' => $entry_agency, 'type' => 'stringIgnoreNull'),
-					array('fieldName' => 'entry_county', 'value' => $entry_county, 'type' => 'stringIgnoreNull')
+		    array('fieldName' => 'entry_agency', 'value' => $entry_agency, 'type' => 'integer'),
+		    array('fieldName' => 'entry_county', 'value' => $entry_county, 'type' => 'integer'),
+		    array('fieldName' => 'entry_unit', 'value' => $entry_unit, 'type' => 'integer')
                 );
 
                 if (ACCOUNT_COMPANY == 'true') {
@@ -723,11 +725,39 @@ if (!empty($action)) {
                         <div class="col-sm-9 col-md-6">
                             <?php
 							county_lookup();
-							echo zen_draw_pull_down_menu(
+							echo iems_pull_down_menu(
                             'entry_county',
                             $county_array,
                             $cInfo->county,
                             'class="form-control" id="entry_county"'
+                            ); ?>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <?php
+                        echo zen_draw_label('Agency', 'entry_agency', 'class="col-sm-3 control-label"'); ?>
+                        <div class="col-sm-9 col-md-6">
+							<?php
+							agency_lookup();
+							echo iems_pull_down_menu(
+                            'entry_agency',
+                            $agency_array,
+                            $cInfo->agency,
+                            'class="form-control" id="entry_agency" disabled'
+                            ); ?>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <?php
+                        echo zen_draw_label('Unit', 'entry_unit', 'class="col-sm-3 control-label"'); ?>
+                        <div class="col-sm-9 col-md-6">
+							<?php
+							unit_lookup();
+							echo iems_pull_down_menu(
+                            'entry_unit',
+                            $unit_array,
+                            $cInfo->unit,
+                            'class="form-control" id="entry_unit" disabled'
                             ); ?>
                         </div>
                     </div>
@@ -743,22 +773,12 @@ if (!empty($action)) {
                                     TABLE_ADDRESS_BOOK,
                                     'entry_company',
                                     50
-                                ) . ' class="form-control" id="entry_company" minlength="' . ENTRY_COMPANY_MIN_LENGTH . '"'
+                                ) . ' class="form-control" id="entry_company" minlength="' . ENTRY_COMPANY_MIN_LENGTH . '"readonly'
                             ); ?>
-                        </div>
-                    </div>
-					<div class="form-group">
-                        <?php
-                        echo zen_draw_label('Agency', 'entry_agency', 'class="col-sm-3 control-label"'); ?>
-                        <div class="col-sm-9 col-md-6">
-							<?php
-							agency_lookup();
-							echo zen_draw_pull_down_menu(
-                            'entry_agency',
-                            $agency_array,
-                            $cInfo->agency,
-                            'class="form-control" id="entry_agency"'
-                            ); ?>
+							<!--IEMS EDITED CODE-->
+							<br><br><button type="button" class="btn btn-primary btn-lrg" id ="updateAgency">Update this Customer's Company Identifier</button>
+							<button type="button" class="btn btn-primary btn-lrg" id ="resetAffiliations">Reset this Customer's Affiliations</button>
+							<!--IEMS EDITED CODE-->
                         </div>
                     </div>
                 </div>
@@ -798,17 +818,24 @@ if (!empty($action)) {
                     ?>
                     <div class="form-group">
                         <?php
-                        echo zen_draw_label('THIS WILL BE UNIT', 'entry_suburb', 'class="col-sm-3 control-label"'); ?>
-                        <div class="col-sm-9 col-md-6">
+                        echo zen_draw_label(ENTRY_SUBURB, 'entry_suburb', 'class="col-sm-3 control-label"'); ?>
+							<div class="col-sm-9 col-md-6">
 							<?php
-							agency_lookup();
-							echo zen_draw_pull_down_menu(
-                            'entry_suburb',
-                            $agency_array,
-                            $cInfo->suburb,
-                            'class="form-control" id="entry_suburb"'
-                            ); ?>
-                        </div>
+							echo zen_draw_input_field(
+								'entry_suburb',
+								htmlspecialchars(
+									$cInfo->entry_suburb,
+									ENT_COMPAT,
+									CHARSET,
+									true
+								),
+								zen_set_field_length(
+									TABLE_ADDRESS_BOOK,
+									'entry_suburb',
+									50
+								) . ' class="form-control" id="entry_suburb"'
+							); ?>
+						</div>
                     </div>
                     <?php
                 }

@@ -30,8 +30,10 @@
 	$county_values = $db->Execute("select * from iems_counties");
     	while (!$county_values->EOF) {
 			$county_array[] = array(
-			    'id' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName'],
-			    'code' => $county_values->fields['countyCode'],       
+			    'id' => $county_values->fields['countyID'],
+			    'countyID' => $county_values->fields['countyID'],
+			    'countyCode' => $county_values->fields['countyCode'],
+			    'countyName' => $county_values->fields['countyName'],       
 			    'text' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName']);
 			$county_values->MoveNext();
 			};
@@ -46,23 +48,30 @@ function agency_lookup() {
 	$agency_values = $db->Execute("select * from iems_agencies");
 		while (!$agency_values->EOF) {
 			$agency_array[] = array(
-			    'id' => $agency_values->fields['masterAgency'] . " " . $agency_values->fields['masterAgencyDescription'],
+			    'id' => $agency_values->fields['masterAgencyID'],
+				'masterAgency' => $agency_values->fields['masterAgency'],
+				'masterCountyID' => $agency_values->fields['masterCountyID'],
+				'masterAgencyDescription' => $agency_values->fields['masterAgencyDescription'],
 			    'text' => $agency_values->fields['masterAgency'] . " " . $agency_values->fields['masterAgencyDescription']);
 			$agency_values->MoveNext();
 			};
 	return $agency_array; 
 	} // end_agency_lookup
 
-function filtered_unit_lookup() {
+function unit_lookup() {
 	global $db;
 	global $unit_array;
-	global $unit_filter;
 
 	$unit_array = array();
-	$unit_values = $db->Execute("select * from `master_unit` where masterAgencyID LIKE '" . $unit_filter . "' order by masterUnitDescription");
+	$unit_values = $db->Execute("select * from iems_units");
 		while (!$unit_values->EOF) {
-			$unit_array[] = array(	'id' => $unit_values->fields['masterUnitID'],
-									'text' => $unit_values->fields['masterUnitDescription']);
+			$unit_array[] = array(
+					'id' => $unit_values->fields['masterUnitID'],
+					'masterCountyID' => $unit_values->fields['masterCountyID'], 
+					'masterAgencyID' => $unit_values->fields['masterAgencyID'],
+					'masterAgency' => $unit_values->fields['masterAgency'],
+					'masterUnitDescription' => $unit_values->fields['masterUnitDescription'], 
+					'text' => $unit_values->fields['masterAgency'] . " " . $unit_values->fields['masterUnitDescription']);
 			$unit_values->MoveNext();
 			}; //end while
 	return $unit_array; 
@@ -117,7 +126,7 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   if (empty($default) && isset($GLOBALS[$name]) && is_string($GLOBALS[$name])) {
     $default = stripslashes($GLOBALS[$name]);
   }
-
+  $field .= '<option value="">Please Select an Option</option>';
   foreach ($values as $value) {
     $field .= '  <option value="' . zen_output_string($value['id']) . '"';
     if ($default == $value['id']) {

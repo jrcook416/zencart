@@ -354,7 +354,7 @@ if (isset($_POST['update_total'])) {
     foreach ($_POST['update_total'] as $order_total) {
         $order_total['value'] = floatval($order_total['value']);
         $order_total['text'] = $eo->eoFormatCurrencyValue($order_total['value']);
-        $order_total['sort_order'] = $eo->eoGetOrderTotalSortOrder($order_total['code']);
+        //$order_total['sort_order'] = $eo->eoGetOrderTotalSortOrder($order_total['code']);
 
         // TODO Special processing for some modules
         if (zen_not_null($order_total['title']) && $order_total['title'] != ':') {

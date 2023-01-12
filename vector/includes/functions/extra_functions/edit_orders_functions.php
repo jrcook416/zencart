@@ -90,7 +90,6 @@ if(!function_exists('zen_get_country_list')) {
             $countries_array[] = ['id' => $val, 'text' => zen_get_country_name($val)];
         }
         // now add anything not in the defaults list:
-		/*
         foreach ($countries as $country) {
             $alreadyInList = false;
             foreach ($countriesAtTopOfList as $key => $val) {
@@ -104,7 +103,6 @@ if(!function_exists('zen_get_country_list')) {
                 $countries_array[] = $country;
             }
         }
-		*/
         return zen_draw_pull_down_menu($name, $countries_array, $selected, $parameters);
     }
 }
@@ -295,55 +293,6 @@ if (!function_exists('zen_get_multiple_tax_rates')) {
         return $rates_array;
     }
 }
-/*
-if (function_exists ('zen_get_tax_locations')) {
-    trigger_error ('Pre-existing zen_get_tax_locations function detected.', E_USER_ERROR);
-    exit ();
-} else {
-    function zen_get_tax_locations($store_country = -1, $store_zone = -1) {
-        global $order;
-        if (STORE_PRODUCT_TAX_BASIS == 'Store') {
-            $GLOBALS['customer_country_id'] = STORE_COUNTRY;
-            $GLOBALS['customer_zone_id'] = STORE_ZONE;
-        } else {
-            $_SESSION['customer_id'] = $order->customer['id'];
-
-            if (STORE_PRODUCT_TAX_BASIS == 'Shipping') {
-                global $eo;
-                if ($eo->eoOrderIsVirtual ($GLOBALS['order'])) {
-                    if (is_array ($GLOBALS['order']->billing['country'])) {
-                        $GLOBALS['customer_country_id'] = $GLOBALS['order']->billing['country']['id'];
-                    } else {
-                        $GLOBALS['customer_country_id'] = zen_get_country_id ($GLOBALS['order']->billing['country']);
-                    }
-                    $GLOBALS['customer_zone_id'] = zen_get_zone_id ($GLOBALS['customer_country_id'], $GLOBALS['order']->billing['state']);
-                } else {
-                    if (is_array ($GLOBALS['order']->delivery['country'])) {
-                        $GLOBALS['customer_country_id'] = $GLOBALS['order']->delivery['country']['id'];
-                    } else {
-                        $GLOBALS['customer_country_id'] = zen_get_country_id ($GLOBALS['order']->delivery['country']);
-                    }
-                    $GLOBALS['customer_zone_id'] = zen_get_zone_id ($GLOBALS['customer_country_id'], $GLOBALS['order']->delivery['state']);
-                }
-            } elseif (STORE_PRODUCT_TAX_BASIS == 'Billing') {
-                if (is_array ($GLOBALS['order']->billing['country'])) {
-                    $GLOBALS['customer_country_id'] = $GLOBALS['order']->billing['country']['id'];
-                } else {
-                    $GLOBALS['customer_country_id'] = zen_get_country_id ($GLOBALS['order']->billing['country']);
-                }
-                $GLOBALS['customer_zone_id'] = zen_get_zone_id ($GLOBALS['customer_country_id'], $GLOBALS['order']->billing['state']);
-            }
-        }
-        $_SESSION['customer_country_id'] = $GLOBALS['customer_country_id'];
-        $_SESSION['customer_zone_id'] = $GLOBALS['customer_zone_id'];
-        
-        return [
-            'zone_id' => $GLOBALS['customer_zone_id'],
-            'country_id' => $GLOBALS['customer_country_id']
-        ];
-    }
-}
-*/
 if (!function_exists('is_product_valid')) {
     function is_product_valid($product_id, $coupon_id) {
         global $db;

@@ -33,7 +33,7 @@ class order_total extends base {
         $lang_file = null;
         $module_file = DIR_WS_MODULES . 'order_total/' . $value;
         if (IS_ADMIN_FLAG === true) {
-          $lang_file = zen_get_file_directory(DIR_FS_CATALOG . DIR_WS_LANGUAGES . $_SESSION['language'] . '/modules/order_total/', $value, 'false');
+          $lang_file = zen_get_file_directory(DIR_FS_CATALOG . DIR_WS_LANGUAGES . $_SESSION['language'] . '/modules/order_total/', $value, 'false'); 
           $module_file = DIR_FS_CATALOG . $module_file;
         } else {
           $lang_file = zen_get_file_directory(DIR_WS_LANGUAGES . $_SESSION['language'] . '/modules/order_total/', $value, 'false');

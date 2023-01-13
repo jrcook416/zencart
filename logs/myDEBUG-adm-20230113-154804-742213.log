@@ -1,0 +1,12 @@
+[13-Jan-2023 15:48:04 America/Indianapolis] PHP Fatal error:  Uncaught Error: Undefined constant "ICON_ORDER_EDIT" in /var/www/html/zencart/vector/orders.php:1849
+Stack trace:
+#0 /var/www/html/zencart/vector/index.php(11): require()
+#1 {main}
+  thrown in /var/www/html/zencart/vector/orders.php on line 1849
+
+[13-Jan-2023 15:48:04 America/Indianapolis] Request URI: /zencart/vector/index.php?cmd=orders, IP address: ::1
+--> PHP Fatal error: Uncaught Error: Undefined constant "ICON_ORDER_EDIT" in /var/www/html/zencart/vector/orders.php:1849
+Stack trace:
+#0 /var/www/html/zencart/vector/index.php(11): require()
+#1 {main}
+  thrown in /var/www/html/zencart/vector/orders.php on line 1849.

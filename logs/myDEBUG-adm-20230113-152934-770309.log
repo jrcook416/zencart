@@ -1,0 +1,4 @@
+[13-Jan-2023 15:29:34 America/Indianapolis] PHP Parse error:  Unmatched '}' in /var/www/html/zencart/vector/orders.php on line 2066
+
+[13-Jan-2023 15:29:34 America/Indianapolis] Request URI: /zencart/vector/index.php?cmd=orders, IP address: ::1
+--> PHP Parse error: Unmatched '}' in /var/www/html/zencart/vector/orders.php on line 2066.

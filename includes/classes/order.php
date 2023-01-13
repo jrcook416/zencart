@@ -146,6 +146,22 @@ class order extends base
         $this->products = [];
         $this->customer = [];
         $this->delivery = [];
+	$this->billing = []; 
+	$this->content_type = []; 
+	$this->email_low_stock = []; 
+	$this->products_ordered_attributes = [];
+      	$this->products_ordered = []; 
+	$this->products_ordered_email = []; 
+	$this->products_ordered_html = [];
+	$this->attachArray = [];
+	$this->email_order_message = [];
+	$this->extra_header_text = [];
+      	$this->doStockDecrement = [];
+	$this->send_low_stock_emails = []; 
+	$this->queryReturnFlag = []; 
+	$this->bestSellersUpdate = []; 
+	$this->use_external_tax_handler_only = [];
+   	$this->products_ordered_attributes_html = [];
 
         $this->notify('NOTIFY_ORDER_INSTANTIATE', [], $order_id);
         if (!empty($order_id)) {

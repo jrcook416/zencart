@@ -7,6 +7,10 @@
 */
 
 $define = [
+    'ICON_PREVIEW' => 'Customer Preview',
+    'MINI_ICON_INFO' => 'Edit Customer',
+    'MINI_ICON_ORDERS' => 'View Orders',
+    'ICON_ORDER_EDIT' => 'Edit Order',
     'HEADING_TITLE' => 'Orders',
     'HEADING_TITLE_DETAILS' => 'Order Details (#%u)',
     'HEADING_TITLE_SEARCH' => 'Order ID:',

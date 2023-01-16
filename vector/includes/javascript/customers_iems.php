@@ -30,7 +30,7 @@ $(document).ready(function() {
 		}; //end for
 		$('#entry_agency').empty();
 		$('#entry_agency').append(html);
-		$('#entry_agency').prop('disabled',false);
+		$('#entry_agency').prop('readonly',false);
 		$('#entry_agency').selectpicker('refresh');
 		alert("Please select an agency.");
 	});//end document on change
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		}; //end for
 		$('#entry_unit').empty();
 		$('#entry_unit').append(html);
-		$('#entry_unit').prop('disabled',false);
+		$('#entry_unit').prop('readonly',false);
 		$('#entry_unit').selectpicker('refresh');
 		alert("Select an Ordering Unit.");
 	});//end document on change

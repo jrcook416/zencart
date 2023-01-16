@@ -1,16 +1,56 @@
 <?php
 /**
- * @copyright Copyright 2003-2022 Zen Cart Development Team
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Scott C Wilson 2022 Jan 11 New in v1.5.8-alpha $
-*/
-
+ * @version $Id: Steve 2020 May 27 Modified in v1.5.7 $
+ */
 $define = [
-    'ENTRY_CUSTOMER' => 'CUSTOMER:',
-    'ENTRY_PAYMENT_METHOD' => 'Payment Method:',
-    'ENTRY_SHIPPING' => 'Shipping:',
-    'TEXT_INFO_ATTRIBUTE_FREE' => '&nbsp;-&nbsp;FREE',
-];
+'TABLE_HEADING_COMMENTS' =>  'Comments',
+'TABLE_HEADING_CUSTOMER_NOTIFIED' =>  'Customer Notified',
+'TABLE_HEADING_DATE_ADDED' =>  'Date Added',
+'TABLE_HEADING_STATUS' =>  'Status',
 
+'TABLE_HEADING_PRODUCTS' =>  'Products',
+'TABLE_HEADING_TAX' =>  'Tax',
+'TABLE_HEADING_TOTAL' =>  'Total',
+'TABLE_HEADING_PRICE_EXCLUDING_TAX' =>  'Price (ex)',
+'TABLE_HEADING_PRICE_INCLUDING_TAX' =>  'Price (inc)',
+'TABLE_HEADING_TOTAL_EXCLUDING_TAX' =>  'Total (ex)',
+'TABLE_HEADING_TOTAL_INCLUDING_TAX' =>  'Total (inc)',
+'TABLE_HEADING_PRICE' =>  'Price',
+'ENTRY_CUSTOMER' =>  'CUSTOMER:',
+
+'ENTRY_SOLD_TO' =>  'SOLD TO:',
+'ENTRY_SHIP_TO' =>  'SHIP TO:',
+'ENTRY_PAYMENT_METHOD' =>  'Payment Method:',
+'ENTRY_SHIPPING' =>  'Shipping:',
+'ENTRY_DATE_PURCHASED' =>  'Date Ordered:',
+
+'ENTRY_ORDER_ID' => 'Order No. ',
+'TEXT_INFO_ATTRIBUTE_FREE' =>  '&nbsp;-&nbsp;FREE',
+
+/* Super Order defines */
+'HEADER_INVOICE' =>  'Invoice - Order #',
+'HEADER_INVOICES' =>  'Invoices',
+'HEADER_TAX_ID' =>  'Tax ID #',
+'HEADER_PHONE' =>  'Phone:',
+'HEADER_FAX' =>  'Fax:',
+'HEADER_CUSTOMER_NOTES' =>  'Order Notes:',
+'HEADER_PO_NUMBER' =>  'P.O. Number:',
+'HEADER_PO_INVOICE_DATE' =>  'Invoice Date:',
+'HEADER_PO_TERMS' =>  'Terms:',
+'HEADER_PO_TERMS_LENGTH' =>  '30 Days',
+'TABLE_HEADING_PRICE_NO_TAX' =>  'Unit Price',
+'TABLE_HEADING_TOTAL_NO_TAX' =>  'Total',
+'ENTRY_BILL_TO' =>  'BILL TO:',
+'ENTRY_PO_INFO' =>  'P.O. DETAILS',
+'ENTRY_NO_TAX' =>  'Tax Exempt',
+'ENTRY_PAYMENT_METHOD' =>  'Payment Method:',
+'ENTRY_AMOUNT_APPLIED_CUST' =>  'Amount Applied:',
+'ENTRY_BALANCE_DUE_CUST' =>  'Balance Due:',
+'ENTRY_AMOUNT_APPLIED_SHOP' =>  'Amount Applied: (Default Store Currency)',
+'ENTRY_BALANCE_DUE_SHOP' =>  'Balance Due: (Default Store Currency)',
+
+];
 return $define;

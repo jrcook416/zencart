@@ -743,7 +743,7 @@ if (!empty($action)) {
                             'entry_agency',
                             $agency_array,
                             $cInfo->agency,
-                            'class="form-control" id="entry_agency" disabled'
+                            'class="form-control" id="entry_agency" readonly'
                             ); ?>
                         </div>
                     </div>
@@ -757,7 +757,7 @@ if (!empty($action)) {
                             'entry_unit',
                             $unit_array,
                             $cInfo->unit,
-                            'class="form-control" id="entry_unit" disabled'
+                            'class="form-control" id="entry_unit" readonly'
                             ); ?>
                         </div>
                     </div>

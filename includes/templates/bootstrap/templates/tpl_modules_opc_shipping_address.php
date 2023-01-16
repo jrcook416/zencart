@@ -9,13 +9,13 @@
 // Display shipping-address information **only if** the order contains at least one physical product (i.e. it's not virtual).
 //
 if ($is_virtual_order === true) {
-    echo zen_draw_checkbox_field('shipping_billing', '1', false, 'id="shipping_billing" style="display: none;"');
+    echo zen_draw_checkbox_field('shipping_billing', '1', true, 'id="shipping_billing" style="display: none;" disabled');
 } else {
     if (CHECKOUT_ONE_ENABLE_SHIPPING_BILLING === 'false') {
-        echo zen_draw_checkbox_field('shipping_billing', '1', false, 'id="shipping_billing" style="display: none;"');
+        echo zen_draw_checkbox_field('shipping_billing', '1', true, 'id="shipping_billing" style="display: none;" disabled');
     } else {
 ?>
-<div id="checkoutOneShippingFlag" class="custom-control custom-checkbox mb-3" style="display: none;"><?php echo  zen_draw_checkbox_field('shipping_billing', '1', $shipping_billing, 'id="shipping_billing"');?>
+<div id="checkoutOneShippingFlag" class="custom-control custom-checkbox mb-3" style="display: none;"><?php echo  zen_draw_checkbox_field('shipping_billing', '1', $shipping_billing, 'id="shipping_billing" disabled');?>
     <label class="custom-control-label checkboxLabel" for="shipping_billing"><?php echo TEXT_USE_BILLING_FOR_SHIPPING; ?></label>
 </div>
 <?php

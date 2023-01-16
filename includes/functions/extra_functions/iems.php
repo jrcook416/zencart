@@ -6,92 +6,95 @@
  * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
  * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
  * copied to each of those directories and maintained within Git version control.
+ * For the sake of argument, this is the /includes/functions/extra_functions version of this file.
  * All code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
  * IEMS documentation.
  * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
  * 
  *
- * @package	IEMSCustomFiles
+ * @package		IEMSCustomFiles
  * @subpackage	Vector
  * @category	Indianapolis EMS custom code
- * @link   	<https://www.iemssupply.net>
+ * @link   		<https://www.iemssupply.net>
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
  * @version 	Jeremiah Cook 2022-09-20, modified for ZC v1.5.7d
  */
-/**
- * Queries the unit table in the database and returns an array of units.
- *
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- *
- * @return 	mixed An associative array ($unit_array) holding unit descriptions and unit filters.
- * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $unit_array - the associative array that we will load the unit list into.
- * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table.
- */
+
+ function county_lookup() {
+	global $db;
+	global $county_array;
+
+	$county_array = array();
+	$county_values = $db->Execute("select * from iems_counties");
+    	while (!$county_values->EOF) {
+			$county_array[] = array(
+			    'id' => $county_values->fields['countyID'],
+			    'countyID' => $county_values->fields['countyID'],
+			    'countyCode' => $county_values->fields['countyCode'],
+			    'countyName' => $county_values->fields['countyName'],       
+			    'text' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName']);
+			$county_values->MoveNext();
+			};
+	return $county_array;	
+	} //end county_array
+
+function agency_lookup() {
+	global $db;
+	global $agency_array;
+
+	$agency_array = array();
+	$agency_values = $db->Execute("select * from iems_agencies");
+		while (!$agency_values->EOF) {
+			$agency_array[] = array(
+			    'id' => $agency_values->fields['masterAgencyID'],
+				'masterAgency' => $agency_values->fields['masterAgency'],
+				'masterCountyID' => $agency_values->fields['masterCountyID'],
+				'masterAgencyDescription' => $agency_values->fields['masterAgencyDescription'],
+			    'text' => $agency_values->fields['masterAgency'] . " " . $agency_values->fields['masterAgencyDescription']);
+			$agency_values->MoveNext();
+			};
+	return $agency_array; 
+	} // end_agency_lookup
+
 function unit_lookup() {
 	global $db;
 	global $unit_array;
 
 	$unit_array = array();
-	$unit_values = $db->Execute("select * from `units`");
+	$unit_values = $db->Execute("select * from iems_units");
 		while (!$unit_values->EOF) {
-			$unit_array[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit'], 'agency_filter' => $unit_values->fields['unit_filter']);
+			$unit_array[] = array(
+					'id' => $unit_values->fields['masterUnitID'],
+					'masterCountyID' => $unit_values->fields['masterCountyID'], 
+					'masterAgencyID' => $unit_values->fields['masterAgencyID'],
+					'masterAgency' => $unit_values->fields['masterAgency'],
+					'masterUnitDescription' => $unit_values->fields['masterUnitDescription'], 
+					'text' => $unit_values->fields['masterAgency'] . " " . $unit_values->fields['masterUnitDescription']);
 			$unit_values->MoveNext();
 			}; //end while
 	return $unit_array; 
 	} //end unit_lookup
 
-/**
- * Queries the unit table in the database and returns an array of units, filtered by the parameter $filter.
- *
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- *
- * @return 	mixed An associative array ($filtered_units) holding unit descriptions and unit filters.
- * @param  	string $filter - used to pass the selected agency to the function.  
- * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $filtered_units - the associative array that we will load the unit list into.
- * @var		string $unit_values - the string that holds the MySQL query to pull all columns from the `units` table, filtered by the parameter $filter.
- */
-function filtered_unit_array($filter) {
+function filtered_unit_lookup($filter) {
 	global $db;
-	global $filtered_units;
-	global $filter;
+	global $unit_array;
 
-	$filtered_units = array();
-	$unit_values = $db->Execute("select unit from `units` where unit_filter LIKE '" .  $filter . "' order by unit");
-
+	$unit_array = array();
+	$unit_values = $db->Execute("select * from iems_units where masterAgencyID = '" . $filter. "' order by masterUnitDescription");
 		while (!$unit_values->EOF) {
-			$filtered_units[] = array('id' => $unit_values->fields['unit'], 'text' => $unit_values->fields['unit']);
+			$unit_array[] = array(
+					'id' => $unit_values->fields['masterUnitID'],
+					'masterCountyID' => $unit_values->fields['masterCountyID'], 
+					'masterAgencyID' => $unit_values->fields['masterAgencyID'],
+					'masterAgency' => $unit_values->fields['masterAgency'],
+					'masterUnitDescription' => $unit_values->fields['masterUnitDescription'], 
+					'text' => $unit_values->fields['masterAgency'] . " " . $unit_values->fields['masterUnitDescription']);
 			$unit_values->MoveNext();
-			};
-	return $filtered_units; 
-	} // end_filtered_unit_array
-	
-/**
- * Queries the unit table in the database and returns an array of distinct agency values.
- *
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- *
- * @return 	mixed An associative array ($company_array) holding distinct entries in the unit table in `unit_filter`.
- * @var		array $db - the database specified in /vector/includes/configure.php
- * @var		array $company_array - the associative array that we will load the unit filter (agency) list into.
- * @var		string $company_values - the string that holds the MySQL query to pull all distinct agency names from the `units` table.
- */
-function company_lookup() {
-	global $db;
-	global $company_array;
-
-	$company_array = array();
-	$company_values = $db->Execute("select distinct agency from `units` ");
-
-		while (!$company_values->EOF) {
-			$company_array[] = array('id' => $company_values->fields['agency'], 'text' => $company_values->fields['agency']);
-			$company_values->MoveNext();
-			};
-	return $company_array; 
-	} //end company_array
+			}; //end while
+	return $unit_array; 
+	} //end unit_lookup
 
   /**
  *  Output a form pull down menu
@@ -129,7 +132,7 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   if (strpos($parameters, 'id=') === false) {
     $field .= ' id="select-' . zen_output_string($name) . '"';
   }
-*/
+*/ 
 
   $field .= ' name="' . zen_output_string($name) . '"';
 
@@ -142,7 +145,7 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   if (empty($default) && isset($GLOBALS[$name]) && is_string($GLOBALS[$name])) {
     $default = stripslashes($GLOBALS[$name]);
   }
-
+  $field .= '<option value="">Please Select an Option</option>';
   foreach ($values as $value) {
     $field .= '  <option value="' . zen_output_string($value['id']) . '"';
     if ($default == $value['id']) {
@@ -172,4 +175,18 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   );
   return $field;
 } // end iems_pull_down_menu()
+
+function uom_lookup() {
+	global $db;
+	global $uom_array;
+	$uom_array = array();
+	$uom_values = $db->Execute("select uom_id, uom from `uom` ");
+
+		while (!$uom_values->EOF) {
+			$uom_array[] = array('id' => $uom_values->fields['uom'], 'text' => $uom_values->fields['uom']);
+			$uom_values->MoveNext();
+			};
+	return $uom_array; 
+	} //end uom_array
+
 ?>

@@ -28,7 +28,7 @@ if ($address['validated']) {
     $display_condensed_address = false;
     $address_form_class = '';
 }
-
+print_r($address);
 // -----
 // Create a variable that can be used in all form-entry fields below to add a clearing break to the display.
 //
@@ -105,18 +105,43 @@ echo $_SESSION['opc']->formatAddressElement($which, 'firstname', $address['first
 
 echo $_SESSION['opc']->formatAddressElement($which, 'lastname', $address['lastname'], ENTRY_LAST_NAME, TABLE_CUSTOMERS, 'customers_lastname', ENTRY_LAST_NAME_MIN_LENGTH, ENTRY_LAST_NAME_TEXT) . $clear_both;
 
+echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_COMPANY, TABLE_ADDRESS_BOOK, 'entry_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT) . $clear_both;
+
+$field_name = "county[$which]";
+$field_id = "county-$which";
+?>
+<label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo "County:" ?></label><br>
+<?php
+county_lookup(); 
+echo iems_pull_down_menu($field_name, $county_array, $address_info['county'], 'class="form-control" id="' . $field_id . '"'); 
+$field_name = "agency[$which]";
+$field_id = "agency-$which";?>
+<label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo "Agency:" ?></label><br>
+<?php
+agency_lookup();
+echo iems_pull_down_menu($field_name, $agency_array, $address_info['agency'], 'class="form-control" id="' . $field_id . '"'); 
+$field_name = "unit[$which]";
+$field_id = "unit-$which";?>
+<label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo "Ordering Unit:" ?></label><br>
+<?php
+$filter = $address['agency'];
+filtered_unit_lookup($filter); 
+echo iems_pull_down_menu($field_name, $unit_array, $address_info['unit'], 'class="form-control" id="' . $field_id . '"'); 
+?>
+<?php
 $field_name = "zone_country_id[$which]";
 $field_id = "country-$which";
 ?>
-      <label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo ENTRY_COUNTRY; ?></label>
+      <label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo ENTRY_COUNTRY; ?></label><br>
       <?php echo zen_get_country_list($field_name, $address['country'], "id=\"$field_id\"") . 
       (zen_not_null(ENTRY_COUNTRY_TEXT) ? '<span class="alert">' . ENTRY_COUNTRY_TEXT . '</span>' : '') . $clear_both; ?>
 <?php
+
 if (ACCOUNT_STATE === 'true') {
     $state_zone_id = "stateZone-$which";
     $zone_field_name = "zone_id[$which]";
 ?>
-      <label class="inputLabel"><?php echo ENTRY_STATE; ?></label>
+      <label class="inputLabel"><?php echo ENTRY_STATE; ?></label><br>
 <?php    
     if ($address['show_pulldown_states']) {
         echo zen_draw_pull_down_menu($zone_field_name, zen_prepare_country_zones_pull_down($address['country']), $address['zone_id'], "id=\"$state_zone_id\"");
@@ -128,10 +153,6 @@ if (ACCOUNT_STATE === 'true') {
     }
 
     echo $_SESSION['opc']->formatAddressElement($which, 'state', $address['state'], '', TABLE_ADDRESS_BOOK, 'entry_state', ENTRY_STATE_MIN_LENGTH, ENTRY_STATE_TEXT) . $clear_both;
-}
-
-if (ACCOUNT_COMPANY === 'true') {
-    echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_COMPANY, TABLE_ADDRESS_BOOK, 'entry_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT) . $clear_both;
 }
 
 echo $_SESSION['opc']->formatAddressElement($which, 'street_address', $address['street_address'], ENTRY_STREET_ADDRESS, TABLE_ADDRESS_BOOK, 'entry_street_address', ENTRY_STREET_ADDRESS_MIN_LENGTH, ENTRY_STREET_ADDRESS_TEXT) . $clear_both;

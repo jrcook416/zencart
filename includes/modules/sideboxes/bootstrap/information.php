@@ -2,36 +2,15 @@
 /**
  * information sidebox - displays list of general info links, as defined in this file
  *
- * BOOTSTRAP v3.4.1
+ * BOOTSTRAP v3.1.0
  *
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: DrByte 2020 May 16 Modified in v1.5.7 $
  */
-$information = [];
-
-// -----
-// Mimic the zc158 processing flags for the inclusion of the about-us and brands page-links.
-//
-// Note: To be removed when zc157 is no longer supported!
-//
-$flag_show_about_us_sidebox_link = (isset($flag_show_about_us_sidebox_link)) ? $flag_show_about_us_sidebox_link : defined('FILENAME_ABOUT_US');
-if (!isset($flag_show_brand_sidebox_link)) {
-    // -----
-    // Setting a flag for use in the 'information' sidebox.
-    //
-    $brand_check = $db->Execute(
-        "SELECT m.manufacturers_id
-           FROM " . TABLE_MANUFACTURERS . " m
-                LEFT JOIN " . TABLE_PRODUCTS . " p
-                    ON p.manufacturers_id = m.manufacturers_id
-          WHERE p.products_status = 1
-          LIMIT 1"
-    );
-    $flag_show_brand_sidebox_link = defined('FILENAME_BRANDS') && !$brand_check->EOF;
-    unset($brand_check);
-}
+unset($information);
+$information = array();
 
 // -----
 // Enabling this sidebox's information to also be used by the mobile-menu.  If the variable
@@ -43,11 +22,11 @@ if (!isset($flag_show_brand_sidebox_link)) {
 //
 $information_classes = (!empty($information_sidebox_class)) ? $information_sidebox_class : 'list-group-item list-group-item-action';
 
-if ($flag_show_about_us_sidebox_link === true) {
+if (defined('FILENAME_ABOUT_US')) {
     $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_ABOUT_US) . '">' . BOX_INFORMATION_ABOUT_US . '</a>';
 }
 
-if ($flag_show_brand_sidebox_link === true) {
+if (defined('FILENAME_BRANDS')) {
     $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_BRANDS) . '">' . BOX_HEADING_BRANDS . '</a>';
 }
 
@@ -64,9 +43,11 @@ if (DEFINE_CONTACT_US_STATUS <= 1) {
     $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_CONTACT_US, '', 'SSL') . '">' . BOX_INFORMATION_CONTACT . '</a>';
 }
 
+//-bof-one-page-checkout-lat9  *** 1 of 1 ***
 if (defined('FILENAME_ORDER_STATUS') && defined('BOX_INFORMATION_ORDER_STATUS')) {
     $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_ORDER_STATUS, '', 'SSL') . '">' . BOX_INFORMATION_ORDER_STATUS . '</a>';
 }
+//-eof-one-page-checkout-lat9  *** 1 of 1 ***
 
 // forum/bb link:
 if (!empty($external_bb_url) && !empty($external_bb_text)) {
@@ -78,15 +59,15 @@ if (DEFINE_SITE_MAP_STATUS <= 1) {
 }
 
 // only show GV FAQ when installed
-if (defined('MODULE_ORDER_TOTAL_GV_STATUS') && MODULE_ORDER_TOTAL_GV_STATUS === 'true') {
+if (defined('MODULE_ORDER_TOTAL_GV_STATUS') && MODULE_ORDER_TOTAL_GV_STATUS == 'true') {
     $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_GV_FAQ) . '">' . BOX_INFORMATION_GV . '</a>';
 }
 // only show Discount Coupon FAQ when installed
-if (DEFINE_DISCOUNT_COUPON_STATUS <= 1 && defined('MODULE_ORDER_TOTAL_COUPON_STATUS') && MODULE_ORDER_TOTAL_COUPON_STATUS === 'true') {      
+if (DEFINE_DISCOUNT_COUPON_STATUS <= 1 && defined('MODULE_ORDER_TOTAL_COUPON_STATUS') && MODULE_ORDER_TOTAL_COUPON_STATUS == 'true') {      
     $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_DISCOUNT_COUPON) . '">' . BOX_INFORMATION_DISCOUNT_COUPONS . '</a>';
 }
 
-if (SHOW_NEWSLETTER_UNSUBSCRIBE_LINK === 'true') {
+if (SHOW_NEWSLETTER_UNSUBSCRIBE_LINK == 'true') {
     $information[] = '<a class="' . $information_classes . '" href="' . zen_href_link(FILENAME_UNSUBSCRIBE) . '">' . BOX_INFORMATION_UNSUBSCRIBE . '</a>';
 }
 

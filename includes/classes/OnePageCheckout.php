@@ -1054,11 +1054,10 @@ class OnePageCheckout extends base
         $this->inputPreCheck($which);
 
         $address_book_id = (int)($which === 'bill') ? $_SESSION['billto'] : $_SESSION['sendto'];
-
         if ($address_book_id == $this->tempBilltoAddressBookId || $address_book_id == $this->tempSendtoAddressBookId) {
-            $address_values = $this->tempAddressValues[$which];
+            $address_values = $this->getAddressValuesFromDb($_SESSION['customer_id']);
         } else {
-            $address_values = $this->getAddressValuesFromDb($address_book_id);
+            $address_values = $this->getAddressValuesFromDb($_SESSION['customer_id']);
         }
         if (!isset($address_values['country_id'])) {
             $address_values['country_id'] = $address_values['country'];
@@ -1121,6 +1120,9 @@ class OnePageCheckout extends base
             'firstname' => '',
             'lastname' => '',
             'street_address' => '',
+			'county' => '',
+			'agency' => '',
+			'unit' => '',
             'suburb' => '',
             'city' => '',
             'postcode' => '',
@@ -1505,6 +1507,10 @@ class OnePageCheckout extends base
             $error = true;
             $messages['lastname'] = $message_prefix . ENTRY_LAST_NAME_ERROR;
         }
+		
+		$county = zen_db_prepare_input(zen_sanitize_string($address_values['county']));
+		$agency = zen_db_prepare_input(zen_sanitize_string($address_values['agency']));
+		$unit = zen_db_prepare_input(zen_sanitize_string($address_values['unit']));
 
         $street_address = zen_db_prepare_input($address_values['street_address']);
         if (strlen($street_address) < ENTRY_STREET_ADDRESS_MIN_LENGTH) {
@@ -1624,6 +1630,9 @@ class OnePageCheckout extends base
                     'gender' => $gender,
                     'firstname' => $firstname,
                     'lastname' => $lastname,
+					'county' => $county,
+					'agency' => $agency,
+					'unit' => $unit,
                     'street_address' => $street_address,
                     'suburb' => $suburb,
                     'city' => $city,
@@ -1706,10 +1715,14 @@ class OnePageCheckout extends base
             $sql_data_array = [
                 ['fieldName' => 'entry_firstname', 'value' => $address['firstname'], 'type' => $this->dbStringType],
                 ['fieldName' => 'entry_lastname', 'value' => $address['lastname'], 'type' => $this->dbStringType],
+				['fieldName' => 'entry_county', 'value' => $address['county'], 'type' => 'integer'],
+				['fieldName' => 'entry_agency', 'value' => $address['agency'], 'type' => 'integer'],
+				['fieldName' => 'entry_unit', 'value' => $address['unit'], 'type' => 'integer'],
                 ['fieldName' => 'entry_street_address', 'value' => $address['street_address'], 'type' => $this->dbStringType],
                 ['fieldName' => 'entry_postcode', 'value' => $address['postcode'], 'type' => $this->dbStringType],
                 ['fieldName' => 'entry_city', 'value' => $address['city'], 'type' => $this->dbStringType],
-                ['fieldName' => 'entry_country_id', 'value' => $address['country'], 'type' => 'integer']
+                ['fieldName' => 'entry_country_id', 'value' => $address['country'], 'type' => 'integer'],
+				
             ];
 
             if (ACCOUNT_GENDER === 'true') {

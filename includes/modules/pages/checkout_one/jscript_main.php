@@ -121,7 +121,7 @@ if ($show_state_dropdowns) {
     $addr_script_filepath = DIR_WS_MODULES . "pages/checkout_one/$addr_script_filename";
     $addr_script_mtime = filemtime($addr_script_filepath);
     $addr_script_filepath .= "?$addr_script_mtime";
+}
 ?>
 <script src="<?php echo $addr_script_filepath; ?>" defer></script>
 <?php
-}

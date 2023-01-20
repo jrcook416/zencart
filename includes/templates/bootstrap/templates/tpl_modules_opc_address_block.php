@@ -6,8 +6,11 @@
 // This module is included by tpl_modules_opc_billing_address.php and tpl_modules_opc_shipping_address.php and
 // provides a common-formatting for those two address-blocks.
 //
-// Last updated: OPC v2.4.2/Bootstrap v3.4.0
+// Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.4
 //
+?>
+<!--bof address block -->
+<?php
 // -----
 // Sanitize module input values.
 //
@@ -28,7 +31,7 @@ if ($address['validated']) {
     $display_condensed_address = false;
     $address_form_class = '';
 }
-print_r($address);
+
 // -----
 // Create a variable that can be used in all form-entry fields below to add a clearing break to the display.
 //
@@ -46,12 +49,12 @@ $_SESSION['opc']->setAddressLabelParams(' class="inputLabel"');
 // The first section of an address-block contains the condensed formatting of the address, to reduce
 // on-screen real-estate required.
 //
-if ($display_condensed_address === true) {
+if ($display_condensed_address) {
 ?>
 <div id="address-<?php echo $which; ?>" class="row">
     <div class="col-10"><?php echo zen_address_format(zen_get_address_format_id($address['country_id']), $address, true, '', '<br>'); ?></div>
 <?php
-if ($opc_disable_address_change === false) {
+if (!$opc_disable_address_change) {
 ?>
     <div class="text-right" id="opc-<?php echo $which; ?>-edit"><?php echo zen_image_button(BUTTON_IMAGE_EDIT_SMALL, BUTTON_EDIT_SMALL_ALT); ?></div>
 <?php
@@ -65,7 +68,7 @@ if ($opc_disable_address_change === false) {
 // The second section contains the address-form through which an address can be changed, if enabled.  If the
 // address can't be changed, perform a quick return so that the form elements aren't rendered.
 //
-if ($opc_disable_address_change === true) {
+if ($opc_disable_address_change) {
     return;
 }
 ?>
@@ -78,7 +81,7 @@ if ($opc_disable_address_change === true) {
 // Note: Checking for more than two (2) entries, since the "Choose from previous selections" is
 // pre-populated!
 //
-if ($opc_disable_address_change === false) {
+if (!$opc_disable_address_change) {
     $address_selections = $_SESSION['opc']->formatAddressBookDropdown();
     if (count($address_selections) > 2) {
         $selected = $_SESSION['opc']->getAddressDropDownSelection($which);
@@ -101,33 +104,25 @@ if (ACCOUNT_GENDER === 'true') {
     echo $clear_both;
 }
 
+
 echo $_SESSION['opc']->formatAddressElement($which, 'firstname', $address['firstname'], ENTRY_FIRST_NAME, TABLE_CUSTOMERS, 'customers_firstname', ENTRY_FIRST_NAME_MIN_LENGTH, ENTRY_FIRST_NAME_TEXT) . $clear_both;
 
 echo $_SESSION['opc']->formatAddressElement($which, 'lastname', $address['lastname'], ENTRY_LAST_NAME, TABLE_CUSTOMERS, 'customers_lastname', ENTRY_LAST_NAME_MIN_LENGTH, ENTRY_LAST_NAME_TEXT) . $clear_both;
 
 echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_COMPANY, TABLE_ADDRESS_BOOK, 'entry_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT) . $clear_both;
 
-$field_name = "county[$which]";
-$field_id = "county-$which";
-?>
-<label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo "County:" ?></label><br>
-<?php
-county_lookup(); 
-echo iems_pull_down_menu($field_name, $county_array, $address_info['county'], 'class="form-control" id="' . $field_id . '"'); 
-$field_name = "agency[$which]";
-$field_id = "agency-$which";?>
-<label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo "Agency:" ?></label><br>
-<?php
-agency_lookup();
-echo iems_pull_down_menu($field_name, $agency_array, $address_info['agency'], 'class="form-control" id="' . $field_id . '"'); 
+//echo $_SESSION['opc']->formatAddressElement($which, 'county', $address['county'], ENTRY_COUNTY, TABLE_ADDRESS_BOOK, 'entry_county', '', ENTRY_COUNTY_TEXT) . $clear_both;
+
+//echo $_SESSION['opc']->formatAddressElement($which, 'agency', $address['agency'], ENTRY_AGENCY, TABLE_ADDRESS_BOOK, 'entry_agency', '', ENTRY_AGENCY_TEXT) . $clear_both;
+
 $field_name = "unit[$which]";
 $field_id = "unit-$which";?>
-<label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo "Ordering Unit:" ?></label><br>
+<label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo ENTRY_UNIT; ?></label><br>
 <?php
 $filter = $address['agency'];
-filtered_unit_lookup($filter); 
-echo iems_pull_down_menu($field_name, $unit_array, $address_info['unit'], 'class="form-control" id="' . $field_id . '"'); 
-?>
+filtered_unit_lookup($filter);
+echo iems_pull_down_menu($field_name, $unit_array, $address['unit'], 'class="form-control"'); ?>
+<br><br>
 <?php
 $field_name = "zone_country_id[$which]";
 $field_id = "country-$which";
@@ -136,12 +131,11 @@ $field_id = "country-$which";
       <?php echo zen_get_country_list($field_name, $address['country'], "id=\"$field_id\"") . 
       (zen_not_null(ENTRY_COUNTRY_TEXT) ? '<span class="alert">' . ENTRY_COUNTRY_TEXT . '</span>' : '') . $clear_both; ?>
 <?php
-
 if (ACCOUNT_STATE === 'true') {
     $state_zone_id = "stateZone-$which";
     $zone_field_name = "zone_id[$which]";
 ?>
-      <label class="inputLabel"><?php echo ENTRY_STATE; ?></label><br>
+      <label class="inputLabel"><?php echo ENTRY_STATE; ?></label>
 <?php    
     if ($address['show_pulldown_states']) {
         echo zen_draw_pull_down_menu($zone_field_name, zen_prepare_country_zones_pull_down($address['country']), $address['zone_id'], "id=\"$state_zone_id\"");
@@ -151,7 +145,7 @@ if (ACCOUNT_STATE === 'true') {
     } else {
         echo zen_draw_hidden_field($zone_field_name, $address['zone_name']);
     }
-
+    
     echo $_SESSION['opc']->formatAddressElement($which, 'state', $address['state'], '', TABLE_ADDRESS_BOOK, 'entry_state', ENTRY_STATE_MIN_LENGTH, ENTRY_STATE_TEXT) . $clear_both;
 }
 
@@ -168,3 +162,4 @@ echo $_SESSION['opc']->formatAddressElement($which, 'postcode', $address['postco
 ?>
       <div id="messages-<?php echo $which; ?>" class="mt-2"></div>
 </div>
+<!--eof address block -->

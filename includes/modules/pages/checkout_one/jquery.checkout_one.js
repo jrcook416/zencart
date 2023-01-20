@@ -741,7 +741,7 @@ jQuery(document).ready(function(){
 
     function changeBillingFields(event)
     {
-        jQuery(this).addClass('opc-changed');
+        //jQuery(this).addClass('opc-changed');
         jQuery('#checkoutOneBillto .opc-buttons, #opc-bill-save, #opc-add-bill, #opc-add-bill+label').show();
         jQuery('#opc-bill-edit').hide();
         jQuery('#checkoutPayment > .opc-overlay').addClass('active');
@@ -792,7 +792,7 @@ jQuery(document).ready(function(){
 
     function changeShippingFields(event)
     {
-        jQuery(this).addClass('opc-changed');
+        //jQuery(this).addClass('opc-changed');
         jQuery('#checkoutOneShipto .opc-buttons, #opc-ship-save, #opc-add-ship, #opc-add-ship+label').show();
         jQuery('#checkoutPayment > .opc-overlay').addClass('active');
         jQuery('#checkoutOneShipto').removeClass('visibleField');
@@ -1048,4 +1048,5 @@ jQuery(document).ready(function(){
             }
         });
     }
+
 });

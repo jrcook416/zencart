@@ -1,45 +1,40 @@
 <?php
 // -----
 // Part of the One-Page Checkout plugin, provided under GPL 2.0 license by lat9 (cindy@vinosdefrutastropicales.com).
-// Copyright (C) 2013-2022, Vinos de Frutas Tropicales.  All rights reserved.
+// Copyright (C) 2013-2017, Vinos de Frutas Tropicales.  All rights reserved.
 //
-// Last updated: OPC v2.4.2/Bootstrap v3.4.0
+// Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.0
 //
 // -----
 // The "display: none;" on the loading icon enables that to "not display" if javascript is disabled in the customer's browser.  The
 // page's jscript_main.php handling will "show" that when javascript is enabled and we're not forcing the confirmation-page's display.
 //
 ?>
-<div class="centerColumn" id="checkoutOneConfirmation<?php echo ($confirmation_required === true) ? 'Display' : ''; ?>">
+<div class="centerColumn" id="checkoutOneConfirmation<?php echo ($confirmation_required) ? 'Display' : ''; ?>">
 <?php
 // -----
 // If the current payment method requires that the confirmation page be displayed ...
 //
-if ($confirmation_required === true) {
+if ($confirmation_required) {
 ?>
     <h1 id="checkoutConfirmDefaultHeading"><?php echo HEADING_TITLE; ?></h1>
-<?php
-    if ($messageStack->size('redemptions') > 0) {
-        echo $messageStack->output('redemptions');
-    }
-    if ($messageStack->size('checkout_confirmation') > 0) {
-        echo $messageStack->output('checkout_confirmation');
-    }
-    if ($messageStack->size('checkout') > 0) {
-        echo $messageStack->output('checkout');
-    }
-?>
 
-    <div class="card-columns">
+    <?php if ($messageStack->size ('redemptions') > 0) echo $messageStack->output ('redemptions'); ?>
+    <?php if ($messageStack->size ('checkout_confirmation') > 0) echo $messageStack->output ('checkout_confirmation'); ?>
+    <?php if ($messageStack->size ('checkout') > 0) echo $messageStack->output ('checkout'); ?>
+
+    <div class="card-columns">  
+<!--bof billing address card-->
         <div id="billingAddress-card" class="card mb-3">
             <h4 id="billingAddress-card-header" class="card-header"><?php echo HEADING_BILLING_ADDRESS; ?></h4>
             <div id="billingAddress-card-body" class="card-body p-3">
                 <div class="card-deck">
+<!--bof bill to address card-->
                     <div id="billToAddress-card" class="card">
                         <div id="billToAddress-card-body" class="card-body">
-                            <address><?php echo zen_address_format($order->billing['format_id'], $order->billing, 1, ' ', '<br>'); ?></address>
+                            <address><?php echo zen_address_format($order->billing['format_id'], $order->billing, 1, ' ', '<br />'); ?></address>
 <?php 
-    if ($flagDisablePaymentAddressChange === false) { 
+    if (!$flagDisablePaymentAddressChange) { 
 ?>
                             <div id="billToAddress-btn-toolbar" class="btn-toolbar justify-content-end mt-3" role="toolbar">
                                 <?php echo '<a href="' . zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL') . '">' . zen_image_button(BUTTON_IMAGE_EDIT_SMALL, BUTTON_EDIT_SMALL_ALT) . '</a>'; ?>
@@ -49,44 +44,55 @@ if ($confirmation_required === true) {
 ?>
                         </div>
                     </div>
+<!--eof bill to address card-->
 
+<!--bof payment method card-->
                     <div id="paymentMethod-card" class="card">
+<?php
+    $class =& $_SESSION['payment'];
+?>
                         <h4 id="paymentMethod-card-header" class="card-header"><?php echo HEADING_PAYMENT_METHOD; ?></h4>
                         <div id="paymentMethod-card-body" class="card-body">
-                            <h4 id="paymentMethod-paymentTitle"><?php echo $payment_title; ?></h4>
+                            <h4 id="paymentMethod-paymentTitle"><?php echo $GLOBALS[$class]->title; ?></h4>
 <?php
-    if (!empty($confirmation_title)) {
+    if (is_array ($payment_modules->modules)) {
+        if ($confirmation = $payment_modules->confirmation()) {
 ?>
-                            <div id="paymentMethod-content" class="content"><?php echo $confirmation_title; ?></div>
+                            <div id="paymentMethod-content" class="content"><?php echo $confirmation['title']; ?></div>
 <?php
-    }
-    if (!empty($confirmation_fields)) {
+        }
+    if (!empty($confirmation['fields'])) {
 ?>
                             <div id="paymentMethod-content-one" class="content">
 <?php
-        foreach ($confirmation_fields as $next_field) {
+        for ($i = 0, $n = count($confirmation['fields']); $i < $n; $i++) {
 ?>
-                                <div><?php echo $next_field['title']; ?></div>
-                                <div><?php echo $next_field['field']; ?></div>
+                                <div><?php echo $confirmation['fields'][$i]['title']; ?></div>
+            <div ><?php echo $confirmation['fields'][$i]['field']; ?></div>
 <?php
         }
 ?>
                             </div>
 <?php
     }
+}
 ?>
                         </div>
-                    </div>
+    </div>
+<!--eof payment method card-->
                 </div>
             </div>
         </div>
+<!--eof billing address card-->
 <?php
-    if ($_SESSION['sendto'] !== false) {
+    if ($_SESSION['sendto'] != false) {
 ?>
+<!--bof delivery address card-->
         <div id="deliveryAddress-card" class="card mb-3">
             <h4 id="deliveryAddress-card-header" class="card-header"><?php echo HEADING_DELIVERY_ADDRESS; ?></h4>
             <div id="deliveryAddress-card-body" class="card-body p-3">
                 <div class="card-deck">
+<!--bof ship to address card-->    
                     <div id="shipToAddress-card" class="card">
                         <div id="shipToAddress-card-body" class="card-body">
                             <address><?php echo zen_address_format($order->delivery['format_id'], $order->delivery, 1, ' ', '<br>'); ?></address>
@@ -96,24 +102,29 @@ if ($confirmation_required === true) {
 
                         </div>
                     </div>
+<!--eof ship to address card-->
 <?php
-        if (!empty($order->info['shipping_method'])) {
+        if ($order->info['shipping_method']) {
 ?>
+<!--bof shipping method card-->
                     <div id="shippingMethod-card" class="card">
                         <h4 id="shippingMethod-card-header" class="card-header"><?php echo HEADING_SHIPPING_METHOD; ?></h4>
                         <div id="shippingMethod-card-body" class="card-body">
                             <h4><?php echo $order->info['shipping_method']; ?></h4>
                         </div>
                     </div>
+<!--eof shipping method card-->
 <?php
         }
 ?>
                 </div>
             </div>
         </div>
+<!--eof delivery address card-->
 <?php
     }
 ?>
+<!--bof special instructions or order comments card-->
         <div id="orderComment-card" class="card mb-3">
             <h4 id="orderComment-card-header" class="card-header"><?php echo HEADING_ORDER_COMMENTS; ?></h4>
             <div id="orderComment-card-body" class="card-body p-3">
@@ -124,13 +135,15 @@ if ($confirmation_required === true) {
                 </div>
             </div>
         </div>
+<!--eof special instructions or order comments card-->
 
+<!--bof shopping cart contents card-->
         <div id="cartContents-card" class="card mb-3">
             <h4 id="cartContents-card-header" class="card-header"><?php echo HEADING_PRODUCTS; ?></h4>
             <div id="cartContents-card-body" class="card-body p-3">
 <?php  
     if ($flagAnyOutOfStock) { 
-        if (STOCK_ALLOW_CHECKOUT === 'true') {  
+        if (STOCK_ALLOW_CHECKOUT == 'true') {  
 ?>
                 <div class="alert alert-danger" role="alert"><?php echo OUT_OF_STOCK_CAN_CHECKOUT; ?></div>
 <?php    
@@ -156,7 +169,7 @@ if ($confirmation_required === true) {
                             <th scope="col" id="cartTableDisplay-productsHeading"<?php echo $products_colspan; ?>><?php echo TABLE_HEADING_PRODUCTS; ?></th>
 <?php
   // If there are tax groups, display the tax columns for price breakdown
-    if ($tax_column_present === true) {
+    if ($tax_column_present) {
 ?>
                             <th scope="col" id="cartTableDisplay-taxHeading"><?php echo HEADING_TAX; ?></th>
 <?php
@@ -173,7 +186,7 @@ if ($confirmation_required === true) {
                             <td class="productsCell"<?php echo $products_colspan; ?>><?php echo $order->products[$i]['name'] . ((!empty($stock_check[$i])) ? $stock_check[$i] : ''); ?>
 <?php 
         // if there are attributes, loop thru them and display one per line
-        if (isset($order->products[$i]['attributes']) && count($order->products[$i]['attributes']) > 0 ) {
+        if (isset ($order->products[$i]['attributes']) && count ($order->products[$i]['attributes']) > 0 ) {
 ?>
                                 <div class="productsCell-attributes">
                                     <ul>
@@ -218,7 +231,7 @@ if ($confirmation_required === true) {
     // Some payment modules (notably firstdata_hco) make use of the $order_totals object which has been set by the page's header processing.
     //
     if (MODULE_ORDER_TOTAL_INSTALLED) {
-        if ($confirmation_required === true) {
+        if ($confirmation_required) {
             $order_total_modules->output();
         }
     }
@@ -241,16 +254,17 @@ echo zen_draw_form('checkout_confirmation', $form_action_url, 'post', 'id="check
 // -----
 // Add the selected payment module's final HTML to the display.
 //
-echo $payment_process_button;
+if (is_array ($payment_modules->modules)) {
+    echo $payment_modules->process_button();
+}
 ?>
         <div class="text-right"><?php echo zen_image_submit(BUTTON_IMAGE_CONFIRM_ORDER, BUTTON_CONFIRM_ORDER_ALT, 'name="btn_submit" id="btn_submit"'); ?></div>
     </div>
-<?php
-echo '</form>';
-?>
+<?php echo '</form>'; ?>
+  
     <div id="checkoutOneConfirmationLoading" style="display: none;">
         <?php echo 
-            ((CHECKOUT_ONE_CONFIRMATION_INSTRUCTIONS === '') ? '' : (CHECKOUT_ONE_CONFIRMATION_INSTRUCTIONS . '<br><br>')) . 
+            ((CHECKOUT_ONE_CONFIRMATION_INSTRUCTIONS == '') ? '' : (CHECKOUT_ONE_CONFIRMATION_INSTRUCTIONS . '<br><br>')) . 
             zen_image($template->get_template_dir (CHECKOUT_ONE_CONFIRMATION_LOADING, DIR_WS_TEMPLATE, $current_page_base ,'images') . '/' . CHECKOUT_ONE_CONFIRMATION_LOADING, CHECKOUT_ONE_CONFIRMATION_LOADING_ALT); ?>
     </div>
 </div>

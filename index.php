@@ -94,6 +94,11 @@
   require($template->get_template_dir('tpl_main_page.php',DIR_WS_TEMPLATE, $current_page_base,'common'). '/tpl_main_page.php');
 ?>
 </html>
+<pre>
+<?php
+print_r($_SESSION);
+?>
+</pre>
 <?php
 /**
  * Load general code run before page closes

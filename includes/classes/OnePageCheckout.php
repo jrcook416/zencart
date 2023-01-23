@@ -320,7 +320,8 @@ class OnePageCheckout extends base
             "SELECT address_book_id, entry_firstname as firstname, entry_lastname as lastname,
                     entry_company as company, entry_street_address as street_address,
                     entry_suburb as suburb, entry_city as city, entry_postcode as postcode,
-                    entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id
+                    entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id,
+					entry_county as county, entry_agency as agency, entry_unit as unit
                FROM " . TABLE_ADDRESS_BOOK . "
               WHERE customers_id = :customersID
                 AND address_book_id = :addressBookID
@@ -840,9 +841,6 @@ class OnePageCheckout extends base
             'lastname' => $this->tempAddressValues[$which]['lastname'],
             'company' => $this->tempAddressValues[$which]['company'],
             'street_address' => $this->tempAddressValues[$which]['street_address'],
-			'county' => $this->tempAddressValues[$which]['county'],
-			'agency' => $this->tempAddressValues[$which]['agency'],
-			'unit' => $this->tempAddressValues[$which]['unit'],
             'suburb' => $this->tempAddressValues[$which]['suburb'],
             'city' => $this->tempAddressValues[$which]['city'],
             'postcode' => $this->tempAddressValues[$which]['postcode'],
@@ -1028,7 +1026,7 @@ class OnePageCheckout extends base
 
         $address_book_id = $_SESSION['billto'];
         if ($address_book_id == $this->tempBilltoAddressBookId) {
-            $address_values = $this->getAddressValuesFromDb($address_book_id);
+            $address_values = $this->tempAddressValues['bill'];
         } else {
             $address_values = $this->getAddressValuesFromDb($address_book_id);
         }
@@ -1057,10 +1055,11 @@ class OnePageCheckout extends base
         $this->inputPreCheck($which);
 
         $address_book_id = (int)($which === 'bill') ? $_SESSION['billto'] : $_SESSION['sendto'];
+
         if ($address_book_id == $this->tempBilltoAddressBookId || $address_book_id == $this->tempSendtoAddressBookId) {
-            $address_values = $this->getAddressValuesFromDb($_SESSION['customer_id']);
+            $address_values = $this->tempAddressValues[$which];
         } else {
-            $address_values = $this->getAddressValuesFromDb($_SESSION['customer_id']);
+            $address_values = $this->getAddressValuesFromDb($address_book_id);
         }
         if (!isset($address_values['country_id'])) {
             $address_values['country_id'] = $address_values['country'];
@@ -1118,13 +1117,11 @@ class OnePageCheckout extends base
     protected function initAddressValuesForGuest()
     {
         $address_values = [
+            'gender' => '',
             'company' => '',
             'firstname' => '',
             'lastname' => '',
             'street_address' => '',
-			'county' => '',
-			'agency' => '',
-			'unit' => '',
             'suburb' => '',
             'city' => '',
             'postcode' => '',
@@ -1509,10 +1506,6 @@ class OnePageCheckout extends base
             $error = true;
             $messages['lastname'] = $message_prefix . ENTRY_LAST_NAME_ERROR;
         }
-		
-		$county = $address_values['county'];
-		$agency = $address_values['agency'];
-		$unit = $address_values['unit'];
 
         $street_address = zen_db_prepare_input($address_values['street_address']);
         if (strlen($street_address) < ENTRY_STREET_ADDRESS_MIN_LENGTH) {
@@ -1632,9 +1625,6 @@ class OnePageCheckout extends base
                     'gender' => $gender,
                     'firstname' => $firstname,
                     'lastname' => $lastname,
-					'county' => $county,
-					'agency' => $agency,
-					'unit' => $unit,
                     'street_address' => $street_address,
                     'suburb' => $suburb,
                     'city' => $city,
@@ -1717,14 +1707,10 @@ class OnePageCheckout extends base
             $sql_data_array = [
                 ['fieldName' => 'entry_firstname', 'value' => $address['firstname'], 'type' => $this->dbStringType],
                 ['fieldName' => 'entry_lastname', 'value' => $address['lastname'], 'type' => $this->dbStringType],
-				['fieldName' => 'entry_county', 'value' => $address['county'], 'type' => 'integer'],
-				['fieldName' => 'entry_agency', 'value' => $address['agency'], 'type' => 'integer'],
-				['fieldName' => 'entry_unit', 'value' => $address['unit'], 'type' => 'integer'],
                 ['fieldName' => 'entry_street_address', 'value' => $address['street_address'], 'type' => $this->dbStringType],
                 ['fieldName' => 'entry_postcode', 'value' => $address['postcode'], 'type' => $this->dbStringType],
                 ['fieldName' => 'entry_city', 'value' => $address['city'], 'type' => $this->dbStringType],
-                ['fieldName' => 'entry_country_id', 'value' => $address['country'], 'type' => 'integer'],
-				
+                ['fieldName' => 'entry_country_id', 'value' => $address['country'], 'type' => 'integer']
             ];
 
             if (ACCOUNT_GENDER === 'true') {

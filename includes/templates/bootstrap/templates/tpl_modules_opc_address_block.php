@@ -31,7 +31,7 @@ if ($address['validated']) {
     $display_condensed_address = false;
     $address_form_class = '';
 }
-print_r($address_values);
+$_SESSION['opc_addr_block_address'] = $address;
 // -----
 // Create a variable that can be used in all form-entry fields below to add a clearing break to the display.
 //
@@ -111,15 +111,17 @@ echo $_SESSION['opc']->formatAddressElement($which, 'lastname', $address['lastna
 
 echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_COMPANY, TABLE_ADDRESS_BOOK, 'entry_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT) . $clear_both;
 
-//echo $_SESSION['opc']->formatAddressElement($which, 'county', $address['county'], ENTRY_COUNTY, TABLE_ADDRESS_BOOK, 'entry_county', '', ENTRY_COUNTY_TEXT) . $clear_both;
+echo $_SESSION['opc']->formatAddressElement($which, 'county', $address['county'], ENTRY_COUNTY, TABLE_ADDRESS_BOOK, 'entry_county', '', ENTRY_COUNTY_TEXT) . $clear_both;
 
-//echo $_SESSION['opc']->formatAddressElement($which, 'agency', $address['agency'], ENTRY_AGENCY, TABLE_ADDRESS_BOOK, 'entry_agency', '', ENTRY_AGENCY_TEXT) . $clear_both;
+echo $_SESSION['opc']->formatAddressElement($which, 'agency', $address['agency'], ENTRY_AGENCY, TABLE_ADDRESS_BOOK, 'entry_agency', '', ENTRY_AGENCY_TEXT) . $clear_both;
 
 $field_name = "unit[$which]";
 $field_id = "unit-$which";?>
 <label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo ENTRY_UNIT; ?></label><br>
 <?php
-echo iems_pull_down_menu($field_name, '', $address['unit'], 'class="form-control" id="' . $field_id . '"'); ?>
+$agency = $_SESSION['customer_agency'];
+filtered_unit_lookup($agency);
+echo iems_pull_down_menu($field_name, $filtered_unit_array, $address['unit'], "id=\"$field_id\"" , false);?>
 <br><br>
 <?php
 $field_name = "zone_country_id[$which]";

@@ -502,6 +502,8 @@ class Customer extends base
                 'firstname' => $result['firstname'],
                 'lastname' => $result['lastname'],
                 'address_book_id' => $result['address_book_id'],
+				'county' => $result['county'],
+				'agency' => $result['agency'],
                 'country_id' => $result['country_id'],
                 'country_iso' => $result['country_iso'],
                 'country_name' => $result['country_name'],

@@ -76,6 +76,25 @@ function unit_lookup() {
 			}; //end while
 	return $unit_array; 
 	} //end unit_lookup
+	
+function filtered_unit_lookup($agency) {
+	global $db;
+	global $filtered_unit_array;
+
+	$filtered_unit_array = array();
+	$filtered_unit_values = $db->Execute("select * from iems_units where masterAgencyID = '" . $agency . "'");
+		while (!$filtered_unit_values->EOF) {
+			$filtered_unit_array[] = array(
+					'id' => $filtered_unit_values->fields['masterUnitID'],
+					'masterCountyID' => $filtered_unit_values->fields['masterCountyID'], 
+					'masterAgencyID' => $filtered_unit_values->fields['masterAgencyID'],
+					'masterAgency' => $filtered_unit_values->fields['masterAgency'],
+					'masterUnitDescription' => $filtered_unit_values->fields['masterUnitDescription'], 
+					'text' => $filtered_unit_values->fields['masterAgency'] . " " . $filtered_unit_values->fields['masterUnitDescription']);
+			$filtered_unit_values->MoveNext();
+			}; //end while
+	return $filtered_unit_array; 
+	} //end unit_lookup
 
   /**
  *  Output a form pull down menu

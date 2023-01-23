@@ -854,11 +854,14 @@ jQuery(document).ready(function(){
 
     function saveAddressValues(which, address_block)
     {
-        zcLog2Console('saveAddressValues('+which+', '+address_block+')');
+		zcLog2Console('saveAddressValues('+which+', '+address_block+')');
         var gender = jQuery('input[name="gender['+which+']"]:checked').val(),
             company = jQuery('input[name="company['+which+']"]').val(),
             firstname = jQuery('input[name="firstname['+which+']"]').val(),
             lastname = jQuery('input[name="lastname['+which+']"]').val(),
+			county = jQuery('input[name="county['+which+']"]').val(),
+			agency = jQuery('input[name="agency['+which+']"]').val(),
+            unit = jQuery('select[name="unit['+which+']"] option:selected').val(),
             street_address = jQuery('input[name="street_address['+which+']"]').val(),
             suburb = jQuery('input[name="suburb['+which+']"]').val(),
             city = jQuery('input[name="city['+which+']"]').val(),
@@ -877,6 +880,9 @@ jQuery(document).ready(function(){
                 company: company,
                 firstname: firstname,
                 lastname: lastname,
+               	county: county,
+				agency: agency,
+				unit: unit,
                 street_address: street_address,
                 suburb: suburb,
                 city: city,

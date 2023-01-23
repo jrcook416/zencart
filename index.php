@@ -95,6 +95,11 @@
 ?>
 </html>
 <?php
+?><pre>
+<?php
+print_r($_SESSION);
+?></pre>
+<?php
 /**
  * Load general code run before page closes
  */

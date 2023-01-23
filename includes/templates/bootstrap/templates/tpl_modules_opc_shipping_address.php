@@ -5,8 +5,6 @@
 //
 // Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.2
 //
-$filter = $address['agency'];
-filtered_unit_lookup($filter);
 ?>
 <script>
 $(document).ready(function() {
@@ -18,8 +16,6 @@ $(document).ready(function() {
 </script>
 <!--bof shipping-address block -->
 <?php
-$filter = $address['agency'];
-filtered_unit_lookup($filter);
 // -----
 // Display shipping-address information **only if** the order contains at least one physical product (i.e. it's not virtual).
 //

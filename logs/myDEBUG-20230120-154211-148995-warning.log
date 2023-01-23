@@ -1,0 +1,35 @@
+[20-Jan-2023 15:42:11 America/Indianapolis] Request URI: /zencart/ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1513): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1318): OnePageCheckout->validateUpdatedAddress()
+#2 /var/www/html/zencart/includes/classes/ajax/zcAjaxOnePageCheckout.php(371): OnePageCheckout->validateAndSaveAjaxPostedAddress()
+#3 /var/www/html/zencart/ajax.php(85): zcAjaxOnePageCheckout->validateAddressValues()
+--> PHP Warning: Undefined array key "county" in /var/www/html/zencart/includes/classes/OnePageCheckout.php on line 1513.
+
+[20-Jan-2023 15:42:11 America/Indianapolis] Request URI: /zencart/ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1514): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1318): OnePageCheckout->validateUpdatedAddress()
+#2 /var/www/html/zencart/includes/classes/ajax/zcAjaxOnePageCheckout.php(371): OnePageCheckout->validateAndSaveAjaxPostedAddress()
+#3 /var/www/html/zencart/ajax.php(85): zcAjaxOnePageCheckout->validateAddressValues()
+--> PHP Warning: Undefined array key "agency" in /var/www/html/zencart/includes/classes/OnePageCheckout.php on line 1514.
+
+[20-Jan-2023 15:42:11 America/Indianapolis] Request URI: /zencart/ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1515): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1318): OnePageCheckout->validateUpdatedAddress()
+#2 /var/www/html/zencart/includes/classes/ajax/zcAjaxOnePageCheckout.php(371): OnePageCheckout->validateAndSaveAjaxPostedAddress()
+#3 /var/www/html/zencart/ajax.php(85): zcAjaxOnePageCheckout->validateAddressValues()
+--> PHP Warning: Undefined array key "unit" in /var/www/html/zencart/includes/classes/OnePageCheckout.php on line 1515.
+
+[20-Jan-2023 15:42:11 America/Indianapolis] Request URI: /zencart/ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1641): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1318): OnePageCheckout->validateUpdatedAddress()
+#2 /var/www/html/zencart/includes/classes/ajax/zcAjaxOnePageCheckout.php(371): OnePageCheckout->validateAndSaveAjaxPostedAddress()
+#3 /var/www/html/zencart/ajax.php(85): zcAjaxOnePageCheckout->validateAddressValues()
+--> PHP Warning: Undefined variable $state in /var/www/html/zencart/includes/classes/OnePageCheckout.php on line 1641.
+
+[20-Jan-2023 15:42:11 America/Indianapolis] Request URI: /zencart/ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1647): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1318): OnePageCheckout->validateUpdatedAddress()
+#2 /var/www/html/zencart/includes/classes/ajax/zcAjaxOnePageCheckout.php(371): OnePageCheckout->validateAndSaveAjaxPostedAddress()
+#3 /var/www/html/zencart/ajax.php(85): zcAjaxOnePageCheckout->validateAddressValues()
+--> PHP Warning: Undefined variable $country_has_zones in /var/www/html/zencart/includes/classes/OnePageCheckout.php on line 1647.
+

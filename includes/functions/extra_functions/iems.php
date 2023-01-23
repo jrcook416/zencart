@@ -77,25 +77,6 @@ function unit_lookup() {
 	return $unit_array; 
 	} //end unit_lookup
 
-function filtered_unit_lookup($filter) {
-	global $db;
-	global $unit_array;
-
-	$unit_array = array();
-	$unit_values = $db->Execute("select * from iems_units where masterAgencyID = '" . $filter. "' order by masterUnitDescription");
-		while (!$unit_values->EOF) {
-			$unit_array[] = array(
-					'id' => $unit_values->fields['masterUnitID'],
-					'masterCountyID' => $unit_values->fields['masterCountyID'], 
-					'masterAgencyID' => $unit_values->fields['masterAgencyID'],
-					'masterAgency' => $unit_values->fields['masterAgency'],
-					'masterUnitDescription' => $unit_values->fields['masterUnitDescription'], 
-					'text' => $unit_values->fields['masterAgency'] . " " . $unit_values->fields['masterUnitDescription']);
-			$unit_values->MoveNext();
-			}; //end while
-	return $unit_array; 
-	} //end unit_lookup
-
   /**
  *  Output a form pull down menu
  *  Pulls values from a passed array, with the indicated option pre-selected
@@ -128,11 +109,9 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   }
 
   $field = '<select rel="dropdown"';
-/*
   if (strpos($parameters, 'id=') === false) {
-    $field .= ' id="select-' . zen_output_string($name) . '"';
+    $field .= ' id="' . zen_output_string($name) . '"';
   }
-*/ 
 
   $field .= ' name="' . zen_output_string($name) . '"';
 

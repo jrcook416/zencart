@@ -19,25 +19,23 @@ $(document).ready(function() {
     	    liveSearch:true,
     	});  //end select initialize
 	$(document).on('click', '#opc-bill-edit', function(){
-		<?php $filter = $address['agency']; 
-		filtered_unit_lookup($filter);
-		echo $filter; ?>
 		alert("PHP parsed.");
+		<?php unit_lookup();?>
 		var data = <?php echo json_encode($unit_array, JSON_UNESCAPED_SLASHES); ?>;
 		console.log(data);
-		var agency = "<?php echo $address['agency']; ?>";
+		var agency = "<?php echo $_SESSION['customer_agency'];?>";
 		console.log(agency);
 		alert("You have selected agency code " + agency);
 		var agFilter = data.filter((data) => data.masterAgencyID === agency);
 		var html = '<option value="">Please Make a Selection</option>';
         	for(var count = 0; count < agFilter.length; count++)
         	{
-        		html += '<option value="'+agFilter[count].id+'">'+agFilter[count].text+'</option>';
+        		html += '<option value="'+agFilter[count].id+'">'+agFilter[count].masterUnitDescription+'</option>';
 		}; //end for
-		$('#entry_unit').empty();
-		$('#entry_unit').append(html);
-		$('#entry_unit').prop('readonly',false);
-		$('#entry_unit').selectpicker('refresh');
+		$('#unit-bill').empty();
+		$('#unit-bill').append(html);
+		$('#unit-bill').prop('readonly',false);
+		$('#unit-bill').selectpicker('refresh');
 		alert("Select an Ordering Unit.");
 	});//end document on click
 }); //end document ready

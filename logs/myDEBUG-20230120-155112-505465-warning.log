@@ -1,0 +1,34 @@
+[20-Jan-2023 15:51:12 America/Indianapolis] Request URI: /zencart/index.php?main_page=checkout_one, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php(34): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_billing_address.php(25): require('...')
+#2 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_checkout_one_default.php(55): require('...')
+#3 /var/www/html/zencart/includes/templates/bootstrap/common/tpl_main_page.php(202): require('...')
+#4 /var/www/html/zencart/index.php(94): require('...')
+--> PHP Warning: Undefined variable $address_values in /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php on line 34.
+
+[20-Jan-2023 15:51:12 America/Indianapolis] Request URI: /zencart/index.php?main_page=checkout_one, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/functions/extra_functions/iems.php(128): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php(122): iems_pull_down_menu()
+#2 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_billing_address.php(25): require('...')
+#3 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_checkout_one_default.php(55): require('...')
+#4 /var/www/html/zencart/includes/templates/bootstrap/common/tpl_main_page.php(202): require('...')
+#5 /var/www/html/zencart/index.php(94): require('...')
+--> PHP Warning: foreach() argument must be of type array|object, string given in /var/www/html/zencart/includes/functions/extra_functions/iems.php on line 128.
+
+[20-Jan-2023 15:51:12 America/Indianapolis] Request URI: /zencart/index.php?main_page=checkout_one, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php(34): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_shipping_address.php(41): require('...')
+#2 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_checkout_one_default.php(60): require('...')
+#3 /var/www/html/zencart/includes/templates/bootstrap/common/tpl_main_page.php(202): require('...')
+#4 /var/www/html/zencart/index.php(94): require('...')
+--> PHP Warning: Undefined variable $address_values in /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php on line 34.
+
+[20-Jan-2023 15:51:12 America/Indianapolis] Request URI: /zencart/index.php?main_page=checkout_one, IP address: ::1, Language id 1
+#0 /var/www/html/zencart/includes/functions/extra_functions/iems.php(128): zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php(122): iems_pull_down_menu()
+#2 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_modules_opc_shipping_address.php(41): require('...')
+#3 /var/www/html/zencart/includes/templates/bootstrap/templates/tpl_checkout_one_default.php(60): require('...')
+#4 /var/www/html/zencart/includes/templates/bootstrap/common/tpl_main_page.php(202): require('...')
+#5 /var/www/html/zencart/index.php(94): require('...')
+--> PHP Warning: foreach() argument must be of type array|object, string given in /var/www/html/zencart/includes/functions/extra_functions/iems.php on line 128.
+

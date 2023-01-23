@@ -834,12 +834,15 @@ class OnePageCheckout extends base
             trigger_error("Unknown or disabled country present for '$which' address ($country_id).", E_USER_ERROR);
             exit();
         }
-
+		
         $address = [
             'firstname' => $this->tempAddressValues[$which]['firstname'],
             'lastname' => $this->tempAddressValues[$which]['lastname'],
             'company' => $this->tempAddressValues[$which]['company'],
             'street_address' => $this->tempAddressValues[$which]['street_address'],
+			'county' => $this->tempAddressValues[$which]['county'],
+			'agency' => $this->tempAddressValues[$which]['agency'],
+			'unit' => $this->tempAddressValues[$which]['unit'],
             'suburb' => $this->tempAddressValues[$which]['suburb'],
             'city' => $this->tempAddressValues[$which]['city'],
             'postcode' => $this->tempAddressValues[$which]['postcode'],
@@ -1025,7 +1028,7 @@ class OnePageCheckout extends base
 
         $address_book_id = $_SESSION['billto'];
         if ($address_book_id == $this->tempBilltoAddressBookId) {
-            $address_values = $this->tempAddressValues['bill'];
+            $address_values = $this->getAddressValuesFromDb($address_book_id);
         } else {
             $address_values = $this->getAddressValuesFromDb($address_book_id);
         }
@@ -1115,7 +1118,6 @@ class OnePageCheckout extends base
     protected function initAddressValuesForGuest()
     {
         $address_values = [
-            'gender' => '',
             'company' => '',
             'firstname' => '',
             'lastname' => '',
@@ -1508,9 +1510,9 @@ class OnePageCheckout extends base
             $messages['lastname'] = $message_prefix . ENTRY_LAST_NAME_ERROR;
         }
 		
-		$county = zen_db_prepare_input(zen_sanitize_string($address_values['county']));
-		$agency = zen_db_prepare_input(zen_sanitize_string($address_values['agency']));
-		$unit = zen_db_prepare_input(zen_sanitize_string($address_values['unit']));
+		$county = $address_values['county'];
+		$agency = $address_values['agency'];
+		$unit = $address_values['unit'];
 
         $street_address = zen_db_prepare_input($address_values['street_address']);
         if (strlen($street_address) < ENTRY_STREET_ADDRESS_MIN_LENGTH) {

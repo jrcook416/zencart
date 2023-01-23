@@ -31,7 +31,7 @@ if ($address['validated']) {
     $display_condensed_address = false;
     $address_form_class = '';
 }
-
+print_r($address_values);
 // -----
 // Create a variable that can be used in all form-entry fields below to add a clearing break to the display.
 //
@@ -119,9 +119,7 @@ $field_name = "unit[$which]";
 $field_id = "unit-$which";?>
 <label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo ENTRY_UNIT; ?></label><br>
 <?php
-$filter = $address['agency'];
-filtered_unit_lookup($filter);
-echo iems_pull_down_menu($field_name, $unit_array, $address['unit'], 'class="form-control"'); ?>
+echo iems_pull_down_menu($field_name, '', $address['unit'], 'class="form-control" id="' . $field_id . '"'); ?>
 <br><br>
 <?php
 $field_name = "zone_country_id[$which]";

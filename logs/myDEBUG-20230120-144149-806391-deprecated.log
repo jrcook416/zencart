@@ -1,0 +1,27 @@
+[20-Jan-2023 14:41:49 America/Indianapolis] Request URI: /zencart/ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues, IP address: ::1, Language id 1
+#0 [internal function]: zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/functions/functions_strings.php(57): preg_replace()
+#2 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1514): zen_sanitize_string()
+#3 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1319): OnePageCheckout->validateUpdatedAddress()
+#4 /var/www/html/zencart/includes/classes/ajax/zcAjaxOnePageCheckout.php(371): OnePageCheckout->validateAndSaveAjaxPostedAddress()
+#5 /var/www/html/zencart/ajax.php(85): zcAjaxOnePageCheckout->validateAddressValues()
+--> PHP Deprecated: preg_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in /var/www/html/zencart/includes/functions/functions_strings.php on line 57.
+
+[20-Jan-2023 14:41:49 America/Indianapolis] Request URI: /zencart/ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues, IP address: ::1, Language id 1
+#0 [internal function]: zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/functions/functions_strings.php(57): preg_replace()
+#2 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1515): zen_sanitize_string()
+#3 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1319): OnePageCheckout->validateUpdatedAddress()
+#4 /var/www/html/zencart/includes/classes/ajax/zcAjaxOnePageCheckout.php(371): OnePageCheckout->validateAndSaveAjaxPostedAddress()
+#5 /var/www/html/zencart/ajax.php(85): zcAjaxOnePageCheckout->validateAddressValues()
+--> PHP Deprecated: preg_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in /var/www/html/zencart/includes/functions/functions_strings.php on line 57.
+
+[20-Jan-2023 14:41:49 America/Indianapolis] Request URI: /zencart/ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues, IP address: ::1, Language id 1
+#0 [internal function]: zen_debug_error_handler()
+#1 /var/www/html/zencart/includes/functions/functions_strings.php(57): preg_replace()
+#2 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1516): zen_sanitize_string()
+#3 /var/www/html/zencart/includes/classes/OnePageCheckout.php(1319): OnePageCheckout->validateUpdatedAddress()
+#4 /var/www/html/zencart/includes/classes/ajax/zcAjaxOnePageCheckout.php(371): OnePageCheckout->validateAndSaveAjaxPostedAddress()
+#5 /var/www/html/zencart/ajax.php(85): zcAjaxOnePageCheckout->validateAddressValues()
+--> PHP Deprecated: preg_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in /var/www/html/zencart/includes/functions/functions_strings.php on line 57.
+

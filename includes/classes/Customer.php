@@ -158,6 +158,9 @@ class Customer extends base
         $_SESSION['customer_country_id'] = (int)$this->data['country_id'];
         $_SESSION['customer_zone_id'] = (int)$this->data['zone_id'];
         $_SESSION['customers_authorization'] = (int)$this->data['customers_authorization'];
+		$_SESSION['customer_agency'] = (int)$this->data['agency'];
+		$_SESSION['customer_county'] = (int)$this->data['county'];
+		$_SESSION['customer_unit'] = (int)$this->data['unit'];
 
         // @TODO - should we add $this->data to a session var, and replace numerous other lookups?
 

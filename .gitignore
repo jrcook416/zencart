@@ -3,6 +3,8 @@ local/configure*.php
 vector/includes/configure*.php
 /vendor
 /logs
+cleanup.sh
+
 
 *.php1
 *.bak

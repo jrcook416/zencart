@@ -27,6 +27,10 @@ Zen Cart branch v158-dev-new is an abandoned branch that holds work completed on
 11. [Edit Orders v4.6.2](https://www.https://www.zen-cart.com/downloads.php?do=file&id=1513) on 2023-01-13.
 12. [Administrator Notes v2](https://www.zen-cart.com/downloads.php?do=file&id=2339) on 2023-01-13.
 13. [Database I/O Manager 1.6.7](https://www.zen-cart.com/downloads.php?do=file&id=2091) on 2023-01-13.
+14. [SuperOrders v5.0.0 beta1](https://www.zen-cart.com/downloads.php?do=file&id=155&styleid=2) on 2023-01-13.
+15. Updated multiple pieces of One Page Checkout to comply with IEMS-specific unit identification needs and processes during the week of 2023-01-16 to 2023-01-20 and the week of 2023-01-23 to 2023-01-24.  
+16. Updated the README.md file with a brief summary of changes made between 2023-01-10 and 2023-01-24.
+17. 
 
 ----------------------
 Compatibility

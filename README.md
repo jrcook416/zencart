@@ -42,10 +42,11 @@ There are specific modifications that Kevin Gona requested in this update.
 2. The checkout process needs to be combined into one or two steps where possible. 
 3. Focus on combining all sites into one site framework for ease of operation for the logistics technician and warehouse coordinator roles. 
 
-I merged the ZCA Bootstrap Template, ImageHandler 5, and One Page Checkout files on December 1 and continued with normal business processes. I continued with work on the core code while waiting for plugin files to be developed and installed Edit Orders 4.6.2, Administrator Notes 2, Database I/O Manager 1.67, and Super Orders v5 on 2023-01-13. I was given approval to continue with sole development on Zen Cart&reg; around 13 January and have focused my efforts on development since then.
+I merged the ZCA Bootstrap Template, ImageHandler 5, and One Page Checkout files on December 1 and continued with normal business processes. I made some template adjustments to the Bootstrap 5 template along with some work on the IEMS-specific global function definitions and /vector/customers.php (which drives administrative maintenance on customer records in the system) on 2023-01-09. I continued work on these files, including JavaScript definition files, on 2023-01-10.  I started working on the Edit Orders tweaks on 2023-01-11, at which time I had to stop and look at changes to language file definition arrays in PHP 8.  This set me back a day while I cleaned up those files. I was given approval to continue with sole development on Zen Cart&reg; around 13 January and have focused my efforts on development since then. 
 
-From 2023-01-16 to 2023-01-20 and the week of 2023-01-23 (specifically on 23-01, 24-01, and 25-01),  I focused my efforts on working towards combining the front-end workflow goals (users only being able to see units in their assigned agency AND combining the checkout process into one or two steps) by working on customizing the One Page Checkout module.  This module works well in v1.5.8 out of the box, but I have made some specific changes to the code: 
+On 2023-01-13, I continued this work and installed several more plugins, including Super Orders 5. I started active work on One Page Checkout on 2023-01-16 and have worked on it exclusively for the last six business days. The work has been focused on combining the front-end workflow goals (users only being able to see units in their assigned agency AND combining the checkout process into one or two steps) and moving one step closer to production.
 
+As of 2023-01-25 at end of shift, the next step will be to integrate custom Indianapolis EMS elements into the general Zen Cart&reg; order processing flow.
 
 ----------------------
 Compatibility

@@ -840,6 +840,7 @@ class OnePageCheckout extends base
             'firstname' => $this->tempAddressValues[$which]['firstname'],
             'lastname' => $this->tempAddressValues[$which]['lastname'],
             'company' => $this->tempAddressValues[$which]['company'],
+			'unit' => $this->tempAddressValues[$which]['unit'],
             'street_address' => $this->tempAddressValues[$which]['street_address'],
             'suburb' => $this->tempAddressValues[$which]['suburb'],
             'city' => $this->tempAddressValues[$which]['city'],
@@ -1116,16 +1117,16 @@ class OnePageCheckout extends base
 
     protected function initAddressValuesForGuest()
     {
+		// IEMS EDITED CODE // 
         $address_values = [
-            'gender' => '',
             'company' => '',
+			'unit' => '',
             'firstname' => '',
             'lastname' => '',
             'street_address' => '',
-            'suburb' => '',
             'city' => '',
             'postcode' => '',
-            'state' => '',
+            'state' => 'Indiana',
             'country' => (int)STORE_COUNTRY,
             'country_id' => (int)STORE_COUNTRY,
             'zone_id' => 0,
@@ -1138,6 +1139,7 @@ class OnePageCheckout extends base
             'error' => false,
             'error_state_input' => false,
             'validated' => false,
+		// END IEMS EDITED CODE //
         ];
         $address_values = $this->updateStateDropdownSettings($address_values);
 

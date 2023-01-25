@@ -346,6 +346,7 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
         [
             'format' => $fmt,
             'address' => $incoming,
+			'agency' => $address['$agency'],
             'firstname' => $address['$firstname'],
             'lastname' => $address['$lastname'],
             'street' => $address['$street'],

@@ -158,9 +158,21 @@ class Customer extends base
         $_SESSION['customer_country_id'] = (int)$this->data['country_id'];
         $_SESSION['customer_zone_id'] = (int)$this->data['zone_id'];
         $_SESSION['customers_authorization'] = (int)$this->data['customers_authorization'];
-		$_SESSION['customer_agency'] = (int)$this->data['agency'];
-		$_SESSION['customer_county'] = (int)$this->data['county'];
-		$_SESSION['customer_unit'] = (int)$this->data['unit'];
+		
+		// IEMS CUSTOM CODE //
+		// COUNTY CODE AND IDENTIFIER ASSIGNMENT //
+		$_SESSION['IEMS']['customer_county_code'] = (int)$this->data['county'];
+		county_code_lookup($_SESSION['IEMS']['customer_county_code']);
+		$_SESSION['IEMS']['county'] = $_SESSION['IEMS']['countyCode'] . " " . $_SESSION['IEMS']['countyName'];
+		// AGENCY CODE AND IDENTIFIER ASSIGNMENT //
+		$_SESSION['IEMS']['customer_agency_code'] = (int)$this->data['agency'];
+		agency_code_lookup($_SESSION['IEMS']['customer_agency_code']);
+		$_SESSION['IEMS']['agency'] = $_SESSION['IEMS']['agencyCountyID'] . " " . $_SESSION['IEMS']['agencyCode'] . " " . $_SESSION['IEMS']['agencyName'];
+		// UNIT CODE AND IDENTIFIER ASSIGNMENT //
+		$_SESSION['IEMS']['customer_unit'] = (int)$this->data['unit'];
+		unit_code_lookup($_SESSION['IEMS']['customer_unit']);
+		$_SESSION['IEMS']['unit'] = $_SESSION['IEMS']['unitCounty'] . ' ' . $_SESSION['IEMS']['unitAgency'] . " " . $_SESSION['IEMS']['unitName'];
+		// END IEMS CUSTOM CODE //
 
         // @TODO - should we add $this->data to a session var, and replace numerous other lookups?
 

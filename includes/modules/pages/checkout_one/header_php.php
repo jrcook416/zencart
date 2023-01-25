@@ -164,7 +164,6 @@ if ($free_shipping) {
 
 require DIR_WS_CLASSES . 'order.php';
 $order = new order;
-
 $total_weight = $_SESSION['cart']->show_weight();
 $total_count = $_SESSION['cart']->count_contents();
 

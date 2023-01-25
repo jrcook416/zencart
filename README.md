@@ -13,7 +13,7 @@ It's free software, with free community-driven support available 24/7 on the Zen
 ---------------------
 Zen Cart&reg; v158-dev-new for Indianapolis EMS Logistics
 ---------------------
-Zen Cart branch v158-dev-new is an abandoned branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v158 release.  It contains the following modifications:
+Zen Cart branch v158-dev-new is a branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v158 release.  It contains the following modifications:
 1. An initial commit of the v158 stock code as referenced from upstream/v158.
 2. Updated v158 stock code on 2022-12-01.
 3. [ZCA Bootstrap Template v3.4.1](https://www.zen-cart.com/downloads.php?do=file&id=2191) on 2022-12-01.
@@ -31,6 +31,21 @@ Zen Cart branch v158-dev-new is an abandoned branch that holds work completed on
 15. Updated multiple pieces of One Page Checkout to comply with IEMS-specific unit identification needs and processes during the week of 2023-01-16 to 2023-01-20 and the week of 2023-01-23 to 2023-01-24.  
 16. Updated the README.md file with a brief summary of changes made between 2023-01-10 and 2023-01-24.
 17. 
+
+----------------------
+Work Completed
+----------------------
+Active development on the Indianapolis EMS Logistics build started on 2022-12-01, using stock v1.5.8 code from the GitHub repository.  Repository upstream/v158 was cloned to an Indianapolis EMS local machine for development. I completed the initial pull anticipating approximately six to nine months of development time between normal job duties and functions prior to the production release of v1.5.8 to our stakeholders.  This process was accelerated by the end of life of PHP 7.4 in December. 
+
+There are specific modifications that Kevin Gona requested in this update.  
+1. Users from one agency should not be able to see the list of ordering units in another agency.
+2. The checkout process needs to be combined into one or two steps where possible. 
+3. Focus on combining all sites into one site framework for ease of operation for the logistics technician and warehouse coordinator roles. 
+
+I merged the ZCA Bootstrap Template, ImageHandler 5, and One Page Checkout files on December 1 and continued with normal business processes. I continued with work on the core code while waiting for plugin files to be developed and installed Edit Orders 4.6.2, Administrator Notes 2, Database I/O Manager 1.67, and Super Orders v5 on 2023-01-13. I was given approval to continue with sole development on Zen Cart&reg; around 13 January and have focused my efforts on development since then.
+
+From 2023-01-16 to 2023-01-20 and the week of 2023-01-23 (specifically on 23-01, 24-01, and 25-01),  I focused my efforts on working towards combining the front-end workflow goals (users only being able to see units in their assigned agency AND combining the checkout process into one or two steps) by working on customizing the One Page Checkout module.  This module works well in v1.5.8 out of the box, but I have made some specific changes to the code: 
+
 
 ----------------------
 Compatibility

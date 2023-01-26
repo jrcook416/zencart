@@ -30,7 +30,7 @@ Zen Cart branch v158-dev-new is a branch that holds work completed on the Indian
 14. [SuperOrders v5.0.0 beta1](https://www.zen-cart.com/downloads.php?do=file&id=155&styleid=2) on 2023-01-13.
 15. Updated multiple pieces of One Page Checkout to comply with IEMS-specific unit identification needs and processes during the week of 2023-01-16 to 2023-01-20 and the week of 2023-01-23 to 2023-01-24.  
 16. Updated the README.md file with a brief summary of changes made between 2023-01-10 and 2023-01-24.
-17. 
+17. Continued work to get custom unit information into the order class and workflow.  I was successful in getting information pulled from the customer record to save to the order table.  The next priority will be to make sure that One Page Checkout is updating this unit information and saving that information, not the queried address information, to the order tables.  Following that, I will build a custom lookup to replace the unit ID number with a unit description in the administrative interface. 
 
 ----------------------
 Work Completed
@@ -46,7 +46,7 @@ I merged the ZCA Bootstrap Template, ImageHandler 5, and One Page Checkout files
 
 On 2023-01-13, I continued this work and installed several more plugins, including Super Orders 5. I started active work on One Page Checkout on 2023-01-16 and have worked on it exclusively for the last six business days. The work has been focused on combining the front-end workflow goals (users only being able to see units in their assigned agency AND combining the checkout process into one or two steps) and moving one step closer to production.
 
-As of 2023-01-25 at end of shift, the next step will be to integrate custom Indianapolis EMS elements into the general Zen Cart&reg; order processing flow.
+As of 2023-01-26 at end of shift, the next step will be to integrate custom Indianapolis EMS elements into the general Zen Cart&reg; order processing flow.  See note #17 for progress. 
 
 ----------------------
 Compatibility

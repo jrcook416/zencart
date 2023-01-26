@@ -3,14 +3,14 @@
  * This is a file containing custom functions for the Indianapolis EMS implementation of Zen Cart.
  *
  *
- * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory 
+ * Custom functions for Indianapolis EMS are defined in the /vector/includes/functions/extra_functions directory
  * and the /includes/functions/extra_functions directory as per the Zen Cart coding standards.  This file should be
  * copied to each of those directories and maintained within Git version control.
  * For the sake of argument, this is the /includes/functions/extra_functions version of this file.
- * All code should be documented using phpDoc standards as laid out in the phpDoc manual and the 
+ * All code should be documented using phpDoc standards as laid out in the phpDoc manual and the
  * IEMS documentation.
  * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
- * 
+ *
  *
  * @package		IEMSCustomFiles
  * @subpackage	Vector
@@ -21,7 +21,6 @@
  * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
  * @version 	Jeremiah Cook 2022-09-20, modified for ZC v1.5.7d
  */
-
  function county_lookup() {
 	global $db;
 	global $county_array;
@@ -33,11 +32,11 @@
 			    'id' => $county_values->fields['countyID'],
 			    'countyID' => $county_values->fields['countyID'],
 			    'countyCode' => $county_values->fields['countyCode'],
-			    'countyName' => $county_values->fields['countyName'],       
+			    'countyName' => $county_values->fields['countyName'],
 			    'text' => $county_values->fields['countyCode'] . " " . $county_values->fields['countyName']);
 			$county_values->MoveNext();
 			};
-	return $county_array;	
+	return $county_array;
 	} //end county_array
 
 function agency_lookup() {
@@ -55,7 +54,7 @@ function agency_lookup() {
 			    'text' => $agency_values->fields['masterAgency'] . " " . $agency_values->fields['masterAgencyDescription']);
 			$agency_values->MoveNext();
 			};
-	return $agency_array; 
+	return $agency_array;
 	} // end_agency_lookup
 
 function unit_lookup() {
@@ -67,26 +66,16 @@ function unit_lookup() {
 		while (!$unit_values->EOF) {
 			$unit_array[] = array(
 					'id' => $unit_values->fields['masterUnitID'],
-					'masterCountyID' => $unit_values->fields['masterCountyID'], 
+					'masterCountyID' => $unit_values->fields['masterCountyID'],
 					'masterAgencyID' => $unit_values->fields['masterAgencyID'],
 					'masterAgency' => $unit_values->fields['masterAgency'],
-					'masterUnitDescription' => $unit_values->fields['masterUnitDescription'], 
+					'masterUnitDescription' => $unit_values->fields['masterUnitDescription'],
 					'text' => $unit_values->fields['masterAgency'] . " " . $unit_values->fields['masterUnitDescription']);
 			$unit_values->MoveNext();
 			}; //end while
-	return $unit_array; 
+	return $unit_array;
 	} //end unit_lookup
 
-  /**
- *  Output a form pull down menu
- *  Pulls values from a passed array, with the indicated option pre-selected
- * @param string $name name
- * @param array $values values
- * @param string $default default value
- * @param string $parameters parameters
- * @param boolean $required required
- * @return string
- */
 function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false)
 {
   // -----
@@ -113,7 +102,7 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   if (strpos($parameters, 'id=') === false) {
     $field .= ' id="select-' . zen_output_string($name) . '"';
   }
-*/ 
+*/
 
   $field .= ' name="' . zen_output_string($name) . '"';
 
@@ -167,7 +156,7 @@ function uom_lookup() {
 			$uom_array[] = array('id' => $uom_values->fields['uom'], 'text' => $uom_values->fields['uom']);
 			$uom_values->MoveNext();
 			};
-	return $uom_array; 
+	return $uom_array;
 	} //end uom_array
 
 ?>

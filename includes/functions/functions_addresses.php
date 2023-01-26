@@ -281,6 +281,7 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
 
     if (ACCOUNT_SUBURB !== 'true') $incoming['suburb'] = '';
     $address['company'] = !empty($incoming['company']) ? zen_output_string_protected($incoming['company']) : '';
+    $address['unit'] = !empty($incoming['unit']) ? zen_output_string_protected($incoming['unit']) : '';
     $address['firstname'] = !empty($incoming['firstname']) ? zen_output_string_protected($incoming['firstname']) : (!empty($incoming['name']) ? zen_output_string_protected($incoming['name']) : '');
     $address['lastname'] = !empty($incoming['lastname']) ? zen_output_string_protected($incoming['lastname']) : '';
     $address['street'] = !empty($incoming['street_address']) ? zen_output_string_protected($incoming['street_address']) : '';
@@ -346,7 +347,6 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
         [
             'format' => $fmt,
             'address' => $incoming,
-			'agency' => $address['$agency'],
             'firstname' => $address['$firstname'],
             'lastname' => $address['$lastname'],
             'street' => $address['$street'],
@@ -381,7 +381,7 @@ function zen_address_label($customers_id, $address_id = 1, $html = false, $boln 
 {
     global $db, $zco_notifier;
     $sql = "SELECT entry_firstname AS firstname, entry_lastname AS lastname,
-                   entry_company AS company, entry_street_address AS street_address,
+                   entry_company AS company, entry_unit AS unit, entry_street_address AS street_address,
                    entry_suburb AS suburb, entry_city AS city, entry_postcode AS postcode,
                    entry_state AS state, entry_zone_id AS zone_id,
                    entry_country_id AS country_id

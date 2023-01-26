@@ -49,7 +49,7 @@ class order extends base
      */
     public $delivery = [];
     /**
-     * $doStockDecrement is a flag used by a notifier to prevent the default stock decrement processing 
+     * $doStockDecrement is a flag used by a notifier to prevent the default stock decrement processing
      * @var boolean
      */
     public $doStockDecrement;
@@ -80,7 +80,7 @@ class order extends base
     protected $orderId = null;
     /**
      * $products is an array containing details of the products for the order
-     * @var array 
+     * @var array
      */
     public $products = [];
     /**
@@ -115,17 +115,17 @@ class order extends base
     public $statuses = [];
     /**
      * $total_cost is the total cost of the order
-     * @var float 
+     * @var float
      */
     public $total_cost;
     /**
      * $total_tax is the total amount of tax for the order
-     * @var float 
+     * @var float
      */
     public $total_tax;
     /**
      * $total_weight is the total weight of the order
-     * @var float 
+     * @var float
      */
     public $total_weight;
     /**
@@ -146,20 +146,20 @@ class order extends base
         $this->products = [];
         $this->customer = [];
         $this->delivery = [];
-	$this->billing = []; 
-	$this->content_type = []; 
-	$this->email_low_stock = []; 
+	$this->billing = [];
+	$this->content_type = [];
+	$this->email_low_stock = [];
 	$this->products_ordered_attributes = [];
-      	$this->products_ordered = []; 
-	$this->products_ordered_email = []; 
+      	$this->products_ordered = [];
+	$this->products_ordered_email = [];
 	$this->products_ordered_html = [];
 	$this->attachArray = [];
 	$this->email_order_message = [];
 	$this->extra_header_text = [];
       	$this->doStockDecrement = [];
-	$this->send_low_stock_emails = []; 
-	$this->queryReturnFlag = []; 
-	$this->bestSellersUpdate = []; 
+	$this->send_low_stock_emails = [];
+	$this->queryReturnFlag = [];
+	$this->bestSellersUpdate = [];
 	$this->use_external_tax_handler_only = [];
    	$this->products_ordered_attributes_html = [];
 
@@ -466,7 +466,7 @@ class order extends base
     protected function getCountryZoneId(int $countries_id, string $state)
     {
         global $db;
-        
+
         $sql =
             "SELECT zone_id
                FROM " . TABLE_ZONES . "
@@ -493,7 +493,7 @@ class order extends base
         $this->content_type = $_SESSION['cart']->get_content_type();
 
         $customer_address_query = "SELECT c.customers_firstname, c.customers_lastname, c.customers_telephone,
-                                    c.customers_email_address, ab.entry_company, ab.entry_street_address,
+                                    c.customers_email_address, ab.entry_company, ab.entry_unit, ab.entry_street_address,
                                     ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id,
                                     z.zone_code, z.zone_name, co.countries_id, co.countries_name,
                                     co.countries_iso_code_2, co.countries_iso_code_3,
@@ -507,7 +507,7 @@ class order extends base
 
         $customer_address = $db->Execute($customer_address_query);
 
-        $shipping_address_query = "SELECT ab.entry_firstname, ab.entry_lastname, ab.entry_company,
+        $shipping_address_query = "SELECT ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_unit,
                                     ab.entry_street_address, ab.entry_suburb, ab.entry_postcode,
                                     ab.entry_city, ab.entry_zone_id, z.zone_code, z.zone_name, ab.entry_country_id,
                                     c.countries_id, c.countries_name, c.countries_iso_code_2,
@@ -520,7 +520,7 @@ class order extends base
 
         $shipping_address = $db->Execute($shipping_address_query);
 
-        $billing_address_query = "SELECT ab.entry_firstname, ab.entry_lastname, ab.entry_company,
+        $billing_address_query = "SELECT ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_unit,
                                    ab.entry_street_address, ab.entry_suburb, ab.entry_postcode,
                                    ab.entry_city, ab.entry_zone_id, z.zone_code, z.zone_name, ab.entry_country_id,
                                    c.countries_id, c.countries_name, c.countries_iso_code_2,
@@ -588,6 +588,7 @@ class order extends base
                 'firstname' => $customer_address->fields['customers_firstname'],
                 'lastname' => $customer_address->fields['customers_lastname'],
                 'company' => $customer_address->fields['entry_company'],
+                'unit' => $customer_address->fields['entry_unit'],
                 'street_address' => $customer_address->fields['entry_street_address'],
                 'suburb' => $customer_address->fields['entry_suburb'],
                 'city' => $customer_address->fields['entry_city'],
@@ -627,6 +628,7 @@ class order extends base
                 'firstname' => $shipping_address->fields['entry_firstname'],
                 'lastname' => $shipping_address->fields['entry_lastname'],
                 'company' => $shipping_address->fields['entry_company'],
+                'unit' => $shipping_address->fields['entry_unit'],
                 'street_address' => $shipping_address->fields['entry_street_address'],
                 'suburb' => $shipping_address->fields['entry_suburb'],
                 'city' => $shipping_address->fields['entry_city'],
@@ -645,6 +647,7 @@ class order extends base
                 'firstname' => $billing_address->fields['entry_firstname'],
                 'lastname' => $billing_address->fields['entry_lastname'],
                 'company' => $billing_address->fields['entry_company'],
+                'unit' => $billing_address->fields['entry_unit'],
                 'street_address' => $billing_address->fields['entry_street_address'],
                 'suburb' => $billing_address->fields['entry_suburb'],
                 'city' => $billing_address->fields['entry_city'],

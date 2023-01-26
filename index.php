@@ -93,11 +93,15 @@
  */
   require($template->get_template_dir('tpl_main_page.php',DIR_WS_TEMPLATE, $current_page_base,'common'). '/tpl_main_page.php');
 ?>
-</html>
 <?php
 ?><pre>
 <?php
 print_r($_SESSION);
+?></pre>
+<?php
+?><pre>
+<?php
+print_r($order);
 ?></pre>
 <?php
 /**

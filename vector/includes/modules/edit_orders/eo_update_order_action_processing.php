@@ -20,6 +20,7 @@ $order_updated = false;
 $sql_data_array = [
     'customers_name' => $_POST['update_customer_name'],
     'customers_company' => $_POST['update_customer_company'],
+    'customers_unit' => $_POST['update_customer_unit'],
     'customers_street_address' => $_POST['update_customer_street_address'],
     'customers_suburb' => $_POST['update_customer_suburb'],
     'customers_city' => $_POST['update_customer_city'],
@@ -32,6 +33,7 @@ $sql_data_array = [
 
     'billing_name' => $_POST['update_billing_name'],
     'billing_company' => $_POST['update_billing_company'],
+    'billing_unit' => $_POST['update_billing_unit'],
     'billing_street_address' => $_POST['update_billing_street_address'],
     'billing_suburb' => $_POST['update_billing_suburb'],
     'billing_city' => $_POST['update_billing_city'],
@@ -41,6 +43,7 @@ $sql_data_array = [
 
     'delivery_name' => $_POST['update_delivery_name'],
     'delivery_company' => $_POST['update_delivery_company'],
+    'delivery_unit' => $_POST['update_delivery_unit'],
     'delivery_street_address' => $_POST['update_delivery_street_address'],
     'delivery_suburb' => $_POST['update_delivery_suburb'],
     'delivery_city' => $_POST['update_delivery_city'],
@@ -86,7 +89,7 @@ if (isset($_POST['update_info_cc_number'])) {
 // Give any listening observer the opportunity to make modifications to the SQL data associated
 // with the updated order and/or disallow the update.
 //
-// If the observer disallows the update (by setting the 3rd parameter to (bool)false), it's the observer's responsibility 
+// If the observer disallows the update (by setting the 3rd parameter to (bool)false), it's the observer's responsibility
 // to issue a message to the current admin to let them know why the update was denied.
 //
 // Note that (currently) any updates made to the order will be lost!
@@ -132,7 +135,7 @@ if (isset($_POST['update_products'])) {
     // -----
     // Sometimes, EO needs a reset to its order-totals processing, especially in the presence
     // of order-totals that make tax-related changes (like group_pricing).  If the admin has ticked the "Reset" box,
-    // clear out all the tax and total-related values and also reset the order-totals currently 
+    // clear out all the tax and total-related values and also reset the order-totals currently
     // applied to start afresh.
     //
     if (isset($_POST['reset_totals'])) {
@@ -142,7 +145,7 @@ if (isset($_POST['update_products'])) {
             $order->info['tax_groups'][$key] = 0;
         }
     }
-    
+
     // -----
     // Initialize the shipping cost, tax-rate and tax-value.
     //
@@ -194,7 +197,7 @@ if (isset($_POST['update_products'])) {
             PHP_EOL . 'Order Product ID: ' . $orders_products_id . ' Row ID: ' . $rowID . PHP_EOL .
             'Product in Request: ' . PHP_EOL . $eo->eoFormatArray($product_update)
         );
-                
+
         // Only update if there is an existing item in the order
         if ($rowID >= 0) {
             // Grab the old product + attributes
@@ -217,7 +220,7 @@ if (isset($_POST['update_products'])) {
 
             $eo->eoLog (
                 PHP_EOL . 'Removed Product Order Subtotal: ' . $order->info['subtotal'] . PHP_EOL .
-                $eo->eoFormatOrderTotalsForLog($order, 'Removed Product Order Totals: ') . 
+                $eo->eoFormatOrderTotalsForLog($order, 'Removed Product Order Totals: ') .
                 'Removed Product Tax (total): ' . $order->info['tax'] . PHP_EOL .
                 'Removed Product Tax Groups:' . PHP_EOL . $eo->eoFormatArray($order->info['tax_groups'])
             );
@@ -234,7 +237,7 @@ if (isset($_POST['update_products'])) {
                     (EO_PRODUCT_PRICE_CALC_METHOD == 'AutoSpecials' || (EO_PRODUCT_PRICE_CALC_METHOD == 'Choose' && $_POST['payment_calc_method'] == 1))
                 );
                 unset($attrs);
-                
+
                 // Handle the case where the product was deleted
                 // from the store. This should probably never be done.
                 // Removing the product will cause issues with links
@@ -265,7 +268,7 @@ if (isset($_POST['update_products'])) {
                 } else {
                     $new_product = array_merge($new_product, $product_update);
                 }
-                
+
                 // -----
                 // If the admin has an option to "Choose" the pricing calculation method, save the
                 // current selection in the session so that it's maintained during their processing.
@@ -292,7 +295,7 @@ if (isset($_POST['update_products'])) {
             $order_updated = true;
         }
     }
-    
+
     // -----
     // If the order's been updated ...
     //
@@ -301,7 +304,7 @@ if (isset($_POST['update_products'])) {
         // Add an orders-status-history record, identifying that an update was performed.
         //
         $eo->eoRecordStatusHistory($oID, EO_MESSAGE_ORDER_UPDATED . $price_calc_method_message);
-        
+
         // -----
         // Need to force update the tax field if the tax is zero.
         // This runs after the shipping tax is added by the above update
@@ -451,7 +454,7 @@ if (isset($_POST['update_total'])) {
 
     // Update the order's order-totals
     eo_update_database_order_totals($oID);
-    
+
     // -----
     // Update the product's weight, too.
     //
@@ -486,7 +489,7 @@ $eo->eoLog (
     PHP_EOL . '============================================================' .
     PHP_EOL . PHP_EOL .
     'Final Subtotal: ' . $order->info['subtotal'] . PHP_EOL .
-     $eo->eoFormatOrderTotalsForLog($order, 'Final Totals:') . 
+     $eo->eoFormatOrderTotalsForLog($order, 'Final Totals:') .
     'Final Tax (total): ' . $order->info['tax'] . PHP_EOL .
     'Final Tax Groups:' . PHP_EOL . $eo->eoFormatArray($order->info['tax_groups'])
 );

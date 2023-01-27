@@ -35,6 +35,11 @@
         </tr>
 
         <tr>
+            <td class="eo-label"><label for="update_<?php echo $address_name; ?>_unit"><?php echo ENTRY_CUSTOMER_UNIT; ?></label>:&nbsp;</td>
+            <td><?php filtered_unit_lookup($address_fields['agency']); echo zen_draw_pull_down_menu('update_' . $address_name . '_unit',$filtered_unit_array,$address_fields['unit'], 'id="update_' . $address_name . '_unit"'); ?></td>
+        </tr>
+
+        <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_address"><?php echo ENTRY_CUSTOMER_ADDRESS; ?></label>:&nbsp;</td>
             <td><input name="update_<?php echo $address_name; ?>_street_address" size="45" value="<?php echo zen_output_string_protected($address_fields['street_address']); ?>" <?php echo $max_street_address_length; ?> id="update_<?php echo $address_name; ?>_address"></td>
         </tr>
@@ -67,7 +72,7 @@
         echo zen_get_country_list('update_' . $address_name . '_country', $address_fields['country']['id'], 'id="update_' . $address_name . '_country"');
     } else {
         echo '<input name="update_' . $address_name . '_country" size="45" value="' . zen_output_string_protected($address_fields['country']) . '"' . $max_country_length . '" id="update_"' . $address_name . '_country">';
-    } 
+    }
     ?>
             </td>
         </tr>
@@ -75,7 +80,7 @@
     // -----
     // Now, issue the address-specific notification to allow other plugins to add fields to the
     // associated address.
-    // 
+    //
     // A watching observer can provide an associative array in the form:
     //
     // $extra_data = array(

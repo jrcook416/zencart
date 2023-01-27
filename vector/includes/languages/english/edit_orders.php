@@ -37,6 +37,7 @@ define('TABLE_HEADING_UPDATED_BY', 'Updated By');
 define('ENTRY_CUSTOMER', 'Customer Address:');
 define('ENTRY_CUSTOMER_NAME', 'Name');
 define('ENTRY_CUSTOMER_COMPANY', 'Company');
+define('ENTRY_CUSTOMER_UNIT', 'Ordering Unit');
 define('ENTRY_CUSTOMER_ADDRESS', 'Address');
 define('ENTRY_CUSTOMER_SUBURB', 'Suburb');
 define('ENTRY_CUSTOMER_CITY', 'City');

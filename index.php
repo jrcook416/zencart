@@ -94,16 +94,6 @@
   require($template->get_template_dir('tpl_main_page.php',DIR_WS_TEMPLATE, $current_page_base,'common'). '/tpl_main_page.php');
 ?>
 <?php
-?><pre>
-<?php
-print_r($_SESSION);
-?></pre>
-<?php
-?><pre>
-<?php
-print_r($order);
-?></pre>
-<?php
 /**
  * Load general code run before page closes
  */

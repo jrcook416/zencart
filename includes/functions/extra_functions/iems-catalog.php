@@ -21,6 +21,8 @@
  * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
  * @version 	Jeremiah Cook 2022-09-20, modified for ZC v1.5.7d
  */
+
+
     function filtered_unit_lookup($agency) {
         global $db;
         global $filtered_unit_array;
@@ -106,3 +108,17 @@
       );
       return $field;
     } // end iems_pull_down_menu()
+
+function unit_name_lookup($unitCode){
+    global $db;
+    global $unitName;
+    $unit_values = $db->Execute("select masterCountyID, masterAgency, masterUnitDescription from iems_units where masterUnitID = '" . $unitCode . "' LIMIT 1");
+    while (!$unit_values->EOF){
+        $countyID = $unit_values->fields['masterCountyID'];
+        $agencyID = $unit_values->fields['masterAgency'];
+        $unitDesc = $unit_values->fields['masterUnitDescription'];
+        $unitName = $countyID . " " . $agencyID . " " . $unitDesc;
+        $unit_values->MoveNext();
+    };
+    return $unitName;
+} //end unit_code_lookup

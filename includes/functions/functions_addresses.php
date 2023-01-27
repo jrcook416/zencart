@@ -321,6 +321,10 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
     $tmp = array_map('strlen', array_keys($address));
     array_multisort($tmp, SORT_DESC, $address);
 
+    // convert unit from int value to string
+    $unitName = unit_name_lookup($address['unit']);
+    $address['unit'] = $unitName;
+
     // store translated values into original array, just for the sake of the notifier
     $incoming = $address;
 

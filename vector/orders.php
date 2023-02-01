@@ -35,8 +35,12 @@ if (!defined('TY_TRACKER')) {
 }
 /* BOF Super Orders 1 of 21 */
 
-$quick_view_popover_enabled = false;
-$includeAttributesInProductDetailRows = true;
+// Override instructions in:
+// https://docs.zen-cart.com/user/admin/site_specific_overrides/
+$quick_view_popover_enabled = $quick_view_popover_enabled ?? false;
+$includeAttributesInProductDetailRows = $includeAttributesInProductDetailRows ?? true;
+$show_product_tax = $show_product_tax ?? true;
+$show_zone_info = $show_zone_info ?? true;
 
 require(DIR_WS_CLASSES . 'currencies.php');
 $currencies = new currencies();

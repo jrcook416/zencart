@@ -158,7 +158,7 @@ class Customer extends base
         $_SESSION['customer_country_id'] = (int)$this->data['country_id'];
         $_SESSION['customer_zone_id'] = (int)$this->data['zone_id'];
         $_SESSION['customers_authorization'] = (int)$this->data['customers_authorization'];
-		
+
 		// IEMS CUSTOM CODE //
 		// COUNTY CODE AND IDENTIFIER ASSIGNMENT //
 		$_SESSION['IEMS']['customer_county_code'] = (int)$this->data['county'];
@@ -172,6 +172,7 @@ class Customer extends base
 		$_SESSION['IEMS']['customer_unit'] = (int)$this->data['unit'];
 		unit_code_lookup($_SESSION['IEMS']['customer_unit']);
 		$_SESSION['IEMS']['unit'] = $_SESSION['IEMS']['unitCounty'] . ' ' . $_SESSION['IEMS']['unitAgency'] . " " . $_SESSION['IEMS']['unitName'];
+        $_SESSION['IEMS']['groups'] = zen_groups_customer_belongs_to((int)$customer_id);
 		// END IEMS CUSTOM CODE //
 
         // @TODO - should we add $this->data to a session var, and replace numerous other lookups?
@@ -476,16 +477,16 @@ class Customer extends base
         if (empty($customer_id)) return [];
 
         $sql = "SELECT address_book_id,
-                       entry_firstname AS firstname, 
+                       entry_firstname AS firstname,
 					   entry_lastname AS lastname,
-                       entry_company AS company, 
+                       entry_company AS company,
 					   entry_street_address AS street_address,
-                       entry_suburb AS suburb, 
-					   entry_city AS city, 
+                       entry_suburb AS suburb,
+					   entry_city AS city,
 					   entry_postcode AS postcode,
                        entry_state AS state,
                        entry_zone_id AS zone_id,
-					   entry_agency AS agency, 
+					   entry_agency AS agency,
 					   entry_county AS county,
 					   entry_unit AS unit,
                        zone_name, zone_code AS zone_iso,

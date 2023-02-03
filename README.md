@@ -31,6 +31,7 @@ Zen Cart branch v158-dev-new is a branch that holds work completed on the Indian
 15. Updated multiple pieces of One Page Checkout to comply with IEMS-specific unit identification needs and processes during the week of 2023-01-16 to 2023-01-20 and the week of 2023-01-23 to 2023-01-24.  
 16. Updated the README.md file with a brief summary of changes made between 2023-01-10 and 2023-01-24.
 17. Continued work to get custom unit information into the order class and workflow.  I was successful in getting information pulled from the customer record to save to the order table.  The next priority will be to make sure that One Page Checkout is updating this unit information and saving that information, not the queried address information, to the order tables.  Following that, I will build a custom lookup to replace the unit ID number with a unit description in the administrative interface. 
+18. Updated the v158-dev-new branch with upstream/v158 on 2023-02-01. 
 
 ----------------------
 Work Completed

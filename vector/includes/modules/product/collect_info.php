@@ -167,13 +167,6 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
   ?>
   <div class="col-sm-12 text-center"><?php echo (zen_get_categories_status($current_category_id) == '0' ? TEXT_CATEGORIES_STATUS_INFO_OFF : '') . (isset($out_status) && $out_status ? ' ' . TEXT_PRODUCTS_STATUS_INFO_OFF : ''); ?></div>
   <div class="form-group">
-      <p class="col-sm-3 control-label"><?php echo TEXT_PRODUCTS_STATUS; ?></p>
-    <div class="col-sm-9 col-md-6">
-      <label class="radio-inline"><?php echo zen_draw_radio_field('products_status', '1', ($pInfo->products_status == 1)) . TEXT_PRODUCT_AVAILABLE; ?></label>
-      <label class="radio-inline"><?php echo zen_draw_radio_field('products_status', '0', ($pInfo->products_status == 0)) . TEXT_PRODUCT_NOT_AVAILABLE; ?></label>
-    </div>
-  </div>
-  <div class="form-group">
       <?php echo zen_draw_label(TEXT_PRODUCTS_DATE_AVAILABLE, 'products_date_available', 'class="col-sm-3 control-label"'); ?>
     <div class="col-sm-9 col-md-6">
       <div class="date input-group" id="datepicker">
@@ -305,6 +298,7 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
       <?php echo ($pInfo->product_is_always_free_shipping == 1 ? '<span class="help-block errorText">' . TEXT_FREE_SHIPPING_EDIT . '</span>' : ''); ?>
     </div>
   </div>
+
   <div class="form-group">
       <p class="col-sm-3 control-label"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS; ?></p>
     <div class="col-sm-9 col-md-6">
@@ -313,24 +307,152 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
       <?php echo ($pInfo->products_qty_box_status == 0 ? '<span class="help-block errorText">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
     </div>
   </div>
-  <div class="form-group">
-      <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
-    <div class="col-sm-9 col-md-6">
-        <?php echo zen_draw_input_field('products_quantity_order_min', ($pInfo->products_quantity_order_min == 0 ? 1 : $pInfo->products_quantity_order_min), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+
+<div class="well" style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 10px 10px 0 0;">
+    <div class = "row">
+    <div class = "col-sm-2">
+        DEFAULT (All Agencies)
+                <div class="form-group">
+                    <p class="col-sm-3 control-label"><?php echo TEXT_PRODUCTS_STATUS; ?></p>
+                    <div class="col-sm-9 col-md-6">
+                        <label class="radio-inline"><?php echo zen_draw_radio_field('products_status', '1', ($pInfo->products_status == 1)) . TEXT_PRODUCT_AVAILABLE; ?></label>
+                        <label class="radio-inline"><?php echo zen_draw_radio_field('products_status', '0', ($pInfo->products_status == 0)) . TEXT_PRODUCT_NOT_AVAILABLE; ?></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
+                    <div class="col-sm-9 col-md-6">
+                        <?php echo zen_draw_input_field('products_quantity_order_min', ($pInfo->products_quantity_order_min == 0 ? 1 : $pInfo->products_quantity_order_min), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
+                        <div class="col-sm-9 col-md-6">
+                            <?php echo zen_draw_input_field('products_quantity_order_max', $pInfo->products_quantity_order_max, 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                        </div>
+                </div>
+                <div class="form-group">
+                    <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
+                        <div class="col-sm-9 col-md-6">
+                            <?php echo zen_draw_input_field('products_quantity_order_units', ($pInfo->products_quantity_order_units == 0 ? 1 : $pInfo->products_quantity_order_units), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                        </div>
+                </div>
+        </div>
+        <div class = "col-sm-2">
+        EXTERNAL AGENCIES
+            <div class="form-group">
+                <p class="col-sm-3 control-label"><?php echo TEXT_PRODUCTS_STATUS; ?></p>
+                <div class="col-sm-9 col-md-6">
+                    <label class="radio-inline"><?php echo zen_draw_radio_field('ext_products_status', '1', ($pInfo->limits['EXT']['status'] == 1)) . TEXT_PRODUCT_AVAILABLE; ?></label>
+                    <label class="radio-inline"><?php echo zen_draw_radio_field('ext_products_status', '0', ($pInfo->limits['EXT']['status']  == 0)) . TEXT_PRODUCT_NOT_AVAILABLE; ?></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('ext_products_quantity_order_min', ($pInfo->limits['EXT']['minimum']  == 0 ? 1 : $pInfo->limits['EXT']['minimum'] ), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('ext_products_quantity_order_max', $pInfo->limits['EXT']['maximum'] , 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('ext_products_quantity_order_units', ($pInfo->limits['EXT']['units']  == 0 ? 1 : $pInfo->limits['EXT']['units'] ), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                </div>
+            </div>
+        </div>
+        <div class = "col-sm-2">
+        INDIANAPOLIS EMS
+            <div class="form-group">
+                <p class="col-sm-3 control-label"><?php echo TEXT_PRODUCTS_STATUS; ?></p>
+                <div class="col-sm-9 col-md-6">
+                    <label class="radio-inline"><?php echo zen_draw_radio_field('iems_products_status', '1', ($pInfo->limits['IEMS']['status'] == 1)) . TEXT_PRODUCT_AVAILABLE; ?></label>
+                    <label class="radio-inline"><?php echo zen_draw_radio_field('iems_products_status', '0', ($pInfo->limits['IEMS']['status'] == 0)) . TEXT_PRODUCT_NOT_AVAILABLE; ?></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('iems_products_quantity_order_min', ($pInfo->limits['IEMS']['minimum'] == 0 ? 1 : $pInfo->limits['IEMS']['minimum']), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('iems_products_quantity_order_max', $pInfo->limits['IEMS']['maximum'], 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('iems_products_quantity_order_units', ($pInfo->limits['IEMS']['units'] == 0 ? 1 : $pInfo->limits['IEMS']['units']), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                </div>
+            </div>
+        </div>
+        <div class = "col-sm-2">
+        INDIANAPOLIS FIRE
+            <div class="form-group">
+                <p class="col-sm-3 control-label"><?php echo TEXT_PRODUCTS_STATUS; ?></p>
+                <div class="col-sm-9 col-md-6">
+                    <label class="radio-inline"><?php echo zen_draw_radio_field('ifd_products_status', '1', ($pInfo->limits['IFD']['status'] == 1)) . TEXT_PRODUCT_AVAILABLE; ?></label>
+                    <label class="radio-inline"><?php echo zen_draw_radio_field('ifd_products_status', '0', ($pInfo->limits['IFD']['status'] == 0)) . TEXT_PRODUCT_NOT_AVAILABLE; ?></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('ifd_products_quantity_order_min', ($pInfo->limits['IFD']['minimum'] == 0 ? 1 : $pInfo->limits['IFD']['minimum']), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('ifd_products_quantity_order_max', $pInfo->limits['IFD']['maximum'], 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('ifd_products_quantity_order_units', ($pInfo->limits['IFD']['units'] == 0 ? 1 : $pInfo->limits['IFD']['units']), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                </div>
+            </div>
+        </div>
+        <div class = "col-sm-2">
+        WAYNE TOWNSHIP
+            <div class="form-group">
+                <p class="col-sm-3 control-label"><?php echo TEXT_PRODUCTS_STATUS; ?></p>
+                <div class="col-sm-9 col-md-6">
+                    <label class="radio-inline"><?php echo zen_draw_radio_field('wayne_products_status', '1', ($pInfo->limits['WAYNE']['status'] == 1)) . TEXT_PRODUCT_AVAILABLE; ?></label>
+                    <label class="radio-inline"><?php echo zen_draw_radio_field('wayne_products_status', '0', ($pInfo->limits['WAYNE']['status'] == 0)) . TEXT_PRODUCT_NOT_AVAILABLE; ?></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('wayne_products_quantity_order_min', ($pInfo->limits['WAYNE']['minimum'] == 0 ? 1 : $pInfo->limits['WAYNE']['minimum']), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('wayne_products_quantity_order_max', $pInfo->limits['WAYNE']['maximum'], 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
+                <div class="col-sm-9 col-md-6">
+                    <?php echo zen_draw_input_field('products_quantity_order_units', ($pInfo->limits['WAYNE']['units'] == 0 ? 1 : $pInfo->limits['WAYNE']['units']), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="form-group">
-      <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
-    <div class="col-sm-9 col-md-6">
-      <?php echo zen_draw_input_field('products_quantity_order_max', $pInfo->products_quantity_order_max, 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
-    </div>
-  </div>
-  <div class="form-group">
-      <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
-    <div class="col-sm-9 col-md-6">
-        <?php echo zen_draw_input_field('products_quantity_order_units', ($pInfo->products_quantity_order_units == 0 ? 1 : $pInfo->products_quantity_order_units), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
-    </div>
-  </div>
+</div>
+
   <div class="form-group">
       <p class="col-sm-3 control-label"><?php echo TEXT_PRODUCTS_MIXED; ?></p>
     <div class="col-sm-9 col-md-6">

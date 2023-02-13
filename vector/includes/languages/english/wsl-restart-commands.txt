@@ -1,0 +1,5 @@
+wsl --shutdown
+wsl -u root service apache2 start
+wsl -u root service mysql start
+wsl -u root service cron start
+wsl -u tomcat service tomcat start

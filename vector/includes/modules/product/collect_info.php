@@ -53,6 +53,20 @@ if (isset($_GET['pID']) && empty($_POST)) {
                            AND p.products_id = pd.products_id
                            AND pd.language_id = " . (int)$_SESSION['languages_id']);
 
+  $productLimits = $db->Execute("SELECT * FROM product_quantity_reference_view
+         where products_id = " . (int)$_GET['pID']);
+
+  while(!$productLimits->EOF){
+      $product->fields['limits'][$productLimits->fields['source']] = array(
+          'source' => $productLimits->fields['source'],
+          'status' => $productLimits->fields['products_status'],
+          'minimum' => $productLimits->fields['products_quantity_order_min'],
+          'maximum' => $productLimits->fields['products_quantity_order_max'],
+          'units' => $productLimits->fields['products_quantity_order_units']
+      );
+     $productLimits->MoveNext();
+ };
+
   $pInfo->updateObjectInfo($product->fields);
 } elseif (!empty($_POST)) {
   $pInfo->updateObjectInfo($_POST);

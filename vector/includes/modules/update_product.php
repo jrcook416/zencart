@@ -26,7 +26,7 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
   }
   $products_date_available = (date('Y-m-d') < $products_date_available) ? $products_date_available : 'null';
 
-  if (!empty($products_id)) { 
+  if (!empty($products_id)) {
     $zco_notifier->notify('NOTIFY_MODULES_UPDATE_PRODUCT_START', ['action' => $action, 'products_id' => $products_id]);
   }
 
@@ -57,6 +57,35 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
     'products_price_sorter' => convertToFloat($_POST['products_price_sorter']),
   );
 
+  $ext_custom_limit_array = array(
+      'products_status' => (int)$_POST['ext_products_status'],
+      'products_quantity_order_min' => convertToFloat($_POST['ext_products_quantity_order_min']) == 0 ? 1 : convertToFloat($_POST['ext_products_quantity_order_min']),
+      'products_quantity_order_max' => convertToFloat($_POST['ext_products_quantity_order_max']),
+      'products_quantity_order_units' => convertToFloat($_POST['ext_products_quantity_order_units']) == 0 ? 1 : convertToFloat($_POST['ext_products_quantity_order_units']),
+      'source' => 'EXT',
+  );
+  $iems_custom_limit_array = array(
+      'products_status' => (int)$_POST['iems_products_status'],
+      'products_quantity_order_min' => convertToFloat($_POST['iems_products_quantity_order_min']) == 0 ? 1 : convertToFloat($_POST['products_quantity_order_min']),
+      'products_quantity_order_max' => convertToFloat($_POST['iems_products_quantity_order_max']),
+      'products_quantity_order_units' => convertToFloat($_POST['iems_products_quantity_order_units']) == 0 ? 1 : convertToFloat($_POST['products_quantity_order_units']),
+      'source' => 'IEMS',
+  );
+  $ifd_custom_limit_array = array(
+      'products_status' => (int)$_POST['ifd_products_status'],
+      'products_quantity_order_min' => convertToFloat($_POST['ifd_products_quantity_order_min']) == 0 ? 1 : convertToFloat($_POST['ifd_products_quantity_order_min']),
+      'products_quantity_order_max' => convertToFloat($_POST['ifd_products_quantity_order_max']),
+      'products_quantity_order_units' => convertToFloat($_POST['ifd_products_quantity_order_units']) == 0 ? 1 : convertToFloat($_POST['ifd_products_quantity_order_units']),
+      'source' => 'IFD',
+  );
+  $wayne_custom_limit_array = array(
+      'products_status' => (int)$_POST['wayne_products_status'],
+      'products_quantity_order_min' => convertToFloat($_POST['wayne_products_quantity_order_min']) == 0 ? 1 : convertToFloat($_POST['wayne_products_quantity_order_min']),
+      'products_quantity_order_max' => convertToFloat($_POST['wayne_products_quantity_order_max']),
+      'products_quantity_order_units' => convertToFloat($_POST['wayne_products_quantity_order_units']) == 0 ? 1 : convertToFloat($_POST['wayne_products_quantity_order_units']),
+      'source' => 'WAYNE',
+  );
+
   $db_filename = zen_limit_image_filename($_POST['products_image'], TABLE_PRODUCTS, 'products_image');
   $sql_data_array['products_image'] = zen_db_prepare_input($db_filename);
   $new_image = 'true';
@@ -74,6 +103,14 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
 
     zen_db_perform(TABLE_PRODUCTS, $sql_data_array);
     $products_id = zen_db_insert_id();
+    $ext_custom_limit_array['products_id'] = $products_id;
+    $iems_custom_limit_array['products_id'] = $products_id;
+    $ifd_custom_limit_array['products_id'] = $products_id;
+    $wayne_custom_limit_array['products_id'] = $products_id;
+    zen_db_perform(TABLE_QUANTITY, $ext_custom_limit_array);
+    zen_db_perform(TABLE_QUANTITY, $iems_custom_limit_array);
+    zen_db_perform(TABLE_QUANTITY, $ifd_custom_limit_array);
+    zen_db_perform(TABLE_QUANTITY, $wayne_custom_limit_array);
 
     // reset products_price_sorter for searches etc.
     zen_update_products_price_sorter($products_id);
@@ -92,6 +129,10 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
     $sql_data_array['master_categories_id'] = (!empty($_POST['master_category']) && (int)$_POST['master_category'] > 0 ? (int)$_POST['master_category'] : (int)$_POST['master_categories_id']);
 
     zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = " . (int)$products_id);
+    zen_db_perform(TABLE_QUANTITY, $ext_custom_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'EXT'");
+    zen_db_perform(TABLE_QUANTITY, $iems_custom_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'IEMS'");
+    zen_db_perform(TABLE_QUANTITY, $ifd_custom_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'IFD'");
+    zen_db_perform(TABLE_QUANTITY, $wayne_custom_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'WAYNE'");
 
     zen_record_admin_activity('Updated product ' . (int)$products_id . ' via admin console.', 'info');
 
@@ -128,7 +169,7 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
     }
   }
 
-  $zco_notifier->notify('NOTIFY_MODULES_UPDATE_PRODUCT_END', array('action' => $action, 'products_id' => $products_id));
+  $zco_notifier->notify('NOTIFY_MODULES_UPDATE_PRODUCT_END', array('action' => $action, 'products_id' => $products_id, 'id' => $products_id));
 
   zen_redirect(zen_href_link(FILENAME_CATEGORY_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . (isset($_POST['search']) ? '&search=' . $_POST['search'] : '')));
 } else {

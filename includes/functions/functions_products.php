@@ -402,9 +402,25 @@ function zen_unlink_product_from_all_linked_categories($product_id, $master_cate
  */
 function zen_get_uprid($prid, $params)
 {
-    $uprid = $prid;
-    if (!is_array($params) || empty($params) || strstr($prid, ':')) return $prid;
+    // -----
+    // The string version of the supplied $prid is returned if:
+    //
+    // 1. The supplied $params is not an array or is an empty array, implying
+    //    that no attributes are associated with the product-selection.
+    // 2. The supplied $prid is already in uprid-format (ppp:xxxx), where
+    //    ppp is the product's id and xxx is a hash of the associated attributes.
+    //
+    $prid = (string)$prid;
+    if (!is_array($params) || $params === [] || strpos($prid, ':') !== false) {
+        return $prid;
+    }
 
+    // -----
+    // Otherwise, the $params array is expected to contain option/value
+    // pairs which are concatenated to the supplied $prid, hashed and then
+    // appended to the supplied $prid.
+    //
+    $uprid = $prid;
     foreach ($params as $option => $value) {
         if (is_array($value)) {
             foreach ($value as $opt => $val) {
@@ -1043,7 +1059,7 @@ function zen_remove_product($product_id, $ptc = 'true')
                   WHERE products_id = " . (int)$product_id);
 
     $db->Execute("DELETE FROM " . TABLE_CUSTOMERS_BASKET_ATTRIBUTES . "
-                  WHERE products_id = " . (int)$product_id);
+                  WHERE products_id LIKE '" . (int)$product_id) . ":%'";
 
 
     $product_reviews = $db->Execute("SELECT reviews_id
@@ -1117,4 +1133,40 @@ function zen_copy_discounts_to_product($copy_from, $copy_to)
                   VALUES (" . (int)$cnt_discount . ", " . (int)$copy_to . ", '" . $result['discount_qty'] . "', '" . $result['discount_price'] . "')");
         $cnt_discount++;
     }
+}
+
+function zen_products_sort_order($includeOrderBy = true): string
+{
+    switch(PRODUCT_INFO_PREVIOUS_NEXT_SORT) {
+        case (0):
+            $productSort = 'LPAD(p.products_id,11,"0")';
+            $productSort = 'p.products_id';
+            break;
+        case (1):
+            $productSort = 'pd.products_name';
+            break;
+        case (2):
+            $productSort = 'p.products_model';
+            break;
+        case (3):
+            $productSort = 'p.products_price_sorter, pd.products_name';
+            break;
+        case (4):
+            $productSort = 'p.products_price_sorter, p.products_model';
+            break;
+        case (5):
+            $productSort = 'pd.products_name, p.products_model';
+            break;
+        case (6):
+            $productSort = 'LPAD(p.products_sort_order,11,"0"), pd.products_name';
+            $productSort = 'products_sort_order, pd.products_name';
+            break;
+        default:
+            $productSort = 'pd.products_name';
+            break;
+    }
+    if ($includeOrderBy) {
+        return ' ORDER BY ' . $productSort;
+    }
+    return $productSort;
 }

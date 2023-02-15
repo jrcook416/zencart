@@ -578,8 +578,7 @@ if (zen_not_null($action) && $order_exists == true) {
       <?php } ?>
 
       <?php
-      if ($action == 'edit' && $order_exists) {
-        $order = new order($oID);
+      if ($action === 'edit' && $order_exists) {
         $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_EDIT_BEGIN', $oID, $order);
         if ($order->info['payment_module_code']) {
           if (file_exists(DIR_FS_CATALOG_MODULES . 'payment/' . $order->info['payment_module_code'] . '.php')) {

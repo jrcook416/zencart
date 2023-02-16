@@ -312,9 +312,9 @@ class splitPageResults
             }
 
             if ($displayAsDropdown) {
-                $dropdown = zen_draw_pull_down_menu($page_name, $this->pages_array, $current_page_number, 'onChange="this.form.submit();"');
+                $dropdown = zen_draw_pull_down_menu($page_name, $this->pages_array, $current_page_number, 'onChange="this.form.submit(); alert();"');
                 $display_links .= $dropdown;
-//                $display_links .= sprintf(TEXT_RESULT_PAGE, $dropdown, $this->num_pages);
+                //$display_links .= sprintf(TEXT_RESULT_PAGE, $dropdown, $this->num_pages);
             } else {
                 foreach ($this->pages_array as $page_id) {
                     $display_links .= '<a href="' . zen_href_link(basename($PHP_SELF), $parameters . $page_name . '=' . $page_id['id']) . '" class="splitPageLink' . ($page_id['id'] === $current_page_number ? ' splitPageLinkCurrent' : '') . '">' . $page_id['id'] . '</a>&nbsp;&nbsp;';

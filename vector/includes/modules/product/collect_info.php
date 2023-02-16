@@ -69,9 +69,7 @@ if (isset($_GET['pID']) && empty($_POST)) {
      $productLimits->MoveNext();
  };
   $pInfo->updateObjectInfo($product->fields);
-echo "<pre>";
-print_r($pInfo);
-echo "</pre>";
+
 } elseif (!empty($_POST)) {
   $pInfo->updateObjectInfo($_POST);
   if (isset($_GET['pID'])) {

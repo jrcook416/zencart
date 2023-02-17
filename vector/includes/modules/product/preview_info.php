@@ -9,10 +9,6 @@ if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
 
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-
 $languages = zen_get_languages();
 if (empty($products_description)) $products_description = [];
 if (empty($products_name)) $products_name = [];

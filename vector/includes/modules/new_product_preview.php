@@ -9,7 +9,6 @@ if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
 
-print_r($_POST);
 // upload image, if submitted
   if (!isset($_GET['read']) || $_GET['read'] !== 'only') {
     $products_image = new upload('products_image');

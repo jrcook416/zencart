@@ -580,11 +580,18 @@ if (zen_not_null($action) && $order_exists == true) {
       <?php
       if ($action === 'edit' && $order_exists) {
         $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_EDIT_BEGIN', $oID, $order);
-        if ($order->info['payment_module_code']) {
-          if (file_exists(DIR_FS_CATALOG_MODULES . 'payment/' . $order->info['payment_module_code'] . '.php')) {
-            require(DIR_FS_CATALOG_MODULES . 'payment/' . $order->info['payment_module_code'] . '.php');
-            require(DIR_FS_CATALOG_LANGUAGES . $_SESSION['language'] . '/modules/payment/' . $order->info['payment_module_code'] . '.php');
-            $module = new $order->info['payment_module_code'];
+        if ($order->info['payment_module_code'] && $order->info['payment_module_code'] !== PAYMENT_MODULE_GV) {
+          $messageStack->reset();
+          $payment_module = DIR_FS_CATALOG_MODULES . 'payment/' . $order->info['payment_module_code'] . '.php';
+          if (!file_exists($payment_module)) {
+              $messageStack->add(sprintf(WARNING_PAYMENT_MODULE_DOESNT_EXIST, $order->info['payment_module_code']), 'warning');
+          } else {
+            require $payment_module;
+            zen_include_language_file($order->info['payment_module_code'] . '.php', '/modules/payment/','inline');
+            $module = new $order->info['payment_module_code']();
+            if ((is_object($module) && method_exists($module, 'admin_notification')) && !$module->enabled) {
+                $messageStack->add(sprintf(WARNING_PAYMENT_MODULE_NOTIFICATIONS_DISABLED, $order->info['payment_module_code']), 'warning');
+            }
 //        echo $module->admin_notification($oID);
           }
         }

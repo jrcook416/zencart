@@ -312,7 +312,7 @@ class splitPageResults
             }
 
             if ($displayAsDropdown) {
-                $dropdown = zen_draw_pull_down_menu($page_name, $this->pages_array, $current_page_number, 'onChange="this.form.submit(); alert();"');
+                $dropdown = zen_draw_pull_down_menu($page_name, $this->pages_array, $current_page_number, 'onChange="this.form.submit();"');
                 $display_links .= $dropdown;
                 //$display_links .= sprintf(TEXT_RESULT_PAGE, $dropdown, $this->num_pages);
             } else {

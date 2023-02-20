@@ -1,7 +1,0 @@
-v_date_purchased,v_orders_status_name,v_orders_id,v_customers_id,v_customers_name,v_customers_company,v_customers_street_address,v_customers_suburb,v_customers_city,v_customers_state,v_customers_postcode,v_customers_country,v_customers_telephone,v_customers_email_address,v_products_quantity,v_products_model,v_products_name
-"2023-01-09 10:07:04",Pending,1,1,"Jeremiah Cook","49 IEMS","3930 Georgetown Road",,Indianapolis,Indiana,46254,"United States",317-937-8782,jeremiah.cook@indianapolisems.org,1,RTBHUNTER,"Russ Tippins Band - The Hunter"
-,,,,,,,,,,,,,,1,DVD-RPMK,"The Replacement Killers"
-,,,,,,,,,,,,,,1,DVD-ABUG,"A Bug's Life Linked"
-,,,,,,,,,,,,,,1,PC-UNTM,"Unreal Tournament Linked"
-"2023-01-17 11:14:28",Processing,2,1,"Jeremiah Cook","49 IEMS","3930 Georgetown Road",,Indianapolis,Indiana,46254,"United States",317-937-8782,jeremiah.cook@indianapolisems.org,1,DVD-ABUG,"A Bug's Life ""Multi Pak"" Special 2003 Collectors Edition"
-"2023-01-23 14:44:47",Processing,3,1,"Jeremiah Cook","49 IEMS","3930 Georgetown Road",,Indianapolis,Indiana,46254,"United States",317-937-8782,jeremiah.cook@indianapolisems.org,1,MAXSAMPLE-1,"A Maximum Sample of 1"

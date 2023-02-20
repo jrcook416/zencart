@@ -59,7 +59,8 @@ $listing_sql = "SELECT " . $select_column_list . " p.products_id, p.products_typ
                   AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
                 LEFT JOIN " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c ON p2c.products_id = p.products_id
                 LEFT JOIN " . TABLE_MANUFACTURERS . " m ON m.manufacturers_id = p.manufacturers_id
-                WHERE p.products_status = 1
+				LEFT JOIN " . TABLE_QUANTITY . " q on p.products_id = q.products_id
+                WHERE q.products_status = 1 AND q.source = '" . $_SESSION['IEMS']['agencyPricing'] . "'
                 " . $and . "
                 " . $alpha_sort;
 

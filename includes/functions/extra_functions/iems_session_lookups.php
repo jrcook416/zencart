@@ -22,11 +22,12 @@
 
     function agency_code_lookup($agencyCode){
         global $db;
-        $agency_values = $db->Execute("select masterCountyID, masterAgency, masterAgencyDescription from iems_agencies where masterAgencyID = '" . $agencyCode . "' LIMIT 1");
+        $agency_values = $db->Execute("select masterCountyID, masterAgency, masterAgencyDescription, iemsPricingGroup from iems_agencies where masterAgencyID = '" . $agencyCode . "' LIMIT 1");
             while (!$agency_values->EOF){
                 $_SESSION['IEMS']['agencyCountyID'] = $agency_values->fields['masterCountyID'];
                 $_SESSION['IEMS']['agencyCode'] = $agency_values->fields['masterAgency'];
                 $_SESSION['IEMS']['agencyName'] = $agency_values->fields['masterAgencyDescription'];
+				$_SESSION['IEMS']['agencyPricing'] = $agency_values->fields['iemsPricingGroup'];
                 $agency_values->MoveNext();
             };
     } //end agency_code_lookup

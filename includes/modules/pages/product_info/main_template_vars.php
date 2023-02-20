@@ -15,7 +15,7 @@
     $zco_notifier->notify('NOTIFY_MAIN_TEMPLATE_VARS_START_PRODUCT_INFO');
 
     if (!isset($product_info->EOF, $product_info->fields['products_id'], $product_info->fields['products_status']) || (int)$product_info->fields['products_id'] !== (int)$_GET['products_id']) {
-        $product_info = zen_get_product_details($_GET['products_id']);
+        $product_info = iems_get_product_details($_GET['products_id']);
     }
 
     $product_not_found = $product_info->EOF;
@@ -154,6 +154,10 @@
     }
 
     require($template->get_template_dir($tpl_page_body, DIR_WS_TEMPLATE, $current_page_base, 'templates') . $tpl_page_body);
+
+echo "<pre>";
+print_r($product_info);
+echo "</pre>";
 
 // This should be last line of the script:
     $zco_notifier->notify('NOTIFY_MAIN_TEMPLATE_VARS_END_PRODUCT_INFO');

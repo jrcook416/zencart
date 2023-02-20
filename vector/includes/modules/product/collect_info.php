@@ -353,19 +353,19 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('ext_products_quantity_order_min', ($pInfo->limits['EXT']['minimum']  == 0 ? 1 : $pInfo->limits['EXT']['minimum'] ), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                    <?php echo zen_draw_input_field('ext_products_quantity_order_min', $pInfo->limits['EXT']['minimum'], 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('ext_products_quantity_order_max', ($pInfo->limits['EXT']['maximum']  == 0 ? 1 : $pInfo->limits['EXT']['maximum']), 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                    <?php echo zen_draw_input_field('ext_products_quantity_order_max', $pInfo->limits['EXT']['maximum'], 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('ext_products_quantity_order_units', ($pInfo->limits['EXT']['units']  == 0 ? 1 : $pInfo->limits['EXT']['units'] ), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                    <?php echo zen_draw_input_field('ext_products_quantity_order_units', $pInfo->limits['EXT']['units'], 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
                 </div>
             </div>
         </div><!--//col div//-->
@@ -381,19 +381,19 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('iems_products_quantity_order_min', ($pInfo->limits['IEMS']['minimum']  == 0 ? 1 : $pInfo->limits['IEMS']['minimum'] ), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                    <?php echo zen_draw_input_field('iems_products_quantity_order_min', $pInfo->limits['IEMS']['minimum'], 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('iems_products_quantity_order_max', ($pInfo->limits['IEMS']['maximum'] == 0 ? 1: $pInfo->limits['IEMS']['maximum']), 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                    <?php echo zen_draw_input_field('iems_products_quantity_order_max', $pInfo->limits['IEMS']['maximum'], 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('iems_products_quantity_order_units', ($pInfo->limits['IEMS']['units']  == 0 ? 1 : $pInfo->limits['IEMS']['units'] ), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                    <?php echo zen_draw_input_field('iems_products_quantity_order_units', $pInfo->limits['IEMS']['units'], 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
                 </div>
             </div>
         </div><!--//col div//-->
@@ -409,19 +409,19 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('ifd_products_quantity_order_min', ($pInfo->limits['IFD']['minimum']  == 0 ? 1 : $pInfo->limits['IFD']['minimum'] ), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                    <?php echo zen_draw_input_field('ifd_products_quantity_order_min', $pInfo->limits['IFD']['minimum'], 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('ifd_products_quantity_order_max', ($pInfo->limits['IFD']['maximum'] == 0 ? 1 : $pInfo->limits['IFD']['maximum']), 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                    <?php echo zen_draw_input_field('ifd_products_quantity_order_max', $pInfo->limits['IFD']['maximum'], 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('ifd_products_quantity_order_units', ($pInfo->limits['IFD']['units']  == 0 ? 1 : $pInfo->limits['IFD']['units'] ), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                    <?php echo zen_draw_input_field('ifd_products_quantity_order_units', $pInfo->limits['IFD']['units'], 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
                 </div>
             </div>
         </div><!--//col div//-->
@@ -437,19 +437,19 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('wayne_products_quantity_order_min', ($pInfo->limits['WAYNE']['minimum']  == 0 ? 1 : $pInfo->limits['WAYNE']['minimum'] ), 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
+                    <?php echo zen_draw_input_field('wayne_products_quantity_order_min', $pInfo->limits['WAYNE']['minimum'], 'class="form-control" id="products_quantity_order_min" inputmode="decimal"'); ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MAX_RETAIL, 'products_quantity_order_max', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('wayne_products_quantity_order_max', ($pInfo->limits['WAYNE']['maximum'] == 0 ? 1 : $pInfo->limits['WAYNE']['maximum'] ), 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
+                    <?php echo zen_draw_input_field('wayne_products_quantity_order_max', $pInfo->limits['WAYNE']['maximum'], 'class="form-control" id="products_quantity_order_max" inputmode="decimal"'); ?>&nbsp;&nbsp;<?php echo TEXT_PRODUCTS_QUANTITY_MAX_RETAIL_EDIT; ?>
                 </div>
             </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_UNITS_RETAIL, 'products_quantity_order_units', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
-                    <?php echo zen_draw_input_field('wayne_products_quantity_order_units', ($pInfo->limits['WAYNE']['units']  == 0 ? 1 : $pInfo->limits['WAYNE']['units'] ), 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
+                    <?php echo zen_draw_input_field('wayne_products_quantity_order_units', $pInfo->limits['WAYNE']['units'], 'class="form-control" id="products_quantity_order_units" inputmode="decimal"'); ?>
                 </div>
             </div>
         </div><!--//col div//-->

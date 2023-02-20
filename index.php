@@ -92,15 +92,6 @@
  * template also loads the page body code based on the variable $body_code.
  */
   require($template->get_template_dir('tpl_main_page.php',DIR_WS_TEMPLATE, $current_page_base,'common'). '/tpl_main_page.php');
-?>
-<pre>
-<?php
-print_r($_SESSION);
-?>
-</pre>
-<?php
-/**
- * Load general code run before page closes
- */
+
 ?>
 <?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>

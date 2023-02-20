@@ -64,27 +64,51 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
       'products_quantity_order_units' => convertToFloat($_POST['ext_products_quantity_order_units']) == 0 ? 1 : convertToFloat($_POST['ext_products_quantity_order_units']),
       'source' => 'EXT',
   );
+    $ext_update_limit_array = array(
+        'products_status' => (int)$_POST['ext_products_status'],
+        'products_quantity_order_min' => convertToFloat($_POST['ext_products_quantity_order_min']),
+        'products_quantity_order_max' => convertToFloat($_POST['ext_products_quantity_order_max']),
+        'products_quantity_order_units' => convertToFloat($_POST['ext_products_quantity_order_units']),
+    );
   $iems_custom_limit_array = array(
       'products_status' => (int)$_POST['iems_products_status'],
-      'products_quantity_order_min' => convertToFloat($_POST['iems_products_quantity_order_min']) == 0 ? 1 : convertToFloat($_POST['products_quantity_order_min']),
+      'products_quantity_order_min' => convertToFloat($_POST['products_quantity_order_min']),
       'products_quantity_order_max' => convertToFloat($_POST['iems_products_quantity_order_max']),
-      'products_quantity_order_units' => convertToFloat($_POST['iems_products_quantity_order_units']) == 0 ? 1 : convertToFloat($_POST['products_quantity_order_units']),
+      'products_quantity_order_units' => convertToFloat($_POST['products_quantity_order_units']),
       'source' => 'IEMS',
   );
+    $iems_update_limit_array = array(
+        'products_status' => (int)$_POST['iems_products_status'],
+        'products_quantity_order_min' => convertToFloat($_POST['products_quantity_order_min']),
+        'products_quantity_order_max' => convertToFloat($_POST['iems_products_quantity_order_max']),
+        'products_quantity_order_units' => convertToFloat($_POST['products_quantity_order_units']),
+    );
   $ifd_custom_limit_array = array(
       'products_status' => (int)$_POST['ifd_products_status'],
-      'products_quantity_order_min' => convertToFloat($_POST['ifd_products_quantity_order_min']) == 0 ? 1 : convertToFloat($_POST['ifd_products_quantity_order_min']),
+      'products_quantity_order_min' => convertToFloat($_POST['ifd_products_quantity_order_min']),
       'products_quantity_order_max' => convertToFloat($_POST['ifd_products_quantity_order_max']),
-      'products_quantity_order_units' => convertToFloat($_POST['ifd_products_quantity_order_units']) == 0 ? 1 : convertToFloat($_POST['ifd_products_quantity_order_units']),
+      'products_quantity_order_units' => convertToFloat($_POST['ifd_products_quantity_order_units']),
       'source' => 'IFD',
   );
+    $ifd_update_limit_array = array(
+        'products_status' => (int)$_POST['ifd_products_status'],
+        'products_quantity_order_min' => convertToFloat($_POST['ifd_products_quantity_order_min']),
+        'products_quantity_order_max' => convertToFloat($_POST['ifd_products_quantity_order_max']),
+        'products_quantity_order_units' => convertToFloat($_POST['ifd_products_quantity_order_units']),
+    );
   $wayne_custom_limit_array = array(
       'products_status' => (int)$_POST['wayne_products_status'],
-      'products_quantity_order_min' => convertToFloat($_POST['wayne_products_quantity_order_min']) == 0 ? 1 : convertToFloat($_POST['wayne_products_quantity_order_min']),
+      'products_quantity_order_min' => convertToFloat($_POST['wayne_products_quantity_order_min']),
       'products_quantity_order_max' => convertToFloat($_POST['wayne_products_quantity_order_max']),
-      'products_quantity_order_units' => convertToFloat($_POST['wayne_products_quantity_order_units']) == 0 ? 1 : convertToFloat($_POST['wayne_products_quantity_order_units']),
+      'products_quantity_order_units' => convertToFloat($_POST['wayne_products_quantity_order_units']),
       'source' => 'WAYNE',
   );
+    $wayne_update_limit_array = array(
+        'products_status' => (int)$_POST['wayne_products_status'],
+        'products_quantity_order_min' => convertToFloat($_POST['wayne_products_quantity_order_min']),
+        'products_quantity_order_max' => convertToFloat($_POST['wayne_products_quantity_order_max']),
+        'products_quantity_order_units' => convertToFloat($_POST['wayne_products_quantity_order_units']),
+    );
 
   $db_filename = zen_limit_image_filename($_POST['products_image'], TABLE_PRODUCTS, 'products_image');
   $sql_data_array['products_image'] = zen_db_prepare_input($db_filename);
@@ -129,10 +153,10 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
     $sql_data_array['master_categories_id'] = (!empty($_POST['master_category']) && (int)$_POST['master_category'] > 0 ? (int)$_POST['master_category'] : (int)$_POST['master_categories_id']);
 
     zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = " . (int)$products_id);
-    zen_db_perform(TABLE_QUANTITY, $ext_custom_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'EXT'");
-    zen_db_perform(TABLE_QUANTITY, $iems_custom_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'IEMS'");
-    zen_db_perform(TABLE_QUANTITY, $ifd_custom_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'IFD'");
-    zen_db_perform(TABLE_QUANTITY, $wayne_custom_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'WAYNE'");
+    zen_db_perform(TABLE_QUANTITY, $ext_update_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'EXT'");
+    zen_db_perform(TABLE_QUANTITY, $iems_update_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'IEMS'");
+    zen_db_perform(TABLE_QUANTITY, $ifd_update_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'IFD'");
+    zen_db_perform(TABLE_QUANTITY, $wayne_update_limit_array, 'update', "products_id = " . (int)$products_id . " AND source = 'WAYNE'");
 
     zen_record_admin_activity('Updated product ' . (int)$products_id . ' via admin console.', 'info');
 

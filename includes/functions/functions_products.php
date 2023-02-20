@@ -25,7 +25,7 @@ function zen_get_product_details($product_id, $language_id = null)
             FROM " . TABLE_PRODUCTS . " p
             LEFT JOIN " . TABLE_PRODUCT_TYPES . " pt ON (p.products_type = pt.type_id)
             LEFT JOIN " . TABLE_PRODUCTS_DESCRIPTION . " pd ON (p.products_id = pd.products_id AND pd.language_id = " . (int)$language_id . ")
-            WHERE p.products_id = " . (int)$product_id;
+			WHERE p.products_id = " . (int)$product_id;
     $product = $db->Execute($sql, 1, true, 900);
     //Allow an observer to modify details
     $zco_notifier->notify('NOTIFY_GET_PRODUCT_DETAILS', $product_id, $product);
@@ -42,11 +42,11 @@ function zen_product_set_header_response($product_id, $product_info = null)
 
     // make sure we got a dbResponse
     if ($product_info === null || !isset($product_info->EOF)) {
-        $product_info = zen_get_product_details($product_id);
+        $product_info = iems_get_product_details($product_id);
     }
     // make sure it's for the current product
     if (!isset($product_info->fields['products_id'], $product_info->fields['products_status']) || (int)$product_info->fields['products_id'] !== $product_id) {
-        $product_info = zen_get_product_details($product_id);
+        $product_info = iems_get_product_details($product_id);
     }
 
     $response_code = 200;

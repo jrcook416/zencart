@@ -227,6 +227,7 @@ $zco_notifier->notify('NOTIFY_SEARCH_SELECT_STRING', $select_str, $select_str);
 
 //  $from_str = "from " . TABLE_PRODUCTS . " p left join " . TABLE_MANUFACTURERS . " m using(manufacturers_id), " . TABLE_PRODUCTS_DESCRIPTION . " pd left join " . TABLE_SPECIALS . " s on p.products_id = s.products_id, " . TABLE_CATEGORIES . " c, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c";
 $from_str = "FROM (" . TABLE_PRODUCTS . " p
+             LEFT JOIN " . TABLE_QUANTITY . " q ON p.products_id = q.products_id
              LEFT JOIN " . TABLE_MANUFACTURERS . " m
              USING(manufacturers_id), " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_CATEGORIES . " c, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c )";
 
@@ -347,6 +348,8 @@ if (isset($_GET['dto']) && zen_not_null($_GET['dto']) && ($_GET['dto'] != DOB_FO
     $where_str .= " and p.products_date_added <= :dateAdded";
     $where_str = $db->bindVars($where_str, ':dateAdded', zen_date_raw($dto), 'date');
 }
+
+$where_str .= "AND q.products_status = 1 AND q.source = '" . $_SESSION['IEMS']['agencyPricing'] . "'";
 
 $rate = $currencies->get_value($_SESSION['currency']);
 $pfrom = 0.0;

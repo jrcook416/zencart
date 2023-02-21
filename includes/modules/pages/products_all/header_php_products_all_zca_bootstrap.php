@@ -1,7 +1,7 @@
 <?php
 /**
  * products_all  header_php.php
- * 
+ *
  * BOOTSTRAP v3.0.0
  *
  * @package page
@@ -33,9 +33,12 @@ if (!(function_exists('zca_bootstrap_active') && zca_bootstrap_active())) {
                                     p.master_categories_id
                              FROM " . TABLE_PRODUCTS . " p
                              LEFT JOIN " . TABLE_MANUFACTURERS . " m ON (p.manufacturers_id = m.manufacturers_id), " . TABLE_PRODUCTS_DESCRIPTION . " pd
+                             LEFT JOIN " . TABLE_QUANTITY . " q on p.products_id = q.products_id
                              WHERE p.products_status = 1
                              AND p.products_id = pd.products_id
-                             AND pd.language_id = :languageID " . $order_by;
+                             AND pd.language_id = :languageID " . $order_by . "
+                             AND q.products_status = 1
+                             AND q.source = '" . $_SESSION['IEMS']['agencyPricing'] . "'";
 
 
 $listing_sql = $db->bindVars($listing_sql, ':languageID', $_SESSION['languages_id'], 'integer');

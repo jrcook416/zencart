@@ -24,12 +24,13 @@ class zcAjaxBootstrapSearch extends base
             if (zen_parse_search_string(stripslashes(trim($_POST['keywords'])), $search_keywords)) {
                 $keywords = trim($_POST['keywords']);
 
-                $sql = 
+                $sql =
                     "  FROM " . TABLE_PRODUCTS . " p
                             INNER JOIN " . TABLE_PRODUCTS_DESCRIPTION . " pd
-                                ON pd.products_id = p.products_id
+                               ON pd.products_id = p.products_id
                                AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
-                      WHERE p.products_status = 1
+                               LEFT JOIN " . TABLE_QUANTITY . " q on p.products_id = q.products_id
+                               WHERE q.products_status = 1 AND q.source = '" . $_SESSION['IEMS']['agencyPricing'] . "'
                         AND (";
 
                 foreach ($search_keywords as $next_keyword) {
@@ -57,7 +58,7 @@ class zcAjaxBootstrapSearch extends base
                     $select_clause = 'SELECT DISTINCT p.products_image, p.products_id, p.products_sort_order, pd.products_name, p.master_categories_id, p.products_model';
                     $order_by_clause = ' ORDER BY p.products_sort_order, pd.products_name';
                     $limit_clause = ' LIMIT ' . (int)BS4_AJAX_SEARCH_RESULTS_PER_PAGE;
-                    
+
                     $results = $db->Execute($select_clause . $sql . $order_by_clause . $limit_clause);
                     $products_search = [];
                     foreach ($results as $next_item) {

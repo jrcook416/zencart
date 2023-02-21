@@ -150,3 +150,64 @@ function iems_get_product_details($product_id, $language_id = null)
     $zco_notifier->notify('NOTIFY_GET_PRODUCT_DETAILS', $product_id, $product);
     return $product;
 }
+
+function iems_get_products_quantity_min_units_display($product_id, $include_break = true, $message_is_for_shopping_cart = false)
+{
+    $result = iems_get_product_details($product_id);
+
+    if ($result->EOF) return '';
+
+    $check_min = $result->fields['products_quantity_order_min'];
+    $check_max = $result->fields['products_quantity_order_max'];
+    $check_units = $result->fields['products_quantity_order_units'];
+    $allows_mixed = $result->fields['products_quantity_mixed'];
+
+    $the_min_units = '';
+
+    if ($check_min != 1 or $check_units != 1) {
+        if ($check_min != 1) {
+            $the_min_units .= '<span class="qmin">' . PRODUCTS_QUANTITY_MIN_TEXT_LISTING . '&nbsp;' . $check_min . '</span>';
+        }
+
+        if ($check_units != 1) {
+            $the_min_units .= '<span class="qunit">' . (zen_not_null($the_min_units) ? ' ' : '') . PRODUCTS_QUANTITY_UNIT_TEXT_LISTING . '&nbsp;' . $check_units . '</span>';
+        }
+
+        // don't check for mixed if no attributes
+        $chk_mix = zen_has_product_attributes((int)$product_id) && $allows_mixed;
+        if ($chk_mix === true) {
+            $the_min_units .= '<span class="qmix">';
+            if (($check_min > 0 || $check_units > 0)) {
+                if ($include_break) {
+                    $the_min_units .= '<br>';
+                } else {
+                    $the_min_units .= '&nbsp;&nbsp;';
+                }
+                $the_min_units .= ($message_is_for_shopping_cart == false ? TEXT_PRODUCTS_MIX_OFF : TEXT_PRODUCTS_MIX_OFF_SHOPPING_CART);
+
+            } else {
+                if ($include_break) {
+                    $the_min_units .= '<br>';
+                } else {
+                    $the_min_units .= '&nbsp;&nbsp;';
+                }
+                $the_min_units .= ($message_is_for_shopping_cart == false ? TEXT_PRODUCTS_MIX_ON : TEXT_PRODUCTS_MIX_ON_SHOPPING_CART);
+            }
+            $the_min_units .= '</span>';
+        }
+    }
+
+    if ($check_max > 0) {
+        $the_min_units .= '<span class="qmax">';
+        if ($include_break == true) {
+            $the_min_units .= ($the_min_units != '' ? '<br>' : '');
+        } else {
+            $the_min_units .= ($the_min_units != '' ? '&nbsp;&nbsp;' : '');
+        }
+        $the_min_units .= PRODUCTS_QUANTITY_MAX_TEXT_LISTING . '&nbsp;' . $check_max;
+        $the_min_units .= '</span>';
+    }
+
+    return $the_min_units;
+}
+

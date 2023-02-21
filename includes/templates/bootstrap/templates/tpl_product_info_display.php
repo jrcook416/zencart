@@ -80,7 +80,7 @@ require($template->get_template_dir('/tpl_products_next_previous.php',DIR_WS_TEM
 /**
  * display the products additional images in a model carousel
  */
- 
+
 if (PRODUCT_INFO_SHOW_BOOTSTRAP_MODAL_POPUPS == 'Yes' && PRODUCT_INFO_SHOW_BOOTSTRAP_MODAL_SLIDE == '1') {
 
 require($template->get_template_dir('tpl_bootstrap_images.php',DIR_WS_TEMPLATE, $current_page_base,'modalboxes'). '/tpl_bootstrap_images.php');
@@ -100,9 +100,9 @@ $buttonText = $num_images . TEXT_MULTIPLE_IMAGES; ?>
 /**
  * display the products additional images in individual modal
  */
- 
-echo '<div class="p-3"></div>'; 
- 
+
+echo '<div class="p-3"></div>';
+
   require($template->get_template_dir('/tpl_modules_additional_images.php',DIR_WS_TEMPLATE, $current_page_base,'templates'). '/tpl_modules_additional_images.php');
   }
   ?>
@@ -265,11 +265,11 @@ if (CUSTOMERS_APPROVAL == 3 && TEXT_LOGIN_FOR_PRICE_BUTTON_REPLACE_SHOWROOM == '
         $the_button .= zen_draw_hidden_field('products_id', (int)$_GET['products_id']) . zen_image_submit(BUTTON_IMAGE_IN_CART, BUTTON_IN_CART_ALT);
         $the_button .= '</div>';
         $the_button .= '</div>';
-        
-        if (zen_get_products_quantity_min_units_display((int)$_GET['products_id']) > '0') {
+
+        if (iems_get_products_quantity_min_units_display((int)$_GET['products_id']) > '0') {
             $the_button .= '<div id="min-max-units" class="d-flex justify-content-around">';
-            $the_button .= zen_get_products_quantity_min_units_display((int)$_GET['products_id']);
-            $the_button .= '</div>'; 
+            $the_button .= iems_get_products_quantity_min_units_display((int)$_GET['products_id']);
+            $the_button .= '</div>';
         }
     }
     $display_button = zen_get_buy_now_button($_GET['products_id'], $the_button);
@@ -280,7 +280,7 @@ if (CUSTOMERS_APPROVAL == 3 && TEXT_LOGIN_FOR_PRICE_BUTTON_REPLACE_SHOWROOM == '
   <div id="addToCart-card-header" class="card-header"><?php echo PRODUCTS_ORDER_QTY_TEXT; ?></div>
   <div id="cartAdd" class="card-body text-center">
 <?php
-    
+
       echo $display_qty;
       echo $display_button;
 ?>

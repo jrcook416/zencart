@@ -313,7 +313,7 @@ if ($num_products_count > 0) {
                     $lc_text .= '<br><br>';
                     $lc_text .= zen_get_buy_now_button($record['products_id'], $lc_button, $more_info_button);
                     $lc_text .= '<br>';
-                    $lc_text .= zen_get_products_quantity_min_units_display($record['products_id']);
+                    $lc_text .= iems_get_products_quantity_min_units_display($record['products_id']);
                     $lc_text .= '<br>';
                     if (zen_get_show_product_switch($record['products_id'], 'ALWAYS_FREE_SHIPPING_IMAGE_SWITCH')) {
                         if (zen_get_product_is_always_free_shipping($record['products_id'])) {

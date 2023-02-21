@@ -160,7 +160,7 @@ function zen_get_products_display_price($product_id)
         }
     }
 
-    $product_check = zen_get_product_details($product_id);
+    $product_check = iems_get_product_details($product_id);
 
     if ($product_check->EOF) return '';
 

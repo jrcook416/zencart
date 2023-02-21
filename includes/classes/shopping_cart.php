@@ -1216,11 +1216,24 @@ class shoppingCart extends base
 
         $products_array = [];
         foreach ($this->contents as $products_id => $data) {
-            $sql = "SELECT p.*, pd.products_name
-                    FROM " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd
+            $sql = "SELECT p.products_id, p.products_type, p.products_quantity, p.products_model, p.products_image,
+			        p.products_price, p.products_virtual, p.products_date_added, p.products_last_modified,
+			        p.products_date_available, p.products_weight, q.products_status AS products_status,
+			        p.products_tax_class_id, p.manufacturers_id, p.products_ordered,
+			        q.products_quantity_order_min AS products_quantity_order_min,
+			        q.products_quantity_order_units AS products_quantity_order_units, p.products_priced_by_attribute,
+			        p.product_is_free, p.product_is_call, p.products_quantity_mixed, p.product_is_always_free_shipping,
+			        p.products_qty_box_status, q.products_quantity_order_max AS products_quantity_order_max,
+			        p.products_sort_order, p.products_discount_type, p.products_discount_type_from, p.products_price_sorter,
+			        p.master_categories_id, p.products_mixed_discount_quantity, p.metatags_title_status, p.metatags_products_name_status,
+			        p.metatags_model_status, p. metatags_price_status, p.metatags_title_tagline_status, pd.*
+                    FROM " . TABLE_PRODUCTS . " p
+                    LEFT JOIN " . TABLE_PRODUCTS_DESCRIPTION . " pd on p.products_id = pd.products_id
+                    LEFT JOIN " . TABLE_QUANTITY . " q on p.products_id = q.products_id
                     WHERE p.products_id = '" . (int)$products_id . "'
                     AND pd.products_id = p.products_id
-                    AND pd.language_id = " . (int)$_SESSION['languages_id'];
+                    AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
+                    AND q.products_status = 1 AND q.source = '" . $_SESSION['IEMS']['agencyPricing'] . "'";
 
             $products = $db->Execute($sql, 1);
             if (!$products->EOF) {

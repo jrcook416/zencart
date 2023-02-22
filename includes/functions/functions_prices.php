@@ -509,7 +509,7 @@ function zen_get_products_quantity_order_min($product_id)
  */
 function zen_get_products_quantity_order_units($product_id)
 {
-    $result = zen_get_product_details($product_id);
+    $result = iems_get_product_details($product_id);
     if ($result->EOF) return '';
     return $result->fields['products_quantity_order_units'];
 }
@@ -521,7 +521,7 @@ function zen_get_products_quantity_order_units($product_id)
  */
 function zen_get_products_quantity_order_max($product_id)
 {
-    $result = zen_get_product_details($product_id);
+    $result = iems_get_product_details($product_id);
     if ($result->EOF) return '';
     return $result->fields['products_quantity_order_max'];
 }
@@ -545,7 +545,7 @@ function zen_get_products_qty_box_status($product_id)
  */
 function zen_get_products_quantity_mixed($product_id)
 {
-    $result = zen_get_product_details($product_id);
+    $result = iems_get_product_details($product_id);
     if ($result->EOF) return false;
     return $result->fields['products_quantity_mixed'] == 1;
 }
@@ -559,7 +559,7 @@ function zen_get_products_quantity_mixed($product_id)
  */
 function zen_get_products_quantity_min_units_display($product_id, $include_break = true, $message_is_for_shopping_cart = false)
 {
-    $result = zen_get_product_details($product_id);
+    $result = iems_get_product_details($product_id);
 
     if ($result->EOF) return '';
 

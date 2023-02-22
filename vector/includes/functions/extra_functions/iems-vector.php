@@ -9,7 +9,8 @@
  * For the sake of argument, this is the /includes/functions/extra_functions version of this file.
  * All code should be documented using phpDoc standards as laid out in the phpDoc manual and the
  * IEMS documentation.
- * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.  They will not show in the API documentation.
+ * Note: Variables existing inside of functions are tagged in the function docBlock where appropriate.
+ * They will not show in the API documentation.
  *
  *
  * @package		IEMSCustomFiles
@@ -17,9 +18,21 @@
  * @category	Indianapolis EMS custom code
  * @link   		<https://www.iemssupply.net>
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
- * @copyright 	Copyright (c)2013-2022, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
- * @license   	<https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html> GNU General Public License 2
- * @version 	Jeremiah Cook 2022-09-20, modified for ZC v1.5.7d
+ * @copyright   Copyright 2003-2022 Zen Cart Development Team
+ * @copyright   Portions Copyright 2003 osCommerce
+ * @copyright 	Copyright (c)2013-2023, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license     http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version 	Jeremiah Cook 2023-02-22, modified for ZC v1.5.8
+ */
+
+ /*
+ * function county_lookup()
+ *
+ * This function drives the county selector in vector/customers.php.
+ * It will pull the `countyID`, `countyCode`, and `countyName` records and load them into an associative array
+ * that will in turn load into a county selector with a primary ID field of `countyID` and a text field containing the
+ * `countyCode` concatenated with the `countyName` for display.
+ *
  */
  function county_lookup() {
 	global $db;
@@ -39,6 +52,15 @@
 	return $county_array;
 	} //end county_array
 
+ /*
+ * function agency_lookup()
+ *
+ * This function drives the agency selector in vector/customers.php.
+ * It will pull the `masterAgencyID`, `masterAgency`, `masterCountyID`, and `masterAgencyDescription` records
+ * and load them into an associative array that will in turn load into an agency selector with a primary ID field
+ * of ` masterAgencyID` and a text field containing the `masterAgency` concatenated with the `masterAgencyDescription` for display.
+ *
+ */
 function agency_lookup() {
 	global $db;
 	global $agency_array;
@@ -56,6 +78,17 @@ function agency_lookup() {
 			};
 	return $agency_array;
 	} // end_agency_lookup
+
+
+ /*
+ * function unit_lookup()
+ *
+ * This function drives the agency selector in vector/customers.php.
+ * It will pull the `masterUnitID`, `masterCountyID`, `masterAgencyID`, `masterAgency`, and `masterUnitDescription` records
+ * and load them into an associative array that will in turn load into an agency selector with a primary ID field
+ * of ` masterUnitID` and a text field containing the `masterAgency` concatenated with the `masterUnitDescription` for display.
+ *
+ */
 
 function unit_lookup() {
 	global $db;
@@ -76,6 +109,14 @@ function unit_lookup() {
 	return $unit_array;
 	} //end unit_lookup
 
+
+ /*
+ * function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false)
+ *
+ * This function is a carbon-copy of the zen_pull_down_menu function EXCEPT adding the 'select-' identifier to the field tag,
+ * which is specific for the bootstrap-select functionality within the select elements.
+ *
+ */
 function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false)
 {
   // -----
@@ -146,6 +187,13 @@ function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $r
   return $field;
 } // end iems_pull_down_menu()
 
+
+ /*
+ * function uom_lookup()
+ *
+ * This function pulls a list of units of measure from a unit of measure table. It is currently not used.
+ *
+ */
 function uom_lookup() {
 	global $db;
 	global $uom_array;
@@ -159,6 +207,16 @@ function uom_lookup() {
 	return $uom_array;
 	} //end uom_array
 
+
+ /*
+ * function unit_name_lookup()
+ *
+ * This function drives the agency selector in vector/customers.php.
+ * It will pull the `masterUnitID`, `masterCountyID`, `masterAgencyID`, `masterAgency`, and `masterUnitDescription` records
+ * and load them into an associative array that will in turn load into an agency selector with a primary ID field
+ * of ` masterUnitID` and a text field containing the `masterAgency` concatenated with the `masterUnitDescription` for display.
+ *
+ */
 function unit_name_lookup($unitCode){
     global $db;
     global $unitName;
@@ -202,10 +260,10 @@ function iems_get_product_details($product_id, $language_id = null)
      $sql = "SELECT p.products_id, p.products_type, p.products_quantity, p.products_model, p.products_image,
 			p.products_price, p.products_virtual, p.products_date_added, p.products_last_modified,
 			p.products_date_available, p.products_weight, q.products_status AS products_status,
-			p.products_tax_class_id, p.manufacturers_id, p.products_ordered, 
-			q.products_quantity_order_min AS products_quantity_order_min, 
-			q.products_quantity_order_units AS products_quantity_order_units, p.products_priced_by_attribute, 
-			p.product_is_free, p.product_is_call, p.products_quantity_mixed, p.product_is_always_free_shipping, 
+			p.products_tax_class_id, p.manufacturers_id, p.products_ordered,
+			q.products_quantity_order_min AS products_quantity_order_min,
+			q.products_quantity_order_units AS products_quantity_order_units, p.products_priced_by_attribute,
+			p.product_is_free, p.product_is_call, p.products_quantity_mixed, p.product_is_always_free_shipping,
 			p.products_qty_box_status, q.products_quantity_order_max AS products_quantity_order_max,
 			p.products_sort_order, p.products_discount_type, p.products_discount_type_from, p.products_price_sorter,
 			p.master_categories_id, p.products_mixed_discount_quantity, p.metatags_title_status, p.metatags_products_name_status,

@@ -13,25 +13,36 @@ It's free software, with free community-driven support available 24/7 on the Zen
 ---------------------
 Zen Cart&reg; v158-dev-new for Indianapolis EMS Logistics
 ---------------------
-Zen Cart branch v158-dev-new is a branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v158 release.  It contains the following modifications:
-1. An initial commit of the v158 stock code as referenced from upstream/v158.
-2. Updated v158 stock code on 2022-12-01.
-3. [ZCA Bootstrap Template v3.4.1](https://www.zen-cart.com/downloads.php?do=file&id=2191) on 2022-12-01.
-4. [ImageHandler 5](https://www.zen-cart.com/downloads.php?do=file&id=2169) on 2022-12-01.
-5. [One Page Checkout v2.4.4](https://www.zen-cart.com/downloads.php?do=file&id=2095) on 2022-12-01.
-6. Updated vector/customers.php to handle the addition of county, unit, and agency identifiers to the customer record on 2023-01-09. 
-7. Updated vector/includes/functions/extra_functions/iems.php to handle changes to the agency and county unit identifier query functions on 2023-01-09.
-8. Updated includes/classes/Customer.php on 2023-01-09 to handle custom changes to the Customer class involving the address book on 2023-01-09.
-9. Updated the MySQL schema with the addition of database tables for agency, county, and unit identifiers on 2023-01-10. 
-10. Updated the README.md file with coding changes made between 2022-12-01 to 2023-01-10 on 2023-01-10. 
-11. [Edit Orders v4.6.2](https://www.https://www.zen-cart.com/downloads.php?do=file&id=1513) on 2023-01-13.
-12. [Administrator Notes v2](https://www.zen-cart.com/downloads.php?do=file&id=2339) on 2023-01-13.
-13. [Database I/O Manager 1.6.7](https://www.zen-cart.com/downloads.php?do=file&id=2091) on 2023-01-13.
-14. [SuperOrders v5.0.0 beta1](https://www.zen-cart.com/downloads.php?do=file&id=155&styleid=2) on 2023-01-13.
-15. Updated multiple pieces of One Page Checkout to comply with IEMS-specific unit identification needs and processes during the week of 2023-01-16 to 2023-01-20 and the week of 2023-01-23 to 2023-01-24.  
-16. Updated the README.md file with a brief summary of changes made between 2023-01-10 and 2023-01-24.
-17. Continued work to get custom unit information into the order class and workflow.  I was successful in getting information pulled from the customer record to save to the order table.  The next priority will be to make sure that One Page Checkout is updating this unit information and saving that information, not the queried address information, to the order tables.  Following that, I will build a custom lookup to replace the unit ID number with a unit description in the administrative interface. 
-18. Updated the v158-dev-new branch with upstream/v158 on 2023-02-01. 
+Zen Cart branch v158-dev-new is a branch that holds work completed on the Indianapolis EMS Zen Cart&reg; v1.5.8 release.  It contains the following modifications:
+
+1. An initial commit of the v1.5.8 stock code as referenced from upstream/v158 on November 30, 2022.
+2. I updated the v1.5.8 stock code and made the following additions to the base code on December 01, 2022:
+ - I installed [ZCA Bootstrap Template v3.4.1](https://www.zen-cart.com/downloads.php?do=file&id=2191).
+ - I installed [ImageHandler 5](https://www.zen-cart.com/downloads.php?do=file&id=2169).
+ - I installed [One Page Checkout v2.4.4](https://www.zen-cart.com/downloads.php?do=file&id=2095).
+3. I made the following changes to the base code on January 09, 2023:
+ - I shut off the ability for a customer to create their own account by commenting out a line in the default login template file.
+ - I removed the ability of the customer to work with their own address book entries.
+ - I removed stock One Page Checkout files from a dead template directory.  
+ - I added county, agency, and unit affiliation handling to vector/customers.php.
+ - I worked on iems.php.  
+ - I created agency, county, and unit lookup functions. 
+ - Work continued on vector/customers.php, vector/includes/functions/extra_functions/iems.php, and the customer class on the catalog side. 
+4. I made the following changes to the base code on January 10, 2023: 
+ - I updated the MySQL schema with the addition of database tables for agency, county
+ - I updated the README.md file with coding changes made between 2022-12-01 to 2023-01-10.
+ - I also created custom JavaScript handlers for the county, agency, and unit select boxes. 
+5. On January 11 and 12, 2023, I mainly focused on changes to the language files specific to Zen Cart v1.5.8.  There was a change in the language file definitions between PHP 7.4 and PHP 8.1 versions, which I had to overcome. 
+6. I made the following changes to the base code on January 13, 2023:
+ - I installed [Edit Orders v4.6.2](https://www.https://www.zen-cart.com/downloads.php?do=file&id=1513).
+ - I installed [Administrator Notes v2](https://www.zen-cart.com/downloads.php?do=file&id=2339).
+ - I installed [Database I/O Manager 1.6.7](https://www.zen-cart.com/downloads.php?do=file&id=2091).
+ - I installed [SuperOrders v5.0.0 beta1](https://www.zen-cart.com/downloads.php?do=file&id=155&styleid=2).
+7. I made the following changes to the base code during the weeks of January 16 to 20 and January 23 to January 24: 
+ - I updated multiple pieces of One Page Checkout to comply with IEMS-specific unit identification needs and processes. 
+ - I updated the README.md file with a brief summary of changes made in this period of time.
+8. On January 25, 2023, I successfully created IEMS-specific keys to the $_SESSION variable to hold various parts of information. 
+9. The first two weeks in February had a few things going on, I got back to active development on February 13th and had a working model in place by February 22. 
 
 ----------------------
 Work Completed

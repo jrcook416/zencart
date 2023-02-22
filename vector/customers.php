@@ -1,18 +1,28 @@
 <?php
-
 /**
- * @copyright Copyright 2003-2022 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Scott C Wilson 2022 Aug 27 Modified in v1.5.8-alpha2 $
+ * This is a file containing custom code for the Indianapolis EMS implementation of Zen Cart.
+ *
+ * /vector/customers.php
+ *
+ * @package		IEMSCustomFiles
+ * @subpackage	Vector
+ * @category	Indianapolis EMS custom code
+ * @link   		<https://www.iemssupply.net>
+ * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @copyright   Copyright 2003-2022 Zen Cart Development Team
+ * @copyright   Portions Copyright 2003 osCommerce
+ * @copyright 	Copyright (c)2013-2023, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
+ * @license     http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version 	Jeremiah Cook 2023-02-22, modified for ZC v1.5.8
  */
+
 require('includes/application_top.php');
 
 require(DIR_WS_CLASSES . 'currencies.php');
 $currencies = new currencies();
 $group_array = [];
 
-// Override instructions in: 
+// Override instructions in:
 // https://docs.zen-cart.com/user/admin/site_specific_overrides/
 if (!isset($show_registration_ip_in_listing)) {
     $show_registration_ip_in_listing = false;
@@ -710,6 +720,12 @@ if (!empty($action)) {
                 ?>
             </div>
             <?php
+            /**IEMS CUSTOM CODE
+
+            This code contains all of the modifications necessary for the administrative user to modify a user's
+            county, agency, and unit affiliations specific to IEMS Zen Cart.
+
+             **/
             if (ACCOUNT_COMPANY == 'true') {
                 ?>
                 <div class="row">

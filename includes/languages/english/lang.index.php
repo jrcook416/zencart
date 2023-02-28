@@ -11,8 +11,8 @@ $define = [
     'TEXT_BUY' => 'Buy 1 \'',
     'TEXT_NOW' => '\' now',
     'HEADING_TITLE_PRODUCTS' => 'Available Products',
-    'HEADING_TITLE' => 'Congratulations! You have successfully installed your Zen Cart&reg; E-Commerce Solution.',
-    'HEADING_TITLE_NESTED' => 'Congratulations! You have successfully installed your Zen Cart&reg; E-Commerce Solution.',
+    'HEADING_TITLE' => 'Welcome to the Indianapolis EMS Supply and Logistics Ordering System.',
+    'HEADING_TITLE_NESTED' => 'Welcome to the Indianapolis EMS Supply and Logistics Ordering System.',
 ];
 
 return $define;

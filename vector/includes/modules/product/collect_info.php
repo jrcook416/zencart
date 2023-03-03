@@ -312,6 +312,7 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
 
 <div class="well" style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 10px 10px 0 0;">
     <div class = "row">
+        <!--
         <div class = "col-sm-2">
             <p class="text-center"><b>DEFAULT SETTINGS</b></p><br>
             <div class="form-group">
@@ -320,7 +321,7 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
                         <label class="radio-inline"><?php echo zen_draw_radio_field('products_status', '1', ($pInfo->products_status == 1)) . TEXT_PRODUCT_AVAILABLE; ?></label>
                         <label class="radio-inline"><?php echo zen_draw_radio_field('products_status', '0', ($pInfo->products_status == 0)) . TEXT_PRODUCT_NOT_AVAILABLE; ?></label>
                     </div>
-            </div><!--//form group-->
+            </div>
             <div class="form-group">
                 <?php echo zen_draw_label(TEXT_PRODUCTS_QUANTITY_MIN_RETAIL, 'products_quantity_order_min', 'class="col-sm-3 control-label"'); ?>
                 <div class="col-sm-9 col-md-6">
@@ -340,6 +341,7 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
                     </div>
             </div>
         </div><!--//col div//-->
+        
 
         <div class = "col-sm-2">
             <p class="text-center"><b>EXTERNAL AGENCIES</b></p><br>

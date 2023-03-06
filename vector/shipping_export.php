@@ -122,7 +122,10 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 
    } else { // Default 1 Order Per row (filelayout1=1)
 
-      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, date_purchased, ot.value, comments, order_tax, o.orders_status, o.payment_method";
+      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, 
+	  delivery_agency, delivery_unit, delivery_street_address, delivery_suburb, delivery_city, 
+	  delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, 
+	  order_total, date_purchased, ot.value, comments, order_tax, o.orders_status, o.payment_method";
       if ($_POST['iso_country2_code'] == 1) {
          $order_info = $order_info . ", cc.countries_iso_code_2";
       };
@@ -194,6 +197,10 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
    } // End File layout sql
 
    $order_details = $db->Execute($order_info);
+   
+   
+   
+   
    /******************Begin Set Header Row Information*****************************/
    $str_header = "Order ID,Customer Email";
    if ($_POST['split_name'] == 1) { //If name split is desired then split it.
@@ -201,7 +208,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
    } else {
       $str_header = $str_header . ",Delivery Name";
    }
-   $str_header = $str_header . ",Company,Delivery Street,Delivery Suburb,Delivery City,Delivery State,Delivery Post Code,Delivery Country,Ship Dest Type"; // swguy
+   $str_header = $str_header . ",Company,Agency,Unit,Delivery Street,Delivery Suburb,Delivery City,Delivery State,Delivery Post Code,Delivery Country,Ship Dest Type"; // swguy
    if ($_POST['shipmethod'] == 1) {
       $str_header = $str_header . ",Shipping Method";
    };
@@ -288,9 +295,13 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
          $dest_type = 'Commercial';
       }
 // end swguy
-      $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_company'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_street_address'] . $FIELDEND .
-         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_suburb'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_city'] . $FIELDEND .
-         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_state'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_postcode'] . $FIELDEND .
+/**IEMS CUSTOM CODE **/
+      $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_company'] . $FIELDEND . 
+		$FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_street_address'] . $FIELDEND .
+         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_suburb'] . $FIELDEND . 
+		 $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_city'] . $FIELDEND .
+         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_state'] . $FIELDEND . 
+		 $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_postcode'] . $FIELDEND .
          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_country'] . $FIELDEND .
          $FIELDSEPARATOR . $FIELDSTART . $dest_type . $FIELDEND;
 // swguy last line changed		

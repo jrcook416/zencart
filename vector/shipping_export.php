@@ -72,7 +72,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 
    if ($_POST['filelayout'] == 2) { // 1 Product Per row RADIO
 
-      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, op.products_model, products_name, op.products_price, final_price, op.products_quantity, date_purchased, ot.value, orders_products_id, order_tax, o.orders_status, o.payment_method";
+      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_agency, delivery_unit, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, op.products_model, products_name, op.products_price, final_price, op.products_quantity, date_purchased, ot.value, orders_products_id, order_tax, o.orders_status, o.payment_method";
       if ($_POST['iso_country2_code'] == 1) {
          $order_info = $order_info . ", cc.countries_iso_code_2";
       };

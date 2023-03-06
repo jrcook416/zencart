@@ -23,7 +23,6 @@
  * @version $Id: mc12345678 2021 Feb 22 Modified in v1.5.7c $
  */
 require('includes/application_top.php');
-
 // unset variable which is sometimes tainted by bad plugins like magneticOne tools
 if (isset($module)) {
   unset($module);
@@ -579,6 +578,7 @@ if (zen_not_null($action) && $order_exists == true) {
 
       <?php
       if ($action === 'edit' && $order_exists) {
+          $order = new order($oID);
         $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_EDIT_BEGIN', $oID, $order);
         if ($order->info['payment_module_code'] && $order->info['payment_module_code'] !== PAYMENT_MODULE_GV) {
           $messageStack->reset();

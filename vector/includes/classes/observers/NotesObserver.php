@@ -79,7 +79,7 @@ class NotesObserver extends base {
                 break;
 
             case 'NOTIFY_MODULES_UPDATE_PRODUCT_END':
-				$notes->updateNote($p2, "products");
+                $notes->updateNote($p2, "products");
                 break;
                 
             case 'NOTIFY_ADMIN_PRODUCT_COLLECT_INFO_EXTRA_INPUTS':
@@ -108,8 +108,8 @@ class NotesObserver extends base {
                 $notes->updateNote($p1, "customers");
                 break;
             
-            case 'NOTIFY_ADMIN_ORDERS_DEFAULT_ACTION': 
-               if ($p3 == 'update_note') { 
+            case 'NOTIFY_ADMIN_ORDERS_DEFAULT_ACTION':
+               if ($p3 = 'update_note') {
                    $notes->updateNote($p1, "orders");
 
                    $redirect = zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(['action', 'language']) . ($admin_language !== $_SESSION['languages_code'] ? '&language=' . $admin_language : ''), 'NONSSL');

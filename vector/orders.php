@@ -27,7 +27,7 @@ require('includes/application_top.php');
 if (isset($module)) {
   unset($module);
 }
-
+print_r($_POST);
 /* BOF Super Orders 1 of 21 */
 if (!defined('TY_TRACKER')) {
     define('TY_TRACKER', 'False');
@@ -1368,7 +1368,7 @@ if (zen_not_null($action) && $order_exists == true) {
                     <td>
 <?php
                         if ($first) {
-                           echo nl2br(zen_db_output($item['comments']));
+                           echo nl2br(zen_output_string_protected($item['comments']));
                            $first = false;
                         } else {
                            echo nl2br($item['comments']);

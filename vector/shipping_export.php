@@ -47,7 +47,8 @@ if ($format == 'TXT') {
    $LINEBREAK = "\n";
    $ATTRIBSEPARATOR = ' | '; //Be Careful with this option. Setting it to a 'comma' for example could throw off the remaining fields.
 }
-$file = (isset($_POST['filename']) ? $_POST['filename'] : "IEMS-Orders" . date('mdy-Hi') . $file_extension . "");
+$file = (isset($_POST['filename']) ? $_POST['filename'] : "IEMS-Website-Orders" . date('mdy-Hi') . 
+$file_extension . "");
 //$file = (isset($_POST['filename']) ? $_POST['filename'] : "Orders". $file_extension ."");
 $to_email_address = (isset($_POST['auto_email_supplier']) ? $_POST['auto_email_supplier'] : "" . EMAIL_EXPORT_ADDRESS . "");
 $email_subject = (isset($_POST['auto_email_subject']) ? $_POST['auto_email_subject'] : "Order export from " . STORE_NAME . "");
@@ -268,7 +269,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 
    while (!$order_details->EOF) {
 
-      $str_export = $FIELDSTART . "IEMS-" . $order_details->fields['orders_id'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['customers_email_address'] . $FIELDEND;
+      $str_export = $FIELDSTART . $order_details->fields['orders_id'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['customers_email_address'] . $FIELDEND;
       if ($_POST['split_name'] == 1) {
          $fullname = $order_details->fields['delivery_name'];
          list($first, $middle, $last) = preg_split("/[\s,]+/", $fullname);

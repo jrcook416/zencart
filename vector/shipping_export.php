@@ -118,7 +118,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
          //$order_info = $order_info . " AND date_purchased >= '". $start_date ."' AND date_purchased <= '". $end_date ."'";
       }
       $order_info = $order_info . " ORDER BY orders_id ASC";
-      //echo $order_info;
+      
 
    } else { // Default 1 Order Per row (filelayout1=1)
 

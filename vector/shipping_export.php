@@ -817,12 +817,12 @@ while (!$orders_status->EOF) {
                                                                 <input type='button' name='checkall'
                                                                        value="Check / Uncheck All"
                                                                        onclick='checkedAll(download_csv);'><br/><br/>
-                                                               <?php echo zen_draw_checkbox_field('export_test', '1', $export_test_checked); ?>
+                                                               <?php echo zen_draw_checkbox_field('export_test', '1', $export_test_checked=true); ?>
                                                                 &nbsp;<?php echo TEXT_RUNIN_TEST_FIELD; ?><br/>
                                                                <?php echo zen_draw_checkbox_field('split_name', '1', $export_split_checked); ?>
                                                                 &nbsp;<?php echo TEXT_SPLIT_NAME_FIELD; ?><br/>
                                                                 <!--Order Status: <?php echo zen_draw_pull_down_menu('date_status', $status_array, $_POST['date_status'], 'id="date_status"'); ?>-->
-                                                               <?php echo zen_draw_checkbox_field('include_header_row', '1', $export_header_row_checked); ?>
+                                                               <?php echo zen_draw_checkbox_field('include_header_row', '1', $export_header_row_checked=true); ?>
                                                                 &nbsp;<?php echo TEXT_HEADER_ROW_FIELD; ?><br/><br>
                                                                <?php echo TEXT_EMAIL_EXPORT_FORMAT; ?><?php echo zen_draw_pull_down_menu('format', $available_export_formats, $format); ?>
 
@@ -866,12 +866,12 @@ while (!$orders_status->EOF) {
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                           <?php echo zen_draw_checkbox_field('status_setting', '1', $order_status_setting_checked); ?>
+                                                                           <?php echo zen_draw_checkbox_field('status_setting', '1', $order_status_setting_checked=true); ?>
                                                                             Set Order Status After Export to&nbsp;
                                                                             <!--</td>
                                                                           </tr>
                                                                           <tr>
-                                                                            <td>--><?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, $_POST['order_status_setting'], 'id="order_status_setting"'); ?></td>
+                                                                            <td>--><?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, '4', 'id="order_status_setting"'); ?></td>
                                                                     </tr>
                                                                 </table>
                                                                 <hr/>
@@ -891,7 +891,7 @@ while (!$orders_status->EOF) {
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td><?php echo zen_draw_pull_down_menu('order_status', $status_array, $_POST['order_status'], 'id="order_status"'); ?></td>
+                                                                        <td><?php echo zen_draw_pull_down_menu('order_status', $status_array, '3', 'id="order_status"'); ?></td>
                                                                     </tr>
                                                                 </table>
                                                                 <hr>
@@ -913,7 +913,7 @@ while (!$orders_status->EOF) {
                                                                <?php echo TEXT_FILE_LAYOUT; ?><br/>
                                                                <?php echo zen_draw_radio_field('filelayout', '1') ?>
                                                                 &nbsp;<?php echo TEXT_FILE_LAYOUT_OPR_FIELD; ?><br/>
-                                                               <?php echo zen_draw_radio_field('filelayout', '2') ?>
+                                                               <?php echo zen_draw_radio_field('filelayout', '2', $file_layout_checked=true) ?>
                                                                 &nbsp;<?php echo TEXT_FILE_LAYOUT_PPR_FIELD; ?><br/>
                                                                 <hr>
                                                                <?php echo TEXT_ADDITIONAL_FIELDS; ?><br/>
@@ -925,7 +925,7 @@ while (!$orders_status->EOF) {
                                                                 &nbsp;<?php echo TEXT_PHONE_NUMBER_FIELD; ?><br/>
                                                                <?php echo zen_draw_checkbox_field('order_total', '1', $order_total_checked); ?>
                                                                 &nbsp;<?php echo TEXT_ORDER_TOTAL_FIELD; ?><br/>
-                                                               <?php echo zen_draw_checkbox_field('date_purchased', '1', $date_purchased_checked); ?>
+                                                               <?php echo zen_draw_checkbox_field('date_purchased', '1', $date_purchased_checked=true); ?>
                                                                 &nbsp;<?php echo TEXT_ORDER_DATE_FIELD; ?><br/>
                                                                <?php echo zen_draw_checkbox_field('order_comments', '1', $order_comments_checked); ?>
                                                                 &nbsp;<?php echo TEXT_ORDER_COMMENTS_FIELD; ?><br/>
@@ -938,7 +938,7 @@ while (!$orders_status->EOF) {
                                                                 &nbsp;<?php echo TEXT_DISCOUNT_FIELD; ?><br/>
                                                                <?php echo zen_draw_checkbox_field('payment_method', '1', $order_pmethod_checked); ?>
                                                                 &nbsp;<?php echo TEXT_PAYMENT_METHOD_FIELD; ?><br/>
-                                                               <?php echo zen_draw_checkbox_field('orders_status_export', '1', $order_status_checked); ?>
+                                                               <?php echo zen_draw_checkbox_field('orders_status_export', '1', $order_status_checked=true); ?>
                                                                 &nbsp;<?php echo TEXT_ORDER_STATUS_FIELD; ?><br/>
                                                                <?php echo zen_draw_checkbox_field('iso_country2_code', '1', $iso_country2_code_checked); ?>
                                                                 &nbsp;<?php echo TEXT_ISO_COUNTRY2_FIELD; ?><br/>
@@ -949,7 +949,7 @@ while (!$orders_status->EOF) {
                                                                 &nbsp;<?php //echo TEXT_STATE_ABBR_FIELD;
                                                                //}?><br/>
                                                                 <hr>
-                                                               <?php echo zen_draw_checkbox_field('product_details', '1', $prod_details_checked); ?>
+                                                               <?php echo zen_draw_checkbox_field('product_details', '1', $prod_details_checked=true); ?>
                                                                 &nbsp;<?php echo TEXT_PRODUCT_DETAILS_FIELD; ?> <span
                                                                         style="color: #ff0000"><strong>*</strong></span><br/>
                                                                 <hr/>

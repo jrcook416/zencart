@@ -27,7 +27,7 @@ require('includes/application_top.php');
 if (isset($module)) {
   unset($module);
 }
-print_r($_POST);
+
 /* BOF Super Orders 1 of 21 */
 if (!defined('TY_TRACKER')) {
     define('TY_TRACKER', 'False');

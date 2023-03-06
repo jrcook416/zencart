@@ -14,7 +14,6 @@ require('includes/application_top.php');
 require(DIR_WS_CLASSES . 'currencies.php');
 $currencies = new currencies();
 include(DIR_WS_CLASSES . 'order.php');
-
 // change destination here for path when using "save to file on server"
 if (!defined('DIR_FS_EMAIL_EXPORT')) define('DIR_FS_EMAIL_EXPORT', DIR_FS_CATALOG . 'images/uploads/');
 
@@ -48,7 +47,7 @@ if ($format == 'TXT') {
    $LINEBREAK = "\n";
    $ATTRIBSEPARATOR = ' | '; //Be Careful with this option. Setting it to a 'comma' for example could throw off the remaining fields.
 }
-$file = (isset($_POST['filename']) ? $_POST['filename'] : "Orders" . date('mdy-Hi') . $file_extension . "");
+$file = (isset($_POST['filename']) ? $_POST['filename'] : "IEMS-Orders" . date('mdy-Hi') . $file_extension . "");
 //$file = (isset($_POST['filename']) ? $_POST['filename'] : "Orders". $file_extension ."");
 $to_email_address = (isset($_POST['auto_email_supplier']) ? $_POST['auto_email_supplier'] : "" . EMAIL_EXPORT_ADDRESS . "");
 $email_subject = (isset($_POST['auto_email_subject']) ? $_POST['auto_email_subject'] : "Order export from " . STORE_NAME . "");
@@ -72,7 +71,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 
    if ($_POST['filelayout'] == 2) { // 1 Product Per row RADIO
 
-      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_agency, delivery_unit, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, op.products_model, products_name, op.products_price, final_price, op.products_quantity, date_purchased, ot.value, orders_products_id, order_tax, o.orders_status, o.payment_method";
+      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, op.products_model, products_name, op.products_price, final_price, op.products_quantity, date_purchased, ot.value, orders_products_id, order_tax, o.orders_status, o.payment_method";
       if ($_POST['iso_country2_code'] == 1) {
          $order_info = $order_info . ", cc.countries_iso_code_2";
       };
@@ -122,10 +121,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 
    } else { // Default 1 Order Per row (filelayout1=1)
 
-      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, 
-	  delivery_agency, delivery_unit, delivery_street_address, delivery_suburb, delivery_city, 
-	  delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, 
-	  order_total, date_purchased, ot.value, comments, order_tax, o.orders_status, o.payment_method";
+      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, date_purchased, ot.value, comments, order_tax, o.orders_status, o.payment_method";
       if ($_POST['iso_country2_code'] == 1) {
          $order_info = $order_info . ", cc.countries_iso_code_2";
       };
@@ -197,10 +193,6 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
    } // End File layout sql
 
    $order_details = $db->Execute($order_info);
-   
-   
-   
-   
    /******************Begin Set Header Row Information*****************************/
    $str_header = "Order ID,Customer Email";
    if ($_POST['split_name'] == 1) { //If name split is desired then split it.
@@ -208,7 +200,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
    } else {
       $str_header = $str_header . ",Delivery Name";
    }
-   $str_header = $str_header . ",Company,Agency,Unit,Delivery Street,Delivery Suburb,Delivery City,Delivery State,Delivery Post Code,Delivery Country,Ship Dest Type"; // swguy
+   $str_header = $str_header . ",Company,Delivery Street,Delivery Suburb,Delivery City,Delivery State,Delivery Post Code,Delivery Country,Ship Dest Type"; // swguy
    if ($_POST['shipmethod'] == 1) {
       $str_header = $str_header . ",Shipping Method";
    };
@@ -276,7 +268,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 
    while (!$order_details->EOF) {
 
-      $str_export = $FIELDSTART . $order_details->fields['orders_id'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['customers_email_address'] . $FIELDEND;
+      $str_export = $FIELDSTART . "IEMS-" . $order_details->fields['orders_id'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['customers_email_address'] . $FIELDEND;
       if ($_POST['split_name'] == 1) {
          $fullname = $order_details->fields['delivery_name'];
          list($first, $middle, $last) = preg_split("/[\s,]+/", $fullname);
@@ -295,17 +287,11 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
          $dest_type = 'Commercial';
       }
 // end swguy
-/**IEMS CUSTOM CODE **/
-      $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_company'] . $FIELDEND . 
-		$FIELDSEPARATOR. $FIELDSTART . $order_details->fields['delivery_agency'] . $FIELDEND .
-		$FIELDSEPARATOR. $FIELDSTART . $order_details->fields['delivery_unit'] . $FIELDEND .
-		$FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_street_address'] . $FIELDEND .
-        $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_suburb'] . $FIELDEND . 
-		$FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_city'] . $FIELDEND .
-        $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_state'] . $FIELDEND . 
-		$FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_postcode'] . $FIELDEND .
-        $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_country'] . $FIELDEND .
-        $FIELDSEPARATOR . $FIELDSTART . $dest_type . $FIELDEND;
+      $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_company'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_street_address'] . $FIELDEND .
+         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_suburb'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_city'] . $FIELDEND .
+         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_state'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_postcode'] . $FIELDEND .
+         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_country'] . $FIELDEND .
+         $FIELDSEPARATOR . $FIELDSTART . $dest_type . $FIELDEND;
 // swguy last line changed		
       if ($_POST['shipmethod'] == 1) {
          $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['shipping_method'] . $FIELDEND;
@@ -450,29 +436,6 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
             $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['products_name'] . $FIELDEND;
             $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['products_model'] . $FIELDEND . $FIELDSEPARATOR;
 
-            $product_attributes_rows = "SELECT Count(*) as num_rows
-FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
-WHERE orders_id = " . $order_details->fields['orders_id'] . "
-AND orders_products_id = " . $order_details->fields['orders_products_id'] . "";
-            $attributes_query_rows = $db->Execute($product_attributes_rows);
-            $num_rows = $attributes_query_rows->fields['num_rows'];
-
-            If ($num_rows > 0) {
-               $product_attributes_query = "SELECT *
-	FROM " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . "
-	WHERE orders_id = " . $order_details->fields['orders_id'] . "
-	AND orders_products_id = " . $order_details->fields['orders_products_id'] . "";
-               $attributes_query_results = $db->Execute($product_attributes_query);
-               $str_export .= $FIELDSTART;
-               for ($i = 0, $n = $num_rows; $i < $n; $i++) {
-                  //dhc
-                  $str_safequotes = str_replace('"', "'", $attributes_query_results->fields['products_options_values']);
-                  $str_export .= $attributes_query_results->fields['products_options'] . ': ' . str_replace(array("\r\n", "\r", "\n"), " ", $str_safequotes) . $ATTRIBSEPARATOR;
-                  $attributes_query_results->MoveNext();
-               }
-               $str_export .= $FIELDEND;
-            }
-
          } else { // 1 OPR default
 
             /**************the following exports 1 OPR w/ attributes) ****************/
@@ -487,9 +450,6 @@ AND orders_products_id = " . $order_details->fields['orders_products_id'] . "";
                if (isset($order->products[$i]['attributes']) && (($k = sizeof($order->products[$i]['attributes'])) > 0)) {
                   $str_export .= $FIELDSTART;
                   for ($j = 0; $j < $k; $j++) {
-//erl
-//$str_export .= $order->products[$i]['attributes'][$j]['option'] . ': ' . nl2br($order->products[$i]['attributes'][$j]['value']) . $ATTRIBSEPARATOR;
-                     //dhc
                      $str_safequotes = str_replace('"', "'", $order->products[$i]['attributes'][$j]['value']);
                      $str_export .= $order->products[$i]['attributes'][$j]['option'] . ': ' . str_replace(array("\r\n", "\r", "\n"), " ", $str_safequotes) . $ATTRIBSEPARATOR;
                   }
@@ -507,7 +467,8 @@ AND orders_products_id = " . $order_details->fields['orders_products_id'] . "";
       //echo $str_export . "<br />\n"; //dhc
       //If order status is to be updated, then update it for this order now.
       if ($_POST['status_setting'] == 1) { //Update the order status upon export
-         $db->execute('UPDATE ' . TABLE_ORDERS . ' SET orders_status="' . $_POST['order_status_setting'] . '" WHERE orders_id="' . $order_details->fields['orders_id'] . '"');
+        $db->execute('UPDATE ' . TABLE_ORDERS . ' SET orders_status="' . $_POST['order_status_setting'] . '" WHERE orders_id="' . $order_details->fields['orders_id']. '"');
+        $db->execute('UPDATE ' . TABLE_ORDERS . ' SET downloaded_ship="yes" WHERE downloaded_ship="no" AND orders_id ="' . $order_details->fields['orders_id']. '"');
       }
       //********************************************************************
       $order_details->MoveNext();
@@ -532,22 +493,6 @@ AND orders_products_id = " . $order_details->fields['orders_products_id'] . "";
       zen_mail('Supplier Name', $to_email_address, $email_subject, EMAIL_EXPORT_BODY, STORE_NAME, EMAIL_FROM, $html_msg, 'default', DIR_FS_EMAIL_EXPORT . $file);
       //Set Success Message
       $success_message = "<span style='color:#ff0000;font-weight:bold;font-size:14px;'>File processed successfully!</span>";
-      /***************************Begin Update records in db if selected by user***************************/
-      if ($_POST['export_test'] != 1) { //Not testing so update
-         //Original Code
-         //$db->execute('UPDATE '. TABLE_ORDERS .' SET downloaded_ship="yes" WHERE downloaded_ship="no"');
-         $orders_update_query = "UPDATE " . TABLE_ORDERS . " SET downloaded_ship='yes' WHERE downloaded_ship='no'";
-         if ($_POST['start_date'] != '' && $_POST['end_date'] != '') {
-            $orders_update_query = $orders_update_query . " AND date_purchased BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
-            //$orders_discount_query = $orders_discount_query . " AND date_purchased >= '". $start_date ."' AND date_purchased <= '". $end_date ."'";
-         }
-         $db->Execute($orders_update_query);
-      }
-      //Moved the below to line 383 to update each order as it is rotated through.
-      /*if ($_POST['status_setting'] == 1) { //Update the order status upon export
-       $db->execute('UPDATE '. TABLE_ORDERS .' SET orders_status="'. $_POST['order_status_setting'] . '" WHERE orders_status!="' . $_POST['order_status_setting'] . '"');
-     }*/
-      /***************************End Update records in db if selected by user***************************/
    } else { // This export should be in the format of a file download so set page headers.
       Header('Content-type: application/csv');
       Header("Content-disposition: attachment; filename=" . $file . "");
@@ -556,24 +501,8 @@ AND orders_products_id = " . $order_details->fields['orders_products_id'] . "";
       }
       //echo $str_export;
       echo $str_full_export;
-      /***************************Begin Update records in db if selected by user***************************/
-      if ($_POST['export_test'] != 1) { //Not testing so update
-         //$db->execute('UPDATE '. TABLE_ORDERS .' SET downloaded_ship="yes" WHERE downloaded_ship="no"');
-         $orders_update_query = "UPDATE " . TABLE_ORDERS . " SET downloaded_ship='yes' WHERE downloaded_ship='no'";
-         if ($_POST['start_date'] != '' && $_POST['end_date'] != '') {
-            $orders_update_query = $orders_update_query . " AND date_purchased BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
-            //$orders_discount_query = $orders_discount_query . " AND date_purchased >= '". $start_date ."' AND date_purchased <= '". $end_date ."'";
-         }
-         $db->Execute($orders_update_query);
-      }
-      //Moved the below to line 383 to update each order as it is rotated through.
-      /*if ($_POST['status_setting'] == 1) { //Update the order status upon export
-       $db->execute('UPDATE '. TABLE_ORDERS .' SET orders_status="'. $_POST['order_status_setting'] . '" WHERE orders_status!="' . $_POST['order_status_setting'] . '"');
-     }*/
-      /***************************End Update records in db if selected by user***************************/
       exit;
    }
-   /*******************************************************************************************************/
 }
 
 // build arrays for dropdowns in order status search menu
@@ -738,14 +667,14 @@ while (!$orders_status->EOF) {
                                                             State
                                                         </td>
                                                         <td class="dataTableHeadingContent" align="center" valign="top">
-                                                            Country
+                                                            Order<br>Status
                                                         </td>
                                                         <td class="dataTableHeadingContent" align="center" valign="top">
                                                             &nbsp;
                                                         </td>
                                                     </tr>
                                                    <?php
-                                                   $query = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, date_purchased
+                                                   $query = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, orders_status, shipping_method, customers_telephone, order_total, date_purchased
                             FROM " . TABLE_ORDERS . " o
                             WHERE downloaded_ship='no'
                             ORDER BY orders_id ASC";
@@ -756,7 +685,9 @@ while (!$orders_status->EOF) {
                                                    $order = $db->execute($query);
 
                                                    while (!$order->EOF) {
-                                                      list($order_id, $cust_email, $delivery_name, $delivery_company, $delivery_street, $delivery_suburb, $delivery_city, $delivery_postcode, $delivery_state, $delivery_country, $shipping_method, $customers_telephone, $order_total, $product_model, $product_name, $product_price, $product_qty, $date_purchased, $comments) = array_values($order->fields);
+                                                      list($order_id, $cust_email, $delivery_name, $delivery_company, $delivery_street, $delivery_suburb, $delivery_city, $delivery_postcode, $delivery_state, $orders_status, $shipping_method, $customers_telephone, $order_total, $product_model, $product_name, $product_price, $product_qty, $date_purchased, $comments) = array_values($order->fields);
+                                                      $status = $order->fields['orders_status'];
+                                                      $newStatus = $status - 1;
                                                       ?>
                                                        <!--<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="window.open('<?php echo zen_href_link(FILENAME_ORDERS, 'page=1&oID=' . $order_id . '&action=edit', 'NONSSL'); ?>')">-->
                                                        <tr class="dataTableRow" onMouseOver="rowOverEffect(this)"
@@ -772,7 +703,7 @@ while (!$orders_status->EOF) {
                                                            <td class="dataTableContent"><?php echo $delivery_city; ?></td>
                                                            <td class="dataTableContent"><?php echo $delivery_postcode; ?></td>
                                                            <td class="dataTableContent"><?php echo $delivery_state; ?></td>
-                                                           <td class="dataTableContent"><?php echo $delivery_country; ?></td>
+                                                           <td class="dataTableContent"><?php echo $status_array[$newStatus]['text']; ?></td>
                                                            <td class="dataTableContent"><a
                                                                        href="<?php echo zen_href_link(FILENAME_ORDERS, 'page=1&oID=' . $order_id . '&action=edit', 'NONSSL'); ?>"><img
                                                                            src="images/icons/preview.gif" border="0"
@@ -817,7 +748,7 @@ while (!$orders_status->EOF) {
                                                                 <input type='button' name='checkall'
                                                                        value="Check / Uncheck All"
                                                                        onclick='checkedAll(download_csv);'><br/><br/>
-                                                               <?php echo zen_draw_checkbox_field('export_test', '1', $export_test_checked=true); ?>
+                                                               <?php echo zen_draw_checkbox_field('export_test', '1', $export_test_checked); ?>
                                                                 &nbsp;<?php echo TEXT_RUNIN_TEST_FIELD; ?><br/>
                                                                <?php echo zen_draw_checkbox_field('split_name', '1', $export_split_checked); ?>
                                                                 &nbsp;<?php echo TEXT_SPLIT_NAME_FIELD; ?><br/>
@@ -871,7 +802,7 @@ while (!$orders_status->EOF) {
                                                                             <!--</td>
                                                                           </tr>
                                                                           <tr>
-                                                                            <td>--><?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, '4', 'id="order_status_setting"'); ?></td>
+                                                                            <td>--><?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, '4' , 'id="order_status_setting"'); ?></td>
                                                                     </tr>
                                                                 </table>
                                                                 <hr/>
@@ -886,7 +817,7 @@ while (!$orders_status->EOF) {
                                                                                    value="1" checked>Any Order
                                                                             Status<br/>
                                                                             <input type="radio" name="status_target"
-                                                                                   value="2">Assigned Order Status
+                                                                                   value="2" checked>Assigned Order Status
                                                                             (select below)
                                                                         </td>
                                                                     </tr>

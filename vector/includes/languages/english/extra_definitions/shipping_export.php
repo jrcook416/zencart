@@ -30,7 +30,6 @@ define('HEADING_PREVIOUS_EXPORTS_TITLE', 'Previous Exports Inclusion');
 define('TEXT_CUSTOM_DATE', 'This is an optional component allowing more flexibility. Leave both fields blank to export all orders since last export was completed (the default). If you wish to include orders from date ranges that have already been downloaded, then you should complete the two boxes below.
 ');
 define('TEXT_PREVIOUS_EXPORTS', 'Include Previously Exported Orders');
-define('TEXT_PREVIOUS_EXPORTS', 'By default the export file includes only those orders that have not already been exported. If you wish to include orders from date ranges that have already been downloaded, then you should checkbox the selection below. Combine this feature with the date range feature for even more flexibility.');
 define('TEXT_VIDEO_TUTORIAL', 'To view the video tutorial on how to use this module, visit <a href="http://www.zencartoptimization.com/2007/06/14/video-tutorial-export-shipping-and-order-information-from-zen-cart/" target="_blank"><strong><u>http://www.zencartoptimization.com</u></strong></a>.<br><br>');
 define('TEXT_RUNIN_TEST', 'Select whether you want to run in test mode or not. Test mode allows you to export without marking orders as "exported". This enables to you re-export them again.<br />');
 define('TEXT_ADDITIONAL_FIELDS', '<strong>Select additional fields</strong> to be added to the export below. Additional fields will be exported in the order listed.<br />');

@@ -272,7 +272,7 @@ function iems_get_product_details($product_id, $language_id = null)
             LEFT JOIN " . TABLE_PRODUCT_TYPES . " pt ON (p.products_type = pt.type_id)
             LEFT JOIN " . TABLE_PRODUCTS_DESCRIPTION . " pd ON (p.products_id = pd.products_id AND pd.language_id = " . (int)$language_id . ")
 			LEFT JOIN " . TABLE_QUANTITY . " q ON (p.products_id = q.products_id)
-			WHERE p.products_id = " . (int)$product_id . " AND q.source = '" . $_SESSION['IEMS']['agencyPricing'] . "'";
+			WHERE p.products_id = " . (int)$product_id;
     $product = $db->Execute($sql, 1, true, 900);
     //Allow an observer to modify details
     $zco_notifier->notify('NOTIFY_GET_PRODUCT_DETAILS', $product_id, $product);

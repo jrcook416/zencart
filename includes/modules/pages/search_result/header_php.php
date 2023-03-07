@@ -257,11 +257,12 @@ if ((DISPLAY_PRICE_WITH_TAX == 'true') && ((isset($_GET['pfrom']) && zen_not_nul
 // Notifier Point
 $zco_notifier->notify('NOTIFY_SEARCH_FROM_STRING', $from_str, $from_str);
 
-$where_str = " WHERE (p.products_status = 1
+$where_str = " WHERE (q.products_status = 1
                AND p.products_id = pd.products_id
                AND pd.language_id = :languagesID
                AND p.products_id = p2c.products_id
-               AND p2c.categories_id = c.categories_id ";
+               AND p2c.categories_id = c.categories_id
+               AND q.source = '" . $_SESSION['IEMS']['agencyPricing'] . "'";
 
 $where_str = $db->bindVars($where_str, ':languagesID', $_SESSION['languages_id'], 'integer');
 

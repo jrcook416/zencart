@@ -1217,7 +1217,7 @@ class shoppingCart extends base
         $products_array = [];
         foreach ($this->contents as $products_id => $data) {
             $sql = "SELECT p.products_id, p.products_type, p.products_quantity, p.products_model, p.products_image,
-			        p.products_price, p.products_virtual, p.products_date_added, p.products_last_modified,
+			        p.products_price, p.products_uom, p.products_virtual, p.products_date_added, p.products_last_modified,
 			        p.products_date_available, p.products_weight, q.products_status AS products_status,
 			        p.products_tax_class_id, p.manufacturers_id, p.products_ordered,
 			        q.products_quantity_order_min AS products_quantity_order_min,
@@ -1376,10 +1376,11 @@ class shoppingCart extends base
                 $products_array[] = [
                     'id' => $products_id,
                     'category' => $products->fields['master_categories_id'],
-                    'name' => $products->fields['products_name'],
+                    'name' => $products->fields['products_name'] . " (" . $products->fields['products_uom'] . ")",
                     'model' => $products->fields['products_model'],
                     'image' => $products->fields['products_image'],
                     'price' => ($products->fields['product_is_free'] == '1' ? 0 : $products_price),
+                    'uom' => $products->fields['uom'],
                     'quantity' => $new_qty,
                     'weight' => $products->fields['products_weight'] + $this->attributes_weight($products_id),
                     'final_price' => ($products_price + $this->attributes_price($products_id)),

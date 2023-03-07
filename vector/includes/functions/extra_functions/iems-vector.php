@@ -198,7 +198,7 @@ function uom_lookup() {
 	global $db;
 	global $uom_array;
 	$uom_array = array();
-	$uom_values = $db->Execute("select uom_id, uom from `uom` ");
+	$uom_values = $db->Execute("select uom_id, uom from `iems_uom` ");
 
 		while (!$uom_values->EOF) {
 			$uom_array[] = array('id' => $uom_values->fields['uom'], 'text' => $uom_values->fields['uom']);
@@ -258,7 +258,7 @@ function iems_get_product_details($product_id, $language_id = null)
     if ($language_id === null) $language_id = $_SESSION['languages_id'];
 
      $sql = "SELECT p.products_id, p.products_type, p.products_quantity, p.products_model, p.products_image,
-			p.products_price, p.products_virtual, p.products_date_added, p.products_last_modified,
+			p.products_price, p.products_uom, p.products_virtual, p.products_date_added, p.products_last_modified,
 			p.products_date_available, p.products_weight, q.products_status AS products_status,
 			p.products_tax_class_id, p.manufacturers_id, p.products_ordered,
 			q.products_quantity_order_min AS products_quantity_order_min,

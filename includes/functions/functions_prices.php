@@ -356,7 +356,8 @@ function zen_get_products_display_price($product_id)
         // don't show the $0.00
         $final_display_price = $show_special_price . $show_sale_price . $show_sale_discount;
     } else {
-        $final_display_price = $show_normal_price . $show_special_price . $show_sale_price . $show_sale_discount;
+        $uom = $product_check->fields['products_uom'];
+        $final_display_price = $show_normal_price . ' ' . $uom . $show_special_price . $show_sale_price . $show_sale_discount;
     }
 
     // -----
@@ -418,7 +419,7 @@ function zen_get_products_base_price($product_id)
 
     $product_check = zen_get_product_details($product_id);
 
-    if ($product_check->EOF) return false; 
+    if ($product_check->EOF) return false;
     $products_price = $product_check->fields['products_price'];
 
     if ($product_check->fields['products_priced_by_attribute'] != 1) {
@@ -1062,7 +1063,7 @@ function zen_get_products_sale_discount_type($product_id = false, $categories_id
     $results = $db->Execute($sql);
     foreach ($results as $result) {
        if (empty($result['sale_categories_all'])) {
-          continue; 
+          continue;
        }
         $categories = explode(',', $result['sale_categories_all']);
         foreach ($categories as $key => $value) {
@@ -1174,7 +1175,7 @@ function zen_get_attributes_price_factor($price, $special, $factor, $offset)
  */
 function zen_get_attributes_qty_prices_onetime($string, $qty)
 {
-    if (empty($string)) return 0; 
+    if (empty($string)) return 0;
     $attribute_qty = preg_split("/[:,]/", str_replace(' ', '', $string));
     $new_price = 0;
     $size = count($attribute_qty);
@@ -1540,7 +1541,7 @@ function zen_update_products_price_sorter($product_id)
 function zen_parse_salemaker_categories($categories_csv)
 {
     if (empty($categories_csv)) {
-       return []; 
+       return [];
     }
     $clist_array = explode(',', $categories_csv);
     return array_unique($clist_array);

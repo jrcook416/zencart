@@ -17,6 +17,7 @@ $parameters = [
   'products_model' => '',
   'products_image' => '',
   'products_price' => '0.0000',
+    'products_uom' => '',
   'products_virtual' => 0,
   'products_weight' => '0',
   'products_date_added' => '',
@@ -56,7 +57,7 @@ if (isset($_GET['pID']) && empty($_POST)) {
   $pInfo->updateObjectInfo($product->fields);
 } elseif (!empty($_POST)) {
   $pInfo->updateObjectInfo($_POST);
-  
+
   if (isset($_GET['pID'])) {
      $pInfo->products_id = (int)$_GET['pID'];
   }

@@ -130,12 +130,12 @@ function iems_get_product_details($product_id, $language_id = null)
     if ($language_id === null) $language_id = $_SESSION['languages_id'];
 
      $sql = "SELECT p.products_id, p.products_type, p.products_quantity, p.products_model, p.products_image,
-			p.products_price, p.products_virtual, p.products_date_added, p.products_last_modified,
+			p.products_price, p.products_uom, p.products_virtual, p.products_date_added, p.products_last_modified,
 			p.products_date_available, p.products_weight, q.products_status AS products_status,
-			p.products_tax_class_id, p.manufacturers_id, p.products_ordered, 
-			q.products_quantity_order_min AS products_quantity_order_min, 
-			q.products_quantity_order_units AS products_quantity_order_units, p.products_priced_by_attribute, 
-			p.product_is_free, p.product_is_call, p.products_quantity_mixed, p.product_is_always_free_shipping, 
+			p.products_tax_class_id, p.manufacturers_id, p.products_ordered,
+			q.products_quantity_order_min AS products_quantity_order_min,
+			q.products_quantity_order_units AS products_quantity_order_units, p.products_priced_by_attribute,
+			p.product_is_free, p.product_is_call, p.products_quantity_mixed, p.product_is_always_free_shipping,
 			p.products_qty_box_status, q.products_quantity_order_max AS products_quantity_order_max,
 			p.products_sort_order, p.products_discount_type, p.products_discount_type_from, p.products_price_sorter,
 			p.master_categories_id, p.products_mixed_discount_quantity, p.metatags_title_status, p.metatags_products_name_status,
@@ -211,3 +211,15 @@ function iems_get_products_quantity_min_units_display($product_id, $include_brea
     return $the_min_units;
 }
 
+function uom_lookup() {
+	global $db;
+	global $uom_array;
+	$uom_array = array();
+	$uom_values = $db->Execute("select uom_id, uom from `uom` ");
+
+		while (!$uom_values->EOF) {
+			$uom_array[] = array('id' => $uom_values->fields['uom'], 'text' => $uom_values->fields['uom']);
+			$uom_values->MoveNext();
+			};
+	return $uom_array;
+	} //end uom_array

@@ -36,6 +36,7 @@ if (isset($_POST['edit']) && $_POST['edit'] == 'edit') {
     'products_type' => (int)$_POST['product_type'],
     'products_model' => zen_db_prepare_input($_POST['products_model']),
     'products_price' => convertToFloat($_POST['products_price']),
+    'products_uom' => zen_db_prepare_input($_POST['products_uom']),
     'products_date_available' => $products_date_available,
     'products_weight' => convertToFloat($_POST['products_weight']),
     'products_status' => (int)$_POST['products_status'],

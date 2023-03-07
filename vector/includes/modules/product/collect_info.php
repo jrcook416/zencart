@@ -201,9 +201,16 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
         <br>
         <?php
       }
+        uom_lookup();
       ?>
     </div>
   </div>
+    <div class="form-group">
+        <?php echo zen_draw_label("Unit of Measure", 'products_uom', 'class="col-sm-3 control-label"'); ?>
+        <div class="col-sm-9 col-md-6">
+            <?php echo zen_draw_pull_down_menu('products_uom', $uom_array, $pInfo->products_uom, 'class="form-control" id="products_uom"'); ?>
+        </div>
+    </div>
 <?php
     // -----
     // Give an observer the chance to supply some additional product-related inputs.  Each
@@ -341,7 +348,7 @@ if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_sta
                     </div>
             </div>
         </div><!--//col div//-->
-        
+
 
         <div class = "col-sm-2">
             <p class="text-center"><b>EXTERNAL AGENCIES</b></p><br>

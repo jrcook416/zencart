@@ -288,14 +288,20 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
          $dest_type = 'Commercial';
       }
 // end swguy
+
+/**IEMS CUSTOM CODE **/
+$unitCode = $order_details->fields['delivery_unit'];
+unit_name_lookup($unitCode);
       $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_company'] . $FIELDEND .
           $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_agency'] . $FIELDEND .
-          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_unit'] . $FIELDEND .
+          $FIELDSEPARATOR . $FIELDSTART . $unitName . $FIELDEND .
           $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_street_address'] . $FIELDEND .
-         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_suburb'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_city'] . $FIELDEND .
-         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_state'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_postcode'] . $FIELDEND .
-         $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_country'] . $FIELDEND .
-         $FIELDSEPARATOR . $FIELDSTART . $dest_type . $FIELDEND;
+          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_suburb'] . $FIELDEND .
+          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_city'] . $FIELDEND .
+          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_state'] . $FIELDEND .
+          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_postcode'] . $FIELDEND .
+          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_country'] . $FIELDEND .
+          $FIELDSEPARATOR . $FIELDSTART . $dest_type . $FIELDEND;
 // swguy last line changed
       if ($_POST['shipmethod'] == 1) {
          $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['shipping_method'] . $FIELDEND;

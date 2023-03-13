@@ -231,6 +231,20 @@ function unit_name_lookup($unitCode){
     return $unitName;
 } //end unit_code_lookup
 
+function agency_name_lookup($agencyCode){
+    global $db;
+    global $unitName;
+    $agency_values = $db->Execute("select masterAgencyID, masterAgency, masterCountyID, masterAgencyDescription from iems_agencies where masterAgencyID = '" . $agencyCode . "' LIMIT 1");
+    while (!$agency_values->EOF){
+        $countyID = $agency_values->fields['masterCountyID'];
+        $agencyID = $agency_values->fields['masterAgency'];
+        $agencyDesc = $agency_values->fields['masterAgencyDescription'];
+        $agencyName = $countyID . " " . $agencyID . " " . $agencyDesc;
+        $agency_values->MoveNext();
+    };
+    return $agencyName;
+} //end unit_code_lookup
+
 function filtered_unit_lookup($agency) {
     global $db;
     global $filtered_unit_array;

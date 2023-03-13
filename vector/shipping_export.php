@@ -292,8 +292,11 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 /**IEMS CUSTOM CODE **/
 $unitCode = $order_details->fields['delivery_unit'];
 unit_name_lookup($unitCode);
+$agencyCode = $order_details->fields['delivery_agency'];
+agency_name_lookup($agencyCode);   
+
       $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_company'] . $FIELDEND .
-          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_agency'] . $FIELDEND .
+          $FIELDSEPARATOR . $FIELDSTART . $agencyName . $FIELDEND .
           $FIELDSEPARATOR . $FIELDSTART . $unitName . $FIELDEND .
           $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_street_address'] . $FIELDEND .
           $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_suburb'] . $FIELDEND .

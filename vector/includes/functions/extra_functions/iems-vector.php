@@ -233,7 +233,7 @@ function unit_name_lookup($unitCode){
 
 function agency_name_lookup($agencyCode){
     global $db;
-    global $unitName;
+    global $agencyName;
     $agency_values = $db->Execute("select masterAgencyID, masterAgency, masterCountyID, masterAgencyDescription from iems_agencies where masterAgencyID = '" . $agencyCode . "' LIMIT 1");
     while (!$agency_values->EOF){
         $countyID = $agency_values->fields['masterCountyID'];

@@ -47,7 +47,7 @@ if ($format == 'TXT') {
    $LINEBREAK = "\n";
    $ATTRIBSEPARATOR = ' | '; //Be Careful with this option. Setting it to a 'comma' for example could throw off the remaining fields.
 }
-$file = (isset($_POST['filename']) ? $_POST['filename'] : "IEMS-Website-Orders" . date('mdy-Hi') . 
+$file = (isset($_POST['filename']) ? $_POST['filename'] : "IEMS-Website-Orders" . date('mdy-Hi') .
 $file_extension . "");
 //$file = (isset($_POST['filename']) ? $_POST['filename'] : "Orders". $file_extension ."");
 $to_email_address = (isset($_POST['auto_email_supplier']) ? $_POST['auto_email_supplier'] : "" . EMAIL_EXPORT_ADDRESS . "");
@@ -72,7 +72,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 
    if ($_POST['filelayout'] == 2) { // 1 Product Per row RADIO
 
-      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, op.products_model, products_name, op.products_price, final_price, op.products_quantity, date_purchased, ot.value, orders_products_id, order_tax, o.orders_status, o.payment_method";
+      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_agency, delivery_unit, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, op.products_model, products_name, op.products_price, final_price, op.products_quantity, date_purchased, ot.value, orders_products_id, order_tax, o.orders_status, o.payment_method";
       if ($_POST['iso_country2_code'] == 1) {
          $order_info = $order_info . ", cc.countries_iso_code_2";
       };
@@ -118,11 +118,11 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
          //$order_info = $order_info . " AND date_purchased >= '". $start_date ."' AND date_purchased <= '". $end_date ."'";
       }
       $order_info = $order_info . " ORDER BY orders_id ASC";
-      
+
 
    } else { // Default 1 Order Per row (filelayout1=1)
 
-      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, date_purchased, ot.value, comments, order_tax, o.orders_status, o.payment_method";
+      $order_info = "SELECT o.orders_id, customers_email_address, delivery_name, delivery_company, delivery_agency, delivery_unit, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, shipping_method, customers_telephone, order_total, date_purchased, ot.value, comments, order_tax, o.orders_status, o.payment_method";
       if ($_POST['iso_country2_code'] == 1) {
          $order_info = $order_info . ", cc.countries_iso_code_2";
       };
@@ -143,7 +143,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
          $order_info = $order_info . ", " . TABLE_ZONES . " z";
       }
       */
-      $order_info = $order_info . " WHERE o.orders_id = ot.orders_id 
+      $order_info = $order_info . " WHERE o.orders_id = ot.orders_id
 	AND ot.class = 'ot_shipping' ";
       if ($_POST['iso_country2_code'] == 1 || $_POST['iso_country3_code'] == 1) {
          $order_info = $order_info . " AND cc.countries_name = o.delivery_country ";
@@ -201,7 +201,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
    } else {
       $str_header = $str_header . ",Delivery Name";
    }
-   $str_header = $str_header . ",Company,Delivery Street,Delivery Suburb,Delivery City,Delivery State,Delivery Post Code,Delivery Country,Ship Dest Type"; // swguy
+   $str_header = $str_header . ",Delivery Company, Delivery Agency, Delivery Unit, Delivery Street,Delivery Suburb,Delivery City,Delivery State,Delivery Post Code,Delivery Country,Ship Dest Type"; // swguy
    if ($_POST['shipmethod'] == 1) {
       $str_header = $str_header . ",Shipping Method";
    };
@@ -293,7 +293,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_state'] . $FIELDEND . $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_postcode'] . $FIELDEND .
          $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_country'] . $FIELDEND .
          $FIELDSEPARATOR . $FIELDSTART . $dest_type . $FIELDEND;
-// swguy last line changed		
+// swguy last line changed
       if ($_POST['shipmethod'] == 1) {
          $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['shipping_method'] . $FIELDEND;
       };
@@ -398,7 +398,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 
       if ($_POST['orders_status_export'] == 1) { // if order status was selected, then run the query to pull the data for adding it to the export string.
 // Run a query to pull the Order Status if present
-         $orders_status_query = "SELECT orders_status_name 
+         $orders_status_query = "SELECT orders_status_name
 	FROM (" . TABLE_ORDERS_STATUS . ")
 	WHERE orders_status_id=" . $order_details->fields['orders_status'] . "";
          $orders_status = $db->Execute($orders_status_query);

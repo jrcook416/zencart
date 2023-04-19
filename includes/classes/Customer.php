@@ -171,7 +171,7 @@ class Customer extends base
 		// UNIT CODE AND IDENTIFIER ASSIGNMENT //
 		$_SESSION['IEMS']['customer_unit'] = (int)$this->data['unit'];
 		unit_code_lookup($_SESSION['IEMS']['customer_unit']);
-		$_SESSION['IEMS']['unit'] = $_SESSION['IEMS']['unitCounty'] . ' ' . $_SESSION['IEMS']['unitAgency'] . " " . $_SESSION['IEMS']['unitName'];
+		//$_SESSION['IEMS']['unit'] = $_SESSION['IEMS']['unitCounty'] . ' ' . $_SESSION['IEMS']['unitAgency'] . " " . $_SESSION['IEMS']['unitName'];
         $_SESSION['IEMS']['groups'] = zen_groups_customer_belongs_to((int)$customer_id);
 		// END IEMS CUSTOM CODE //
 

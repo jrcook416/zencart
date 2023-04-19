@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright Copyright 2003-2022 Zen Cart Development Team
+ * @copyright Copyright 2003-2023 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: brittainmark 2022 Sep 17 Modified in v1.5.8 $
+ * @version $Id: lat9 2023 Feb 24 Modified in v1.5.8a $
  */
 require 'includes/application_top.php';
 require DIR_WS_CLASSES . 'currencies.php';
@@ -623,8 +623,8 @@ switch ($_GET['action']) {
                   $cc_list = $db->Execute($cc_query_raw);
 
                   foreach ($cc_list as $item) {
-                    if (((!$_GET['uid']) || (@$_GET['uid'] == $item['unique_id'])) && (!$cInfo)) {
-                      $cInfo = new objectInfo($item);
+                    if (empty($_GET['uid']) || ($_GET['uid'] === $item['unique_id'] && !isset($cInfo))) {
+                        $cInfo = new objectInfo($item);
                     }
                     if ((isset($cInfo)) && ($item['unique_id'] == $cInfo->unique_id)) {
                       ?>

@@ -2,10 +2,10 @@
 /**
  * Login Page
  *
- * @copyright Copyright 2003-2022 Zen Cart Development Team
+ * @copyright Copyright 2003-2023 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: pRose on charmes 2022 Mar 02 Modified in v1.5.8-alpha $
+ * @version $Id: brittainmark 2022 Oct 15 Modified in v1.5.8a $
  */
 // This should be first line of the script:
 $zco_notifier->notify('NOTIFY_HEADER_START_LOGIN');
@@ -40,6 +40,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'process') {
         if (!zen_validate_hmac_timestamp() || !$adminId = zen_validate_hmac_admin_id($_POST['aid'])) {
             zen_redirect(zen_href_link(FILENAME_TIME_OUT));
         }
+        unset($_SESSION['billto']);
+        unset($_SESSION['sendto']);
         $loginAuthorized = true;
         $_SESSION['emp_admin_login'] = true;
         $_SESSION['emp_admin_id'] = $adminId;

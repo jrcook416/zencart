@@ -17,10 +17,10 @@
  *  ~ Admin comment editing
  *  ~ Improved HTML and look & feel
  *
- * @copyright Copyright 2003-2021 Zen Cart Development Team
+ * @copyright Copyright 2003-2023 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: mc12345678 2021 Feb 22 Modified in v1.5.7c $
+ * @version $Id: lat9 2023 Feb 15 Modified in v1.5.8a $
  */
 require('includes/application_top.php');
 // unset variable which is sometimes tainted by bad plugins like magneticOne tools

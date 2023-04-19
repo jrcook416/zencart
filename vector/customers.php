@@ -9,12 +9,12 @@
  * @category	Indianapolis EMS custom code
  * @link   		<https://www.iemssupply.net>
  * @author    	Jeremiah Cook <jeremiah.cook@indianapolisems.org>
- * @copyright   Copyright 2003-2022 Zen Cart Development Team
+ * @copyright   Copyright 2003-2023 Zen Cart Development Team
  * @copyright   Portions Copyright 2003 osCommerce
  * @copyright 	Copyright (c)2013-2023, Jeremiah Cook <jeremiah.cook@indianapolisems.org>
  * @license     http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version 	Jeremiah Cook 2023-02-22, modified for ZC v1.5.8
- */
+ * @version 	Jeremiah Cook 2023-02-22, modified for ZC v1.5.8a
+ **/
 
 require('includes/application_top.php');
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright Copyright 2003-2022 Zen Cart Development Team
+ * @copyright Copyright 2003-2023 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license https://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Scott C Wilson 2022 Sep 17 Modified in v1.5.8 $
+ * @version $Id: brittainmark 2022 Dec 23 Modified in v1.5.8a $
  */
 require('includes/application_top.php');
 // To override the $show_* or $attr_img_width values, see 
@@ -40,10 +40,10 @@ foreach ($orders_status as $order_status) {
 }
 
 $show_customer = false;
-if ($order->billing['name'] != $order->delivery['name']) {
+if (isset($order->delivery['name']) && $order->billing['name'] != $order->delivery['name']) {
   $show_customer = true;
 }
-if ($order->billing['street_address'] != $order->delivery['street_address']) {
+if (isset($order->delivery['street_address']) && $order->billing['street_address'] != $order->delivery['street_address']) {
   $show_customer = true;
 }
 ?>
@@ -115,7 +115,7 @@ if ($order->billing['street_address'] != $order->delivery['street_address']) {
                 <td class="main"><b><?php echo ENTRY_SHIP_TO; ?></b></td>
               </tr>
               <tr>
-                <td class="main"><?php echo zen_address_format($order->delivery['format_id'], $order->delivery, 1, '', '<br>'); ?></td>
+                <td class="main"><?php echo (!empty($order->delivery) ? zen_address_format($order->delivery['format_id'], $order->delivery, 1, '', '<br>') : TEXT_NONE); ?></td>
               </tr>
             </table>
           </td>

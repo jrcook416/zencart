@@ -1380,7 +1380,7 @@ class shoppingCart extends base
                     'model' => $products->fields['products_model'],
                     'image' => $products->fields['products_image'],
                     'price' => ($products->fields['product_is_free'] == '1' ? 0 : $products_price),
-                    'uom' => $products->fields['uom'],
+                    'uom' => $products->fields['products_uom'],
                     'quantity' => $new_qty,
                     'weight' => $products->fields['products_weight'] + $this->attributes_weight($products_id),
                     'final_price' => ($products_price + $this->attributes_price($products_id)),

@@ -23,24 +23,26 @@
  */
 
 
-    function filtered_unit_lookup($agency) {
-        global $db;
-        global $filtered_unit_array;
+function filtered_unit_lookup($agency) {
+    global $db;
+    global $filtered_unit_array;
 
-        $filtered_unit_array = array();
-        $filtered_unit_values = $db->Execute("select * from iems_units where masterAgencyID = '" . $agency . "'");
-            while (!$filtered_unit_values->EOF) {
-                $filtered_unit_array[] = array(
-                        'id' => $filtered_unit_values->fields['masterUnitID'],
-                        'masterCountyID' => $filtered_unit_values->fields['masterCountyID'],
-                        'masterAgencyID' => $filtered_unit_values->fields['masterAgencyID'],
-                        'masterAgency' => $filtered_unit_values->fields['masterAgency'],
-                        'masterUnitDescription' => $filtered_unit_values->fields['masterUnitDescription'],
-                        'text' => $filtered_unit_values->fields['masterAgency'] . " " . $filtered_unit_values->fields['masterUnitDescription']);
-                $filtered_unit_values->MoveNext();
-                }; //end while
-        return $filtered_unit_array;
-    } //end filtered_unit_lookup
+    $filtered_unit_array = array();
+    $filtered_unit_values = $db->Execute("select agency.masterCountyID as masterCountyID, agency.masterAgency as masterAgency, agency.masterAgencyDescription as masterAgencyDescription,
+									unit.masterUnitID as masterUnitID, unit.masterAgencyID as masterAgencyID,
+									concat(agency.masterCountyID, ' ' , agency.masterAgency, ' ' , agency.masterAgencyDescription, ' ' , unit.masterUnitDescription) as `unitDescription`
+									from iems_units unit left join iems_agencies agency on agency.masterAgencyID = unit.masterAgencyID
+									where unit.masterAgencyID = '" . $agency . "'");
+    while (!$filtered_unit_values->EOF) {
+        $filtered_unit_array[] = array(
+            'id' => $filtered_unit_values->fields['masterUnitID'],
+            'masterAgencyID' => $filtered_unit_values->fields['masterAgencyID'],
+            'masterUnitDescription' => $filtered_unit_values->fields['unitDescription'],
+            'text' => $filtered_unit_values->fields['unitDescription']);
+        $filtered_unit_values->MoveNext();
+    }; //end while
+    return $filtered_unit_array;
+} //end filtered_unit_lookup
 
     function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
       // -----
@@ -112,12 +114,17 @@
 function unit_name_lookup($unitCode){
     global $db;
     global $unitName;
-    $unit_values = $db->Execute("select masterCountyID, masterAgency, masterUnitDescription from iems_units where masterUnitID = '" . $unitCode . "' LIMIT 1");
+    $unit_values = $db->Execute("select agency.masterCountyID as masterCountyID, agency.masterAgency as masterAgency, agency.masterAgencyDescription as masterAgencyDescription,
+									unit.masterUnitID as masterUnitID, unit.masterAgencyID as masterAgencyID,
+									concat(agency.masterCountyID, ' ' , agency.masterAgency, ' ' , agency.masterAgencyDescription, ' ' , unit.masterUnitDescription) as `unitDescription`
+									from iems_units unit left join iems_agencies agency on agency.masterAgencyID = unit.masterAgencyID
+									where masterUnitID = '" . $unitCode . "' LIMIT 1");
     while (!$unit_values->EOF){
         $countyID = $unit_values->fields['masterCountyID'];
         $agencyID = $unit_values->fields['masterAgency'];
-        $unitDesc = $unit_values->fields['masterUnitDescription'];
-        $unitName = $countyID . " " . $agencyID . " " . $unitDesc;
+		$agencyName = $unit_values->fields['masterAgencyDescription'];
+        $unitDesc = $unit_values->fields['unitDescription'];
+        $unitName = $unitDesc;
         $unit_values->MoveNext();
     };
     return $unitName;

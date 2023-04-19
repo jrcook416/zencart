@@ -283,10 +283,10 @@ class order extends base
         ];
         $this->delivery['zone_id'] = $this->getCountryZoneId((int)$this->delivery['country']['id'], $this->delivery['state']);
 
-        if (($order->fields['shipping_module_code'] == 'storepickup') ||
+        /*if (($order->fields['shipping_module_code'] == 'storepickup') ||
             (empty($this->delivery['name']) && empty($this->delivery['street_address']))) {
             $this->delivery = false;
-        }
+        }*/
 
         $this->billing = [
             'name' => $order->fields['billing_name'],
@@ -1384,7 +1384,7 @@ class order extends base
         $html_msg['HEADING_ADDRESS_INFORMATION'] = HEADING_ADDRESS_INFORMATION;
         $html_msg['ADDRESS_DELIVERY_TITLE'] = EMAIL_TEXT_DELIVERY_ADDRESS;
 
-        $storepickup = (strpos($this->info['shipping_module_code'], "storepickup") !== false);
+        /*$storepickup = (strpos($this->info['shipping_module_code'], "storepickup") !== false);
         if ($this->content_type != 'virtual' && !$storepickup) {
             $html_msg['ADDRESS_DELIVERY_DETAIL'] = zen_address_label($_SESSION['customer_id'], $_SESSION['sendto'], true, '', "<br>");
         } else {
@@ -1399,6 +1399,7 @@ class order extends base
                 zen_address_label($_SESSION['customer_id'], $_SESSION['sendto'], false, '', "\n") . "\n";
         }
         $email_order .= EMAIL_TEXT_TELEPHONE . $this->customer['telephone'] . "\n\n";
+		*/
 
         //addresses area: Billing
         $email_order .= "\n" . EMAIL_TEXT_BILLING_ADDRESS . "\n" .

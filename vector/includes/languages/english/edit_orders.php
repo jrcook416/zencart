@@ -46,6 +46,7 @@ define('ENTRY_CUSTOMER_POSTCODE', 'Postcode');
 define('ENTRY_CUSTOMER_COUNTRY', 'Country');
 define('ENTRY_SHIPPING_ADDRESS', 'Shipping Address:');
 define('ENTRY_BILLING_ADDRESS', 'Billing Address:');
+define('ENTRY_CUSTOMER_AGENCY', 'Agency');
 
 // Order Payment Entries
 define('ENTRY_PAYMENT_METHOD', 'Payment Method:');

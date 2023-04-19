@@ -34,10 +34,8 @@
 
     function unit_code_lookup($unitCode){
         global $db;
-        $unit_values = $db->Execute("select masterCountyID, masterUnitID, masterAgency, masterUnitDescription from iems_units where masterUnitID = '" . $unitCode . "' LIMIT 1");
+        $unit_values = $db->Execute("select masterUnitID, masterUnitDescription from iems_units where masterUnitID = '" . $unitCode . "' LIMIT 1");
         while (!$unit_values->EOF){
-            $_SESSION['IEMS']['unitCounty'] = $unit_values->fields['masterCountyID'];
-            $_SESSION['IEMS']['unitAgency'] = $unit_values->fields['masterAgency'];
             $_SESSION['IEMS']['unitCode'] = $unit_values->fields['masterUnitID'];
             $_SESSION['IEMS']['unitName'] = $unit_values->fields['masterUnitDescription'];
             $unit_values->MoveNext();

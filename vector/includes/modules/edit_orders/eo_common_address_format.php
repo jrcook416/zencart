@@ -34,6 +34,12 @@
             <td><input name="update_<?php echo $address_name; ?>_company" size="45" value="<?php echo zen_output_string_protected($address_fields['company']); ?>" <?php echo $max_company_length; ?> id="update_<?php echo $address_name; ?>_company"></td>
         </tr>
 
+		<tr>
+            <td class="eo-label"><label for="update_<?php echo $address_name; ?>_agency"><?php echo ENTRY_CUSTOMER_AGENCY; ?></label>:&nbsp;</td>
+            <td><?php agency_lookup(); echo zen_draw_pull_down_menu('update_' . $address_name . '_agency', $agency_array, $address_fields['agency'], 'id="update_' . $address_name . '_agency"'); ?></td>
+        </tr>
+
+
         <tr>
             <td class="eo-label"><label for="update_<?php echo $address_name; ?>_unit"><?php echo ENTRY_CUSTOMER_UNIT; ?></label>:&nbsp;</td>
             <td><?php filtered_unit_lookup($address_fields['agency']); echo zen_draw_pull_down_menu('update_' . $address_name . '_unit',$filtered_unit_array,$address_fields['unit'], 'id="update_' . $address_name . '_unit"'); ?></td>

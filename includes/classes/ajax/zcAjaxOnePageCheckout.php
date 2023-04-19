@@ -155,7 +155,7 @@ class zcAjaxOnePageCheckout extends base
                     }
 
                     if (!in_array($check_delivery_postcode, explode(",", MODULE_SHIPPING_STOREPICKUP_POSTCODE))) {
-                        $storepickup = false;
+                        $storepickup = true;
                     }
                 }
 //-eof-product_delivery_by_postcode (PDP) integration
@@ -208,7 +208,7 @@ class zcAjaxOnePageCheckout extends base
                     }
 
                     if (!in_array($check_delivery_postcode, explode(',', MODULE_SHIPPING_STOREPICKUP_POSTCODE))) {
-                        $storepickup = false;
+                        $storepickup = true;
                     }
                 }
 //-eof-product_delivery_by_postcode (PDP) integration

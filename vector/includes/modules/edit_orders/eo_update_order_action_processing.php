@@ -20,6 +20,7 @@ $order_updated = false;
 $sql_data_array = [
     'customers_name' => $_POST['update_customer_name'],
     'customers_company' => $_POST['update_customer_company'],
+	'customers_agency' => $_POST['update_customer_agency'],
     'customers_unit' => $_POST['update_customer_unit'],
     'customers_street_address' => $_POST['update_customer_street_address'],
     'customers_suburb' => $_POST['update_customer_suburb'],
@@ -33,6 +34,7 @@ $sql_data_array = [
 
     'billing_name' => $_POST['update_billing_name'],
     'billing_company' => $_POST['update_billing_company'],
+	'billing_agency' => $_POST['update_billing_agency'],
     'billing_unit' => $_POST['update_billing_unit'],
     'billing_street_address' => $_POST['update_billing_street_address'],
     'billing_suburb' => $_POST['update_billing_suburb'],
@@ -43,6 +45,7 @@ $sql_data_array = [
 
     'delivery_name' => $_POST['update_delivery_name'],
     'delivery_company' => $_POST['update_delivery_company'],
+	'delivery_agency' => $_POST['update_delivery_agency'],
     'delivery_unit' => $_POST['update_delivery_unit'],
     'delivery_street_address' => $_POST['update_delivery_street_address'],
     'delivery_suburb' => $_POST['update_delivery_suburb'],

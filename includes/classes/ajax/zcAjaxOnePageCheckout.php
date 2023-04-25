@@ -194,6 +194,13 @@ class zcAjaxOnePageCheckout extends base
                     $check_delivery_postcode = zen_get_UKPostcodeFirstPart($check_delivery_postcode);
 
                     // now check db for allowed postcodes and enable / disable relevant shipping modules
+					if (!in_array($check_delivery_postcode, explode(',', MODULE_SHIPPING_LOCALDELIVERY_POSTCODE))) {
+                         $localdelivery = false;
+                    }
+
+                    if (!in_array($check_delivery_postcode, explode(',', MODULE_SHIPPING_STOREPICKUP_POSTCODE))) {
+                        $storepickup = true;
+                    }
                 }
 //-eof-product_delivery_by_postcode (PDP) integration
 

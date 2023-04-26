@@ -124,4 +124,28 @@ if ($show_state_dropdowns) {
 }
 ?>
 <script src="<?php echo $addr_script_filepath; ?>" defer></script>
+<script>
+    filterUnitBoxes = function()
+    {
+        <?php 
+		$agency = $_SESSION['IEMS']['customer_agency_code'];
+		filtered_unit_lookup($agency);?>
+        var data = <?php echo json_encode($filtered_unit_array, JSON_UNESCAPED_SLASHES); ?>;
+		console.log(data);
+        var agency = <?php echo json_encode($_SESSION['IEMS']['customer_agency_code']);?>;
+		console.log(agency);
+        var html = '<option value="">Please Make a Selection</option>';
+        for(var count = 0; count < data.length; count++)
+        {
+            html += '<option value="'+data[count].id+'">'+data[count].masterUnitDescription+'</option>';
+			console.log(data[count].masterUnitDescription);
+        }; //end for
+        $('#unit-bill').empty();
+		console.log(html);
+        $('#unit-bill').append(html);
+        $('#unit-bill').prop('readonly',false);
+        $('#unit-bill').selectpicker('refresh');
+        alert("Select an Ordering Unit.");
+    }
+</script>
 <?php

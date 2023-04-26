@@ -10,17 +10,17 @@ var submitter = null;
 // -----
 // These functions are "legacy", carried over from the like-named module in /includes/modules/pages/checkout_payment
 //
-function concatExpiresFields(fields) 
+function concatExpiresFields(fields)
 {
     return jQuery(":input[name=" + fields[0] + "]").val() + jQuery(":input[name=" + fields[1] + "]").val();
 }
 
-function popupWindow(url) 
+function popupWindow(url)
 {
     window.open(url,'popupWindow','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=450,height=320,screenX=150,screenY=150,top=150,left=150')
 }
 
-function couponpopupWindow(url) 
+function couponpopupWindow(url)
 {
     window.open(url,'couponpopupWindow','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=450,height=320,screenX=150,screenY=150,top=150,left=150')
 }
@@ -37,7 +37,7 @@ function submitonce()
     setTimeout('button_timeout()', 4000);
     return false;
 }
-function button_timeout() 
+function button_timeout()
 {
     var button = document.getElementById("btn_submit");
     button.style.cursor="pointer";
@@ -61,7 +61,7 @@ function zcLog2Console(message)
 // -----
 // Normally used in an onfocus attribute of a payment-module's selection.
 //
-function methodSelect(theMethod) 
+function methodSelect(theMethod)
 {
     if (document.getElementById(theMethod)) {
         document.getElementById(theMethod).checked = 'checked';
@@ -170,7 +170,7 @@ jQuery(document).ready(function(){
     // Requires:
     // - checkbox, id="shipping_billing"
     //
-    function shippingIsBilling() 
+    function shippingIsBilling()
     {
         if (jQuery('#checkoutOneShipto').length) {
             if (jQuery("#shipping_billing").is(':checked')) {
@@ -272,8 +272,8 @@ jQuery(document).ready(function(){
     // initialize the checkout_payment form's submittal.  The (global) "submitter" value is set on return to either
     // null/0 (payment-handling required) or 1 (no payment-handling required) and is used by the Zen Cart payment class
     // to determine whether to "invoke" the selected payment method.
-    // 
-    submitFunction = function($gv,$total) 
+    //
+    submitFunction = function($gv,$total)
     {
         var arg_count = arguments.length;
         submitter = null;
@@ -395,7 +395,7 @@ jQuery(document).ready(function(){
                 zcLog2Console( 'Preparing to submit form, since confirmation is not required for "'+lastPaymentValue+'", per the required list: "'+confirmation_required );
                 jQuery('#checkoutOneLoading').show();
                 jQuery('#checkoutConfirmationDefault').hide();
-                
+
                 // -----
                 // Wait, since this is the last on the .ajaxComplete 'chain' of events until
                 // all the just-downloaded jQuery finishes, then submit the AJAX-supplied form.
@@ -413,7 +413,7 @@ jQuery(document).ready(function(){
     // -----
     // Two "helper" functions, used to indicate "progress" during the various AJAX calls.  The
     // cursor changes to "wait" when the AJAX call starts and back to "normal" upon return.
-    //   
+    //
     jQuery(document).ajaxStart(function () {
         jQuery('*').css('cursor', 'wait');
     });
@@ -448,8 +448,8 @@ jQuery(document).ready(function(){
 
     function changeShippingSubmitForm(type, submit_type)
     {
-        if (typeof submit_type === "undefined" || submit_type === null) { 
-            submit_type = ''; 
+        if (typeof submit_type === "undefined" || submit_type === null) {
+            submit_type = '';
         }
         var shippingSelected = jQuery('input[name=shipping]');
         if (shippingSelected.is( ':radio' )) {
@@ -556,8 +556,8 @@ jQuery(document).ready(function(){
                             alert(response.errorMessage);
                         }
                     }
-                }  
-                zcLog2Console('Shipping method updated, error: '+shippingError); 
+                }
+                zcLog2Console('Shipping method updated, error: '+shippingError);
 
                 if (type == 'submit' || type == 'submit-cc') {
                     if (shippingError == true) {
@@ -677,7 +677,7 @@ jQuery(document).ready(function(){
             // Handle any redirects required, based on the AJAX response's status.
             //
             checkForRedirect(response.status);
-            
+
             jQuery('#orderTotalDivs').html(response.orderTotalHtml);
         });
     });
@@ -688,7 +688,7 @@ jQuery(document).ready(function(){
     // note that this is an order-review request, and cause the order to be submitted.
     //
     jQuery(document).on('click', '#opc-order-review', function(event) {
-        submitFunction(0,0); 
+        submitFunction(0,0);
         setOrderConfirmed(1);
 
         zcLog2Console('Submitting order-creating form (review)');
@@ -701,7 +701,7 @@ jQuery(document).ready(function(){
     // note that this is an order-confirmation request, and cause the order to be submitted.
     //
     jQuery(document).on('click', '#opc-order-confirm', function(event) {
-        submitFunction(0,0); 
+        submitFunction(0,0);
         setOrderConfirmed(1);
 
         zcLog2Console('Submitting order-creating form (confirm)');
@@ -778,9 +778,11 @@ jQuery(document).ready(function(){
         jQuery('#address-form-bill').show();
         jQuery('#checkoutOneBillto .opc-buttons').show();
         jQuery('#opc-bill-save, #opc-add-bill, #opc-add-bill+label').hide();
+        filterUnitBoxes();
     }
     jQuery(document).on('click', '#opc-bill-edit', editBilling);
-    
+
+
     function editShipping()
     {
         jQuery('#address-ship').hide();
@@ -799,7 +801,7 @@ jQuery(document).ready(function(){
         jQuery('#checkoutOneShipto').addClass('opc-view');
     }
     jQuery(document).on('focus', '#checkoutOneShipto input, #checkoutOneShipto select:not(#select-address-ship)', changeShippingFields);
-    
+
     function restoreShipping()
     {
         restoreAddressValues('ship', '#checkoutOneShipto');
@@ -835,7 +837,7 @@ jQuery(document).ready(function(){
             // Handle any redirects required, based on the AJAX response's status.
             //
             checkForRedirect(response.status);
-            
+
             jQuery(address_block).replaceWith(response.addressHtml);
             if (typeof initializeStateZones != 'undefined') {
                 initializeStateZones();
@@ -948,7 +950,7 @@ jQuery(document).ready(function(){
 
     // -----
     // If the checkout process is currently being performed in "guest" mode, make sure that any
-    // required fields in the guest-login and billing-address blocks are currently filled-in 
+    // required fields in the guest-login and billing-address blocks are currently filled-in
     // and, if not, give focus to the first required input in the block.
     //
     if (jQuery('#checkoutOneGuestInfo').length) {
@@ -1050,5 +1052,4 @@ jQuery(document).ready(function(){
             }
         });
     }
-
 });

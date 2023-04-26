@@ -13,12 +13,13 @@
 jQuery(document).ready(function() {
     var last_country_bill = jQuery('#country-bill option:selected').val();
     var last_country_ship = jQuery('#country-ship option:selected').val();
-    
+
     // -----
     // Initialize the display for the dropdown vs. hand-entry of the state fields.  If the initially-selected
     // country doesn't have zones, the dropdown will contain only 1 element ('Type a choice below ...').
     //
-    initializeStateZones = function() 
+
+    initializeStateZones = function()
     {
         if (jQuery('#stateZone-bill > option').length == 1) {
             jQuery('#stateZone-bill, #stateZone-bill+span, #stateZone-bill+span+br').hide();

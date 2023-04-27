@@ -75,7 +75,7 @@ if ($show_state_dropdowns) {
 var additionalShippingInputs = {
 <?php
 // -----
-// If the current order has generated shipping quotes (i.e. it's got at least one physical product), check to see if a 
+// If the current order has generated shipping quotes (i.e. it's got at least one physical product), check to see if a
 // shipping-module has required inputs that should accompany the post, format the necessary jQuery to gather those inputs.
 //
 $input_array = 'var shippingInputs = {';
@@ -127,7 +127,7 @@ if ($show_state_dropdowns) {
 <script>
     filterUnitBoxes = function()
     {
-        <?php 
+        <?php
 		$agency = $_SESSION['IEMS']['customer_agency_code'];
 		filtered_unit_lookup($agency);?>
         var data = <?php echo json_encode($filtered_unit_array, JSON_UNESCAPED_SLASHES); ?>;
@@ -145,7 +145,6 @@ if ($show_state_dropdowns) {
         $('#unit-bill').append(html);
         $('#unit-bill').prop('readonly',false);
         $('#unit-bill').selectpicker('refresh');
-        alert("Select an Ordering Unit.");
     }
 </script>
 <?php

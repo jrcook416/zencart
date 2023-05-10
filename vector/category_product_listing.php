@@ -628,7 +628,11 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
               }
           }
 ?>
-                <th class="text-right"><?php echo TABLE_HEADING_STATUS; ?></th>
+                <th class="text-right"><?php echo "IEMS"; ?></th>
+                  <th class="text-right"><?php echo "IFD"; ?></th>
+                  <th class="text-right"><?php echo "Wayne"; ?></th>
+                  <th class="text-right"><?php echo "External"; ?></th>
+
                 <?php
                 if ($action === '') {
                   ?>
@@ -776,8 +780,12 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
             $zco_notifier->notify('NOTIFY_ADMIN_PROD_LISTING_PRODUCTS_QUERY', '', $extra_select, $extra_from, $extra_joins, $extra_ands, $order_by, $extra_search_fields);
 
             $products_query_raw = "SELECT DISTINCT p.products_type, p.products_id, pd.products_name, p.products_quantity,
-                                          p.products_price, p.products_status, p.products_model, p.products_sort_order, p.products_price_sorter, p.products_weight,  
-                                          p.master_categories_id";
+				max(CASE WHEN q.source = 'IEMS' AND q.products_status = '1' THEN '1' else '0' end) AS iems_status,
+                max(CASE WHEN q.source = 'IFD' AND q.products_status = '1' THEN '1' else '0' end) AS ifd_status,
+                max(CASE WHEN q.source = 'WAYNE' AND q.products_status = '1' THEN '1' else '0' end) AS wayne_status,
+                max(CASE WHEN q.source = 'EXT' AND q.products_status = '1' THEN '1' else '0' end) AS ext_status,
+				p.products_price, p.products_status, p.products_model, p.products_sort_order, p.products_price_sorter, p.products_weight,
+				p.master_categories_id ";
             $products_query_raw .= $extra_select;
 
             $products_query_raw .= " FROM " . TABLE_PRODUCTS . " p";
@@ -785,6 +793,8 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
 
             $products_query_raw .= " LEFT JOIN " . TABLE_PRODUCTS_DESCRIPTION . " pd ON (pd.products_id = p.products_id)";
             $products_query_raw .= $extra_joins;
+
+            $products_query_raw .=" LEFT JOIN iems_quantities q on (p.products_id = q.products_id)";
 
             $where = " WHERE pd.language_id = " . (int)$_SESSION['languages_id'];
             $where .= $extra_ands;
@@ -802,7 +812,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                 $where .= " AND p2c.categories_id=" . (int)$current_category_id;
             }
 
-            $products_query_raw .= $where . $order_by;
+            $products_query_raw .= $where . " group by p.products_id " .  $order_by;
 
 // Split Page
 
@@ -927,7 +937,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                     <?php
                   }
                   echo zen_draw_form('setflag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=setflag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
-                  if ($product['products_status'] === '1') {
+                  if ($product['iems_status'] === '1') {
                     ?>
                     <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                     <?php echo zen_draw_hidden_field('flag', '0'); ?>
@@ -937,6 +947,80 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                   <?php } ?>
                   <?php echo '</form>'; ?>
                 </td>
+
+                  <td class="text-right text-nowrap dataTableButtonCell">
+                      <?php
+                      $additional_icons = '';
+                      $zco_notifier->notify('NOTIFY_ADMIN_PROD_LISTING_ADD_ICON', $product, $additional_icons);
+                      echo $additional_icons;
+                      ?>
+                      <?php if (zen_get_product_is_linked($product['products_id']) === 'true') { ?>
+                          <i class="fa fa-square fa-lg txt-linked" aria-hidden="true" title="<?php echo IMAGE_ICON_LINKED; ?>"></i>
+                      <?php } else { ?>
+                          <i class="fa fa-square fa-lg txt-transparent"></i> <!-- blank icon to preserve vertical alignment with additional icons -->
+                          <?php
+                      }
+                      echo zen_draw_form('setflag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=setflag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
+                      if ($product['ifd_status'] === '1') {
+                          ?>
+                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <?php echo zen_draw_hidden_field('flag', '0'); ?>
+                      <?php } else { ?>
+                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <?php echo zen_draw_hidden_field('flag', '1'); ?>
+                      <?php } ?>
+                      <?php echo '</form>'; ?>
+                  </td>
+
+                  <td class="text-right text-nowrap dataTableButtonCell">
+                      <?php
+                      $additional_icons = '';
+                      $zco_notifier->notify('NOTIFY_ADMIN_PROD_LISTING_ADD_ICON', $product, $additional_icons);
+                      echo $additional_icons;
+                      ?>
+                      <?php if (zen_get_product_is_linked($product['products_id']) === 'true') { ?>
+                          <i class="fa fa-square fa-lg txt-linked" aria-hidden="true" title="<?php echo IMAGE_ICON_LINKED; ?>"></i>
+                      <?php } else { ?>
+                          <i class="fa fa-square fa-lg txt-transparent"></i> <!-- blank icon to preserve vertical alignment with additional icons -->
+                          <?php
+                      }
+                      echo zen_draw_form('setflag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=setflag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
+                      if ($product['wayne_status'] === '1') {
+                          ?>
+                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <?php echo zen_draw_hidden_field('flag', '0'); ?>
+                      <?php } else { ?>
+                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <?php echo zen_draw_hidden_field('flag', '1'); ?>
+                      <?php } ?>
+                      <?php echo '</form>'; ?>
+                  </td>
+
+                  <td class="text-right text-nowrap dataTableButtonCell">
+                      <?php
+                      $additional_icons = '';
+                      $zco_notifier->notify('NOTIFY_ADMIN_PROD_LISTING_ADD_ICON', $product, $additional_icons);
+                      echo $additional_icons;
+                      ?>
+                      <?php if (zen_get_product_is_linked($product['products_id']) === 'true') { ?>
+                          <i class="fa fa-square fa-lg txt-linked" aria-hidden="true" title="<?php echo IMAGE_ICON_LINKED; ?>"></i>
+                      <?php } else { ?>
+                          <i class="fa fa-square fa-lg txt-transparent"></i> <!-- blank icon to preserve vertical alignment with additional icons -->
+                          <?php
+                      }
+                      echo zen_draw_form('setflag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=setflag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
+                      if ($product['ext_status'] === '1') {
+                          ?>
+                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <?php echo zen_draw_hidden_field('flag', '0'); ?>
+                      <?php } else { ?>
+                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <?php echo zen_draw_hidden_field('flag', '1'); ?>
+                      <?php } ?>
+                      <?php echo '</form>'; ?>
+                  </td>
+
+
                 <?php if ($action === '') { ?>
                   <td class="text-right hidden-sm hidden-xs"><?php echo $product['products_sort_order']; ?></td>
                   <td class="text-right dataTableButtonCell">

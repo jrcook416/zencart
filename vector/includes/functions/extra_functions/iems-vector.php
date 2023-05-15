@@ -95,8 +95,8 @@ function unit_lookup() {
 	global $unit_array;
 
 	$unit_array = array();
-	$unit_values = $db->Execute("select agency.masterCountyID as masterCountyID, agency.masterAgency as masterAgency, 
-									agency.masterAgencyDescription as masterAgencyDescription, unit.masterUnitID as masterUnitID, 
+	$unit_values = $db->Execute("select agency.masterCountyID as masterCountyID, agency.masterAgency as masterAgency,
+									agency.masterAgencyDescription as masterAgencyDescription, unit.masterUnitID as masterUnitID,
 									unit.masterAgencyID as masterAgencyID,
 									concat(agency.masterCountyID, ' ' , agency.masterAgency, ' ' , unit.masterUnitDescription) as `unitDescription`
 									from iems_units unit left join iems_agencies agency on agency.masterAgencyID = unit.masterAgencyID;");
@@ -300,4 +300,12 @@ function iems_get_product_details($product_id, $language_id = null)
     //Allow an observer to modify details
     $zco_notifier->notify('NOTIFY_GET_PRODUCT_DETAILS', $product_id, $product);
     return $product;
+}
+	function iems_set_product_status($product_id, $status)
+{
+    global $db;
+    $db->Execute("UPDATE iems_quantities
+                SET products_status = " . (int)$status . "
+                WHERE products_id = " . (int)$product_id . "
+                AND source = 'IEMS' ");
 }

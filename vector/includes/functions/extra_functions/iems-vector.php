@@ -309,3 +309,30 @@ function iems_get_product_details($product_id, $language_id = null)
                 WHERE products_id = " . (int)$product_id . "
                 AND source = 'IEMS' ");
 }
+
+function ifd_set_product_status($product_id, $status)
+{
+    global $db;
+    $db->Execute("UPDATE iems_quantities
+                SET products_status = " . (int)$status . "
+                WHERE products_id = " . (int)$product_id . "
+                AND source = 'IFD' ");
+}
+
+function ext_set_product_status($product_id, $status)
+{
+    global $db;
+    $db->Execute("UPDATE iems_quantities
+                SET products_status = " . (int)$status . "
+                WHERE products_id = " . (int)$product_id . "
+                AND source = 'EXT' ");
+}
+
+function wayne_set_product_status($product_id, $status)
+{
+    global $db;
+    $db->Execute("UPDATE iems_quantities
+                SET products_status = " . (int)$status . "
+                WHERE products_id = " . (int)$product_id . "
+                AND source = 'WAYNE' ");
+}

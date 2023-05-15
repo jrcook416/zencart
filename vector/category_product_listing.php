@@ -106,16 +106,42 @@ if (!empty($action)) {
         zen_redirect(zen_href_link(FILENAME_CATEGORY_PRODUCT_LISTING, 'action=edit_category&cPath=' . $_GET['cPath'] . '&cID=' . zen_db_prepare_input($_GET['cID'])));
       }
       break;
-    case 'setflag':
-
+    case 'set_iems_flag':
       if (isset($_POST['iems_flag']) && ($_POST['iems_flag'] === '0' || $_POST['iems_flag'] === '1')) {
         if (isset($_GET['pID'])) {
             iems_set_product_status($_GET['pID'], $_POST['iems_flag']);
         }
       }
-
       zen_redirect(zen_href_link(FILENAME_CATEGORY_PRODUCT_LISTING, 'cPath=' . $_GET['cPath'] . '&pID=' . $_GET['pID'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter));
       break;
+
+      case 'set_ifd_flag':
+          if (isset($_POST['ifd_flag']) && ($_POST['ifd_flag'] === '0' || $_POST['ifd_flag'] === '1')) {
+              if (isset($_GET['pID'])) {
+                  ifd_set_product_status($_GET['pID'], $_POST['ifd_flag']);
+              }
+          }
+          zen_redirect(zen_href_link(FILENAME_CATEGORY_PRODUCT_LISTING, 'cPath=' . $_GET['cPath'] . '&pID=' . $_GET['pID'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter));
+          break;
+
+      case 'set_ext_flag':
+          if (isset($_POST['ext_flag']) && ($_POST['ext_flag'] === '0' || $_POST['ext_flag'] === '1')) {
+              if (isset($_GET['pID'])) {
+                  ext_set_product_status($_GET['pID'], $_POST['ext_flag']);
+              }
+          }
+          zen_redirect(zen_href_link(FILENAME_CATEGORY_PRODUCT_LISTING, 'cPath=' . $_GET['cPath'] . '&pID=' . $_GET['pID'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter));
+          break;
+
+      case 'set_wayne_flag':
+          if (isset($_POST['wayne_flag']) && ($_POST['wayne_flag'] === '0' || $_POST['wayne_flag'] === '1')) {
+              if (isset($_GET['pID'])) {
+                  wayne_set_product_status($_GET['pID'], $_POST['wayne_flag']);
+              }
+          }
+          zen_redirect(zen_href_link(FILENAME_CATEGORY_PRODUCT_LISTING, 'cPath=' . $_GET['cPath'] . '&pID=' . $_GET['pID'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter));
+          break;
+
     case 'delete_category_confirm':
 
       // future cat specific deletion
@@ -936,13 +962,13 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                     <i class="fa fa-square fa-lg txt-transparent"></i> <!-- blank icon to preserve vertical alignment with additional icons -->
                     <?php
                   }
-                  echo zen_draw_form('setflag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=setflag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
+                  echo zen_draw_form('set_iems_flag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=set_iems_flag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
                   if ($product['iems_status'] === '1') {
                     ?>
-                    <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                    <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.set_iems_flag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                     <?php echo zen_draw_hidden_field('iems_flag', '0'); ?>
                   <?php } else { ?>
-                    <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                    <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.set_iems_flag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                     <?php echo zen_draw_hidden_field('iems_flag', '1'); ?>
                   <?php } ?>
                   <?php echo '</form>'; ?>
@@ -960,13 +986,13 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                           <i class="fa fa-square fa-lg txt-transparent"></i> <!-- blank icon to preserve vertical alignment with additional icons -->
                           <?php
                       }
-                      echo zen_draw_form('setflag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=setflag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
+                      echo zen_draw_form('set_ifd_flag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=set_ifd_flag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
                       if ($product['ifd_status'] === '1') {
                           ?>
-                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.set_ifd_flag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                           <?php echo zen_draw_hidden_field('ifd_flag', '0'); ?>
                       <?php } else { ?>
-                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.set_ifd_flag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                           <?php echo zen_draw_hidden_field('ifd_flag', '1'); ?>
                       <?php } ?>
                       <?php echo '</form>'; ?>
@@ -984,13 +1010,13 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                           <i class="fa fa-square fa-lg txt-transparent"></i> <!-- blank icon to preserve vertical alignment with additional icons -->
                           <?php
                       }
-                      echo zen_draw_form('setflag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=setflag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
+                      echo zen_draw_form('set_ext_flag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=set_ext_flag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
                       if ($product['ext_status'] === '1') {
                           ?>
-                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.set_ext_flag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                           <?php echo zen_draw_hidden_field('ext_flag', '0'); ?>
                       <?php } else { ?>
-                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.set_ext_flag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                           <?php echo zen_draw_hidden_field('ext_flag', '1'); ?>
                       <?php } ?>
                       <?php echo '</form>'; ?>
@@ -1008,13 +1034,13 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                           <i class="fa fa-square fa-lg txt-transparent"></i> <!-- blank icon to preserve vertical alignment with additional icons -->
                           <?php
                       }
-                      echo zen_draw_form('setflag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=setflag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
+                      echo zen_draw_form('set_wayne_flag_products' . $product['products_id'], FILENAME_CATEGORY_PRODUCT_LISTING, 'action=set_wayne_flag&pID=' . $product['products_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . $search_parameter);
                       if ($product['wayne_status'] === '1') {
                           ?>
-                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <i class="fa fa-square fa-lg txt-status-on" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="document.forms.set_wayne_flag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                           <?php echo zen_draw_hidden_field('wayne_flag', '0'); ?>
                       <?php } else { ?>
-                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.setflag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
+                          <i class="fa fa-square fa-lg txt-status-off" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="document.forms.set_wayne_flag_products<?php echo $product['products_id']; ?>.submit();" role="button"></i>
                           <?php echo zen_draw_hidden_field('wayne_flag', '1'); ?>
                       <?php } ?>
                       <?php echo '</form>'; ?>

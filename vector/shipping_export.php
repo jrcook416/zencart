@@ -293,7 +293,7 @@ if (isset($_POST['download_csv'])) { // If form was submitted then do processing
 $unitCode = $order_details->fields['delivery_unit'];
 unit_name_lookup($unitCode);
 $agencyCode = $order_details->fields['delivery_agency'];
-agency_name_lookup($agencyCode);   
+agency_name_lookup($agencyCode);
 
       $str_export .= $FIELDSEPARATOR . $FIELDSTART . $order_details->fields['delivery_company'] . $FIELDEND .
           $FIELDSEPARATOR . $FIELDSTART . $agencyName . $FIELDEND .
@@ -761,7 +761,7 @@ while (!$orders_status->EOF) {
                                                                 <input type='button' name='checkall'
                                                                        value="Check / Uncheck All"
                                                                        onclick='checkedAll(download_csv);'><br/><br/>
-                                                               <?php echo zen_draw_checkbox_field('export_test', '1', $export_test_checked); ?>
+                                                               <?php echo zen_draw_checkbox_field('export_test', '1', $export_test_checked=true); ?>
                                                                 &nbsp;<?php echo TEXT_RUNIN_TEST_FIELD; ?><br/>
                                                                <?php echo zen_draw_checkbox_field('split_name', '1', $export_split_checked); ?>
                                                                 &nbsp;<?php echo TEXT_SPLIT_NAME_FIELD; ?><br/>
@@ -815,7 +815,7 @@ while (!$orders_status->EOF) {
                                                                             <!--</td>
                                                                           </tr>
                                                                           <tr>
-                                                                            <td>--><?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, '4' , 'id="order_status_setting"'); ?></td>
+                                                                            <td>--><?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, '6' , 'id="order_status_setting"'); ?></td>
                                                                     </tr>
                                                                 </table>
                                                                 <hr/>

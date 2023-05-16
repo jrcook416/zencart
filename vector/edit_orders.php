@@ -342,11 +342,6 @@ if (!empty($addl_js_files)) {
 ?>
 <!-- footer //-->
 <?php
-
-echo "<pre>";
-print_r($order);
-echo "</pre>";
-
 require DIR_WS_INCLUDES . 'footer.php';
 ?>
 <!-- footer_eof //-->

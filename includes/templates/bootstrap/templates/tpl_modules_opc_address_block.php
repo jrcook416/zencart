@@ -158,12 +158,6 @@ if (ACCOUNT_SUBURB === 'true') {
 echo $_SESSION['opc']->formatAddressElement($which, 'city', $address['city'], ENTRY_CITY, TABLE_ADDRESS_BOOK, 'entry_city', ENTRY_CITY_MIN_LENGTH, ENTRY_CITY_TEXT) . $clear_both;
 
 echo $_SESSION['opc']->formatAddressElement($which, 'postcode', $address['postcode'], ENTRY_POST_CODE, TABLE_ADDRESS_BOOK, 'entry_postcode', ENTRY_POSTCODE_MIN_LENGTH, ENTRY_POST_CODE_TEXT) . $clear_both;
-
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
-
-
 ?>
       <div id="messages-<?php echo $which; ?>" class="mt-2"></div>
 </div>

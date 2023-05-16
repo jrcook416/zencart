@@ -1623,7 +1623,7 @@ if (zen_not_null($action) && $order_exists == true) {
                       $keywords = zen_db_input(zen_db_prepare_input($_GET['search']));
                       $search = " and (o.customers_city like '%" . $keywords . "%' or o.customers_postcode like '%" . $keywords . "%' or o.date_purchased like '%" . $keywords . "%' or o.billing_name like '%" . $keywords . "%' or o.billing_company like '%" . $keywords . "%' or o.billing_street_address like '%" . $keywords . "%' or o.delivery_city like '%" . $keywords . "%' or o.delivery_postcode like '%" . $keywords . "%' or o.delivery_name like '%" . $keywords . "%' or o.delivery_company like '%" . $keywords . "%' or o.delivery_street_address like '%" . $keywords . "%' or o.billing_city like '%" . $keywords . "%' or o.billing_postcode like '%" . $keywords . "%' or o.customers_email_address like '%" . $keywords . "%' or o.customers_name like '%" . $keywords . "%' or o.customers_company like '%" . $keywords . "%' or o.customers_street_address  like '%" . $keywords . "%' or o.customers_telephone like '%" . $keywords . "%' or o.ip_address  like '%" . $keywords . "%')";
                   }
-                  $new_fields .= ", o.customers_company, o.customers_email_address, o.customers_street_address, o.delivery_company, o.delivery_name, o.delivery_street_address, o.billing_company, o.billing_name, o.billing_street_address, o.payment_module_code, o.shipping_module_code, o.orders_status, o.ip_address, o.language_code ";
+                  $new_fields .= ", o.customers_company, o.customers_email_address, o.customers_street_address, o.delivery_unit, o.delivery_company, o.delivery_name, o.delivery_street_address, o.billing_company, o.billing_name, o.billing_street_address, o.payment_module_code, o.shipping_module_code, o.orders_status, o.ip_address, o.language_code ";
 
                   $order_by = " ORDER BY o.orders_id DESC";
                   $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_SEARCH_PARMS', $keywords, $search, $search_distinct, $new_fields, $new_table, $order_by);
@@ -1731,7 +1731,7 @@ if (zen_not_null($action) && $order_exists == true) {
                     <?php
                     echo '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $orders->fields['customers_id'] . '&action=edit', 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_cust_info.gif', MINI_ICON_INFO) . '</a>&nbsp;';
                     echo '<a href="' . zen_href_link(FILENAME_ORDERS, 'cID=' . $orders->fields['customers_id'], 'NONSSL') . '">' . zen_image(DIR_WS_IMAGES . 'icon_cust_orders.gif', MINI_ICON_ORDERS) . '</a>&nbsp;';
-                    echo '<a href="' . zen_href_link(FILENAME_MAIL, 'origin=' . FILENAME_ORDERS . '&customer=' . $orders->fields['customers_email_address'] . '&cID=' . $orders->fields['customers_id']) . '">' . $orders->fields['customers_name'] . ($orders->fields['customers_company'] != '' ? '<br />' . $orders->fields['customers_company'] : '') . '</a>';
+                    echo '<a href="' . zen_href_link(FILENAME_MAIL, 'origin=' . FILENAME_ORDERS . '&customer=' . $orders->fields['customers_email_address'] . '&cID=' . $orders->fields['customers_id']) . '">' . $orders->fields['delivery_name'] . (unit_name_lookup($orders->fields['delivery_unit']) != '' ? '<br />' . unit_name_lookup($orders->fields['delivery_unit']) : '') . '</a>';
                     ?>
                 </td>
                 <?php /* EOF Super Orders 16 of 21 */ ?>

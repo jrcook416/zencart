@@ -39,7 +39,7 @@ if (isset($_POST['add_product_products_id'])) {
 if (isset($_POST['add_product_quantity'])) {
     $add_product_quantity = zen_db_prepare_input($_POST['add_product_quantity']);
 }
-  
+
 // -----
 // The "queryCache" functionality present in the Zen Cart core can get in the way of
 // Edit Orders due to the amount of database manipulation.  Remove the default instance
@@ -49,7 +49,7 @@ if (isset($_POST['add_product_quantity'])) {
 unset($queryCache);
 require DIR_WS_CLASSES . 'EditOrdersQueryCache.php';
 $queryCache = new EditOrdersQueryCache();
-  
+
 // -----
 // Include and instantiate the editOrders class.
 //
@@ -91,11 +91,11 @@ switch ($action) {
             zen_redirect(zen_href_link(FILENAME_EDIT_ORDERS, zen_get_all_get_params(['action']) . 'action=edit'));
         }
         break;
-        
+
     default:
         $action = 'edit';
         $orders_query = $db->Execute(
-            "SELECT orders_id FROM " . TABLE_ORDERS . " 
+            "SELECT orders_id FROM " . TABLE_ORDERS . "
               WHERE orders_id = $oID
               LIMIT 1"
         );
@@ -103,19 +103,19 @@ switch ($action) {
             $messageStack->add_session(sprintf(ERROR_ORDER_DOES_NOT_EXIST, $oID), 'error');
             zen_redirect(zen_href_link(FILENAME_ORDERS));
         }
-        break; 
+        break;
 }
 
 if ($action == 'edit' || ($action == 'update_order' && empty($allow_update))) {
     $action = 'edit';
-    
+
     $order = $eo->getOrderInfo($action);
-   
+
     // -----
     // Initialize the shipping cost, tax-rate and tax-value.
     //
     $eo->eoInitializeShipping($oID, $action);
-    
+
     if (!$eo->eoOrderIsVirtual($order) &&
            ( !is_array($order->customer['country']) || !isset($order->customer['country']['id']) ||
              !is_array($order->billing['country']) || !isset($order->billing['country']['id']) ||
@@ -199,7 +199,7 @@ if (EDIT_ORDERS_USE_NUMERIC_FIELDS != '1') {
 //
 if ($action == 'edit') {
     require DIR_WS_MODULES . 'edit_orders/eo_edit_action_display.php';
-} elseif ($action == "add_prdct") { 
+} elseif ($action == "add_prdct") {
     require DIR_WS_MODULES . 'edit_orders/eo_add_prdct_action_display.php';
 }
 
@@ -234,18 +234,18 @@ $(document).ready(function() {
         var opi = $(this).attr('data-opi');
         updateProductGross(opi);
     });
-    
+
     $('.p-g').on('keyup', function(e) {
         var opi = $(this).attr('data-opi');
         updateProductNet(opi);
     });
 
-    function doRound(x, places) 
+    function doRound(x, places)
     {
         return Math.round(x * Math.pow(10, places)) / Math.pow(10, places);
     }
 
-    function getProductTaxRate(opi) 
+    function getProductTaxRate(opi)
     {
         return getValidatedTaxRate($('input[name="update_products['+opi+'][tax]"]').val());
     }
@@ -255,7 +255,7 @@ $(document).ready(function() {
         return (regex.test(taxRate)) ? taxRate : 0;
     }
 
-    function updateProductGross(opi) 
+    function updateProductGross(opi)
     {
         var taxRate = getProductTaxRate(opi);
         var gross = $('input[name="update_products['+opi+'][final_price]"]').val();
@@ -266,7 +266,7 @@ $(document).ready(function() {
         $('input[name="update_products['+opi+'][gross]"]').val(doRound(gross, 4));
     }
 
-    function updateProductNet(opi) 
+    function updateProductNet(opi)
     {
         var taxRate = getProductTaxRate(opi);
         var net = $('input[name="update_products['+opi+'][gross]"]').val();
@@ -276,19 +276,19 @@ $(document).ready(function() {
         }
         $('input[name="update_products['+opi+'][final_price]"]').val(doRound(net, 4));
     }
-    
+
     $('#s-t, #s-n').on('keyup', function(e) {
         updateShippingGross();
     });
     $('#s-g').on('keyup', function(e) {
         updateShippingNet();
     });
-    
+
     function getShippingTaxRate()
     {
         return getValidatedTaxRate($('#s-t').val());
     }
-    
+
     function updateShippingGross()
     {
         var taxRate = getShippingTaxRate();
@@ -298,7 +298,7 @@ $(document).ready(function() {
         }
         $('#s-g').val(doRound(gross, 4));
     }
-    
+
     function updateShippingNet()
     {
         var taxRate = getShippingTaxRate();
@@ -341,8 +341,13 @@ if (!empty($addl_js_files)) {
 }
 ?>
 <!-- footer //-->
-<?php 
-require DIR_WS_INCLUDES . 'footer.php'; 
+<?php
+
+echo "<pre>";
+print_r($order);
+echo "</pre>";
+
+require DIR_WS_INCLUDES . 'footer.php';
 ?>
 <!-- footer_eof //-->
 </body>

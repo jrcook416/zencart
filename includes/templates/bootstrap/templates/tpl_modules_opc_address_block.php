@@ -118,6 +118,7 @@ $field_id = "unit-$which";?>
 <?php
 // IEMS EDITED CODE //
 $agency = $_SESSION['IEMS']['customer_agency_code'];
+
 filtered_unit_lookup($agency);
 echo iems_pull_down_menu($field_name, $filtered_unit_array, $address['unit'], "id=\"$field_id\"" , false);?>
 <br><br>

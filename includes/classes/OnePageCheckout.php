@@ -321,7 +321,7 @@ class OnePageCheckout extends base
                     entry_company as company, entry_agency as agency, entry_street_address as street_address,
                     entry_suburb as suburb, entry_city as city, entry_postcode as postcode,
                     entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id,
-					entry_county as county, entry_agency as agency, entry_unit as unit
+					entry_county as county, entry_unit as unit
                FROM " . TABLE_ADDRESS_BOOK . "
               WHERE customers_id = :customersID
                 AND address_book_id = :addressBookID

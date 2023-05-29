@@ -6,7 +6,7 @@
 // Modified for use by the 'bootstrap' template:  Bootstrap/OPC v1.0.0
 //
 ?>
-<?php 
+<?php
 if ($payment_module_available) {
     echo $payment_modules->javascript_validation();
 }
@@ -27,7 +27,7 @@ $nojs_link = zen_href_link(FILENAME_CHECKOUT_SHIPPING, 'opctype=jserr', 'SSL');
 <div class="centerColumn opc-base" id="checkoutPayment" style="display:none;">
     <h1 id="checkoutOneHeading"><?php echo HEADING_TITLE; ?></h1>
 <?php
-  echo zen_draw_form('checkout_payment', zen_href_link(FILENAME_CHECKOUT_ONE_CONFIRMATION, '', 'SSL'), 'post', 'id="checkout_payment"') . zen_draw_hidden_field('action', 'process') . zen_draw_hidden_field('javascript_enabled', '0', 'id="javascript-enabled"'); 
+  echo zen_draw_form('checkout_payment', zen_href_link(FILENAME_CHECKOUT_ONE_CONFIRMATION, '', 'SSL'), 'post', 'id="checkout_payment"') . zen_draw_hidden_field('action', 'process') . zen_draw_hidden_field('javascript_enabled', '0', 'id="javascript-enabled"');
 
 if (TEXT_CHECKOUT_ONE_TOP_INSTRUCTIONS != '') {
 ?>
@@ -60,7 +60,7 @@ require $template->get_template_dir('tpl_modules_opc_billing_address.php', DIR_W
 require $template->get_template_dir('tpl_modules_opc_shipping_address.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_opc_shipping_address.php';
 ?>
     </div>
-    
+
     <div class="col-sm-6 col-lg-4">
 <?php
 // -----
@@ -76,10 +76,10 @@ require $template->get_template_dir('tpl_modules_opc_payment_choices.php', DIR_W
 // -----
 // Insert the credit-selection block (for coupons, gift certificates, etc.)
 //
-require $template->get_template_dir('tpl_modules_opc_credit_selections.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_opc_credit_selections.php';
+/* require $template->get_template_dir('tpl_modules_opc_credit_selections.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_opc_credit_selections.php'; */
 ?>
     </div>
-    
+
     <div class="col-sm-12 col-lg-4">
 <?php
 // -----
@@ -106,5 +106,5 @@ require $template->get_template_dir('tpl_modules_opc_submit_block.php', DIR_WS_T
 ?>
     <div class="opc-overlay"></div>
 </div>
-  
+
 <div id="checkoutOneLoading" style="display: none;"><?php echo zen_image($template->get_template_dir(CHECKOUT_ONE_LOADING, DIR_WS_TEMPLATE, $current_page_base ,'images') . '/' . CHECKOUT_ONE_LOADING, CHECKOUT_ONE_LOADING_ALT); ?></div>

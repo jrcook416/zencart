@@ -45,7 +45,7 @@ for ($i = 0, $index = 0, $n = count($order->totals); $i < $n; $i++) {
     $update_total_code = $update_total . '[code]';
     $update_total_title = $update_total . '[title]';
     $update_total_value = $update_total . '[value]';
-    
+
     $index_update_needed = true;
 ?>
 <tr>
@@ -53,12 +53,16 @@ for ($i = 0, $index = 0, $n = count($order->totals); $i < $n; $i++) {
 <?php
     $total = $order->totals[$i];
     $trimmed_title = strip_tags(trim($total['title']));
-    
+
     $order_total_info = eo_get_order_total_by_order((int)$oID, $total['class']);
     $details = array_shift($order_total_info);
     $total_class = (in_array($total['class'], $display_only_totals)) ? 'display-only' : $total['class'];
     switch ($total_class) {
         case 'ot_purchaseorder':
+            $index_update_needed = false;
+            break;
+
+        case 'ot_iems3930':
             $index_update_needed = false;
             break;
 
@@ -89,7 +93,7 @@ for ($i = 0, $index = 0, $n = count($order->totals); $i < $n; $i++) {
 
         // Allow changing the title / text, but not the value. Typically used
         // for order total modules which handle the value based upon another condition
-        case 'ot_coupon': 
+        case 'ot_coupon':
 ?>
     <td colspan="<?php echo $columns - 2; ?>"><?php echo zen_draw_hidden_field($update_total_code, $total['class']); ?></td>
     <td class="smallText a-r"><?php echo zen_draw_input_field($update_total_title, $trimmed_title, 'class="amount eo-entry"'); ?></td>
@@ -102,7 +106,7 @@ for ($i = 0, $index = 0, $n = count($order->totals); $i < $n; $i++) {
             $shipping_title_max = 'maxlength="' . zen_field_length(TABLE_ORDERS, 'shipping_method') . '"';
 ?>
     <td class="a-r"><?php echo zen_draw_hidden_field($update_total_code, $total['class']) . zen_draw_pull_down_menu($update_total . '[shipping_module]', eo_get_available_shipping_modules(), $order->info['shipping_module_code']) . '&nbsp;&nbsp;' . zen_draw_input_field($update_total_title, $trimmed_title, 'class="amount eo-entry" ' . $shipping_title_max); ?></td>
-    
+
     <td class="a-r"><?php echo zen_draw_input_field('shipping_tax', (string)$shipping_tax_rate, 'class="amount" id="s-t"' . $input_tax_parms, false, $input_field_type); ?>&nbsp;%</td>
 <?php
             if (DISPLAY_PRICE_WITH_TAX == 'true') {
@@ -119,12 +123,12 @@ for ($i = 0, $index = 0, $n = count($order->totals); $i < $n; $i++) {
             break;
 
         case 'ot_gv':
-        case 'ot_voucher': 
+        case 'ot_voucher':
 ?>
     <td colspan="<?php echo $columns - 2; ?>"><?php echo zen_draw_hidden_field($update_total_code, $total['class']); ?></td>
     <td class="smallText a-r"><?php echo zen_draw_input_field($update_total_title, $trimmed_title, 'class="amount eo-entry"'); ?></td>
     <td class="smallText a-r">
-<?php                 
+<?php
             if ($details['value'] > 0) {
                 $details['value'] *= -1;
             }
@@ -134,14 +138,14 @@ for ($i = 0, $index = 0, $n = count($order->totals); $i < $n; $i++) {
 <?php
             break;
 
-        default: 
+        default:
 ?>
     <td colspan="<?php echo $columns - 2; ?>"><?php echo zen_draw_hidden_field($update_total_code, $total['class']); ?></td>
     <td class="smallText a-r"><?php echo zen_draw_input_field($update_total_title, $trimmed_title, 'class="amount eo-entry"'); ?></td>
     <td class="smallText a-r"><?php echo zen_draw_input_field($update_total_value, $details['value'], 'class="amount"'); ?></td>
 <?php
             break;
-    } 
+    }
 ?>
 </tr>
 <?php

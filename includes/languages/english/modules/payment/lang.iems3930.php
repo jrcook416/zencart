@@ -1,8 +1,9 @@
 <?php
 $define = [
-    'MODULE_PAYMENT_IEMS3930_TEXT_TITLE' => 'Indianapolis EMS Warehouse',
-    'MODULE_PAYMENT_IEMS3930_TEXT_DESCRIPTION' => 'There is no charge for this order. Typically used for granting Free Shipping. Required to allow no-charge checkouts. Required for free downloads.',
-    'MODULE_PAYMENT_IEMS3930_TEXT_EMAIL_FOOTER' => 'There is no charge for this order.',
+    'MODULE_PAYMENT_IEMS3930_TEXT_TITLE' => 'Indianapolis EMS/Indianapolis Fire Department Order',
+    'MODULE_PAYMENT_IEMS3930_TEXT_DESCRIPTION' => 'Indianapolis EMS and Indianapolis Fire Department Orders',
+    'MODULE_PAYMENT_IEMS3930_TEXT_EMAIL_FOOTER' => 'This is an Indianapolis EMS or Indianapolis Fire 
+Department order; no payment is expected.',
 ];
 
 return $define;

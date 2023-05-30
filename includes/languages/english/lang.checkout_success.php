@@ -2,11 +2,13 @@
 $define = [
     'NAVBAR_TITLE_1' => 'Checkout - Complete',
     'NAVBAR_TITLE_2' => 'Success - Thank You',
-    'HEADING_TITLE' => 'Thank You! We Appreciate your Business!',
+    'HEADING_TITLE' => 'Thank You! Your order has been received.',
     'TEXT_SUCCESS' => '',
     'TEXT_NOTIFY_PRODUCTS' => 'Please notify me of updates to these products',
     'TEXT_SEE_ORDERS' => 'You can view your order history by going to the <a href="' . zen_href_link(FILENAME_ACCOUNT) . '">My Account</a> page and by clicking on "View All Orders".',
-    'TEXT_CONTACT_STORE_OWNER' => 'Please direct any questions to customer service.',
+    'TEXT_CONTACT_STORE_OWNER' => 'Please direct any questions to Indianapolis EMS Logistics. You can click 
+the <b>Contact Us</b> button below for any issues that may arise. Real-time tracking of your order can be seen 
+by viewing your order history at <a href="' . zen_href_link(FILENAME_ACCOUNT) . '">your account page</a> by clicking on "View All Orders".',
     'TEXT_THANKS_FOR_SHOPPING' => 'Thanks for shopping with us online!',
     'FOOTER_DOWNLOAD' => 'You can also download your products at a later time at \'%s\'',
     'TEXT_YOUR_ORDER_NUMBER' => '<strong>Your Order Number is:</strong> ',

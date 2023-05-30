@@ -1,9 +1,9 @@
 <?php
 $define = [
-    'MODULE_SHIPPING_IEMS3930SHIP_TEXT_TITLE' => 'Delivery to Indianapolis EMS Unit Location',
-    'MODULE_SHIPPING_IEMS3930SHIP_TEXT_DESCRIPTION' => 'Delivery to Indianapolis EMS Unit',
-    'MODULE_SHIPPING_iems3930SHIP_TEXT_WAY' => 'Delivery to Indianapolis EMS Unit Location',
-    'MODULE_SHIPPING_iems3930SHIP_MULTIPLE_WAYS' => 'Delivery to Indianapolis EMS Unit',
+    'MODULE_SHIPPING_IEMS3930SHIP_TEXT_TITLE' => 'Delivery Options',
+    'MODULE_SHIPPING_IEMS3930SHIP_TEXT_DESCRIPTION' => 'Delivery Options',
+    'MODULE_SHIPPING_iems3930SHIP_TEXT_WAY' => 'Delivery',
+    'MODULE_SHIPPING_iems3930SHIP_MULTIPLE_WAYS' => '',
 ];
 
 // MODULE_SHIPPING_STOREPICKUP_MULTIPLE_WAYS is for defining multiple locations/methods on a per-language basis. It is only used if the shopper has selected a language other than the store's default.

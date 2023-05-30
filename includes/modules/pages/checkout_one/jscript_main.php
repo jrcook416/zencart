@@ -131,7 +131,7 @@ if ($show_state_dropdowns) {
         $agency = $_SESSION['IEMS']['customer_agency_code'];
         filtered_unit_lookup($agency);?>
         var data = <?php echo json_encode($filtered_unit_array, JSON_UNESCAPED_SLASHES); ?>;
-        var agency = <?php echo json_encode($_SESSION['IEMS']['customer_agency_code']);?>;
+        var agency = <?php echo $agency;?>;
         var html = '<option value="">Please Make a Selection</option>';
         for(var count = 0; count < data.length; count++)
         {

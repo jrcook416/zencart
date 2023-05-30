@@ -69,7 +69,6 @@ echo zen_display_banner('static', $banner);
 <div id="siteinfoLegal" class="legalCopyright text-center"><?php echo FOOTER_TEXT_BODY; ?></div>
 <!--eof- site copyright display -->
 
-
 </div>
 <?php
 } // flag_disable_footer

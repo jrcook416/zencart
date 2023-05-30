@@ -861,7 +861,7 @@ jQuery(document).ready(function(){
             company = jQuery('input[name="company['+which+']"]').val(),
             firstname = jQuery('input[name="firstname['+which+']"]').val(),
             lastname = jQuery('input[name="lastname['+which+']"]').val(),
-            agency = "<?php echo json_encode($_SESSION['IEMS']['customer_agency_code']); ?>",
+            agency = jQuery('input[name="agency"]').val(),
             unit = jQuery('#unit-bill option:selected').val(),
             street_address = jQuery('input[name="street_address['+which+']"]').val(),
             suburb = jQuery('input[name="suburb['+which+']"]').val(),

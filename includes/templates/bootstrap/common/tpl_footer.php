@@ -72,6 +72,7 @@ echo zen_display_banner('static', $banner);
 </div>
 <?php
 } // flag_disable_footer
+
 ?>
 
 <?php if (false || (isset($showValidatorLink) && $showValidatorLink == true)) { ?>

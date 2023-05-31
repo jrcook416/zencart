@@ -142,8 +142,12 @@ $define = [
     // These constants define the instructions that are inserted below the shopping-cart/totals and above the "confirm order" button.
     //
     'TEXT_CHECKOUT_ONE_INSTRUCTION_LABEL' => 'Before You Click "Confirm Order"', //-Displays as the "legend" value for the fieldset that surrounds the message below
-    'TEXT_CHECKOUT_ONE_INSTRUCTIONS' => '<ol class="list-group list-group-numbered"><li class="list-group-item">Point one</li><li class="list-group-item">Point 
-two</li></ol>',      
+    'TEXT_CHECKOUT_ONE_INSTRUCTIONS' => '
+	<ol class="list-group list-group-numbered">
+		<li>Make sure you have updated your unit in the <b>Billing/Shipping Address</b> box.</li>
+		<li>Make sure you have selected a <b>shipping method</b>.</li>
+		<li>Check the ordered items and make sure <b>your order is complete</b>.</li>
+	</ol>',      
 //-Displayed within a set of <p>...</p> tags if not empty
 ];
 return $define;

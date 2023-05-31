@@ -14,8 +14,9 @@
  *
  */
 
-define('MODULE_PAYMENT_PURCHASE_ORDER_TEXT_TITLE', 'Purchase Order');
 
+define('MODULE_PAYMENT_PURCHASE_ORDER_TEXT_TITLE', 'Purchase Order');
+define('MODULE_PAYMENT_PURCHASE_ORDER_PAYTO', 'Indianapolis EMS');
 define('MODULE_PAYMENT_PURCHASE_ORDER_TEXT_DESCRIPTION','
 <span style="font-size:small;color:red;"><b>PLEASE READ!<br>Important Payment Information:</b></span><p>
 <b>Your order will not be processed until we have received your purchase order.</b><p>

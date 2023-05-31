@@ -854,14 +854,14 @@ jQuery(document).ready(function(){
         });
     }
 
-    function saveAddressValues(which, address_block)
+    function saveAddressValues(which, address_block, agency)
     {
 		zcLog2Console('saveAddressValues('+which+', '+address_block+')');
         var gender = jQuery('input[name="gender['+which+']"]:checked').val(),
             company = jQuery('input[name="company['+which+']"]').val(),
             firstname = jQuery('input[name="firstname['+which+']"]').val(),
             lastname = jQuery('input[name="lastname['+which+']"]').val(),
-            agency = jQuery('input[name="agency['+which+']"]').val(),
+            agency = agency,
             unit = jQuery('#unit-bill option:selected').val(),
             street_address = jQuery('input[name="street_address['+which+']"]').val(),
             suburb = jQuery('input[name="suburb['+which+']"]').val(),
@@ -872,6 +872,7 @@ jQuery(document).ready(function(){
             zone_country_id = jQuery('select[name="zone_country_id['+which+']"] option:selected').val(),
             shipping_billing = jQuery('#shipping_billing').is(':checked'),
             add_address = jQuery('#opc-add-'+which).prop('checked');
+
 
         zcJS.ajax({
             url: "ajax.php?act=ajaxOnePageCheckout&method=validateAddressValues",

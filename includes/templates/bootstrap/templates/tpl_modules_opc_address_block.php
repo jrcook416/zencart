@@ -118,6 +118,10 @@ echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company
         TABLE_CUSTOMERS, 'customers_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT, ' readonly') .
     $clear_both;
 
+echo $_SESSION['opc']->formatAddressElement($which, 'agency', $address['agency'], ENTRY_AGENCY,
+        TABLE_CUSTOMERS, 'customers_agency', '1', ENTRY_AGENCY_TEXT, ' readonly') .
+    $clear_both;
+
 $agency = $_SESSION['IEMS']['customer_agency_code'];
 $field_name = "agency[$which]";
 $field_id = "agency-$which";?>

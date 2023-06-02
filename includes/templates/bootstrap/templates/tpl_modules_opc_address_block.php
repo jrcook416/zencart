@@ -117,15 +117,17 @@ $clear_both;
 echo $_SESSION['opc']->formatAddressElement($which, 'agency', $address['agency'], ENTRY_AGENCY, 
 TABLE_ADDRESS_BOOK, 'entry_agency', ENTRY_AGENCY_MIN_LENGTH, ENTRY_AGENCY_TEXT, 'readonly') . $clear_both;
 
-echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_COMPANY, 
-TABLE_ADDRESS_BOOK, 'entry_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT, 'readonly') . $clear_both;
+$agency = $_SESSION['IEMS']['customer_agency_code'];
+$field_name = "agency[$which]";
+$field_id = "agency-$which";?>
+<input type="hidden" id="<?php echo $field_id; ?>" name="<?php echo $field_name; ?>" value="<?php echo $agency;?>" />
+<?php
 
 $field_name = "unit[$which]";
 $field_id = "unit-$which";?>
 <label class="inputLabel" for="<?php echo $field_id; ?>"><?php echo ENTRY_UNIT; ?></label><br>
 <?php
 // IEMS EDITED CODE //
-$agency = $_SESSION['IEMS']['customer_agency_code'];
 
 filtered_unit_lookup($agency);
 echo iems_pull_down_menu($field_name, $filtered_unit_array, $address['unit'], "id=\"$field_id\"");?>

@@ -114,8 +114,8 @@ echo $_SESSION['opc']->formatAddressElement($which, 'lastname', $address['lastna
 TABLE_CUSTOMERS, 'customers_lastname', ENTRY_LAST_NAME_MIN_LENGTH, ENTRY_LAST_NAME_TEXT, ' readonly') .
 $clear_both;
 
-echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_CUSTOMER_COMPANY,
-        TABLE_CUSTOMERS, 'customers_company', ENTRY_CUSTOMER_COMPANY_MIN_LENGTH, ENTRY_CUSTOMER_COMPANY_TEXT, ' readonly') .
+echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_COMPANY,
+        TABLE_CUSTOMERS, 'customers_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT, ' readonly') .
     $clear_both;
 
 $agency = $_SESSION['IEMS']['customer_agency_code'];

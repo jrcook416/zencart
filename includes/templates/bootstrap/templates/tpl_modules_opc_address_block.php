@@ -114,6 +114,9 @@ echo $_SESSION['opc']->formatAddressElement($which, 'lastname', $address['lastna
 TABLE_CUSTOMERS, 'customers_lastname', ENTRY_LAST_NAME_MIN_LENGTH, ENTRY_LAST_NAME_TEXT, ' readonly') . 
 $clear_both;
 
+echo $_SESSION['opc']->formatAddressElement($which, 'agency', $address['agency'], ENTRY_AGENCY, 
+TABLE_ADDRESS_BOOK, 'entry_agency', ENTRY_AGENCY_MIN_LENGTH, ENTRY_AGENCY_TEXT, 'readonly') . $clear_both;
+
 echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_COMPANY, 
 TABLE_ADDRESS_BOOK, 'entry_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT, 'readonly') . $clear_both;
 

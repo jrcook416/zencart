@@ -166,7 +166,7 @@ $address['zone_id'], "id=\"$state_zone_id\"");
     }
 
     echo $_SESSION['opc']->formatAddressElement($which, 'state', $address['state'], ENTRY_STATE, TABLE_ADDRESS_BOOK,
-'entry_state', ENTRY_STATE_MIN_LENGTH, ENTRY_STATE_TEXT) . $clear_both;
+'entry_state', ENTRY_STATE_MIN_LENGTH) . $clear_both;
 }
 echo $_SESSION['opc']->formatAddressElement($which, 'street_address', $address['street_address'],
 ENTRY_STREET_ADDRESS, TABLE_ADDRESS_BOOK, 'entry_street_address', ENTRY_STREET_ADDRESS_MIN_LENGTH,

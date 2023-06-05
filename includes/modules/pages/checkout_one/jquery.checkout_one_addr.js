@@ -13,7 +13,6 @@
 jQuery(document).ready(function() {
     var last_country_bill = jQuery('#country-bill option:selected').val();
     var last_country_ship = jQuery('#country-ship option:selected').val();
-    $('#unit-bill').prop('required',true);
 
     // -----
     // Initialize the display for the dropdown vs. hand-entry of the state fields.  If the initially-selected

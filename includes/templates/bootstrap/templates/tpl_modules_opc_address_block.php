@@ -152,21 +152,20 @@ $clear_both; ?>
 if (ACCOUNT_STATE === 'true') {
     $state_zone_id = "stateZone-$which";
     $zone_field_name = "zone_id[$which]";
-?>
-      <label class="inputLabel"><?php echo ENTRY_STATE; ?></label><br>
-<?php
+    ?>
+    <label class="inputLabel"><?php echo ENTRY_STATE; ?></label><br>
+    <?php
     if ($address['show_pulldown_states']) {
         echo zen_draw_pull_down_menu($zone_field_name, zen_prepare_country_zones_pull_down($address['country']),
-$address['zone_id'], "id=\"$state_zone_id\"");
+        $address['zone_id'], "id=\"$state_zone_id\"");
         if (zen_not_null(ENTRY_STATE_TEXT)) {
             echo '<span class="alert">' . ENTRY_STATE_TEXT . '</span>';
         }
     } else {
         echo zen_draw_hidden_field($zone_field_name, $address['zone_name']);
     }
-
     echo $_SESSION['opc']->formatAddressElement($which, 'state', $address['state'], ENTRY_STATE, TABLE_ADDRESS_BOOK,
-'entry_state', ENTRY_STATE_MIN_LENGTH) . $clear_both;
+    'entry_state', ENTRY_STATE_MIN_LENGTH, ENTRY_STATE_TEXT) . $clear_both;
 }
 echo $_SESSION['opc']->formatAddressElement($which, 'street_address', $address['street_address'],
 ENTRY_STREET_ADDRESS, TABLE_ADDRESS_BOOK, 'entry_street_address', ENTRY_STREET_ADDRESS_MIN_LENGTH,

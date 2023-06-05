@@ -5,7 +5,6 @@
 //
 ?>
 <script>
-    $('#unit-bill').prop('required',true);
 <?php
 // -----
 // Introduced in OPC v2.3.0 to identify the template-specific selector for the

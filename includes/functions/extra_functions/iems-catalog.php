@@ -64,7 +64,7 @@ function filtered_unit_lookup($agency) {
         return $field;
       }
 
-      $field = '<select rel="dropdown"';
+      $field = '<select rel="dropdown" class="col-md-5"';
       if (strpos($parameters, 'id=') === false) {
         $field .= ' id="' . zen_output_string($name) . '"';
       }
@@ -230,5 +230,5 @@ function uom_lookup() {
 			};
 	return $uom_array;
 	} //end uom_array
-	
+
 

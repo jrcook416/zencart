@@ -44,7 +44,7 @@ function filtered_unit_lookup($agency) {
     return $filtered_unit_array;
 } //end filtered_unit_lookup
 
-    function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = true) {
+    function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
       // -----
       // Give an observer the opportunity to **totally** override this function's operation.
       //

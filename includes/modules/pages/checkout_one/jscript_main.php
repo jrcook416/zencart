@@ -141,7 +141,7 @@ if ($show_state_dropdowns) {
         $('#unit-bill').empty();
         $('#unit-bill').append(html);
         $('#unit-bill').selectpicker('refresh');
-        $('#unit-bill').prop('required');
+        $('#unit-bill').prop('required',true);
     }
 </script>
 <?php

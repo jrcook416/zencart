@@ -164,7 +164,7 @@ if (ACCOUNT_STATE === 'true') {
     } else {
         echo zen_draw_hidden_field($zone_field_name, $address['zone_name']);
     }
-    echo $_SESSION['opc']->formatAddressElement($which, 'state', $address['state'], ENTRY_STATE, TABLE_ADDRESS_BOOK,
+    echo $_SESSION['opc']->formatAddressElement($which, 'state', $address['state'],'', TABLE_ADDRESS_BOOK,
     'entry_state', ENTRY_STATE_MIN_LENGTH, ENTRY_STATE_TEXT) . $clear_both;
 }
 echo $_SESSION['opc']->formatAddressElement($which, 'street_address', $address['street_address'],

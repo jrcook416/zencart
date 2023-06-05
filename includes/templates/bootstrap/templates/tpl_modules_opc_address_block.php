@@ -135,7 +135,7 @@ $field_id = "unit-$which";?>
 // IEMS EDITED CODE //
 
 filtered_unit_lookup($agency);
-echo iems_pull_down_menu($field_name, $filtered_unit_array, $address['unit'], "id=\"$field_id\" required");?>
+echo iems_pull_down_menu($field_name, $filtered_unit_array, $address['unit'], "id=\"$field_id\"");?>
 <br><br>
 <?php
 // END IEMS EDITED CODE //
@@ -165,7 +165,7 @@ $address['zone_id'], "id=\"$state_zone_id\"");
         echo zen_draw_hidden_field($zone_field_name, $address['zone_name']);
     }
 
-    echo $_SESSION['opc']->formatAddressElement($which, 'state', $address['state'], '', TABLE_ADDRESS_BOOK,
+    echo $_SESSION['opc']->formatAddressElement($which, 'state', $address['state'], ENTRY_STATE, TABLE_ADDRESS_BOOK,
 'entry_state', ENTRY_STATE_MIN_LENGTH, ENTRY_STATE_TEXT, ' readonly') . $clear_both;
 }
 echo $_SESSION['opc']->formatAddressElement($which, 'street_address', $address['street_address'],

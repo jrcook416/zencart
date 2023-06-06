@@ -91,33 +91,26 @@ if (!$opc_disable_address_change) {
 <?php
     }
 }
+?>
+    <h4>Please select an ordering unit.</h4><br>
+<?php
+$field_name = "firstname[$which]";
+$field_id = "firstname-$which";
+?>
+    <input type="hidden" id="<?php echo $field_id; ?>" name="<?php echo $field_name; ?>" value="<?php echo $address['firstname'];?>" />
+    <?php
 
-if (ACCOUNT_GENDER === 'true') {
-    $field_name = "gender[$which]";
-    $male_id = "gender-male-$which";
-    $female_id = "gender-female-$which";
-    echo '<span class="custom-control custom-radio custom-control-inline">' . zen_draw_radio_field ($field_name, 'm', ($address['gender'] === 'm'), "id=\"$male_id\"") .
-    "<label class=\"custom-control-label radioButtonLabel\" for=\"$male_id\">" . MALE . '</label></span><span class="custom-control custom-radio custom-control-inline">' .
-    zen_draw_radio_field ($field_name, 'f', ($address['gender'] === 'f'), "id=\"$female_id\"") .
-    "<label class=\"custom-control-label radioButtonLabel\" for=\"$female_id\">" . FEMALE . '</label></span>' .
-    (zen_not_null(ENTRY_GENDER_TEXT) ? '<span class="alert">' . ENTRY_GENDER_TEXT . '</span>': '');
+$field_name = "lastname[$which]";
+$field_id = "lastname-$which";
+?>
+    <input type="hidden" id="<?php echo $field_id; ?>" name="<?php echo $field_name; ?>" value="<?php echo $address['lastname'];?>" />
+    <?php
 
-    echo $clear_both;
-}
-
-
-echo $_SESSION['opc']->formatAddressElement($which, 'firstname', $address['firstname'], ENTRY_FIRST_NAME,
-TABLE_CUSTOMERS, 'customers_firstname', ENTRY_FIRST_NAME_MIN_LENGTH, ENTRY_FIRST_NAME_TEXT, ' readonly') .
-$clear_both;
-
-echo $_SESSION['opc']->formatAddressElement($which, 'lastname', $address['lastname'], ENTRY_LAST_NAME,
-TABLE_CUSTOMERS, 'customers_lastname', ENTRY_LAST_NAME_MIN_LENGTH, ENTRY_LAST_NAME_TEXT, ' readonly') .
-$clear_both;
-
-echo $_SESSION['opc']->formatAddressElement($which, 'company', $address['company'], ENTRY_COMPANY,
-        TABLE_CUSTOMERS, 'customers_company', ENTRY_COMPANY_MIN_LENGTH, ENTRY_COMPANY_TEXT, ' readonly') .
-    $clear_both;
-
+$field_name = "company[$which]";
+$field_id = "company-$which";
+?>
+    <input type="hidden" id="<?php echo $field_id; ?>" name="<?php echo $field_name; ?>" value="<?php echo $address['company'];?>" />
+<?php
 $agency = $_SESSION['IEMS']['customer_agency_code'];
 $field_name = "agency[$which]";
 $field_id = "agency-$which";?>
@@ -131,8 +124,8 @@ $field_id = "unit-$which";?>
 // IEMS EDITED CODE //
 
 filtered_unit_lookup($agency);
-echo iems_pull_down_menu($field_name, $filtered_unit_array, $address['unit'], "id=\"$field_id\" required");?>
-<br><br>
+echo zen_draw_pull_down_menu($field_name, $filtered_unit_array, $address['unit'], "id=\"$field_id\" class=\"col-md-5\"") . (zen_not_null(ENTRY_UNIT_TEXT) ? '<span class="alert">' . ENTRY_UNIT_TEXT . '</span>' : '') .
+    $clear_both;;?>
 <?php
 // END IEMS EDITED CODE //
 

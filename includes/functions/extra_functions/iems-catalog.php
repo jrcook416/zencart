@@ -44,72 +44,74 @@ function filtered_unit_lookup($agency) {
     return $filtered_unit_array;
 } //end filtered_unit_lookup
 
-    function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
-      // -----
-      // Give an observer the opportunity to **totally** override this function's operation.
-      //
-      $field = false;
-      $GLOBALS['zco_notifier']->notify(
-          'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU_OVERRIDE',
-          array(
+function iems_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false)
+{
+    // -----
+    // Give an observer the opportunity to **totally** override this function's operation.
+    //
+    $field = false;
+    $GLOBALS['zco_notifier']->notify(
+        'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU_OVERRIDE',
+        array(
             'name' => $name,
             'values' => $values,
             'default' => $default,
             'parameters' => $parameters,
             'required' => $required,
-          ),
-          $field
-      );
-      if ($field !== false) {
+        ),
+        $field
+    );
+    if ($field !== false) {
         return $field;
-      }
+    }
 
-      $field = '<select rel="dropdown" class="col-md-5"';
-      if (strpos($parameters, 'id=') === false) {
+    $field = '<select ';
+
+    if (strpos($parameters, 'id=') === false) {
         $field .= ' id="' . zen_output_string($name) . '"';
-      }
+    }
 
-      $field .= ' name="' . zen_output_string($name) . '"';
+    $field .= ' name="' . zen_output_string($name) . '"';
 
-      if (zen_not_null($parameters)) {
+    if (!empty($parameters)) {
         $field .= ' ' . $parameters;
-      }
+    }
 
-      $field .= '>' . "\n";
+    $field .= '>' . "\n";
 
-      if (empty($default) && isset($GLOBALS[$name]) && is_string($GLOBALS[$name])) {
+    if (empty($default) && isset($GLOBALS[$name]) && is_string($GLOBALS[$name])) {
         $default = stripslashes($GLOBALS[$name]);
-      }
-      $field .= '<option value="">Please Select an Option</option>';
-      foreach ($values as $value) {
+    }
+
+    foreach ($values as $value) {
         $field .= '  <option value="' . zen_output_string($value['id']) . '"';
         if ($default == $value['id']) {
-          $field .= ' selected="selected"';
+            $field .= ' selected="selected"';
         }
 
         $field .= '>' . zen_output_string($value['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>' . "\n";
-      }
-      $field .= '</select>' . "\n";
+    }
+    $field .= '</select>' . "\n";
 
-      if ($required == true) {
-         $field .= TEXT_FIELD_REQUIRED;
-       }
-      // -----
-      // Give an observer the chance to make modifications to the just-rendered field.
-      //
-      $GLOBALS['zco_notifier']->notify(
-          'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU',
-          array(
+    if ($required == true) {
+        $field .= TEXT_FIELD_REQUIRED;
+    }
+    // -----
+    // Give an observer the chance to make modifications to the just-rendered field.
+    //
+    $GLOBALS['zco_notifier']->notify(
+        'NOTIFY_ZEN_DRAW_PULL_DOWN_MENU',
+        array(
             'name' => $name,
             'values' => $values,
             'default' => $default,
             'parameters' => $parameters,
             'required' => $required,
-          ),
-          $field
-      );
-      return $field;
-    } // end iems_pull_down_menu()
+        ),
+        $field
+    );
+    return $field;
+}
 
 function unit_name_lookup($unitCode){
     global $db;

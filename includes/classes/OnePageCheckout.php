@@ -1533,6 +1533,12 @@ class OnePageCheckout extends base
             $messages['postcode'] = $message_prefix . ENTRY_POST_CODE_ERROR;
         }
 
+        $unit = zen_db_prepare_input($address_values['unit']);
+        if (!ctype_digit($unit)){
+            $error = true;
+            $messages['unit'] = $message_prefix. ENTRY_UNIT_ERROR;
+        }
+
         $country = zen_db_prepare_input($address_values['zone_country_id']);
         if (!ctype_digit($country)) {
             $error = true;

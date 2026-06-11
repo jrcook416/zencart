@@ -27,7 +27,7 @@
  * @var $tplSetting TemplateSettings
  */
 /** TPL_SETTINGS ARRAY */
-$tpl_settings['TEMPLATE_NAME'] = 'Template Default';
+$tpl_settings['TEMPLATE_NAME'] = 'Indianapolis_EMS_Template';
 
 //$tpl_settings['COLUMN_LEFT_STATUS'] = '1';
 //$tpl_settings['COLUMN_RIGHT_STATUS'] = '1';

@@ -27,7 +27,7 @@
  * @var $tplSetting TemplateSettings
  */
 /** TPL_SETTINGS ARRAY */
-$tpl_settings['TEMPLATE_NAME'] = 'Indianapolis_EMS_Template';
+$tpl_settings['TEMPLATE_NAME'] = 'Indianapolis EMS';
 
 //$tpl_settings['COLUMN_LEFT_STATUS'] = '1';
 //$tpl_settings['COLUMN_RIGHT_STATUS'] = '1';
@@ -42,3 +42,14 @@ $tpl_settings['TEMPLATE_NAME'] = 'Indianapolis_EMS_Template';
 
 /** Other template-specific variables can be declared here */
 
+
+$grid_product_cards_classes = 'row row-clmns-3';
+$grid_product_classes_matrix = [
+    // for responsive_classic the array index here is in 'pixels', because $center_column_width is in pixels. See tpl_main_page.php
+    '480' => 'row row-clms-1 row-clms-sm-2 row-clms-md-3 row-clms-lg-4 row-clms-xl-6',
+];
+
+$grid_category_cards_classes = 'row row-clms-3';
+$grid_category_classes_matrix = [
+    '480' => 'row row-clms-1 row-clms-sm-2 row-clms-md-3 row-clms-lg-4 row-clms-xl-6',
+];

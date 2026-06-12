@@ -12,34 +12,45 @@
  */
 ?>
 <div class="centerColumn" id="indexProductList">
-    <h1 id="productListHeading"><?= $current_categories_name ?></h1>
+    <div id="cat-top" class="group">
+        <div id="cat-left" class="back">
+            <h1 id="productListHeading"><?= $current_categories_name ?></h1>
 <?php
 if (PRODUCT_LIST_CATEGORIES_IMAGE_STATUS === 'true') {
     // categories_image
     if ($categories_image = zen_get_categories_image($current_category_id)) {
 ?>
-    <div id="categoryImgListing" class="categoryImg">
-        <?= zen_image(DIR_WS_IMAGES . $categories_image, '', CATEGORY_ICON_IMAGE_WIDTH, CATEGORY_ICON_IMAGE_HEIGHT) ?>
-    </div>
+            <div id="categoryImgListing" class="categoryImg">
+                <?= zen_image(DIR_WS_IMAGES . $categories_image, '', CATEGORY_ICON_IMAGE_WIDTH, CATEGORY_ICON_IMAGE_HEIGHT) ?>
+            </div>
 <?php
-    }
-} // categories_image
-
-// categories_description
-if ($current_categories_description != '') {
+            }
+    } // categories_image_status
 ?>
-    <div id="indexProductListCatDescription" class="content"><?= $current_categories_description ?></div>
+        </div>
+
+<?php
+// categories_description
+if ($current_categories_description !== '') {
+?>
+        <div id="indexProductListCatDescription" class="content"><?= $current_categories_description ?></div>
 <?php
 } // categories_description
+?>
+    </div>
+
+<?php
+if (!empty($listing)) {
+?>
+    <div id="filter-wrapper" class="group">
+<?php
+}
 
 $check_for_alpha = $listing_sql;
 $check_for_alpha = $db->Execute($check_for_alpha);
 
 if ($do_filter_list || isset($_GET['alpha_filter_id']) || ($check_for_alpha->RecordCount() > 0 && PRODUCT_LIST_ALPHA_SORTER === 'true')) {
-?>
-    <br class="clearBoth" />
-<?php
-    $form = zen_draw_form('filter', zen_href_link(FILENAME_DEFAULT), 'get') . '<label class="inputLabel">' .TEXT_SHOW . '</label>';
+    $form = zen_draw_form('filter', zen_href_link(FILENAME_DEFAULT), 'get') . '<label class="inputLabel">' . TEXT_SHOW . '</label>';
 
     echo $form;
     echo zen_draw_hidden_field('main_page', FILENAME_DEFAULT);
@@ -95,9 +106,6 @@ if ($do_filter_list || isset($_GET['alpha_filter_id']) || ($check_for_alpha->Rec
     require DIR_WS_MODULES . zen_get_module_directory(FILENAME_PRODUCT_LISTING_ALPHA_SORTER);
 
     echo '</form>';
-?>
-    <br class="clearBoth" />
-<?php
 }
 
 /**
@@ -109,14 +117,14 @@ require $template->get_template_dir('/tpl_modules_listing_display_order.php', DI
 
 if (!empty($listing)) {
 ?>
-<br class="clearBoth" />
+    </div>
 <?php
 }
 
 /**
  * require the code for listing products
  */
-require $template->get_template_dir('tpl_modules_product_listing.php', DIR_WS_TEMPLATE, $current_page_base, 'templates'). '/tpl_modules_product_listing.php';
+require $template->get_template_dir('tpl_modules_product_listing.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_product_listing.php';
 
 //// bof: categories error
 if ($error_categories) {

@@ -2,22 +2,27 @@
 /**
  * Template Information File
  *
- * @copyright Copyright 2003-2023 Zen Cart Development Team
+ * @copyright Copyright 2003-2024 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: lat9 2022 Nov 29 Modified in v1.5.8a $
+ * @version $Id: lat9 2024 Aug 18 Modified in v2.1.0-alpha2 $
+ *
+ * picaflor-azul.com, Picaflor Responsive Classic
  */
 
- /** INDIANAPOLIS EMS CUSTOMIZED FILE */
- 
 $template_name = 'Indianapolis EMS Template';
 $template_version = 'Version 1.0';
-$template_author = 'Zen Cart Team (c) 2003, Jeremiah Cook (c) 2026';
-$template_description = 'This is the Indianapolis EMS template based on the default template. This template set is designed to be easily modified using only the style sheet to change colors, fonts, and the tore logo. Three images are required; logo.jpg, header_bg.jpg, and tile_back.jpg.';
-$template_screenshot = 'scr_template_default.jpg';
+$template_author = 'Jeremiah Cook for IEMS, (c) 2026, based on work by Anne, www.picaflor-azul.com (c) 2015';
+$template_description = 'This HTML5 template, based on the Responsive Classic Template, is mobile friendly and uses contemporary Responsive CSS to allow sharing of a single template across multiple device types.  It uses PHP Mobile Detect to serve up the optimized layout based on device. It allows the designer to implement device-specific php, jquery, javascript or ajax.';
+$template_screenshot = 'scr_responsive_classic.jpg';
 
 // -----
-// Normally, this template does not use "Single Column Settings" in the admin's "Layout Controller",
-// but if a site has set the value, the template honors that setting.
+// Enable the admin's "Layout Controller" to also display the single-column layout settings.
 //
-$uses_single_column_layout_settings = (isset($uses_single_column_layout_settings)) ? $uses_single_column_layout_settings : false;
+$uses_single_column_layout_settings = true;
+
+// -----
+// Instructs the "Layout Controller" that this template doesn't use
+// the 'Mobile-Menu' boxes.
+//
+$uses_mobile_sidebox_settings = false;

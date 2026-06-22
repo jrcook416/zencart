@@ -10,9 +10,9 @@
  * picaflor-azul.com, Picaflor Responsive Classic
  */
 
-$template_name = 'Responsive Classic Template';
+$template_name = 'IEMS Custom Template based on  Responsive Classic Template';
 $template_version = 'Version 1.0';
-$template_author = 'Anne, www.picaflor-azul.com (c) 2015';
+$template_author = 'Anne, www.picaflor-azul.com (c) 2015, revised by Jeremiah Cook for Indianapolis EMS, 2026.';
 $template_description = 'This HTML5 template is mobile friendly and uses contemporary Responsive CSS to allow sharing of a single template across multiple device types.  It uses PHP Mobile Detect to serve up the optimized layout based on device. It allows the designer to implement device-specific php, jquery, javascript or ajax.';
 $template_screenshot = 'scr_responsive_classic.jpg';
 

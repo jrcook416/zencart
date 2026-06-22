@@ -33,7 +33,7 @@
             <?php echo zen_draw_form('create', zen_href_link(FILENAME_CREATE_ACCOUNT, (isset($_GET['gv_no']) ? '&gv_no=' . preg_replace('/[^0-9.,%]/', '', $_GET['gv_no']) : ''), 'SSL')); ?>
 
             <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_CREATE_ACCOUNT, BUTTON_CREATE_ACCOUNT_ALT, 'name="registrationButton"'); ?></div>
-            <?php echo '</form>'; echo "THIS IS A TEST";?>
+            <?php echo '</form>';?>
                                                                      
         </fieldset>
 
@@ -91,7 +91,7 @@
             <div class="information"><?php echo TEXT_NEW_CUSTOMER_INTRODUCTION; ?></div>
             <?php require($template->get_template_dir('tpl_modules_create_account.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_create_account.php'); ?>
         </fieldset>
-
+        <?php echo "This is a test."; ?>
         <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_SUBMIT, BUTTON_SUBMIT_ALT); ?></div>
         <?php echo '</form>'; ?>
         <!--EOF normal login-->

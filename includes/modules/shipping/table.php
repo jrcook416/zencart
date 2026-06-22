@@ -42,7 +42,7 @@ class table extends ZenShipping
         }
 
         if ($this->enabled) {
-            // check MODULE_SHIPPING_TABLE_HANDLING_METHOD is in
+            // check zen_config('MODULE_SHIPPING_TABLE_HANDLING_METHOD') is in
             if (zen_config('MODULE_SHIPPING_TABLE_HANDLING_METHOD') === null) {
                 $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Handling Per Order or Per Box', 'MODULE_SHIPPING_TABLE_HANDLING_METHOD', 'Order', 'Do you want to charge Handling Fee Per Order or Per Box?', '6', '0', 'zen_cfg_select_option(array(\'Order\', \'Box\'), ', now())");
             }
@@ -61,7 +61,7 @@ class table extends ZenShipping
             return;
         }
 
-        $this->checkEnabledForZone(zen_config('MODULE_SHIPPING_TABLE_ZONE'));
+        $this->checkEnabledForZone(zen_config('MODULE_SHIPPING_TABLE_ZONE', ''));
 
         if ($this->enabled) {
             // -----
@@ -97,7 +97,7 @@ class table extends ZenShipping
 
         $order_total_amount = $_SESSION['cart']->show_total() - $_SESSION['cart']->free_shipping_prices();
 
-        $table_cost = preg_split("/[:,]/", zen_config('MODULE_SHIPPING_TABLE_COST'));
+        $table_cost = preg_split("/[:,]/", zen_config('MODULE_SHIPPING_TABLE_COST', ''));
         $size = count($table_cost);
         $shipping = 0;
         for ($i = 0, $n = $size; $i < $n; $i += 2) {
@@ -112,10 +112,10 @@ class table extends ZenShipping
         }
 
         $show_box_weight = '';
-        if (MODULE_SHIPPING_TABLE_MODE === 'weight') {
+        if (zen_config('MODULE_SHIPPING_TABLE_MODE') === 'weight') {
             $shipping = $shipping * $shipping_num_boxes;
             // show boxes if weight
-            switch (SHIPPING_BOX_WEIGHT_DISPLAY) {
+            switch (zen_config('SHIPPING_BOX_WEIGHT_DISPLAY')) {
                 case 0:
                     $show_box_weight = '';
                     break;

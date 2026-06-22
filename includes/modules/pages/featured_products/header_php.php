@@ -21,13 +21,13 @@ $breadcrumb->add(NAVBAR_TITLE);
 
 // create column list for product listing
 $define_list = [
-    'PRODUCT_LIST_MODEL' => zen_config('PRODUCT_LIST_MODEL'),
-    'PRODUCT_LIST_NAME' => zen_config('PRODUCT_LIST_NAME'),
-    'PRODUCT_LIST_MANUFACTURER' => zen_config('PRODUCT_LIST_MANUFACTURER'),
-    'PRODUCT_LIST_PRICE' => zen_config('PRODUCT_LIST_PRICE'),
-    'PRODUCT_LIST_QUANTITY' => zen_config('PRODUCT_LIST_QUANTITY'),
-    'PRODUCT_LIST_WEIGHT' => zen_config('PRODUCT_LIST_WEIGHT'),
-    'PRODUCT_LIST_IMAGE' => zen_config('PRODUCT_LIST_IMAGE'),
+    'PRODUCT_LIST_MODEL' => $tplSetting->PRODUCT_LIST_MODEL,
+    'PRODUCT_LIST_NAME' => $tplSetting->PRODUCT_LIST_NAME,
+    'PRODUCT_LIST_MANUFACTURER' => $tplSetting->PRODUCT_LIST_MANUFACTURER,
+    'PRODUCT_LIST_PRICE' => $tplSetting->PRODUCT_LIST_PRICE,
+    'PRODUCT_LIST_QUANTITY' => $tplSetting->PRODUCT_LIST_QUANTITY,
+    'PRODUCT_LIST_WEIGHT' => $tplSetting->PRODUCT_LIST_WEIGHT,
+    'PRODUCT_LIST_IMAGE' => $tplSetting->PRODUCT_LIST_IMAGE,
     //    'PRODUCT_LIST_BUY_NOW' => PRODUCT_LIST_BUY_NOW,
 ];
 asort($define_list);
@@ -42,7 +42,7 @@ $sql_joins = " LEFT JOIN " . TABLE_FEATURED . " f ON (p.products_id = f.products
 $and = " AND f.status = 1 ";
 
 // display sort order dropdown
-$disp_order_default = PRODUCT_FEATURED_LIST_SORT_DEFAULT;
+$disp_order_default = zen_config('PRODUCT_FEATURED_LIST_SORT_DEFAULT');
 
 // set the product filters according to selected product type
 $typefilter = $_GET['typefilter'] ?? 'default';

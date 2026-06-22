@@ -30,21 +30,22 @@ function zen_create_sort_heading($sortby, $colnum, $heading)
 }
 
 /**
- * Count number of modules of a certain type are enabled
- * @param string $modules
- * @return int
+ * Count the number of modules of a certain type which are enabled
+ *
  * @since ZC v1.0.3
  */
-function zen_count_modules($modules = '')
+function zen_count_modules(string $modules = ''): int
 {
     $count = 0;
 
-    if (empty($modules)) return $count;
+    if (empty($modules)) {
+        return 0;
+    }
 
     $modules_array = preg_split('/;/', $modules);
 
-    for ($i = 0, $n = count($modules_array); $i < $n; $i++) {
-        $class = substr($modules_array[$i], 0, strrpos($modules_array[$i], '.'));
+    foreach ($modules_array as $module) {
+        $class = substr($module, 0, strrpos($module, '.'));
 
         if (isset($GLOBALS[$class]) && is_object($GLOBALS[$class])) {
             if ($GLOBALS[$class]->enabled) {
@@ -58,7 +59,7 @@ function zen_count_modules($modules = '')
 /**
  * @since ZC v1.0.3
  */
-function zen_count_payment_modules()
+function zen_count_payment_modules(): int
 {
     return zen_count_modules(zen_config('MODULE_PAYMENT_INSTALLED'));
 }
@@ -66,7 +67,7 @@ function zen_count_payment_modules()
 /**
  * @since ZC v1.0.3
  */
-function zen_count_shipping_modules()
+function zen_count_shipping_modules(): int
 {
     return zen_count_modules(zen_config('MODULE_SHIPPING_INSTALLED'));
 }
@@ -75,12 +76,9 @@ function zen_count_shipping_modules()
 /**
  * Checks to see if the currency code exists as a currency
  * @TODO - move into currencies class
- * @param string $code
- * @param bool $getFirstDefault
- * @return false|string
  * @since ZC v1.0.3
  */
-function zen_currency_exists(string $code, bool $getFirstDefault = false)
+function zen_currency_exists(string $code, bool $getFirstDefault = false): false|string
 {
     global $db;
 
@@ -125,7 +123,7 @@ function zen_get_box_id(string $box_id)
  */
 function zen_get_buy_now_button($product_id, string $buy_now_link, $additional_link = false)
 {
-    global $db, $zco_notifier, $current_page_base;
+    global $db, $zco_notifier, $current_page_base, $tplSetting;
 
 // show case only supercedes all other settings
     if (zen_config('STORE_STATUS') !== '0') {
@@ -137,7 +135,7 @@ function zen_get_buy_now_button($product_id, string $buy_now_link, $additional_l
     // 2 = Can browse but no prices
     // verify display of prices
     $auth_pending_link =
-        '<a href="' . zen_href_link(CUSTOMERS_AUTHORIZATION_FILENAME, '', 'SSL') . '" rel="noindex nofollow">' .
+        '<a href="' . zen_href_link(zen_config('CUSTOMERS_AUTHORIZATION_FILENAME', ''), '', 'SSL') . '" rel="noindex nofollow">' .
             TEXT_AUTHORIZATION_PENDING_BUTTON_REPLACE .
         '</a>';
     switch (true) {
@@ -192,11 +190,11 @@ function zen_get_buy_now_button($product_id, string $buy_now_link, $additional_l
         case ($button_check->fields['product_is_call'] == '1'):
             $return_button = '<a href="' . zen_href_link(FILENAME_ASK_A_QUESTION, 'pID=' . (int)$product_id . '&cfp=true', 'SSL') . '">' . TEXT_CALL_FOR_PRICE . '</a>';
             break;
-        case ($button_check->fields['products_quantity'] <= 0 and zen_config('SHOW_PRODUCTS_SOLD_OUT_IMAGE') === '1'):
+        case ($button_check->fields['products_quantity'] <= 0 && $tplSetting->SHOW_PRODUCTS_SOLD_OUT_IMAGE === '1'):
             global $template;
             $image = BUTTON_IMAGE_SOLD_OUT;
             $alt = BUTTON_SOLD_OUT_ALT;
-            if (strtolower(zen_config('IMAGE_USE_CSS_BUTTONS')) === 'yes' || strtolower(zen_config('IMAGE_USE_CSS_BUTTONS')) === 'found') {
+            if (strtolower($tplSetting->IMAGE_USE_CSS_BUTTONS) === 'yes' || strtolower($tplSetting->IMAGE_USE_CSS_BUTTONS) === 'found') {
                 $return_button = zen_image_button($image, $alt);
             } else {
                 $return_button = '<span class="text-center">' . zen_image($template->get_template_dir($image, DIR_WS_TEMPLATE, $current_page_base, 'buttons/' . $_SESSION['language'] . '/') . $image, $alt, '', '', '') . '</span>';

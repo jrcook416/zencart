@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
@@ -6,6 +8,7 @@
 
 namespace Zencart\Console;
 
+use Aura\Autoload\Loader;
 use Zencart\Console\Commands\HelpCommand;
 use Zencart\Console\Commands\ListCommand;
 use Zencart\Console\Commands\ConfigGetCommand;
@@ -34,7 +37,11 @@ class ConsoleKernel
         array $bootWarnings = [],
         private $pluginListProvider = null,
         private $versionProvider = null,
-        private $configurationProvider = null
+        private $configurationProvider = null,
+        private ?Loader $psr4Autoloader = null,
+        private array $trustedPluginVersions = [],
+        private mixed $db = null,
+        private ?CliConfigurationLoader $cliConfigurationLoader = null
     ) {
         $this->registry = $registry ?? new CommandRegistry();
         $this->resolver = new CommandResolver($this->registry);
@@ -51,6 +58,15 @@ class ConsoleKernel
             return;
         }
 
+        if ($this->db instanceof \queryFactory) {
+            $GLOBALS['db'] = $this->db;
+        }
+
+        $trustedPluginClassLoader = new TrustedPluginClassLoader($this->psr4Autoloader);
+        $trustedPluginClassLoader->loadPluginBootstrapFiles($this->trustedPluginVersions);
+        $trustedPluginClassLoader->registerPluginClassNamespaces($this->trustedPluginVersions);
+        $this->bootWarnings = array_merge($this->bootWarnings, $trustedPluginClassLoader->getErrors());
+        ($this->cliConfigurationLoader ?? new CliConfigurationLoader())->bootstrap($this->db);
         $this->registerCoreCommands();
         $this->registerPluginCommands();
         $this->booted = true;
@@ -76,16 +92,16 @@ class ConsoleKernel
         }
 
         if ($input->getCommandName() === null && $input->isHelpRequested()) {
-            return $this->executeCommand($command, $input, $output);
+            return self::executeCommand($command, $input, $output);
         }
 
         if ($input->isHelpRequested() && $command->getName() !== 'help') {
             $helpInput = new ConsoleInput([$input->getScriptName(), 'help', $command->getName()]);
             $helpCommand = $this->registry->find('help');
-            return $helpCommand === null ? 1 : $this->executeCommand($helpCommand, $helpInput, $output);
+            return $helpCommand === null ? 1 : self::executeCommand($helpCommand, $helpInput, $output);
         }
 
-        return $this->executeCommand($command, $input, $output);
+        return self::executeCommand($command, $input, $output);
     }
 
     /**
@@ -134,7 +150,7 @@ class ConsoleKernel
     /**
      * @since ZC v3.0.0
      */
-    private function executeCommand(ConsoleCommand $command, ConsoleInput $input, ConsoleOutput $output): int
+    private static function executeCommand(ConsoleCommand $command, ConsoleInput $input, ConsoleOutput $output): int
     {
         try {
             return $command->handle($input, $output);

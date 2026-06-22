@@ -4,23 +4,22 @@
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  */
 
-namespace {
-if (!function_exists('zen_href_link')) {
-    function zen_href_link(string $filename, string $parameters = ''): string
-    {
-        return $filename . ($parameters === '' ? '' : '?' . $parameters);
-    }
-}
-}
-
 namespace Tests\Unit\testsSundry {
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Tests\Support\zcUnitTestCase;
 
+#[RunTestsInSeparateProcesses]
 class ResponsiveClassicPluginRegressionTest extends zcUnitTestCase
 {
-    protected $runTestInSeparateProcess = true;
-    protected $preserveGlobalState = false;
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        if (!function_exists('zen_href_link')) {
+            require dirname(__DIR__) . '/fixtures/zen_href_link_stub.php';
+        }
+    }
 
     public function testCategoriesSideboxShowsSpecialsLinkWhenSpecialsExist(): void
     {
@@ -41,6 +40,7 @@ class ResponsiveClassicPluginRegressionTest extends zcUnitTestCase
             }
         };
         $db = $GLOBALS['db'];
+        $tplSetting = new \TemplateSettings();
         $box_id = 'categories';
         $box_categories_array = [];
 

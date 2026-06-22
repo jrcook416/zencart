@@ -79,10 +79,8 @@ function zenGetLatestTinyMceReleaseTag(int|string $majorVersion = 0): string|fal
 }
 
 // Ensure API Key configuration entry is set; Can be overridden via an extra_configures or extra_datafiles file.
-if (!defined('TINYMCE_EDITOR_API_KEY')) {
+if (zen_config('TINYMCE_EDITOR_API_KEY') === null) {
     $db->Execute("INSERT IGNORE INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('TinyMCE Editor API Key', 'TINYMCE_EDITOR_API_KEY', 'GPL', 'Basic editor features are free, in GPL mode.<br>Optionally enable premium editor features in the TinyMCE editor by providing your account API key and register your store website domain in your Tiny account.<br>Sign up at <a href=\"https://www.tiny.cloud/auth/signup/\" target=\"_blank\">www.tiny.cloud</a><br><br>Default value: <strong>GPL</strong> for free-unregistered mode with basic features.', 1, 111, now())");
-    // the following will be ignored on next load of the page, so should not be edited here
-    define('TINYMCE_EDITOR_API_KEY', 'GPL');
 }
 
 // Some of these are output in the js config:
@@ -96,7 +94,7 @@ $editor_jquery_patch_filename_path = $editor_assets_path . 'tinymce-jquery.min.j
 $editor_jquery_patch_src = file_exists($editor_jquery_patch_filename_path) ? $editor_jquery_patch_filename_url : 'https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js';
 
 // Determine whether TinyMCE editor JS files are self-hosted. If yes, use it. If not, use CDN. But if not GPL then use TinyCloud CDN with API key.
-if (str_starts_with(strtoupper(zen_config('TINYMCE_EDITOR_API_KEY')), 'GPL') || empty(zen_config('TINYMCE_EDITOR_API_KEY'))) {
+if (str_starts_with(strtoupper(zen_config('TINYMCE_EDITOR_API_KEY', 'GPL')), 'GPL') || empty(zen_config('TINYMCE_EDITOR_API_KEY'))) {
     $tinymceCDNversion = $tinymceFallbackCDNversion;
     if (function_exists('zenDoCurlRequest') && $editor_latest_tag = zenGetLatestTinyMceReleaseTag($tinymceVersionSeries)) {
         $tinymceCDNversion = $editor_latest_tag;
@@ -154,7 +152,7 @@ document.addEventListener('focusin', (e) => {
         let editorConfig = {selector: '.editorHook:not(.noEditor)'}
         // set GPL as default in case no license key has been set to override it
         let licenseFree = {license_key: 'gpl', promotion: false}
-        let licenseKeyAdmin = {license_key: '<?= !empty(zen_config('TINYMCE_EDITOR_API_KEY')) ? zen_config('TINYMCE_EDITOR_API_KEY') : 'gpl' ?>'}
+        let licenseKeyAdmin = {license_key: '<?= !empty(zen_config('TINYMCE_EDITOR_API_KEY')) ? zen_config('TINYMCE_EDITOR_API_KEY', 'GPL') : 'gpl' ?>'}
 
         let directoriesConfig = {
             document_base_url: "<?= $editor_doc_base_url ?>",
@@ -206,7 +204,7 @@ foreach ($contentLangs as $lang) {
     }
 </script>
 
-<?php if (strtoupper(zen_config('TINYMCE_EDITOR_API_KEY')) !== 'GPL') { ?>
+<?php if (strtoupper(zen_config('TINYMCE_EDITOR_API_KEY', 'GPL')) !== 'GPL') { ?>
 <style title="TinyMCEPremiumInlineMediaCSSsupport">
     .ephox-summary-card {
         border: 1px solid #AAA;

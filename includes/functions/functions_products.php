@@ -536,7 +536,7 @@ function zen_check_stock($products_id, $products_quantity): string
     // Give an observer the opportunity to change the out-of-stock message.
     $the_message = '';
     if ($stock_left < 0) {
-        $out_of_stock_message = STOCK_MARK_PRODUCT_OUT_OF_STOCK;
+        $out_of_stock_message = zen_config('STOCK_MARK_PRODUCT_OUT_OF_STOCK');
         $zco_notifier->notify(
             'ZEN_CHECK_STOCK_MESSAGE',
             [
@@ -644,7 +644,7 @@ function zen_get_products_type($product_id): int
  * @return string
  * @since ZC v1.2.0d
  */
-function zen_get_products_image($product_id, $width = SMALL_IMAGE_WIDTH, $height = SMALL_IMAGE_HEIGHT): string
+function zen_get_products_image($product_id, $width = null, $height = null): string
 {
     $image = (new Product((int)$product_id))->get('products_image') ?? '';
     if (empty($image)) {
@@ -654,7 +654,7 @@ function zen_get_products_image($product_id, $width = SMALL_IMAGE_WIDTH, $height
     if (IS_ADMIN_FLAG === true) {
         return $image;
     }
-    return zen_image(DIR_WS_IMAGES . $image, zen_get_products_name($product_id), $width, $height);
+    return zen_image(DIR_WS_IMAGES . $image, zen_get_products_name($product_id), $width ?? zen_config('SMALL_IMAGE_WIDTH'), $height ?? zen_config('SMALL_IMAGE_HEIGHT'));
 }
 
 /**
@@ -830,7 +830,7 @@ function zen_remove_product($product_id, $ptc = 'true'): void
           WHERE products_id = $product_id
             AND products_image IS NOT NULL
             AND products_image != ''
-            AND products_image NOT LIKE '%" . zen_db_input(zen_config('PRODUCTS_IMAGE_NO_IMAGE')) . "'
+            AND products_image NOT LIKE '%" . zen_db_input(zen_config('PRODUCTS_IMAGE_NO_IMAGE', 'no_picture.gif')) . "'
           LIMIT 1"
     );
 

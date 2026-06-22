@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Product search SQL operations.
  *
@@ -96,7 +98,7 @@ class Search extends \base
      * @return void
      * @since ZC v2.0.0
      */
-    public function setSearchOptions(SearchOptions $searchOptions)
+    public function setSearchOptions(SearchOptions $searchOptions): void
     {
         $this->searchOptions = $searchOptions;
     }
@@ -109,9 +111,9 @@ class Search extends \base
      * @return string The built SQL.
      * @since ZC v2.0.0
      */
-    public function buildSearchSQL()
+    public function buildSearchSQL(): string
     {
-        global $db, $messageStack, $currencies, $column_list;
+        global $db, $messageStack, $currencies, $column_list, $tplSetting;
 
         if (empty($this->searchOptions)) {
             throw new SearchException(ERROR_MISSING_SEARCH_OPTIONS);
@@ -124,58 +126,58 @@ class Search extends \base
         $search_additional_clause = false;
         $this->notify('NOTIFY_ADVANCED_SEARCH_RESULTS_ADDL_CLAUSE', [], $search_additional_clause);
 
-        if ($search_additional_clause === false &&
-            empty($this->searchOptions->keywords) &&
-            (
-                (empty($this->searchOptions->dfrom) && empty($this->searchOptions->dto)) &&
-                (empty($this->searchOptions->pfrom) || $this->searchOptions->pfrom <= 0) &&
-                (empty($this->searchOptions->pto) || $this->searchOptions->pto <= 0)
+        if ($search_additional_clause === false
+            && empty($this->searchOptions->keywords)
+            && (
+                (empty($this->searchOptions->dfrom) && empty($this->searchOptions->dto))
+                && (empty($this->searchOptions->pfrom) || $this->searchOptions->pfrom <= 0)
+                && (empty($this->searchOptions->pto) || $this->searchOptions->pto <= 0)
             )) {
             throw new SearchException(ERROR_AT_LEAST_ONE_INPUT);
-        } else {
-            $dfrom_array = [];
-            $dto_array = [];
+        }
 
-            if (!empty($this->searchOptions->dfrom) &&
-                !zen_checkdate($this->searchOptions->dfrom, DOB_FORMAT_STRING, $dfrom_array)) {
-                throw new SearchException(ERROR_INVALID_FROM_DATE);
-            }
+        $dfrom_array = [];
+        $dto_array = [];
 
-            if (!empty($this->searchOptions->dto) &&
-                !zen_checkdate($this->searchOptions->dto, DOB_FORMAT_STRING, $dto_array)) {
-                throw new SearchException(ERROR_INVALID_TO_DATE);
-            }
+        if (!empty($this->searchOptions->dfrom)
+            && !zen_checkdate($this->searchOptions->dfrom, DOB_FORMAT_STRING, $dfrom_array)) {
+            throw new SearchException(ERROR_INVALID_FROM_DATE);
+        }
 
-            if (!empty($this->searchOptions->dfrom) && !empty($this->searchOptions->dto)) {
-                if (mktime(0, 0, 0, $dfrom_array[1], $dfrom_array[2], $dfrom_array[0]) > mktime(0, 0, 0, $dto_array[1], $dto_array[2], $dto_array[0])) {
-                    throw new SearchException(ERROR_TO_DATE_LESS_THAN_FROM_DATE);
-                }
-            }
+        if (!empty($this->searchOptions->dto)
+            && !zen_checkdate($this->searchOptions->dto, DOB_FORMAT_STRING, $dto_array)) {
+            throw new SearchException(ERROR_INVALID_TO_DATE);
+        }
 
-            if ($this->searchOptions->pfrom > $this->searchOptions->pto) {
-                throw new SearchException(ERROR_PRICE_TO_LESS_THAN_PRICE_FROM);
-            }
-
-            if (!empty($this->searchOptions->keywords) &&
-                !zen_parse_search_string(stripslashes($this->searchOptions->keywords), $search_keywords)) {
-                throw new SearchException(ERROR_INVALID_KEYWORDS);
+        if (!empty($this->searchOptions->dfrom) && !empty($this->searchOptions->dto)) {
+            if (mktime(0, 0, 0, $dfrom_array[1], $dfrom_array[2], $dfrom_array[0]) > mktime(0, 0, 0, $dto_array[1], $dto_array[2], $dto_array[0])) {
+                throw new SearchException(ERROR_TO_DATE_LESS_THAN_FROM_DATE);
             }
         }
 
-        if (empty($this->searchOptions->dfrom) && empty($this->searchOptions->dto) &&
-            empty($this->searchOptions->pfrom) && empty($this->searchOptions->pto) &&
-            empty($this->searchOptions->keywords) && $search_additional_clause === false) {
+        if ($this->searchOptions->pfrom > $this->searchOptions->pto) {
+            throw new SearchException(ERROR_PRICE_TO_LESS_THAN_PRICE_FROM);
+        }
+
+        if (!empty($this->searchOptions->keywords)
+            && !zen_parse_search_string(stripslashes($this->searchOptions->keywords), $search_keywords)) {
+            throw new SearchException(ERROR_INVALID_KEYWORDS);
+        }
+
+        if (empty($this->searchOptions->dfrom) && empty($this->searchOptions->dto)
+            && empty($this->searchOptions->pfrom) && empty($this->searchOptions->pto)
+            && empty($this->searchOptions->keywords) && $search_additional_clause === false) {
             throw new SearchException(ERROR_AT_LEAST_ONE_INPUT);
         }
 
         $define_list = [
-            'PRODUCT_LIST_MODEL' => zen_config('PRODUCT_LIST_MODEL'),
-            'PRODUCT_LIST_NAME' => zen_config('PRODUCT_LIST_NAME'),
-            'PRODUCT_LIST_MANUFACTURER' => zen_config('PRODUCT_LIST_MANUFACTURER'),
-            'PRODUCT_LIST_PRICE' => zen_config('PRODUCT_LIST_PRICE'),
-            'PRODUCT_LIST_QUANTITY' => zen_config('PRODUCT_LIST_QUANTITY'),
-            'PRODUCT_LIST_WEIGHT' => zen_config('PRODUCT_LIST_WEIGHT'),
-            'PRODUCT_LIST_IMAGE' => zen_config('PRODUCT_LIST_IMAGE')
+            'PRODUCT_LIST_MODEL' => $tplSetting->PRODUCT_LIST_MODEL,
+            'PRODUCT_LIST_NAME' => $tplSetting->PRODUCT_LIST_NAME,
+            'PRODUCT_LIST_MANUFACTURER' => $tplSetting->PRODUCT_LIST_MANUFACTURER,
+            'PRODUCT_LIST_PRICE' => $tplSetting->PRODUCT_LIST_PRICE,
+            'PRODUCT_LIST_QUANTITY' => $tplSetting->PRODUCT_LIST_QUANTITY,
+            'PRODUCT_LIST_WEIGHT' => $tplSetting->PRODUCT_LIST_WEIGHT,
+            'PRODUCT_LIST_IMAGE' => $tplSetting->PRODUCT_LIST_IMAGE,
         ];
 
         asort($define_list);
@@ -218,13 +220,13 @@ class Search extends \base
         }
         /*
         // always add quantity regardless of whether or not it is in the listing for add to cart buttons
-        if (zen_config('PRODUCT_LIST_QUANTITY') < 1) {
+        if ($tplSetting->PRODUCT_LIST_QUANTITY < 1) {
         $select_column_list .= ', p.products_quantity ';
         }
         */
 
         // always add quantity regardless of whether or not it is in the listing for add to cart buttons
-        if ((int)zen_config('PRODUCT_LIST_QUANTITY') < 1) {
+        if ((int)$tplSetting->PRODUCT_LIST_QUANTITY < 1) {
             if (empty($select_column_list)) {
                 $select_column_list .= ' p.products_quantity ';
             } else {
@@ -256,7 +258,7 @@ class Search extends \base
                     LEFT JOIN " . TABLE_MANUFACTURERS . " m
                     USING(manufacturers_id), " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_CATEGORIES . " c, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c )";
 
-        if (zen_config('ADVANCED_SEARCH_INCLUDE_METATAGS') === 'true') {
+        if (zen_config('ADVANCED_SEARCH_INCLUDE_METATAGS', 'true') === 'true') {
             $from_str .=
                 " LEFT JOIN " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd
                     ON (mtpd.products_id= p2c.products_id AND mtpd.language_id = :languagesID)";
@@ -265,8 +267,8 @@ class Search extends \base
 
         if ($displaying_prices_with_tax && (!empty($this->searchOptions->pfrom) || !empty($this->searchOptions->pto))) {
             if (empty($_SESSION['customer_country_id'])) {
-                $_SESSION['customer_country_id'] = STORE_COUNTRY;
-                $_SESSION['customer_zone_id'] = STORE_ZONE;
+                $_SESSION['customer_country_id'] = zen_config('STORE_COUNTRY');
+                $_SESSION['customer_zone_id'] = zen_config('STORE_ZONE');
             }
             $from_str .=
                 " LEFT JOIN (
@@ -340,7 +342,7 @@ class Search extends \base
                 'm.manufacturers_name',
             ];
 
-            if (zen_config('ADVANCED_SEARCH_INCLUDE_METATAGS') === 'true') {
+            if (zen_config('ADVANCED_SEARCH_INCLUDE_METATAGS', 'true') === 'true') {
                 $keyword_search_fields[] = 'mtpd.metatags_keywords';
                 $keyword_search_fields[] = 'mtpd.metatags_description';
             }
@@ -416,31 +418,31 @@ class Search extends \base
             global $order_by;   //- Set in modules/listing_display_order.php
 
             $order_str = $order_by;
-        // -----
-        // Otherwise, use the legacy ordering identified by $_GET['sort']
-        //
+            // -----
+            // Otherwise, use the legacy ordering identified by $_GET['sort']
+            //
         } else {
             // set the default sort order setting from the Admin when not defined by customer
             if (empty($this->searchOptions->sort) && zen_config('PRODUCT_LISTING_DEFAULT_SORT_ORDER') !== '') {
                 $this->searchOptions->sort = zen_config('PRODUCT_LISTING_DEFAULT_SORT_ORDER');
             }
-            if (empty($this->searchOptions->sort) ||
-                !preg_match('/[1-8][ad]/', $this->searchOptions->sort) ||
-                substr($this->searchOptions->sort, 0, 1) > count($column_list)) {
+            if (empty($this->searchOptions->sort)
+                || !preg_match('/[1-8][ad]/', $this->searchOptions->sort)
+                || substr($this->searchOptions->sort, 0, 1) > count($column_list)) {
                 for ($col = 0, $n = count($column_list); $col < $n; $col++) {
                     if ($column_list[$col] === 'PRODUCT_LIST_NAME') {
                         $this->searchOptions->sort = $col + 1 . 'a';
                         $order_str .= ' ORDER BY pd.products_name';
                         break;
-                    } else {
-                        // sort by products_sort_order when PRODUCT_LISTING_DEFAULT_SORT_ORDER ia left blank
-                        // for reverse, descending order use:
-                        //       $listing_sql .= " order by p.products_sort_order desc, pd.products_name";
-                        $order_str .= " ORDER BY p.products_sort_order, pd.products_name";
-                        break;
                     }
+
+                    // sort by products_sort_order when PRODUCT_LISTING_DEFAULT_SORT_ORDER ia left blank
+                    // for reverse, descending order use:
+                    //       $listing_sql .= " order by p.products_sort_order desc, pd.products_name";
+                    $order_str .= " ORDER BY p.products_sort_order, pd.products_name";
+                    break;
                 }
-                // if set to nothing use products_sort_order and PRODUCTS_LIST_NAME is off
+                // if set to nothing, use products_sort_order and PRODUCTS_LIST_NAME is off
                 if (zen_config('PRODUCT_LISTING_DEFAULT_SORT_ORDER') === '') {
                     $this->searchOptions->sort = '20a';
                 }

@@ -6,13 +6,12 @@
 
 namespace Tests\Unit\testsTemplateResolver;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Tests\Support\zcUnitTestCase;
 
+#[RunTestsInSeparateProcesses]
 class AdminInitTemplatesTest extends zcUnitTestCase
 {
-    protected $runTestInSeparateProcess = true;
-    protected $preserveGlobalState = false;
-
     private string $repoRoot;
 
     public function setUp(): void
@@ -22,6 +21,7 @@ class AdminInitTemplatesTest extends zcUnitTestCase
         $this->repoRoot = realpath(__DIR__ . '/../../../../') . '/';
 
         require_once $this->repoRoot . 'includes/functions/zen_define_default.php';
+        require_once $this->repoRoot . 'includes/functions/zen_config.php';
         require_once $this->repoRoot . 'includes/classes/class.base.php';
         require_once $this->repoRoot . 'includes/classes/db/mysql/query_factory.php';
         require_once $this->repoRoot . 'includes/classes/TemplateDto.php';

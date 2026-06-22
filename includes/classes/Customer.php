@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright 2003-2025 Zen Cart Development Team
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
@@ -9,11 +11,11 @@
 class Customer extends base
 {
     //- customers::customers_authorization values
-    public const AUTH_OK = 0;           //- customer is authorized
-    public const AUTH_NO_BROWSE = 1;    //- customer must be authorized to browse
-    public const AUTH_NO_PRICES = 2;    //- customer can browse, but no prices until authorized
-    public const AUTH_NO_PURCHASE = 3;  //- customer can browse with prices, but no cart/checkout until authorized
-    public const AUTH_BANNED = 4;       //- customer is banned
+    public const int AUTH_OK = 0;           //- customer is authorized
+    public const int AUTH_NO_BROWSE = 1;    //- customer must be authorized to browse
+    public const int AUTH_NO_PRICES = 2;    //- customer can browse, but no prices until authorized
+    public const int AUTH_NO_PURCHASE = 3;  //- customer can browse with prices, but no cart/checkout until authorized
+    public const int AUTH_BANNED = 4;       //- customer is banned
 
     protected ?int $customer_id = null;
     protected bool $is_logged_in = false;
@@ -30,7 +32,7 @@ class Customer extends base
         }
 
         if (!empty($customer_id) && empty($this->customer_id)) {
-            $this->customer_id = $customer_id;
+            $this->customer_id = (int)$customer_id;
         }
 
         if (!empty($this->customer_id)) {
@@ -82,7 +84,7 @@ class Customer extends base
      */
     public static function isWholesaleCustomer(): bool
     {
-        $wholesale_info = Customer::getCustomerWholesaleInfo();
+        $wholesale_info = self::getCustomerWholesaleInfo();
         return $wholesale_info['is_wholesale'];
     }
 
@@ -91,7 +93,7 @@ class Customer extends base
      */
     public static function isTaxExempt(): bool
     {
-        $wholesale_info = Customer::getCustomerWholesaleInfo();
+        $wholesale_info = self::getCustomerWholesaleInfo();
         $is_tax_exempt = $wholesale_info['is_tax_exempt'];
 
         global $zco_notifier;
@@ -105,7 +107,7 @@ class Customer extends base
      */
     public static function getCustomerWholesaleTier(): int
     {
-        $wholesale_info = Customer::getCustomerWholesaleInfo();
+        $wholesale_info = self::getCustomerWholesaleInfo();
         return $wholesale_info['wholesale_tier'];
     }
 
@@ -128,7 +130,7 @@ class Customer extends base
             return false;
         }
 
-        $length = defined('PASSWORD_RESET_TOKEN_LENGTH') ? constant('PASSWORD_RESET_TOKEN_LENGTH') : 24;
+        $length = (int)zen_config('PASSWORD_RESET_TOKEN_LENGTH', 24);
         if ($length < 12 || $length > 100) { // under 12 is impractical; over 100 is too large for db field
             $length = 24;
         }
@@ -195,7 +197,7 @@ class Customer extends base
      */
     public static function getPasswordResetTokenMinutesValid(): int
     {
-        $token_valid_minutes = defined('PASSWORD_RESET_TOKEN_MINUTES_VALID') ? (int)constant('PASSWORD_RESET_TOKEN_MINUTES_VALID') : 60;
+        $token_valid_minutes = (int)zen_config('PASSWORD_RESET_TOKEN_MINUTES_VALID', 60);
         if ($token_valid_minutes < 1 || $token_valid_minutes > 1440) {
             $token_valid_minutes = 60;
         }
@@ -307,7 +309,7 @@ class Customer extends base
         }
 
         // fire notifier to check whether login should be allowed?
-//@TODO        $this->notify('NOTIFY_?LOGIN_ATTEMPT', null, $is_logged_in);
+        //@TODO        $this->notify('NOTIFY_?LOGIN_ATTEMPT', null, $is_logged_in);
 
         // -----
         // Load the customer's information from the database and set the appropriate
@@ -351,6 +353,7 @@ class Customer extends base
         $_SESSION['customer_country_id'] = (int)$this->data['country_id'];
         $_SESSION['customer_zone_id'] = (int)$this->data['zone_id'];
         $_SESSION['customers_authorization'] = (int)$this->data['customers_authorization'];
+        zen_set_customer_session_password_hash((string)$this->getPasswordHash($customer_id));
 
         // @TODO - should we add $this->data to a session var, and replace numerous other lookups?
 
@@ -375,6 +378,25 @@ class Customer extends base
               WHERE customer_id = :customerID";
         $sql = $db->bindVars($sql, ':customerID', $customers_id, 'integer');
         $db->Execute($sql);
+    }
+
+
+    /**
+     * Retrieves the password hash for the specified customer.
+     * @since ZC v3.0.0
+     */
+    protected function getPasswordHash(int $customer_id): string
+    {
+        global $db;
+
+        $sql =
+            "SELECT customers_password
+               FROM " . TABLE_CUSTOMERS . "
+              WHERE customers_id = :customersID";
+        $sql = $db->bindVars($sql, ':customersID', $customer_id, 'integer');
+        $result = $db->Execute($sql, 1);
+
+        return $result->EOF ? '' : (string)$result->fields['customers_password'];
     }
 
     /**
@@ -1105,7 +1127,7 @@ class Customer extends base
 
         $result = $db->Execute($sql);
 
-        return $result->fields['total'];
+        return (int)$result->fields['total'];
     }
 
     /**
@@ -1114,12 +1136,13 @@ class Customer extends base
     public function setPassword(string $new_password): void
     {
         global $db;
+        $encryptedPassword = zen_encrypt_password($new_password);
         $sql =
             "UPDATE " . TABLE_CUSTOMERS . "
                 SET customers_password = :password
               WHERE customers_id = :customersID";
         $sql = $db->bindVars($sql, ':customersID', $this->customer_id, 'integer');
-        $sql = $db->bindVars($sql, ':password', zen_encrypt_password($new_password), 'string');
+        $sql = $db->bindVars($sql, ':password', $encryptedPassword, 'string');
         $db->Execute($sql, 1);
         $sql =
             "UPDATE " . TABLE_CUSTOMERS_INFO . "
@@ -1129,6 +1152,10 @@ class Customer extends base
         $db->Execute($sql, 1);
 
         $this->clearPasswordResetTokens($this->customer_id);
+
+        if ($this->isSameAsLoggedIn()) {
+            zen_set_customer_session_password_hash($encryptedPassword);
+        }
     }
 
     /**

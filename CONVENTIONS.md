@@ -53,6 +53,38 @@ endforeach;
 
 ---
 
+## Comment style for new code
+
+- Single-line comments: `//` is fine.
+- Multi-line comments: use `/** */` docblock style, not a run of `//` lines — even when the
+  comment isn't above a class/method/property declaration (e.g. explaining a block of logic
+  mid-method). PHPStorm renders `/**` as a doc-comment regardless of what follows, and some
+  tooling (minifiers, AI code-stripping passes) targets `//` line comments more aggressively,
+  so doc-style blocks are more reliably preserved across multiple lines.
+
+```php
+// Correct — single line
+$total = $price * $qty; // apply quantity
+
+/**
+ * Correct — multi-line, documents the code immediately below.
+ */
+class Foo
+{
+}
+
+/**
+ * Correct — also fine mid-method, documenting the next statement.
+ */
+$result = doSomethingNonObvious();
+
+// Wrong — multi-line using //
+// Explain the non-obvious reason here.
+// across multiple lines like this.
+```
+
+---
+
 ## Naming conventions for new code
 
 | Construct | Convention | Example |
@@ -119,6 +151,39 @@ $db->Execute("SELECT * FROM orders WHERE ...");
 - Admin input sanitization has its own whitelisting system — see [Admin Sanitization docs](https://docs.zen-cart.com/dev/code/admin_sanitization/) 
   before relaxing sanitization rules for any admin field.
 - Do not modify the early request-sanitizing logic in `application_top.php`.
+
+---
+
+## Template settings: choosing `zen_config()` vs `$tplSetting->`
+
+See `AGENTS.md` → "Configuration: `zen_config()` vs `$tplSetting` (TemplateSettings)" for how the
+two mechanisms work and where `$tplSetting` is (and isn't) available. This section covers which
+keys are appropriate to convert from `zen_config()` to `$tplSetting->`.
+
+`$tplSetting->KEY` is appropriate only for **display/layout/template-presentation** settings —
+things a template should reasonably be able to override (box widths, separators, show/hide a
+sidebox section, image-size defaults, and similar).
+
+Keep using `zen_config()` for:
+- Core/site-wide settings not specific to template presentation: `STORE_NAME`, `STORE_OWNER_*`,
+  `CONTACT_US*`, `DEFAULT_LANGUAGE`, `DEFAULT_CURRENCY`.
+- Security/session-sensitive and registration-field settings: `SESSION_*`, `ENTRY_*_LENGTH`,
+  `ACCOUNT_*` fields governing required registration fields.
+- Business-logic/checkout-flow settings: `STOCK_CHECK`, `STOCK_ALLOW_CHECKOUT`,
+  `DISABLED_PRODUCTS*`, `CUSTOMERS_APPROVAL*`, `CUSTOMERS_REFERRAL_STATUS`,
+  `CUSTOMERS_PRODUCTS_NOTIFICATION_STATUS`, `CUSTOMERS_ACTIVATION_REQUIRED`.
+- Any `MODULE_*` setting (payment/shipping/order-total module configuration).
+- Any key currently called with a meaningful default-value second argument
+  (`zen_config('KEY', $default)`) — `$tplSetting->KEY` has no equivalent default-parameter
+  support, so converting would silently drop that fallback behavior.
+- Settings actually backed by a different repository/table than `configuration`
+  (e.g. `SHOW_*_ATTRIBUTES`, sourced from `product_type_layout`) — these require
+  `zen_config()`'s repository-aware lookup.
+- `*_FILENAME` constants and other non-display identifiers.
+
+When in doubt, check the setting's `configuration_group_id`/title/description in
+`zc_install/sql/install/mysql_zencart.sql` to judge whether it reads as a template/display
+concern or a core/business one.
 
 ---
 

@@ -63,7 +63,7 @@ if (count($_GET) > 0 ) {
 }
 
 // check for SSL configuration changes:
-if (!defined('SSLPWSTATUSCHECK')) {
+if (zen_config('SSLPWSTATUSCHECK') === null) {
     die('database upgrade required. please run the 1.3.9-to-1.5.0 upgrade via zc_install');
 }
 $e = (str_starts_with(HTTP_SERVER, 'https')) ? '1' : '0';
@@ -73,7 +73,7 @@ if (zen_config('SSLPWSTATUSCHECK') === '') {
     header('Location: ' . $_SERVER['REQUEST_URI']);
     die('<meta http-equiv="refresh" content="0; url=' . $_SERVER['REQUEST_URI'] . '">One-time auto-configuration completed. Please refresh the page.');
 }
-[$a, $c] = explode(':', zen_config('SSLPWSTATUSCHECK')); $a = (int)$a; $c = (int)$c;
+[$a, $c] = explode(':', zen_config('SSLPWSTATUSCHECK', '')); $a = (int)$a; $c = (int)$c;
 if ($a === 0) {
     if ($c === 0 && (int)$e === 1) { // was nonSSL but now is SSL, so need to exp pwds
         $sql = "UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = '1:" . $e . "', last_modified = now() WHERE configuration_key = 'SSLPWSTATUSCHECK'";

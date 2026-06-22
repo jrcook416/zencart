@@ -86,8 +86,7 @@ if (!empty($oID) && !empty($action)) {
 // based on configuration setting in 'My Store'.    Set a default, just in case that configuration
 // setting isn't set!
 //
-if (!defined('NOTIFY_CUSTOMER_DEFAULT')) define('NOTIFY_CUSTOMER_DEFAULT', '1');
-switch (zen_config('NOTIFY_CUSTOMER_DEFAULT')) {
+switch (zen_config('NOTIFY_CUSTOMER_DEFAULT', '1')) {
     case '0':
         $notify_email = false;
         $notify_no_email = true;
@@ -1426,7 +1425,7 @@ if ($show_orders_weights === true) {
                                     }
 
                                     $orders_query_numrows = $orders_query_numrows ?? 0;
-                                    $orders_split = new splitPageResults($_GET['page'], zen_config('MAX_DISPLAY_SEARCH_RESULTS_ORDERS'), $orders_query_raw, $orders_query_numrows);
+                                    $orders_split = new splitPageResults($_GET['page'], (int)zen_config('MAX_DISPLAY_SEARCH_RESULTS_ORDERS'), $orders_query_raw, $orders_query_numrows);
                                     $orders = $db->Execute($orders_query_raw);
 
                                     while (!$orders->EOF) {

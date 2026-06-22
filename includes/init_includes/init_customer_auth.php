@@ -21,6 +21,28 @@ if (zen_is_logged_in()) {
     zen_session_destroy();
     zen_redirect(zen_href_link(FILENAME_TIME_OUT));
   }
+
+  if (!zen_is_customer_password_session_valid()) {
+    global $messageStack, $customer;
+
+    $_SESSION['cart']->reset(false);
+    if (!isset($customer) || !is_a($customer, Customer::class)) {
+      $customer = new Customer($_SESSION['customer_id']);
+    }
+    $customer->forceLogout();
+    unset(
+      $_SESSION['customer_password_hash'],
+      $_SESSION['customers_email_address'],
+      $_SESSION['customer_first_name'],
+      $_SESSION['customer_last_name'],
+      $_SESSION['customer_default_address_id'],
+      $_SESSION['customer_country_id'],
+      $_SESSION['customer_zone_id'],
+      $_SESSION['customers_authorization']
+    );
+    $messageStack->add_session('header', ERROR_SESSION_INVALID_DUE_TO_PASSWORD_CHANGE, 'warning');
+    zen_redirect(zen_href_link(FILENAME_LOGIN, '', 'SSL'));
+  }
 }
 
 $down_for_maint_flag = false;
@@ -86,13 +108,13 @@ switch (true) {
 
   case ($down_for_maint_flag && DOWN_FOR_MAINTENANCE_TYPE == 'strict'):
     // if DFM is in strict mode, then block access to all pages:
-    zen_redirect(zen_href_link(DOWN_FOR_MAINTENANCE_FILENAME));
+    zen_redirect(zen_href_link(zen_config('DOWN_FOR_MAINTENANCE_FILENAME', '')));
   break;
 
   case ((zen_config('DOWN_FOR_MAINTENANCE') == 'true') && !in_array($_GET['main_page'], array(FILENAME_LOGOFF, FILENAME_PRIVACY, FILENAME_CONTACT_US, FILENAME_CONDITIONS, FILENAME_SHIPPING))):
     // on special pages, if DFM mode is "relaxed", allow access to these pages
     if ($down_for_maint_flag && DOWN_FOR_MAINTENANCE_TYPE == 'relaxed') {
-      zen_redirect(zen_href_link(DOWN_FOR_MAINTENANCE_FILENAME));
+      zen_redirect(zen_href_link(zen_config('DOWN_FOR_MAINTENANCE_FILENAME', '')));
     }
   break;
 
@@ -180,7 +202,7 @@ switch (true) {
    */
   if (!in_array($_GET['main_page'], array(FILENAME_LOGIN, FILENAME_LOGOFF, FILENAME_CONTACT_US, FILENAME_PRIVACY))) {
     if ($_GET['main_page'] != zen_config('CUSTOMERS_AUTHORIZATION_FILENAME')) {
-      zen_redirect(zen_href_link(preg_replace('/[^a-z_]/', '', zen_config('CUSTOMERS_AUTHORIZATION_FILENAME'))));
+      zen_redirect(zen_href_link(preg_replace('/[^a-z_]/', '', zen_config('CUSTOMERS_AUTHORIZATION_FILENAME', ''))));
     }
   }
   break;

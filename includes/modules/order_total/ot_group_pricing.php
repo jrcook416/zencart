@@ -76,13 +76,13 @@ class ot_group_pricing {
     $this->code = 'ot_group_pricing';
     $this->title = MODULE_ORDER_TOTAL_GROUP_PRICING_TITLE;
     $this->description = MODULE_ORDER_TOTAL_GROUP_PRICING_DESCRIPTION;
-    $this->sort_order = defined('MODULE_ORDER_TOTAL_GROUP_PRICING_SORT_ORDER') ? MODULE_ORDER_TOTAL_GROUP_PRICING_SORT_ORDER : null;
+    $this->sort_order = zen_config('MODULE_ORDER_TOTAL_GROUP_PRICING_SORT_ORDER');
     if (null === $this->sort_order) return false;
 
-    $this->include_shipping = MODULE_ORDER_TOTAL_GROUP_PRICING_INC_SHIPPING;
-    $this->include_tax = MODULE_ORDER_TOTAL_GROUP_PRICING_INC_TAX;
-    $this->calculate_tax = MODULE_ORDER_TOTAL_GROUP_PRICING_CALC_TAX;
-    $this->tax_class = MODULE_ORDER_TOTAL_GROUP_PRICING_TAX_CLASS;
+    $this->include_shipping = zen_config('MODULE_ORDER_TOTAL_GROUP_PRICING_INC_SHIPPING');
+    $this->include_tax = zen_config('MODULE_ORDER_TOTAL_GROUP_PRICING_INC_TAX');
+    $this->calculate_tax = zen_config('MODULE_ORDER_TOTAL_GROUP_PRICING_CALC_TAX');
+    $this->tax_class = zen_config('MODULE_ORDER_TOTAL_GROUP_PRICING_TAX_CLASS');
     $this->credit_class = true;
     $this->output = array();
   }
@@ -104,7 +104,7 @@ class ot_group_pricing {
         }
       }
       $order->info['total'] = $order->info['total'] - $od_amount['total'];
-      if (DISPLAY_PRICE_WITH_TAX == 'true') {
+      if (zen_config('DISPLAY_PRICE_WITH_TAX') === 'true') {
         $od_amount['total'] += $tax;
       }
       if ($this->calculate_tax == "Standard") $order->info['total'] -= $tax;
@@ -127,7 +127,7 @@ class ot_group_pricing {
     $order_total = $order->info['total'];
     if ($this->include_shipping != 'true') $order_total -= $order->info['shipping_cost'];
     if ($this->include_tax != 'true') $order_total -= $order->info['tax'];
-    if (DISPLAY_PRICE_WITH_TAX == 'true' && $this->include_shipping != 'true')
+    if (zen_config('DISPLAY_PRICE_WITH_TAX') === 'true' && $this->include_shipping != 'true')
     {
       $order_total += $order->info['shipping_tax'];
     }
@@ -225,7 +225,7 @@ class ot_group_pricing {
     global $order;
     $od_amount = $this->calculate_deductions($order_total);
     $order->info['total'] = $order->info['total'] - $od_amount['total'];
-    return $od_amount['total'] + (DISPLAY_PRICE_WITH_TAX == 'true' ? 0 : $od_amount['tax']);
+    return $od_amount['total'] + (zen_config('DISPLAY_PRICE_WITH_TAX') === 'true' ? 0 : $od_amount['tax']);
   }
 
   /**

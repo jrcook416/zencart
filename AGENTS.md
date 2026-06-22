@@ -2,6 +2,12 @@
 - `CONVENTIONS.md` — coding standards, PSR-12 rules, naming conventions, legacy exceptions
 - `CLAUDE.md` — Claude-specific behavioral layer (references this file)
 
+## Scratch / working files
+
+Audit reports, one-off scripts, and other working artifacts produced during a task
+(e.g. `audit_*.md`, `phase*_*.php`, `*_audit.stats`) belong in `tmp/` at the project root,
+not the repo root. `tmp/` is gitignored. Create it if it doesn't exist.
+
 # Purpose
 -------
 Concise guidance for automated AI coding agents (and humans) to become productive in this Zen Cart v3.0 PHP codebase. Focus is on immediately actionable facts: where to look, how the app boots, test & dev commands, conventions, and integration points.
@@ -93,6 +99,22 @@ Project-specific conventions and patterns
 - Template overrides: The non-admin side supports template-specific overrides for modules and classes. For example, if the active template is `my_template`, the system will look for files in `includes/templates/my_template/` before falling back to the `template_default` paths. This allows for customization without modifying core files.
 - `index.php` flow: includes application_top.php, loops over `header_php` files from PageLoader->listModulePagesFiles('header_php', '.php'), then loads `html_header.php`, `main_template_vars.php`, `tpl_main_page.php`.
 - Language files: `lang.foo.php` files return an array of `'CONSTANT_NAME' => 'value'` pairs. These get merged across load layers (core → plugin, English → active language) and converted to real constants via `define()`. Values may reference other keys in the same array via `%%OTHER_KEY%%` placeholders.
+- Ajax classes (`includes/classes/ajax/*`, dispatched via `ajax.php`) are physically located under catalog-side directories even when they are only ever invoked from Admin — the ajax handler checks `IS_ADMIN_FLAG` to determine actual execution context, not file location. Trace actual callers (and `IS_ADMIN_FLAG` handling) before assuming an ajax class can use `$tplSetting`.
+- Some functions/classes are reachable from both Admin and catalog (for example several functions in `includes/functions/functions_products.php`). Trace actual callers before converting a shared function — converting one only safe for catalog-side callers will produce a fatal/undefined-property error when reached from Admin.
+
+
+Configuration: `zen_config()` vs `$tplSetting` (TemplateSettings)
+-------------------------------------------------------------
+Two distinct mechanisms read configuration values; pick based on what's being read and where the code runs.
+
+- `zen_config('KEY', $default = null)` (`includes/functions/zen_config.php`) reads from the DB-backed `configuration`/`product_type_layout` repositories, falling back to a same-named `defined()` constant, then to `$default`. Available everywhere (catalog **and** Admin). Use this for core, site-wide, security-sensitive, or business-logic settings, and for any key that's called with a meaningful default-value second argument.
+- `$tplSetting->KEY` (object of class `TemplateSettings extends Settings`, see `includes/classes/TemplateSettings.php` / `includes/classes/Settings.php`) is a per-template settings store layering an explicit override (a template's `template_settings.php`, or a DB-stored per-template override) on top of the same global-constant fallback. Use this only for display/layout/template-presentation settings that a template should be able to override. It has no default-parameter support, so it's not a drop-in replacement for `zen_config('KEY', $default)`.
+- See `CONVENTIONS.md` → "Template settings: choosing `zen_config()` vs `$tplSetting->`" for the rules on which keys are appropriate to convert.
+
+`$tplSetting` availability rules — verify these before converting a `zen_config()` call to `$tplSetting->`:
+- It is only initialized in `includes/init_includes/init_templates.php`, which runs during the **catalog** bootstrap only. It is never initialized in Admin context — do not convert code reachable from `admin/*`.
+- It is a true PHP global, automatically visible in top-level procedural include files (page modules, templates), but inside a function or class method body it requires an explicit `global $tplSetting;` declaration, like any other global.
+- `Settings::setFromArray()` treats an explicit override and a same-named global constant as separate concepts: a key already explicitly set (e.g. from `template_settings.php`) always wins over a constant of the same name, regardless of which was resolved first. If you're extending `Settings`, don't reintroduce a check that conflates "has a constant" with "has an explicit value" — that previously caused overrides to be silently discarded whenever a same-named config constant existed.
 
 Integration points and external dependencies
 -------------------------------------------
@@ -183,6 +205,7 @@ Quick tips for agents that create plugins
 - If you add PSR-4 namespaced classes, note that `Zencart\Plugins\Catalog\<UniqueKey>` namespace will be auto-applied when plugin classes are enumerated and registered for autoloading.
 - Test by enabling the plugin via admin `Plugin Manager` (or insert a `plugin_control` DB record in tests), then exercise plugin pages (storefront/admin) and run relevant PHPUnit feature tests.
 - `zc_plugins/.gitignore` uses a blanket deny-all (`*`) with an explicit allowlist. When adding a new plugin, append `!PluginName/` and `!PluginName/**` to that file, or the plugin's files will be invisible to git.
+- That same blanket-deny-then-allowlist pattern can fool gitignore-aware search tools (e.g. `ripgrep`/`ugrep` run with an ignore-files flag, which many `grep` aliases enable). Searching recursively from the `zc_plugins/` parent directory can silently skip an allowlisted plugin's subtree even though git tracks those files correctly. When searching inside a specific plugin, target its directory directly (e.g. `zc_plugins/PluginName`) rather than searching from `zc_plugins/`, or use a tool/flag that ignores `.gitignore`.
 
 A payment/shipping/order-total plugin may keep `install()`, `remove()`, and `keys()` methods on its module class to manage its own `configuration`-table records (these are invoked from the admin Modules pages independently of Plugin Manager). Those methods should only handle configuration entries, never database schema changes; for schema changes use `ScriptedInstaller` methods for install/upgrade/remove, and ensure they are idempotent.
 
@@ -240,6 +263,9 @@ Test Suite: Where to find tests & how the test bootstrap works
 - PHPUnit configuration: `phpunit.xml` uses `vendor/autoload.php` and sets APP_ENV=testing and reduced bcrypt rounds.
 - Tests live in `not_for_release/testFramework/` grouped into Unit, FeatureStore, FeatureAdmin. The test autoloading is configured in `composer.json` under `autoload-dev`.
 - There is a test-support bootstrap at `not_for_release/testFramework/Support/application_testing.php` that will be loaded if present by `application_top.php`.
+- Unit tests are grouped into topic subdirectories under `not_for_release/testFramework/Unit/` (e.g. `testsTemplateResolver/`, `testsCategories/`, `testsHtmlOutput/`). Place a new test in the subdirectory matching its subject; use `testsSundry/` only when nothing else fits.
+- Test classes extend `Tests\Support\zcUnitTestCase`, whose `setUp()` calls `UnitTestBootstrap::initialize()`. If a test calls `define()` on a global constant (common when stubbing config for a unit under test), add the `#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]` class attribute (or `#[RunInSeparateProcess]` on an individual method) — PHP constants can't be redefined, so without process isolation a later test in the same run can fail or silently reuse an earlier test's constant value. Note: the legacy `protected $runTestInSeparateProcess = true;` / `protected $preserveGlobalState = false;` properties seen in some older tests in this codebase do **not** work on the PHPUnit version in use here (`TestCase::$runTestInSeparateProcess` is now `private`, so a same-named subclass property is just an inert shadow) — use the attribute form for any new test, and treat any test still using the old properties as suspect for order-dependent flakiness.
+- Even though `includes/classes` and `includes/modules` are classmap-autoloaded for tests (`composer.json`), existing tests still `require_once DIR_FS_CATALOG . 'includes/classes/Whatever.php';` explicitly in `setUp()`. Follow that pattern for new tests rather than relying solely on autoloading.
 - Use the `composer` shortcuts defined in `composer.json` to run specific test suites:
   - composer run-script unit-tests
   - composer run-script feature-tests

@@ -19,9 +19,6 @@ $zco_notifier->notify('NOTIFY_HEADER_START_ADVANCED_SEARCH_RESULTS');
 if (!defined('KEYWORD_FORMAT_STRING')) {
     define('KEYWORD_FORMAT_STRING', 'keywords');
 }
-if (!defined('ADVANCED_SEARCH_INCLUDE_METATAGS')) {
-    define('ADVANCED_SEARCH_INCLUDE_METATAGS', 'true');
-}
 
 require DIR_WS_MODULES . zen_get_module_directory('require_languages.php');
 
@@ -46,7 +43,7 @@ try {
     $listing_sql = $search->buildSearchSQL();
     $keywords = $searchOptions->keywords;
 
-    $result = new \splitPageResults($listing_sql, zen_config('MAX_DISPLAY_PRODUCTS_LISTING'), 'p.products_id', 'page');
+    $result = new \splitPageResults($listing_sql, $tplSetting->MAX_DISPLAY_PRODUCTS_LISTING, 'p.products_id', 'page');
     $zco_notifier->notify('NOTIFY_SEARCH_RESULTS', $listing_sql, $keywords, $result);
 
     // -----

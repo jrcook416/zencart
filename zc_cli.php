@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Zen Cart console entry point.
  *
@@ -8,7 +10,7 @@
 
 $psr4Autoloader = require __DIR__ . '/includes/application_cli_bootstrap.php';
 $dbContext = zc_cli_get_db_context();
-$pluginRepositoryContext = zc_cli_get_plugin_repository_context();
+$pluginRepositoryContext = zc_cli_get_plugin_repository_context($dbContext);
 $trustedPluginContext = zc_cli_resolve_trusted_plugin_versions(
     $pluginRepositoryContext['repository'],
     $pluginRepositoryContext['warnings']
@@ -21,9 +23,7 @@ $pluginDiscovery = new \Zencart\Console\PluginCommandDiscovery(
     $psr4Autoloader,
     $trustedPluginContext['plugins']
 );
-$pluginListProvider = static function () use ($pluginRepositoryContext): ?array {
-    return $pluginRepositoryContext['repository']?->getAll();
-};
+$pluginListProvider = static fn(): ?array => $pluginRepositoryContext['repository']?->getAll();
 $versionProvider = static function () use ($dbContext): array {
     if ($dbContext['db'] === null) {
         return [];
@@ -49,7 +49,10 @@ $kernel = new \Zencart\Console\ConsoleKernel(
     $trustedPluginContext['warnings'],
     $pluginListProvider,
     $versionProvider,
-    $configurationProvider
+    $configurationProvider,
+    $psr4Autoloader,
+    $trustedPluginContext['plugins'],
+    $dbContext['db']
 );
 
 exit($kernel->run($input, $output));

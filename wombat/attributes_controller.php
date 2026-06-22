@@ -54,7 +54,7 @@ $ary = [];
 $chk_option_values = $db->Execute(
     "SELECT DISTINCT language_id
        FROM " . TABLE_PRODUCTS_OPTIONS_VALUES . "
-      WHERE products_options_values_id = " . (int)PRODUCTS_OPTIONS_VALUES_TEXT_ID
+      WHERE products_options_values_id = " . (int)zen_config('PRODUCTS_OPTIONS_VALUES_TEXT_ID')
 );
 foreach ($chk_option_values as $option_value) {
     $ary[] = $option_value['language_id'];
@@ -1112,7 +1112,7 @@ if ($_GET['products_filter'] === 0) {
           ORDER BY LPAD(po.products_options_sort_order,11,'0'),
                    LPAD(pa.options_id,11,'0'),
                    LPAD(pa.products_options_sort_order,11,'0')";
-    $attributes_split = new splitPageResults($_GET['page'], zen_config('MAX_DISPLAY_SEARCH_RESULTS'), $attributes_query_raw, $attributes_query_numrows);
+    $attributes_split = new splitPageResults($_GET['page'], (int)zen_config('MAX_DISPLAY_SEARCH_RESULTS'), $attributes_query_raw, $attributes_query_numrows);
 ?>
         <div class="row">
           <?= zen_draw_separator('pixel_trans.gif') ?>

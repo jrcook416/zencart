@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * File contains the order-totals-processing class ("order_total")
  *
@@ -30,7 +32,7 @@ class order_total
     /**
      * $modules is an array of installed order totals module names
      */
-    public array $modules;
+    public array $modules = [];
 
     /**
      * $module_order_total_installed indicates whether at least one order-total module is installed.
@@ -54,6 +56,11 @@ class order_total
             $module_list = explode(';', zen_config('MODULE_ORDER_TOTAL_INSTALLED'));
 
             foreach ($module_list as $value) {
+                // If the module's not located (it might be from a disabled zc_plugin), nothing further to do
+                if (!isset($modules_found[$value])) {
+                    continue;
+                }
+
                 if (!$languageLoader->loadModuleLanguageFile($value, 'order_total')) {
                     $language_dir = (IS_ADMIN_FLAG === false) ? DIR_WS_LANGUAGES : (DIR_FS_CATALOG . DIR_WS_LANGUAGES);
                     $lang_file = zen_get_file_directory($language_dir . $_SESSION['language'] . '/modules/order_total/', $value, 'false');
@@ -77,7 +84,7 @@ class order_total
 
                 if (isset($modules_found[$value])) {
                     include_once DIR_FS_CATALOG . $modules_found[$value] . $value;
-                    $class = pathinfo($value, PATHINFO_FILENAME);
+                    $class = pathinfo($value, \PATHINFO_FILENAME);
                     $GLOBALS[$class] = new $class();
                     $this->modules[] = $value;
                     $this->module_order_total_installed = true;
@@ -102,7 +109,7 @@ class order_total
         if ($this->module_order_total_installed === true) {
             $this->notify('NOTIFY_ORDER_TOTAL_PROCESS_STARTS', ['order_info' => $order->info]);
             foreach ($this->modules as $value) {
-                $class = pathinfo($value, PATHINFO_FILENAME);
+                $class = pathinfo($value, \PATHINFO_FILENAME);
                 if (!isset($GLOBALS[$class])) {
                     continue;
                 }
@@ -144,10 +151,10 @@ class order_total
         $output_string = '';
         if ($this->module_order_total_installed === true) {
             foreach ($this->modules as $value) {
-                $class = pathinfo($value, PATHINFO_FILENAME);
+                $class = pathinfo($value, \PATHINFO_FILENAME);
 
                 // ideally, the first part of this IF statement should be dropped, and the ELSE portion is all that should be kept
-                if ($return_html == true) {
+                if ($return_html === true) {
                     $class_code = str_replace('_', '-', $GLOBALS[$class]->code);
                     foreach ($GLOBALS[$class]->output as $next_output) {
                         $output_string .=
@@ -184,7 +191,7 @@ class order_total
         $selection_array = [];
         if ($this->module_order_total_installed === true) {
             foreach ($this->modules as $value) {
-                $class = pathinfo($value, PATHINFO_FILENAME);
+                $class = pathinfo($value, \PATHINFO_FILENAME);
                 if (!empty($GLOBALS[$class]->credit_class)) {
                     $selection = $GLOBALS[$class]->credit_selection();
                     if (is_array($selection)) {
@@ -208,7 +215,7 @@ class order_total
     {
         if ($this->module_order_total_installed === true) {
             foreach ($this->modules as $value) {
-                $class = pathinfo($value, PATHINFO_FILENAME);
+                $class = pathinfo($value, \PATHINFO_FILENAME);
                 if (!empty($GLOBALS[$class]->credit_class)) {
                     $GLOBALS[$class]->update_credit_account($i);
                 }
@@ -229,7 +236,7 @@ class order_total
     {
         if ($this->module_order_total_installed === true) {
             foreach ($this->modules as $value) {
-                $class = pathinfo($value, PATHINFO_FILENAME);
+                $class = pathinfo($value, \PATHINFO_FILENAME);
                 if (!empty($GLOBALS[$class]->credit_class)) {
                     $post_var = 'c' . $GLOBALS[$class]->code;
                     if (!empty($_POST[$post_var])) {
@@ -260,7 +267,7 @@ class order_total
             $orderInfoSaved = $order->info;
             $this->notify('NOTIFY_ORDER_TOTAL_PRE_CONFIRMATION_CHECK_STARTS', ['order_info' => $orderInfoSaved]);
             foreach ($this->modules as $value) {
-                $class = pathinfo($value, PATHINFO_FILENAME);
+                $class = pathinfo($value, \PATHINFO_FILENAME);
                 $GLOBALS[$class]->process();
                 $this->notify('NOTIFY_ORDER_TOTAL_PRE_CONFIRMATION_CHECK_NEXT', ['class' => $class, 'order_info' => $order->info, 'ot_output' => $GLOBALS[$class]->output]);
                 $GLOBALS[$class]->output = [];
@@ -292,7 +299,7 @@ class order_total
     {
         if ($this->module_order_total_installed === true) {
             foreach ($this->modules as $value) {
-                $class = pathinfo($value, PATHINFO_FILENAME);
+                $class = pathinfo($value, \PATHINFO_FILENAME);
                 if (!empty($GLOBALS[$class]->credit_class)) {
                     $GLOBALS[$class]->apply_credit();
                 }
@@ -309,7 +316,7 @@ class order_total
     {
         if ($this->module_order_total_installed === true) {
             foreach ($this->modules as $value) {
-                $class = pathinfo($value, PATHINFO_FILENAME);
+                $class = pathinfo($value, \PATHINFO_FILENAME);
                 if (!empty($GLOBALS[$class]->credit_class) && method_exists($GLOBALS[$class], 'clear_posts')) {
                     $GLOBALS[$class]->clear_posts();
                 }

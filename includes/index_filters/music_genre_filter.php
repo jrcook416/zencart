@@ -94,8 +94,9 @@ if (empty($order_by) || !empty($_GET['disp_order'])) {
 
 // Legacy $_GET['sort'] which was used for sort-by-clicking-column-heading
 if (isset($column_list) && !empty($_GET['sort'])) {
-    if (!isset($_GET['sort']) && PRODUCT_LISTING_DEFAULT_SORT_ORDER !== '') {
-        $_GET['sort'] = PRODUCT_LISTING_DEFAULT_SORT_ORDER;
+    $listing_default_sort_order = zen_config('PRODUCT_LISTING_DEFAULT_SORT_ORDER');
+    if (!isset($_GET['sort']) && $listing_default_sort_order !== '') {
+        $_GET['sort'] = $listing_default_sort_order;
     }
 
     if ((!isset($_GET['sort']))
@@ -109,7 +110,7 @@ if (isset($column_list) && !empty($_GET['sort'])) {
             }
         }
         // if set to nothing use products_sort_order and PRODUCTS_LIST_NAME is off
-        if (PRODUCT_LISTING_DEFAULT_SORT_ORDER === '') {
+        if ($listing_default_sort_order === '') {
             $_GET['sort'] = '20a';
         }
     } else {
@@ -147,7 +148,7 @@ $listing_sql .= ' ' . $where_str . ' ' . $order_by;
 
 
 // optional Product List Filter
-if (PRODUCT_LIST_FILTER > 0) {
+if (zen_config('PRODUCT_LIST_FILTER') > 0) {
     if (!empty($_GET['music_genre_id'])) {
         $filterlist_sql = "SELECT c.categories_id AS id, cd.categories_name AS name
                        FROM " . TABLE_PRODUCTS . " p

@@ -27,7 +27,7 @@
  * @var $tplSetting TemplateSettings
  */
 /** TPL_SETTINGS ARRAY */
-$tpl_settings['TEMPLATE_NAME'] = 'Indianapolis EMS';
+$tpl_settings['TEMPLATE_NAME'] = 'Responsive Classic';
 
 //$tpl_settings['COLUMN_LEFT_STATUS'] = '1';
 //$tpl_settings['COLUMN_RIGHT_STATUS'] = '1';

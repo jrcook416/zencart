@@ -26,9 +26,7 @@ if (!isset($flag_disable_footer) || !$flag_disable_footer) {
             <li><a href="<?= HTTP_SERVER . DIR_WS_CATALOG ?>"><?= HEADER_TITLE_CATALOG ?></a></li>
 <?php
     if ($tplSetting->EZPAGES_STATUS_FOOTER === '1' || ($tplSetting->EZPAGES_STATUS_FOOTER === '2' && zen_is_whitelisted_admin_ip())) {
-?>
-            <li><?php require $template->get_template_dir('tpl_ezpages_bar_footer.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_ezpages_bar_footer.php'; ?></li>
-<?php
+        require $template->get_template_dir('tpl_ezpages_bar_footer.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_ezpages_bar_footer.php';
     }
 ?>
         </ul>
@@ -45,7 +43,7 @@ if (!isset($flag_disable_footer) || !$flag_disable_footer) {
 <?php
     if ($tplSetting->SHOW_FOOTER_IP === '1') {
 ?>
-<div id="siteinfoIP"><?= TEXT_YOUR_IP_ADDRESS . '  ' . $_SERVER['REMOTE_ADDR'] ?></div>
+<div id="siteinfoIP"><?= TEXT_YOUR_IP_ADDRESS . ' ' . $_SERVER['REMOTE_ADDR'] ?></div>
 <?php
     }
 ?>

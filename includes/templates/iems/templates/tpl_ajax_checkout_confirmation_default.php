@@ -56,7 +56,6 @@
   }
 ?>
 
-<br class="clearBoth">
 </div>
 
 <?php
@@ -82,20 +81,14 @@
   }
 ?>
 <br class="clearBoth">
-<hr>
-<?php
-// always show comments
-//  if ($order->info['comments']) {
-?>
+
+<div class="group" id="order-comments">
 
 <h2 id="checkoutConfirmDefaultHeadingComments"><?php echo HEADING_ORDER_COMMENTS; ?></h2>
 <div class="buttonRow forward"><?php echo  '<a href="' . zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL') . '">' . zen_image_button(BUTTON_IMAGE_EDIT_SMALL, BUTTON_EDIT_SMALL_ALT) . '</a>'; ?></div>
 <div><?php echo (empty($order->info['comments']) ? NO_COMMENTS_TEXT : nl2br(zen_output_string_protected($order->info['comments']), false) . zen_draw_hidden_field('comments', $order->info['comments'])); ?></div>
-<br class="clearBoth">
-<?php
-//  }
-?>
-<hr>
+
+</div>
 
 <h2 id="checkoutConfirmDefaultHeadingCart"><?php echo HEADING_PRODUCTS; ?></h2>
 
@@ -158,7 +151,7 @@
       </tr>
 <?php  }  // end for loopthru all products ?>
       </table>
-      <hr>
+
 
 <?php
   if (!empty(zen_config('MODULE_ORDER_TOTAL_INSTALLED'))) {
@@ -223,3 +216,9 @@ if (isset ($_SESSION['shipping']['extras']) && is_array ($_SESSION['shipping']['
 <div class="buttonRow back"><?php echo '<strong>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</strong>' . '<br>' . TEXT_CONTINUE_CHECKOUT_PROCEDURE; ?></div>
 
 </div>
+<script>
+    $(document).ready(function () {
+        // $(window).scrollTop(0);
+        $("html, body").animate({ scrollTop: 0 }, "fast");
+    });
+</script>

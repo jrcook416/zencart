@@ -18,10 +18,11 @@
 <?php if ($messageStack->size('checkout_address') > 0) echo $messageStack->output('checkout_address'); ?>
 
 <h2 id="checkoutPayAddressDefaultAddress"><?php echo TITLE_PAYMENT_ADDRESS; ?></h2>
-
+<div class="instructions group">
 <address class="back"><?php echo zen_address_label($_SESSION['customer_id'], $_SESSION['billto'], true, ' ', '<br>'); ?></address>
-<div class="instructions"><?php echo TEXT_SELECTED_PAYMENT_DESTINATION; ?></div>
-<br class="clearBoth">
+<?php echo TEXT_SELECTED_PAYMENT_DESTINATION; ?>
+</div>
+
 
 <?php
      if ($addresses_count < (int)zen_config('MAX_ADDRESS_BOOK_ENTRIES')) {
@@ -54,12 +55,5 @@
 
 <div class="buttonRow back"><?php echo '<strong>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</strong>' . '<br>' . TEXT_CONTINUE_CHECKOUT_PROCEDURE; ?></div>
 
-<?php
-  if ($process == true) {
-?>
-<div class="buttonRow back"><?php echo '<a href="' . zen_href_link(FILENAME_CHECKOUT_PAYMENT_ADDRESS, '', 'SSL') . '">' . zen_image_button(BUTTON_IMAGE_BACK, BUTTON_BACK_ALT) . '</a>'; ?></div>
-
-<?php
-  }
-?>
+<div class="buttonRow back clearBoth"><?php echo zen_back_link() . zen_image_button(BUTTON_IMAGE_BACK, BUTTON_BACK_ALT) . '</a>'; ?></div>
 </div>

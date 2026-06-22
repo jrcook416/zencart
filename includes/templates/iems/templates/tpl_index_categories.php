@@ -9,7 +9,7 @@
  * @copyright Copyright 2003-2022 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: DrByte 2020 Dec 29 Modified in v1.5.8-alpha $
+ * @version $Id: DrByte 2020 Dec 25 Modified in v1.5.8-alpha $
  */
 ?>
 <div class="centerColumn" id="indexCategories">
@@ -32,6 +32,8 @@
 
 <?php } else { //show_welcome ?>
 
+<div id="cat-top" class="group">
+<div id="cat-left" class="back">
 <h1 id="indexCategoriesHeading"><?php echo $current_categories_name; ?></h1>
 <?php } ?>
 
@@ -40,18 +42,37 @@ if ($tplSetting->PRODUCT_LIST_CATEGORIES_IMAGE_STATUS_TOP === 'true') {
 // categories_image
   if ($categories_image = zen_get_categories_image($current_category_id)) {
 ?>
+
 <div id="categoryImgListing" class="categoryImg"><?php echo zen_image(DIR_WS_IMAGES . $categories_image, '', (int)$tplSetting->SUBCATEGORY_IMAGE_TOP_WIDTH, (int)$tplSetting->SUBCATEGORY_IMAGE_TOP_HEIGHT); ?></div>
+
+
 <?php
   }
 } // categories_image
 ?>
 
 <?php
+if ($show_welcome != true) { ?>
+</div>
+<?php } ?>
+
+
+
+
+<?php
 // categories_description
     if ($current_categories_description != '') {
 ?>
 <div id="categoryDescription" class="catDescContent"><?php echo $current_categories_description;  ?></div>
+<br class="clearBoth">
 <?php } // categories_description ?>
+
+<?php
+if ($show_welcome != true) { ?>
+</div>
+<?php } ?>
+
+
 <!-- BOF: Display grid of available sub-categories, if any -->
 <?php
   if ((int)$tplSetting->PRODUCT_LIST_CATEGORY_ROW_STATUS === 0) {

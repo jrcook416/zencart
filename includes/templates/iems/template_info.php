@@ -10,10 +10,10 @@
  * picaflor-azul.com, Picaflor Responsive Classic
  */
 
-$template_name = 'Indianapolis EMS Template';
+$template_name = 'Responsive Classic Template';
 $template_version = 'Version 1.0';
-$template_author = 'Jeremiah Cook for IEMS, (c) 2026, based on work by Anne, www.picaflor-azul.com (c) 2015';
-$template_description = 'This HTML5 template, based on the Responsive Classic Template, is mobile friendly and uses contemporary Responsive CSS to allow sharing of a single template across multiple device types.  It uses PHP Mobile Detect to serve up the optimized layout based on device. It allows the designer to implement device-specific php, jquery, javascript or ajax.';
+$template_author = 'Anne, www.picaflor-azul.com (c) 2015';
+$template_description = 'This HTML5 template is mobile friendly and uses contemporary Responsive CSS to allow sharing of a single template across multiple device types.  It uses PHP Mobile Detect to serve up the optimized layout based on device. It allows the designer to implement device-specific php, jquery, javascript or ajax.';
 $template_screenshot = 'scr_responsive_classic.jpg';
 
 // -----

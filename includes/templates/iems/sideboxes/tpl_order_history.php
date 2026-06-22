@@ -14,10 +14,11 @@ $content .= '<ul class="list-links orderHistList">' . "\n" ;
 foreach ($customer_orders as $row) {
   $content .= '
 <li>
-<a href="' . zen_href_link(zen_get_info_page($row['id']), 'products_id=' . $row['id']) . '">' . $row['name'] . '</a>&nbsp;&nbsp;
-<a href="' . zen_href_link($_GET['main_page'], zen_get_all_get_params(['action']) . 'action=cust_order&pID=' . $row['id']) . '">' . zen_image($template->get_template_dir(ICON_IMAGE_TINYCART, DIR_WS_TEMPLATE, $current_page_base,'images/icons'). '/' . ICON_IMAGE_TINYCART, ICON_TINYCART_ALT) . '</a>
+<a href="' . zen_href_link(zen_get_info_page($row['id']), 'products_id=' . $row['id']) . '">' . $row['name'] . '</a>
+<a href="' . zen_href_link($_GET['main_page'], zen_get_all_get_params(['action']) . 'action=cust_order&pID=' . $row['id']) . '"><i class="fa-solid fa-cart-arrow-down"></i></a>
 </li>
 ';
+
   }
 $content .= '</ul>' . "\n" ;
 $content .= '</div>';

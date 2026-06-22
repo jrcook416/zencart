@@ -41,20 +41,19 @@ if (is_array($list_box_contents)) {
             echo '<div class="' . $col['wrap_with_classes'] . '">';
         }
 
-      $c_params = "";
-      if (isset($col['params'])) $c_params .= ' ' . (string)$col['params'];
-      if (isset($col['text'])) {
+        $c_params = "";
+        if (isset($col['params'])) $c_params .= ' ' . (string)$col['params'];
+        if (isset($col['text'])) {
             echo '<div' . $c_params . '>' . $col['text'] .  '</div>';
         }
 
         if (!empty($col['wrap_with_classes'])) {
             echo '</div>';
-      }
-      echo PHP_EOL;
+        }
+        echo PHP_EOL;
     }
 ?>
 </div>
-<br class="clearBoth">
 
 <?php
   }

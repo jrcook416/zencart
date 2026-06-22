@@ -17,10 +17,8 @@
 ?>
 <?php if (!empty($var_linksList)) { ?>
 <div id="navEZPagesTop">
-  <ul>
 <?php for ($i=1, $n=sizeof($var_linksList); $i<=$n; $i++) {  ?>
-    <li><a href="<?php echo $var_linksList[$i]['link']; ?>"><?php echo $var_linksList[$i]['name']; ?></a></li>
+  <a href="<?php echo $var_linksList[$i]['link']; ?>"><?php echo $var_linksList[$i]['name']; ?></a><?php echo ($i < $n ? $tplSetting->EZPAGES_SEPARATOR_HEADER : '') . "\n"; ?>
 <?php } // end FOR loop ?>
-  </ul>
 </div>
 <?php } ?>

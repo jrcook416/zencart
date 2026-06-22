@@ -11,10 +11,8 @@
  * @version $Id: DrByte 2023 Aug 01 Modified in v2.0.0-alpha1 $
  */
 ?>
-<?php
-  if (!isset($display_as_mobile)) $display_as_mobile = ($detect->isMobile() && !$detect->isTablet() || $_SESSION['layoutType'] == 'mobile' or  $detect->isTablet() || $_SESSION['layoutType'] == 'tablet');
-?>
-<div class="centerColumn group" id="accountDefault">
+
+<div class="centerColumn" id="accountDefault">
 
 <h1 id="accountDefaultHeading"><?php echo HEADING_TITLE; ?></h1>
 <?php if ($messageStack->size('account') > 0) echo $messageStack->output('account'); ?>
@@ -22,7 +20,7 @@
 <?php
     if (!empty($ordersArray)) {
   ?>
-<p class="forward"><?php echo '<a class="show-all" href="' . zen_href_link(FILENAME_ACCOUNT_HISTORY, '', 'SSL') . '">' . OVERVIEW_SHOW_ALL_ORDERS . '</a>'; ?></p>
+<p class="forward"><?php echo '<a href="' . zen_href_link(FILENAME_ACCOUNT_HISTORY, '', 'SSL') . '">' . OVERVIEW_SHOW_ALL_ORDERS . '</a>'; ?></p>
 <br class="clearBoth">
 <h2 id="previous-orders"><?php echo OVERVIEW_PREVIOUS_ORDERS; ?></h2>
 <table id="prevOrders">
@@ -32,18 +30,18 @@
     <th scope="col"><?php echo TABLE_HEADING_SHIPPED_TO; ?></th>
     <th scope="col"><?php echo TABLE_HEADING_STATUS; ?></th>
     <th scope="col"><?php echo TABLE_HEADING_TOTAL; ?></th>
-    <th scope="col" class="alignCenter"><?php echo TABLE_HEADING_VIEW; ?></th>
+    <th scope="col"><?php echo TABLE_HEADING_VIEW; ?></th>
   </tr>
 <?php
   foreach($ordersArray as $orders) {
 ?>
   <tr>
-    <td class="accountOrderDate"><?php if ($display_as_mobile) { echo '<b class="hide">' . TABLE_HEADING_DATE . '&#58;&nbsp;&nbsp;</b>'; }?><?php echo zen_date_short($orders['date_purchased']); ?></td>
-    <td class="accountOrderId"><?php if ($display_as_mobile) { echo '<b class="hide">' . TABLE_HEADING_ORDER_NUMBER . '&#58;&nbsp;&nbsp;</b>'; }?><?php echo TEXT_NUMBER_SYMBOL . $orders['orders_id']; ?></td>
-    <td class="accountOrderAddress"><?php if ($display_as_mobile) { echo '<b class="hide">' . TABLE_HEADING_SHIPPED_TO . '&#58;&nbsp;&nbsp;</b>'; }?><address><?php echo zen_output_string_protected($orders['order_name']) . '<br>' . $orders['order_country']; ?></address></td>
-    <td class="accountOrderStatus"><?php if ($display_as_mobile) { echo '<b class="hide">' . TABLE_HEADING_STATUS . '&#58;&nbsp;&nbsp;</b>'; }?><?php echo $orders['orders_status_name']; ?></td>
-    <td class="accountOrderTotal alignRight"><?php if ($display_as_mobile) { echo '<b class="hide">' . TABLE_HEADING_TOTAL . '&#58;&nbsp;&nbsp;</b>'; }?><?php echo $orders['order_total']; ?></td>
-    <td class="accountOrderViewButton alignCenter"><?php echo '<a href="' . zen_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $orders['orders_id'], 'SSL') . '"> ' . zen_image_button(BUTTON_IMAGE_VIEW_SMALL, BUTTON_VIEW_SMALL_ALT) . '</a>'; ?></td>
+    <td class="accountOrderDate"><?php echo zen_date_short($orders['date_purchased']); ?></td>
+    <td class="accountOrderId"><?php echo TEXT_NUMBER_SYMBOL . $orders['orders_id']; ?></td>
+    <td class="accountAddress"><address><?php echo zen_output_string_protected($orders['order_name']) . '<br>' . $orders['order_country']; ?></address></td>
+    <td class="accountOrderStatus"><?php echo $orders['orders_status_name']; ?></td>
+    <td class="accountOrderTotal alignRight"><?php echo $orders['order_total']; ?></td>
+    <td class="accountOrderViewButton alignRight"><?php echo '<a href="' . zen_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $orders['orders_id'], 'SSL') . '"> ' . zen_image_button(BUTTON_IMAGE_VIEW_SMALL, BUTTON_VIEW_SMALL_ALT) . '</a>'; ?></td>
   </tr>
 
 <?php
@@ -64,17 +62,17 @@
 
 
 <?php
-  if ((int)ACCOUNT_NEWSLETTER_STATUS > 0 or CUSTOMERS_PRODUCTS_NOTIFICATION_STATUS !='0') {
+  if ((int)zen_config('ACCOUNT_NEWSLETTER_STATUS') > 0 || zen_config('CUSTOMERS_PRODUCTS_NOTIFICATION_STATUS') !== '0') {
 ?>
 <h2><?php echo EMAIL_NOTIFICATIONS_TITLE; ?></h2>
 <ul id="myAccountNotify" class="list">
 <?php
-  if ((int)ACCOUNT_NEWSLETTER_STATUS > 0) {
+  if ((int)zen_config('ACCOUNT_NEWSLETTER_STATUS') > 0) {
 ?>
 <li><?php echo ' <a href="' . zen_href_link(FILENAME_ACCOUNT_NEWSLETTERS, '', 'SSL') . '">' . EMAIL_NOTIFICATIONS_NEWSLETTERS . '</a>'; ?></li>
 <?php } //endif newsletter unsubscribe ?>
 <?php
-  if (CUSTOMERS_PRODUCTS_NOTIFICATION_STATUS == '1') {
+  if (zen_config('CUSTOMERS_PRODUCTS_NOTIFICATION_STATUS') === '1') {
 ?>
 <li><?php echo ' <a href="' . zen_href_link(FILENAME_ACCOUNT_NOTIFICATIONS, '', 'SSL') . '">' . EMAIL_NOTIFICATIONS_PRODUCTS . '</a>'; ?></li>
 

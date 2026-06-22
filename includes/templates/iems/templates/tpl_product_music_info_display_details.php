@@ -17,7 +17,7 @@ $display_product_music_artist = ($flag_show_product_music_info_artist === '1' &&
 $display_product_music_genre = ($flag_show_product_music_info_genre === '1' && !empty($products_music_genre_name));
 if ($display_product_model || $display_product_weight || $display_product_quantity || $display_product_manufacturer || $display_product_music_artist || $display_product_music_genre) {
 ?>
-<ul id="productDetailsList">
+<ul id="productDetailsList" class="floatingBox back">
     <?= (($display_product_model === true) ? '<li>' . TEXT_PRODUCT_MODEL . $products_model . '</li>' : '') . "\n" ?>
     <?= (($display_product_weight === true) ? '<li>' . TEXT_PRODUCT_WEIGHT .  $products_weight . TEXT_PRODUCT_WEIGHT_UNIT . '</li>'  : '') . "\n" ?>
     <?= (($display_product_quantity === true) ? '<li>' . $products_quantity . TEXT_PRODUCT_QUANTITY . '</li>'  : '') . "\n" ?>
@@ -25,5 +25,6 @@ if ($display_product_model || $display_product_weight || $display_product_quanti
     <?= (($display_product_music_artist === true) ? '<li>' . TEXT_PRODUCT_ARTIST . $products_artist_name . '</li>' : '') . "\n" ?>
     <?= (($display_product_music_genre === true) ? '<li>' . TEXT_PRODUCT_MUSIC_GENRE . $products_music_genre_name . '</li>' : '') . "\n" ?>
 </ul>
+<br class="clearBoth">
 <?php
 }

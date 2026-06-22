@@ -12,12 +12,14 @@
  */
 ?>
 <!--bof Media Manager -->
-<div id="mediaManager" class="productMusic group">
+<div id="mediaManager" class="productMusic">
 <?php
 /**
  * display the products related media clips
  */
 require $template->get_template_dir('/tpl_modules_media_manager.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_media_manager.php';
 ?>
+    <br class="clearBoth">
 </div>
+<br class="clearBoth">
 <!--eof Media Manager -->

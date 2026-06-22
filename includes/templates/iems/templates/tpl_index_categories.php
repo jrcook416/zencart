@@ -9,18 +9,18 @@
  * @copyright Copyright 2003-2022 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: DrByte 2020 Dec 25 Modified in v1.5.8-alpha $
+ * @version $Id: DrByte 2020 Dec 29 Modified in v1.5.8-alpha $
  */
 ?>
 <div class="centerColumn" id="indexCategories">
 <?php if ($show_welcome == true) { ?>
 <h1 id="indexCategoriesHeading"><?php echo HEADING_TITLE_NESTED; ?></h1>
 
-<?php if (SHOW_CUSTOMER_GREETING == 1) { ?>
+<?php if ((int)$tplSetting->SHOW_CUSTOMER_GREETING === 1) { ?>
 <h2 class="greeting"><?php echo zen_customer_greeting(); ?></h2>
 <?php } ?>
 
-<?php if (DEFINE_MAIN_PAGE_STATUS >= 1 and DEFINE_MAIN_PAGE_STATUS <= 2) { ?>
+<?php if ((int)$tplSetting->DEFINE_MAIN_PAGE_STATUS >= 1 && (int)$tplSetting->DEFINE_MAIN_PAGE_STATUS <= 2) { ?>
 <div id="indexCategoriesMainContent" class="content"><?php
 /**
  * require the html_define for the index/categories page
@@ -32,50 +32,29 @@
 
 <?php } else { //show_welcome ?>
 
-<div id="cat-top" class="group">
-<div id="cat-left" class="back">
 <h1 id="indexCategoriesHeading"><?php echo $current_categories_name; ?></h1>
 <?php } ?>
 
 <?php
-if (PRODUCT_LIST_CATEGORIES_IMAGE_STATUS_TOP == 'true') {
+if ($tplSetting->PRODUCT_LIST_CATEGORIES_IMAGE_STATUS_TOP === 'true') {
 // categories_image
   if ($categories_image = zen_get_categories_image($current_category_id)) {
 ?>
-
-<div id="categoryImgListing" class="categoryImg"><?php echo zen_image(DIR_WS_IMAGES . $categories_image, '', SUBCATEGORY_IMAGE_TOP_WIDTH, SUBCATEGORY_IMAGE_TOP_HEIGHT); ?></div>
-
-
+<div id="categoryImgListing" class="categoryImg"><?php echo zen_image(DIR_WS_IMAGES . $categories_image, '', (int)$tplSetting->SUBCATEGORY_IMAGE_TOP_WIDTH, (int)$tplSetting->SUBCATEGORY_IMAGE_TOP_HEIGHT); ?></div>
 <?php
   }
 } // categories_image
 ?>
 
 <?php
-if ($show_welcome != true) { ?>
-</div>
-<?php } ?>
-
-
-
-
-<?php
 // categories_description
     if ($current_categories_description != '') {
 ?>
 <div id="categoryDescription" class="catDescContent"><?php echo $current_categories_description;  ?></div>
-<br class="clearBoth">
 <?php } // categories_description ?>
-
-<?php
-if ($show_welcome != true) { ?>
-</div>
-<?php } ?>
-
-
 <!-- BOF: Display grid of available sub-categories, if any -->
 <?php
-  if (PRODUCT_LIST_CATEGORY_ROW_STATUS == 0) {
+  if ((int)$tplSetting->PRODUCT_LIST_CATEGORY_ROW_STATUS === 0) {
     // do nothing
   } else {
     // display subcategories

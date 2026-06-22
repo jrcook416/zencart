@@ -14,7 +14,7 @@
         echo $messageStack->output('login');
     } ?>
 
-    <?php if (USE_SPLIT_LOGIN_MODE == 'True' || $ec_button_enabled) { ?>
+    <?php if ($tplSetting->USE_SPLIT_LOGIN_MODE === 'True' || $ec_button_enabled) { ?>
         <!--BOF PPEC split login- DO NOT REMOVE-->
         <fieldset class="floatingBox back">
             <legend><?php echo HEADING_NEW_CUSTOMER_SPLIT; ?></legend>
@@ -29,12 +29,10 @@
             <?php // ** END PAYPAL EXPRESS CHECKOUT ** ?>
 
             <div class="information"><?php echo TEXT_NEW_CUSTOMER_POST_INTRODUCTION_SPLIT; ?></div>
-          
             <?php echo zen_draw_form('create', zen_href_link(FILENAME_CREATE_ACCOUNT, (isset($_GET['gv_no']) ? '&gv_no=' . preg_replace('/[^0-9.,%]/', '', $_GET['gv_no']) : ''), 'SSL')); ?>
 
             <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_CREATE_ACCOUNT, BUTTON_CREATE_ACCOUNT_ALT, 'name="registrationButton"'); ?></div>
-            <?php echo '</form>';?>
-                                                                     
+            <?php echo '</form>'; ?>
         </fieldset>
 
         <fieldset class="floatingBox forward">
@@ -43,11 +41,11 @@
             <?php echo zen_draw_form('loginForm', zen_href_link(FILENAME_LOGIN, 'action=process' . (isset($_GET['gv_no']) ? '&gv_no=' . preg_replace('/[^0-9.,%]/', '', $_GET['gv_no']) : ''), 'SSL'), 'post', 'id="loginForm"'); ?>
 
             <label class="inputLabel" for="login-email-address"><?php echo ENTRY_EMAIL_ADDRESS; ?></label>
-            <?php echo zen_draw_input_field('email_address', '', 'size="18" id="login-email-address" autofocus autocomplete="username" placeholder="' . ENTRY_EMAIL_ADDRESS_TEXT . '"' . ((int)ENTRY_EMAIL_ADDRESS_MIN_LENGTH > 0 ? ' required' : ''), 'email'); ?>
+            <?php echo zen_draw_input_field('email_address', '', 'size="18" id="login-email-address" autofocus autocomplete="username" placeholder="' . ENTRY_EMAIL_ADDRESS_TEXT . '"' . ((int)zen_config('ENTRY_EMAIL_ADDRESS_MIN_LENGTH') > 0 ? ' required' : ''), 'email'); ?>
             <br class="clearBoth">
 
             <label class="inputLabel" for="login-password"><?php echo ENTRY_PASSWORD; ?></label>
-            <?php echo zen_draw_password_field('password', '', 'size="18" id="login-password" autocomplete="current-password" placeholder="' . ENTRY_REQUIRED_SYMBOL . '"' . ((int)ENTRY_PASSWORD_MIN_LENGTH > 0 ? ' required' : '')); ?>
+            <?php echo zen_draw_password_field('password', '', 'size="18" id="login-password" autocomplete="current-password" placeholder="' . ENTRY_REQUIRED_SYMBOL . '"' . ((int)zen_config('ENTRY_PASSWORD_MIN_LENGTH') > 0 ? ' required' : '')); ?>
             <br class="clearBoth">
 
             <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_LOGIN, BUTTON_LOGIN_ALT); ?></div>
@@ -71,11 +69,11 @@
             <legend><?php echo HEADING_RETURNING_CUSTOMER; ?></legend>
 
             <label class="inputLabel" for="login-email-address"><?php echo ENTRY_EMAIL_ADDRESS; ?></label>
-            <?php echo zen_draw_input_field('email_address', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_email_address', '40') . ' id="login-email-address" autofocus autocomplete="username" placeholder="' . ENTRY_EMAIL_ADDRESS_TEXT . '"' . ((int)ENTRY_EMAIL_ADDRESS_MIN_LENGTH > 0 ? ' required' : ''), 'email'); ?>
+            <?php echo zen_draw_input_field('email_address', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_email_address', '40') . ' id="login-email-address" autofocus autocomplete="username" placeholder="' . ENTRY_EMAIL_ADDRESS_TEXT . '"' . ((int)zen_config('ENTRY_EMAIL_ADDRESS_MIN_LENGTH') > 0 ? ' required' : ''), 'email'); ?>
             <br class="clearBoth">
 
             <label class="inputLabel" for="login-password"><?php echo ENTRY_PASSWORD; ?></label>
-            <?php echo zen_draw_password_field('password', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_password', 40) . ' id="login-password" autocomplete="current-password" placeholder="' . ENTRY_REQUIRED_SYMBOL . '"' . ((int)ENTRY_PASSWORD_MIN_LENGTH > 0 ? ' required' : '')); ?>
+            <?php echo zen_draw_password_field('password', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_password', 40) . ' id="login-password" autocomplete="current-password" placeholder="' . ENTRY_REQUIRED_SYMBOL . '"' . ((int)zen_config('ENTRY_PASSWORD_MIN_LENGTH') > 0 ? ' required' : '')); ?>
             <br class="clearBoth">
             <?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?>
         </fieldset>
@@ -91,7 +89,7 @@
             <div class="information"><?php echo TEXT_NEW_CUSTOMER_INTRODUCTION; ?></div>
             <?php require($template->get_template_dir('tpl_modules_create_account.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_create_account.php'); ?>
         </fieldset>
-        <?php echo "This is a test."; ?>
+
         <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_SUBMIT, BUTTON_SUBMIT_ALT); ?></div>
         <?php echo '</form>'; ?>
         <!--EOF normal login-->

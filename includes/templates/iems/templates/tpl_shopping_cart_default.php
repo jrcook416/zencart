@@ -8,11 +8,8 @@
  * @copyright Copyright 2003-2025 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: torvista 2025 Oct 19 Modified in v2.2.0 $
+ * @version $Id: DrByte 2025 Oct 22 Modified in v2.2.0 $
  */
-?>
-<?php
-  if (!isset($display_as_mobile)) $display_as_mobile = ($detect->isMobile() && !$detect->isTablet() || $_SESSION['layoutType'] == 'mobile' or $detect->isTablet() || $_SESSION['layoutType'] == 'tablet');
 ?>
 <div class="centerColumn" id="shoppingCartDefault">
 <?php
@@ -41,11 +38,12 @@
 
 <?php if (!empty($totalsDisplay)) { ?>
   <div class="cartTotalsDisplay important"><?php echo $totalsDisplay; ?></div>
+  <br class="clearBoth">
 <?php } ?>
 
 <?php  if ($flagAnyOutOfStock) { ?>
 
-<?php    if (STOCK_ALLOW_CHECKOUT == 'true') {  ?>
+<?php    if (zen_config('STOCK_ALLOW_CHECKOUT') === 'true') {  ?>
 
 <div class="messageStackError"><?php echo OUT_OF_STOCK_CAN_CHECKOUT; ?></div>
 
@@ -69,11 +67,6 @@
   foreach ($productArray as $product) {
 ?>
      <tr class="<?php echo $product['rowClass']; ?>">
-
-<?php if ( $detect->isMobile() && !$detect->isTablet() || $_SESSION['layoutType'] == 'mobile' ) {
-      //
-      } else { ?>
-
        <td class="cartQuantity">
 <?php
   if ($product['flagShowFixedQuantity']) {
@@ -81,25 +74,29 @@
   } else {
     echo $product['quantityField'];
   }
-  echo !empty($product['flagStockCheck']) ? '<span class="alert bold">' . $product['flagStockCheck'] . '</span><br>' : '';
+  echo !empty($product['flagStockCheck']) ? '<br><span class="alert bold">' . $product['flagStockCheck'] . '</span><br>' : '';
   echo !empty($product['showMinUnits']) ? $product['showMinUnits'] . '<br>' : '';
-  ?>
+?>
        </td>
-
-       <td class="cartQuantityUpdate"><?php echo $product['buttonUpdate']; ?></td>
-<?php } ?>
-
-
-
+       <td class="cartQuantityUpdate">
+<?php
+  if ($product['buttonUpdate'] == '') {
+    echo '' ;
+  } else {
+    echo $product['buttonUpdate'];
+  }
+?>
+       </td>
        <td class="cartProductDisplay">
-
-<a href="<?= $product['linkProductsName'] ?>">
-    <span class="cartImage back"><?= $product['productsImage'] ?></span>
-    <span class="cartProdTitle"><?= $product['productsName'] .
-        (!empty($product['flagStockCheck']) ? '<span class="alert bold">' . $product['flagStockCheck'] . '</span>' : '') ?>
+           <a href="<?= $product['linkProductsName'] ?>">
+               <span class="cartImage back"><?= $product['productsImage'] ?></span>
+               <span class="cartProdTitle"><?= $product['productsName'] .
+                   (!empty($product['flagStockCheck']) ? '<span class="alert bold">' . $product['flagStockCheck'] . '</span>' : '') ?>
     </span>
-</a>
+           </a>
 <br class="clearBoth">
+
+
 <?php
   echo $product['attributeHiddenField'];
   if (isset($product['attributes']) && is_array($product['attributes'])) {
@@ -121,45 +118,26 @@
   }
 ?>
        </td>
-
-<?php if ( $detect->isMobile() && !$detect->isTablet() || $_SESSION['layoutType'] == 'mobile' ) { ?>
-
-       <td class="cartQuantity">
-<?php
-  if ($product['flagShowFixedQuantity']) {
-    echo $product['showFixedQuantityAmount'] . '<br>' . (!empty($product['flagStockCheck']) ? '<span class="alert bold">' . $product['flagStockCheck'] . '</span><br>' : '') . '<br>' . $product['showMinUnits'];
-  } else {
-    echo $product['quantityField'] . '<br>' . (!empty($product['flagStockCheck']) ? '<span class="alert bold">' . $product['flagStockCheck'] . '</span><br>' : '') . '<br>' . $product['showMinUnits'];
-  }
-?>
-       </td>
-       <td class="cartQuantityUpdate"><?php echo $product['buttonUpdate']; ?></td>
-
-<?php  } else {
-
-  }  ?>
-
-
-       <td class="cartUnitDisplay"><?php if ($display_as_mobile) { echo '<b class="hide">' . TABLE_HEADING_PRICE . '&#58;&nbsp;&nbsp;</b>'; } ?><?php echo $product['productsPriceEach']; ?></td>
-       <td class="cartTotalDisplay"><?php if ($display_as_mobile) { echo '<b class="hide">' . TABLE_HEADING_TOTAL . '&#58;&nbsp;&nbsp;</b>'; } ?><?php echo $product['productsPrice']; ?></td>
+       <td class="cartUnitDisplay"><?php echo $product['productsPriceEach']; ?></td>
+       <td class="cartTotalDisplay"><?php echo $product['productsPrice']; ?></td>
        <td class="cartRemoveItemDisplay">
 <?php
   if ($product['buttonDelete']) {
 ?>
-         <a href="<?php echo zen_href_link(FILENAME_SHOPPING_CART, 'action=remove_product&product_id=' . $product['id']); ?>"><?php echo zen_image($template->get_template_dir(ICON_IMAGE_TRASH, DIR_WS_TEMPLATE, $current_page_base,'images/icons'). '/' . ICON_IMAGE_TRASH, ICON_TRASH_ALT); ?></a>
+           <a href="<?php echo zen_href_link(FILENAME_SHOPPING_CART, 'action=remove_product&product_id=' . $product['id']); ?>"><?php echo zen_image($template->get_template_dir(ICON_IMAGE_TRASH, DIR_WS_TEMPLATE, $current_page_base,'images/icons'). '/' . ICON_IMAGE_TRASH, ICON_TRASH_ALT); ?></a>
 <?php
   }
   if ($product['checkBoxDelete'] ) {
     echo zen_draw_checkbox_field('cart_delete[]', $product['id'], false, 'aria-label="' . ARIA_DELETE_ITEM_FROM_CART . '"');
   }
 ?>
-      </td>
+</td>
      </tr>
 <?php
   } // end foreach ($productArray as $product)
 ?>
        <!-- Finished loop through all products /-->
-</table>
+      </table>
 
 <div id="cartSubTotal"><?php echo SUB_TITLE_SUB_TOTAL; ?> <?php echo $cartShowTotal; ?></div>
 <br class="clearBoth">
@@ -169,7 +147,7 @@
 <div class="buttonRow back"><?php echo zen_back_link() . zen_image_button(BUTTON_IMAGE_CONTINUE_SHOPPING, BUTTON_CONTINUE_SHOPPING_ALT) . '</a>'; ?></div>
 <?php
 // show update cart button
-  if (SHOW_SHOPPING_CART_UPDATE == 2 or SHOW_SHOPPING_CART_UPDATE == 3) {
+  if ((int)$tplSetting->SHOW_SHOPPING_CART_UPDATE === 2 || (int)$tplSetting->SHOW_SHOPPING_CART_UPDATE === 3) {
 ?>
 <div class="buttonRow back"><?php echo zen_image_submit(ICON_IMAGE_UPDATE, ICON_UPDATE_ALT); ?></div>
 <?php
@@ -183,7 +161,7 @@
 
 <br class="clearBoth">
 <?php
-    if (SHOW_SHIPPING_ESTIMATOR_BUTTON == '1') {
+    if ($tplSetting->SHOW_SHIPPING_ESTIMATOR_BUTTON === '1') {
 ?>
 
 <div class="buttonRow back"><?php echo '<a href="javascript:popupWindow(\'' . zen_href_link(FILENAME_POPUP_SHIPPING_ESTIMATOR) . '\')">' .
@@ -194,14 +172,14 @@
 
 <!-- ** BEGIN PAYPAL EXPRESS CHECKOUT ** -->
 <?php  // the tpl_ec_button template only displays EC option if cart contents >0 and value >0
-if (defined('MODULE_PAYMENT_PAYPALWPP_STATUS') && MODULE_PAYMENT_PAYPALWPP_STATUS == 'True') {
+if (zen_config('MODULE_PAYMENT_PAYPALWPP_STATUS') === 'True') {
   include(DIR_FS_CATALOG . DIR_WS_MODULES . 'payment/paypal/tpl_ec_button.php');
 }
 ?>
 <!-- ** END PAYPAL EXPRESS CHECKOUT ** -->
 
 <?php
-      if (SHOW_SHIPPING_ESTIMATOR_BUTTON == '2') {
+      if ($tplSetting->SHOW_SHIPPING_ESTIMATOR_BUTTON === '2') {
 /**
  * load the shipping estimator code if needed
  */

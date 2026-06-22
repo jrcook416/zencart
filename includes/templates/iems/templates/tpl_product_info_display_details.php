@@ -20,7 +20,7 @@ $zco_notifier->notify('NOTIFY_PRODUCT_INFO_DISPLAY_DETAILS', [], $additional_det
 
 if ($display_product_model || $display_product_weight || $display_product_quantity || $display_product_manufacturer || count($additional_details) !== 0) {
 ?>
-<ul id="productDetailsList">
+<ul id="productDetailsList" class="floatingBox back">
     <?= (($display_product_model === true) ? '<li>' . TEXT_PRODUCT_MODEL . $products_model . '</li>' : '') . "\n" ?>
     <?= (($display_product_weight === true) ? '<li>' . TEXT_PRODUCT_WEIGHT .  $products_weight . TEXT_PRODUCT_WEIGHT_UNIT . '</li>'  : '') . "\n" ?>
     <?= (($display_product_quantity === true) ? '<li>' . $products_quantity . TEXT_PRODUCT_QUANTITY . '</li>'  : '') . "\n" ?>
@@ -31,5 +31,6 @@ if ($display_product_model || $display_product_weight || $display_product_quanti
     }
 ?>
 </ul>
+<br class="clearBoth">
 <?php
 }

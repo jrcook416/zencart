@@ -56,6 +56,7 @@
   }
 ?>
 
+<br class="clearBoth">
 </div>
 
 <?php
@@ -81,14 +82,20 @@
   }
 ?>
 <br class="clearBoth">
-
-<div class="group" id="order-comments">
+<hr>
+<?php
+// always show comments
+//  if ($order->info['comments']) {
+?>
 
 <h2 id="checkoutConfirmDefaultHeadingComments"><?php echo HEADING_ORDER_COMMENTS; ?></h2>
 <div class="buttonRow forward"><?php echo  '<a href="' . zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL') . '">' . zen_image_button(BUTTON_IMAGE_EDIT_SMALL, BUTTON_EDIT_SMALL_ALT) . '</a>'; ?></div>
 <div><?php echo (empty($order->info['comments']) ? NO_COMMENTS_TEXT : nl2br(zen_output_string_protected($order->info['comments']), false) . zen_draw_hidden_field('comments', $order->info['comments'])); ?></div>
-
-</div>
+<br class="clearBoth">
+<?php
+//  }
+?>
+<hr>
 
 <h2 id="checkoutConfirmDefaultHeadingCart"><?php echo HEADING_PRODUCTS; ?></h2>
 
@@ -96,7 +103,7 @@
 <br class="clearBoth">
 
 <?php  if ($flagAnyOutOfStock) { ?>
-<?php    if (STOCK_ALLOW_CHECKOUT == 'true') {  ?>
+<?php    if (zen_config('STOCK_ALLOW_CHECKOUT') === 'true') {  ?>
 <div class="messageStackError"><?php echo OUT_OF_STOCK_CAN_CHECKOUT; ?></div>
 <?php    } else { ?>
 <div class="messageStackError"><?php echo OUT_OF_STOCK_CANT_CHECKOUT; ?></div>
@@ -151,10 +158,10 @@
       </tr>
 <?php  }  // end for loopthru all products ?>
       </table>
-
+      <hr>
 
 <?php
-  if (MODULE_ORDER_TOTAL_INSTALLED) {
+  if (!empty(zen_config('MODULE_ORDER_TOTAL_INSTALLED'))) {
     $order_totals = $order_total_modules->process();
 ?>
 <div id="orderTotals"><?php $order_total_modules->output(); ?></div>
@@ -216,9 +223,3 @@ if (isset ($_SESSION['shipping']['extras']) && is_array ($_SESSION['shipping']['
 <div class="buttonRow back"><?php echo '<strong>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</strong>' . '<br>' . TEXT_CONTINUE_CHECKOUT_PROCEDURE; ?></div>
 
 </div>
-<script>
-    $(document).ready(function () {
-        // $(window).scrollTop(0);
-        $("html, body").animate({ scrollTop: 0 }, "fast");
-    });
-</script>

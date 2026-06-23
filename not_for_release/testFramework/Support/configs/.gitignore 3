@@ -1,0 +1,7 @@
+*.configure.php
+*.configure.php.example
+*.db_configure.php
+
+!configure.php.example
+!runner.configure.php
+!runner.main.configure.php

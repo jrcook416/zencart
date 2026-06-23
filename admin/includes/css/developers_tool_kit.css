@@ -1,0 +1,19 @@
+/*
+ * @copyright Copyright 2003-2024 Zen Cart Development Team
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: brittainmark 2023 Jul 21 Modified in v2.0.0-alpha1 $
+ */
+
+.dtk-highlite {font-weight: bold; color: rgb(255, 10, 5);}
+.dtk-foundline-multi {background-color: rgba(4, 211, 216, 0.12);}
+.dtk-foundline, .dtk-foundline-multi {
+    font-family: Verdana, sans-serif;
+    word-break: break-word;
+}
+.dtk-contextline {font-family: Verdana, sans-serif;}
+.dtk-linenum {font-family: Verdana, sans-serif;}
+.dataTableGroupChange {border-top: 2px solid #000 !important;}
+table.results {border:2px solid;}
+table.blank {width:100%;}
+table.constantlink {border:3px solid;}
+table.constantlink td {border:1px solid;}

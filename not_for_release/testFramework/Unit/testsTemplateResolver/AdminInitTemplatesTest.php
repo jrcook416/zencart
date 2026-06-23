@@ -55,7 +55,7 @@ class AdminInitTemplatesTest extends zcUnitTestCase
                 if (stripos($sql, 'FROM ' . TABLE_TEMPLATE_SELECT) !== false) {
                     return $this->makeQueryResult([[
                         'template_id' => 1,
-                        'template_dir' => 'iems',
+                        'template_dir' => 'responsive_classic',
                         'template_language' => 0,
                         'template_settings' => null,
                     ]]);

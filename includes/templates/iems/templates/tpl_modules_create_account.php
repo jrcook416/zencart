@@ -95,8 +95,7 @@ county_lookup();
 echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');?>
 <br class="clearBoth"> 
 <?php
-echo zen_draw_pull_down_menu('suburb', '', 'entry_suburb','id="suburb"', 'required'); ?>
-<br class="clearBoth">  
+echo zen_draw_pull_down_menu('suburb', '$unit_array', 'entry_suburb','id="suburb"', 'required'); ?> 
   }
 /**
 IEMS Edited Code Block -- Ending

@@ -73,14 +73,12 @@
 <?php
   if (zen_config('ACCOUNT_SUBURB') === 'true') {
 ?>
-
-<?php unit_lookup();>
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-<?php echo zen_draw_pull_down_menu('suburb', $unit_lookup, zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
-<br class="clearBoth">
-<?php
-  }
+<?php 
+unit_lookup();
+<?php echo zen_draw_pull_down_menu('suburb', $unit_array, '', 'entry_suburb','id="suburb"'); 
 ?>
+<br class="clearBoth">
 
 <label class="inputLabel" for="city"><?php echo ENTRY_CITY; ?></label>
 <?php echo zen_draw_input_field('city', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)zen_config('ENTRY_CITY_MIN_LENGTH') > 0 ? ' required' : '')); ?>

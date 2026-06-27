@@ -77,6 +77,7 @@
 <?php 
 unit_lookup();
 echo zen_draw_pull_down_menu('suburb', $unit_array, 'entry_suburb','id="suburb"'); 
+  }
 ?>
 <br class="clearBoth">
   

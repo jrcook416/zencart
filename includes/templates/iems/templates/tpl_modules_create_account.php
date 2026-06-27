@@ -31,11 +31,9 @@
 ?>
 
 <?php
-
 /**
 MODIFICATION - County and Unit identification are moving here in the IEMS specific template for work downstream. 
 **/
-<?php
   if (zen_config('ACCOUNT_SUBURB') === 'true') {
 ?>
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>

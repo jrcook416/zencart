@@ -64,7 +64,7 @@ jQuery(document).ready(function($) {
                     } else {
                         options = '<option value="">No units found for this county</option>';
                     }
-                    $('#unit').html(options);
+                    $('#suburb').html(options);
                 },
                 error: function() {
                     $('#suburb').html('<option value="">Error retrieving units</option>');

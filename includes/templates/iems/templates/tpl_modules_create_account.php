@@ -84,12 +84,13 @@ MODIFICATION - County and Unit identification are moving here in the IEMS specif
   if (zen_config('ACCOUNT_SUBURB') === 'true') {
 ?>
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-<?php
-/**
-IEMS Edited Code Block -- Beginning
-**/      
-unit_lookup();
-county_lookup();
+    <?php
+    /**
+    IEMS Edited Code Block -- Beginning
+    **/      
+        unit_lookup();
+        county_lookup();
+    ?>
 <label class="inputLabel" for="county"><?php echo ENTRY_COUNTY; ?></label>
 <?php 
 echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');?>

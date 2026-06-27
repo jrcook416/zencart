@@ -29,6 +29,52 @@
 <?php
   }
 ?>
+/**
+MODIFICATION - Adding an Ajax handler here to take care of changes in county and unit script.
+**/
+<script>
+jQuery(document).ready(function($) {
+    // Listen for the change event on the county dropdown
+    $('#county').on('change', function() {
+        var countyId = $(this).val();
+        
+        // Instantly reset the unit dropdown to a loading state
+        $('#unit').html('<option value="">Loading units...</option>');
+
+        if (countyId !== '') {
+            // Trigger Zen Cart AJAX request to our custom page handler
+            $.ajax({
+                url: 'index.php?main_page=get_units_ajax',
+                type: 'POST',
+                data: { 
+                    county_id: countyId,
+                    securityToken: '<?php echo $_SESSION['securityToken']; ?>' // Standard security precaution
+                },
+                dataType: 'json',
+                success: function(response) {
+                    var options = '<option value="">Select a Unit</option>';
+                    
+                    if (response.success && response.data.length > 0) {
+                        // Loop through returned JSON objects and build HTML strings
+                        $.each(response.data, function(index, unit) {
+                            options += '<option value="' + unit.id + '">' + unit.name + '</option>';
+                        });
+                    } else {
+                        options = '<option value="">No units found for this county</option>';
+                    }
+                    $('#unit').html(options);
+                },
+                error: function() {
+                    $('#unit').html('<option value="">Error retrieving units</option>');
+                }
+            });
+        } else {
+            // Reset to default if no county is chosen
+            $('#unit').html('<option value="">Select a Unit</option>');
+        }
+    });
+});
+</script>
 
 <?php
 /**

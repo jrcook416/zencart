@@ -11,7 +11,7 @@
  * @version $Id: DrByte 2021 Jun 14 Modified in v1.5.8-alpha $
  */
 ?>
-
+<?php unit_lookup();?>
 <?php if ($messageStack->size('create_account') > 0) echo $messageStack->output('create_account'); ?>
 <div class="alert forward"><?php echo FORM_REQUIRED_INFORMATION; ?></div>
 <br class="clearBoth">
@@ -75,7 +75,6 @@
 ?>
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
 <?php 
-unit_lookup();
 echo zen_draw_pull_down_menu('suburb', $unit_array, 'entry_suburb','id="suburb"', 'required'); 
   }
 ?>

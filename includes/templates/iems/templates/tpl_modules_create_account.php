@@ -76,7 +76,7 @@
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
 <?php 
 unit_lookup();
-<?php echo zen_draw_pull_down_menu('suburb', $unit_array, '', 'entry_suburb','id="suburb"'); 
+echo zen_draw_pull_down_menu('suburb', $unit_array, '', 'entry_suburb','id="suburb"'); 
 ?>
 <br class="clearBoth">
 

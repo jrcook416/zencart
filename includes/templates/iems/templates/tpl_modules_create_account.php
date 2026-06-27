@@ -82,9 +82,6 @@ jQuery(document).ready(function($) {
 MODIFICATION - County and Unit identification are moving here in the IEMS specific template for work downstream. 
 **/
   if (zen_config('ACCOUNT_SUBURB') === 'true') {
-?>
-<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-    <?php
     /**
     IEMS Edited Code Block -- Beginning
     **/      
@@ -95,6 +92,7 @@ MODIFICATION - County and Unit identification are moving here in the IEMS specif
 <?php 
 echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');?>
 <br class="clearBoth"> 
+<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
 <?php
 echo zen_draw_pull_down_menu('suburb', '$unit_array', 'entry_suburb','id="suburb"', 'required');
   }

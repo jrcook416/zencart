@@ -16,9 +16,9 @@ if (isset($_POST['securityToken']) && $_POST['securityToken'] == $_SESSION['secu
     if ($county_id > 0) {
         // Replace 'your_table_name' with your actual database table
         // Replace 'county_id_field', 'unit_id', and 'unit_name' with your actual column names
-        $sql = "SELECT unit_id, unit_name 
+        $sql = "SELECT unit_id, unit_description 
                 FROM iems_units 
-                WHERE county_id_field = :countyID 
+                WHERE unit_countyID = :countyID 
                 ORDER BY unit_description ASC";
                 
         $sql = $db->bindVars($sql, ':countyID', $county_id, 'integer');

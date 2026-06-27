@@ -40,7 +40,7 @@ jQuery(document).ready(function($) {
         var countyId = $(this).val();
         
         // Instantly reset the unit dropdown to a loading state
-        $('#unit').html('<option value="">Loading units...</option>');
+        $('#suburb').html('<option value="">Loading units...</option>');
 
         if (countyId !== '') {
             // Trigger Zen Cart AJAX request to our custom page handler
@@ -66,12 +66,12 @@ jQuery(document).ready(function($) {
                     $('#unit').html(options);
                 },
                 error: function() {
-                    $('#unit').html('<option value="">Error retrieving units</option>');
+                    $('#suburb').html('<option value="">Error retrieving units</option>');
                 }
             });
         } else {
             // Reset to default if no county is chosen
-            $('#unit').html('<option value="">Select a Unit</option>');
+            $('#suburb').html('<option value="">Select a Unit</option>');
         }
     });
 });

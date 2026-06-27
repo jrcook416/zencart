@@ -28,10 +28,10 @@
 </fieldset>
 <?php
   }
-?>
 /**
 MODIFICATION - Adding an Ajax handler here to take care of changes in county and unit script.
 **/
+?>
 <script>
 jQuery(document).ready(function($) {
     // Listen for the change event on the county dropdown

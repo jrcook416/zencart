@@ -9,9 +9,10 @@
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: DrByte 2021 Jun 14 Modified in v1.5.8-alpha $
+ * Edited for the IEMS Zencart 3.0.0 template 2026-06-27 Jeremiah Cook
  */
 ?>
-<?php unit_lookup();?>
+
 <?php if ($messageStack->size('create_account') > 0) echo $messageStack->output('create_account'); ?>
 <div class="alert forward"><?php echo FORM_REQUIRED_INFORMATION; ?></div>
 <br class="clearBoth">
@@ -74,9 +75,18 @@
   if (zen_config('ACCOUNT_SUBURB') === 'true') {
 ?>
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-<?php 
+<?php
+/**
+IEMS Edited Code Block -- Beginning
+**/      
+unit_lookup();
+county_lookup();
 echo zen_draw_pull_down_menu('suburb', $unit_array, 'entry_suburb','id="suburb"', 'required'); 
+echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');
   }
+/**
+IEMS Edited Code Block -- Ending
+**/
 ?>
 <br class="clearBoth">
   

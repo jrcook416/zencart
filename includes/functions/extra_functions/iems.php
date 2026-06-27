@@ -46,7 +46,7 @@ function county_lookup() {
 			$county_array[] = array(
                 'id' => $county_values->fields['iems_county_ID'], 
                 'countyCode' => $county_values->fields['iems_county_code'], 
-                'text' => $county_values->fields['iems_county_name'],
+                'text' => $county_values->fields['iems_county_code'] . " " . $county_values->fields['iems_county_name'] . " - IDHS District ". $county_values->fields['iems_idhs_district'],
                 'idhsDistrict' => $county_values->fields['iems_idhs_district']);
 			$county_values->MoveNext();
 			};

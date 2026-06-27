@@ -58,8 +58,8 @@ jQuery(document).ready(function($) {
                     
                     if (response.success && response.data.length > 0) {
                         // Loop through returned JSON objects and build HTML strings
-                        $.each(response.data, function(index, unit) {
-                            options += '<option value="' + unit.id + '">' + unit.name + '</option>';
+                        $.each(response.data, function(index, suburb) {
+                            options += '<option value="' + unit.id + '">' + unit.description + '</option>';
                         });
                     } else {
                         options = '<option value="">No units found for this county</option>';

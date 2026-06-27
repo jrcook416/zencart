@@ -34,6 +34,7 @@ MODIFICATION - Adding an Ajax handler here to take care of changes in county and
 ?>
 <script>
 jQuery(document).ready(function($) {
+    alert("AJAX loaded.");
     // Listen for the change event on the county dropdown
     $('#county').on('change', function() {
         var countyId = $(this).val();

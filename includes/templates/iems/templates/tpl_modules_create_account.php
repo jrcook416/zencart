@@ -38,6 +38,7 @@ jQuery(document).ready(function($) {
     // Listen for the change event on the county dropdown
     $('#county').on('change', function() {
         var countyId = $(this).val();
+        alert("County ID is reported as " . countyId . "");
         
         // Instantly reset the unit dropdown to a loading state
         $('#suburb').html('<option value="">Loading units...</option>');

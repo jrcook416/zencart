@@ -90,11 +90,13 @@ IEMS Edited Code Block -- Beginning
 **/      
 unit_lookup();
 county_lookup();
-echo zen_draw_pull_down_menu('suburb', $unit_array, 'entry_suburb','id="suburb"', 'required'); ?>
-<br class="clearBoth">     
 <label class="inputLabel" for="county"><?php echo ENTRY_COUNTY; ?></label>
 <?php 
-echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');
+echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');?>
+<br class="clearBoth"> 
+<?php
+echo zen_draw_pull_down_menu('suburb', '', 'entry_suburb','id="suburb"', 'required'); ?>
+<br class="clearBoth">  
   }
 /**
 IEMS Edited Code Block -- Ending

@@ -29,7 +29,7 @@ if (isset($_POST['securityToken']) && $_POST['securityToken'] == $_SESSION['secu
             while (!$result->EOF) {
                 $response['data'][] = array(
                     'id' => $result->fields['unit_id'],
-                    'name' => $result->fields['unit_name']
+                    'name' => $result->fields['unit_description']
                 );
                 $result->MoveNext();
             }

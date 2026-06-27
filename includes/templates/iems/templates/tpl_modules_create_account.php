@@ -76,10 +76,10 @@
 <label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
 <?php 
 unit_lookup();
-echo zen_draw_pull_down_menu('suburb', $unit_array, '', 'entry_suburb','id="suburb"'); 
+echo zen_draw_pull_down_menu('suburb', $unit_array, 'entry_suburb','id="suburb"'); 
 ?>
 <br class="clearBoth">
-
+  
 <label class="inputLabel" for="city"><?php echo ENTRY_CITY; ?></label>
 <?php echo zen_draw_input_field('city', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)zen_config('ENTRY_CITY_MIN_LENGTH') > 0 ? ' required' : '')); ?>
 <br class="clearBoth">

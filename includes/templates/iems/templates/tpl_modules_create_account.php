@@ -134,12 +134,12 @@ END OF MODIFICATION
 <?php echo zen_draw_input_field('lastname', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_lastname', '40') . ' id="lastname" placeholder="' . ENTRY_LAST_NAME_TEXT . '"'. ((int)zen_config('ENTRY_LAST_NAME_MIN_LENGTH') > 0 ? ' required' : '')); ?>
 <br class="clearBoth">
 <label class="inputLabel" for="country"><?php echo ENTRY_COUNTRY; ?></label>
-<?php echo zen_get_country_list('zone_country_id', $selected_country, 'id="country" ' . ($flag_show_pulldown_states == true ? 'onchange="update_zone(this.form);"' : '')) . (!empty(ENTRY_COUNTRY_TEXT) ? '<span class="alert">' . ENTRY_COUNTRY_TEXT . 'disabled': ''); ?>
+<?php echo zen_get_country_list('zone_country_id', $selected_country, 'id="country" ' . ($flag_show_pulldown_states == true ? 'onchange="update_zone(this.form);"' : '')) . (!empty(ENTRY_COUNTRY_TEXT) ? '<span class="alert">' . ENTRY_COUNTRY_TEXT . '</span>': 'disabled'); ?>
 <br class="clearBoth">
 <br>
 
 <label class="inputLabel" for="street-address"><?php echo ENTRY_STREET_ADDRESS; ?></label>
-  <?php echo zen_draw_input_field('street_address', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address', '40') . ' id="street-address" placeholder="' . ENTRY_STREET_ADDRESS_TEXT . '"'. ((int)zen_config('ENTRY_STREET_ADDRESS_MIN_LENGTH') > 0 ? ' disabled' : '')); ?>
+  <?php echo zen_draw_input_field('street_address', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address', '40') . ' id="street-address" placeholder="' . ENTRY_STREET_ADDRESS_TEXT . '"'. ((int)zen_config('ENTRY_STREET_ADDRESS_MIN_LENGTH') > 0 ? 'disabled' : '')); ?>
 <br class="clearBoth">
 
 <?php echo zen_draw_input_field($antiSpamFieldName, '', ' size="40" id="CAAS" style="visibility:hidden; display:none;" autocomplete="off"'); ?>
@@ -154,8 +154,8 @@ END OF MODIFICATION
 ?>
 <label class="inputLabel" for="stateZone" id="zoneLabel"><?php echo ENTRY_STATE; ?></label>
 <?php
-      echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone"', 'disabled');
-      echo '<span class="alert">' . ((!empty(ENTRY_STATE_TEXT) && (int)zen_config('ENTRY_STATE_MIN_LENGTH') > 0) ? ENTRY_STATE_TEXT : '') . '</span>';
+      echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone"', '');
+      echo '<span class="alert">' . ((!empty(ENTRY_STATE_TEXT) && (int)zen_config('ENTRY_STATE_MIN_LENGTH') > 0) ? ENTRY_STATE_TEXT : 'disabled') . '</span>';
     }
 ?>
 

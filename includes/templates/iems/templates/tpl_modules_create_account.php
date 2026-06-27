@@ -96,7 +96,7 @@ MODIFICATION - County and Unit identification are moving here in the IEMS specif
 echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');?>
 <br class="clearBoth"> 
 <?php
-echo zen_draw_pull_down_menu('suburb', '$unit_array', 'entry_suburb','id="suburb"', 'required'); ?> 
+echo zen_draw_pull_down_menu('suburb', '$unit_array', 'entry_suburb','id="suburb"', 'required');
   }
 /**
 IEMS Edited Code Block -- Ending

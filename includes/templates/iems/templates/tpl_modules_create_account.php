@@ -31,6 +31,33 @@
 ?>
 
 <?php
+
+/**
+MODIFICATION - County and Unit identification are moving here in the IEMS specific template for work downstream. 
+**/
+<?php
+  if (zen_config('ACCOUNT_SUBURB') === 'true') {
+?>
+<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
+<?php
+/**
+IEMS Edited Code Block -- Beginning
+**/      
+unit_lookup();
+county_lookup();
+echo zen_draw_pull_down_menu('suburb', $unit_array, 'entry_suburb','id="suburb"', 'required'); ?>
+<br class="clearBoth">     
+<label class="inputLabel" for="county"><?php echo ENTRY_COUNTY; ?></label>
+<?php 
+echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');
+  }
+/**
+IEMS Edited Code Block -- Ending
+END OF MODIFICATION
+**/
+?>
+<br class="clearBoth">
+<?php
   if (zen_config('ACCOUNT_COMPANY') === 'true') {
 ?>
 <fieldset>
@@ -70,28 +97,6 @@
 <br class="clearBoth">
 
 <?php echo zen_draw_input_field($antiSpamFieldName, '', ' size="40" id="CAAS" style="visibility:hidden; display:none;" autocomplete="off"'); ?>
-
-<?php
-  if (zen_config('ACCOUNT_SUBURB') === 'true') {
-?>
-<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-<?php
-/**
-IEMS Edited Code Block -- Beginning
-**/      
-unit_lookup();
-county_lookup();
-echo zen_draw_pull_down_menu('suburb', $unit_array, 'entry_suburb','id="suburb"', 'required'); ?>
-<br class="clearBoth">     
-<label class="inputLabel" for="county"><?php echo ENTRY_SUBURB; ?></label>
-<?php 
-echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');
-  }
-/**
-IEMS Edited Code Block -- Ending
-**/
-?>
-<br class="clearBoth">
   
 <label class="inputLabel" for="city"><?php echo ENTRY_CITY; ?></label>
 <?php echo zen_draw_input_field('city', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)zen_config('ENTRY_CITY_MIN_LENGTH') > 0 ? ' required' : '')); ?>

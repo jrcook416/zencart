@@ -95,7 +95,7 @@ echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="count
 <br class="clearBoth"> 
 <label class="inputLabel" for="unit"><?php echo ENTRY_UNIT; ?></label>
 <?php
-echo zen_draw_pull_down_menu('unit', $unit_array, 'entry_unit','id="unit"', 'required');
+echo zen_draw_pull_down_menu('unit', '', 'entry_unit','id="unit"', 'required');
 /**
 IEMS Edited Code Block -- Ending
 END OF MODIFICATION

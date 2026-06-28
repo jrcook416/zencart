@@ -144,7 +144,7 @@ END OF MODIFICATION
 <?php echo zen_draw_input_field($antiSpamFieldName, '', ' size="40" id="CAAS" style="visibility:hidden; display:none;" autocomplete="off"'); ?>
   
 <label class="inputLabel" for="city"><?php echo ENTRY_CITY; ?></label>
-<?php echo zen_draw_input_field('city', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)zen_config('ENTRY_CITY_MIN_LENGTH') > 0 ? ' disabled' : '')); ?>
+<?php echo zen_draw_input_field('city', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_city', '40') . ' id="city" disabled="disabled" placeholder="' . ENTRY_CITY_TEXT . '"'. ((int)zen_config('ENTRY_CITY_MIN_LENGTH') > 0 ? ' disabled' : '')); ?>
 <br class="clearBoth">
 
 <?php
@@ -153,7 +153,7 @@ END OF MODIFICATION
 ?>
 <label class="inputLabel" for="stateZone" id="zoneLabel"><?php echo ENTRY_STATE; ?></label>
 <?php
-      echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone"', '');
+      echo zen_draw_pull_down_menu('zone_id', zen_prepare_country_zones_pull_down($selected_country), $zone_id, 'id="stateZone" disabled="disabled"', '');
       echo '<span class="alert">' . ((!empty(ENTRY_STATE_TEXT) && (int)zen_config('ENTRY_STATE_MIN_LENGTH') > 0) ? ENTRY_STATE_TEXT : 'disabled') . '</span>';
     }
 ?>
@@ -163,7 +163,7 @@ END OF MODIFICATION
 <?php } ?>
 <label class="inputLabel" for="state" id="stateLabel"><?php echo $state_field_label; ?></label>
 <?php
-    echo zen_draw_input_field('state', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_state', '40') . ' id="state"' . ((int)zen_config('ENTRY_STATE_MIN_LENGTH') > 0 ? ' placeholder="' . ENTRY_STATE_TEXT . '"' : 'disabled'));
+    echo zen_draw_input_field('state', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_state', '40') . ' id="state" disabled="disabled"' . ((int)zen_config('ENTRY_STATE_MIN_LENGTH') > 0 ? ' placeholder="' . ENTRY_STATE_TEXT . '"' : 'disabled'));
     if ($flag_show_pulldown_states == false) {
       echo zen_draw_hidden_field('zone_id', $zone_name, ' ');
     }
@@ -174,7 +174,7 @@ END OF MODIFICATION
 ?>
 
 <label class="inputLabel" for="postcode"><?php echo ENTRY_POST_CODE; ?></label>
-<?php echo zen_draw_input_field('postcode', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_postcode', '40') . ' id="postcode" placeholder="' . ENTRY_POST_CODE_TEXT . '"' . ((int)zen_config('ENTRY_POSTCODE_MIN_LENGTH') > 0 ? ' disabled' : '')
+<?php echo zen_draw_input_field('postcode', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_postcode', '40') . ' id="postcode" disabled="disabled" placeholder="' . ENTRY_POST_CODE_TEXT . '"' . ((int)zen_config('ENTRY_POSTCODE_MIN_LENGTH') > 0 ? ' disabled' : '')
 ); ?>
 <br class="clearBoth">
 
@@ -190,7 +190,7 @@ END OF MODIFICATION
 ?>
 <br class="clearBoth">
 <label class="inputLabel" for="fax"><?php echo ENTRY_FAX_NUMBER; ?></label>
-<?php echo zen_draw_input_field('fax', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_fax', '32') . ' id="fax" placeholder="' . ENTRY_FAX_NUMBER_TEXT . '"', 'tel'); ?>
+<?php echo zen_draw_input_field('fax', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_fax', '32') . ' id="fax" disabled="disabled" placeholder="' . ENTRY_FAX_NUMBER_TEXT . '"', 'tel'); ?>
 <?php
   }
 ?>
@@ -202,7 +202,7 @@ END OF MODIFICATION
 <fieldset>
 <legend><?php echo TABLE_HEADING_DATE_OF_BIRTH; ?></legend>
 <label class="inputLabel" for="dob"><?php echo ENTRY_DATE_OF_BIRTH; ?></label>
-<?php echo zen_draw_input_field('dob','', zen_set_field_length(TABLE_CUSTOMERS, 'customers_dob', '20') . ' id="dob" placeholder="' . ENTRY_DATE_OF_BIRTH_TEXT . '"' . (zen_config('ACCOUNT_DOB') === 'true' && (int)zen_config('ENTRY_DOB_MIN_LENGTH') != 0 ? ' required' : '')); ?>
+<?php echo zen_draw_input_field('dob','', zen_set_field_length(TABLE_CUSTOMERS, 'customers_dob', '20') . ' id="dob" disabled="disabled" placeholder="' . ENTRY_DATE_OF_BIRTH_TEXT . '"' . (zen_config('ACCOUNT_DOB') === 'true' && (int)zen_config('ENTRY_DOB_MIN_LENGTH') != 0 ? ' required' : '')); ?>
 <br class="clearBoth">
 </fieldset>
 <?php
@@ -219,7 +219,7 @@ END OF MODIFICATION
   if ($display_nick_field == true) {
 ?>
 <label class="inputLabel" for="nickname"><?php echo ENTRY_NICK; ?></label>
-<?php echo zen_draw_input_field('nick','', zen_set_field_length(TABLE_CUSTOMERS, 'customers_nick', '32') . ' id="nickname" placeholder="' . ENTRY_NICK_TEXT . '"'); ?>
+<?php echo zen_draw_input_field('nick','', zen_set_field_length(TABLE_CUSTOMERS, 'customers_nick', '32') . ' id="nickname" disabled="disabled" placeholder="' . ENTRY_NICK_TEXT . '"'); ?>
 <br class="clearBoth">
 <?php
   }
@@ -239,11 +239,11 @@ END OF MODIFICATION
 <?php
   if ((int)zen_config('ACCOUNT_NEWSLETTER_STATUS') != 0) {
 ?>
-<?php echo zen_draw_checkbox_field('newsletter', '1', $newsletter, 'id="newsletter-checkbox"') . '<label class="checkboxLabel" for="newsletter-checkbox">' . ENTRY_NEWSLETTER . '</label>' . (!empty(ENTRY_NEWSLETTER_TEXT) ? '<span class="alert">' . ENTRY_NEWSLETTER_TEXT . '</span>': ''); ?>
+<?php echo zen_draw_checkbox_field('newsletter', '1', $newsletter, 'id="newsletter-checkbox" disabled="disabled"') . '<label class="checkboxLabel" for="newsletter-checkbox">' . ENTRY_NEWSLETTER . '</label>' . (!empty(ENTRY_NEWSLETTER_TEXT) ? '<span class="alert">' . ENTRY_NEWSLETTER_TEXT . '</span>': ''); ?>
 <br class="clearBoth">
 <?php } ?>
 
-<?php echo zen_draw_radio_field('email_format', 'HTML', ($email_format == 'HTML' ? true : false),'id="email-format-html"') . '<label class="radioButtonLabel" for="email-format-html">' . ENTRY_EMAIL_HTML_DISPLAY . '</label>' .  zen_draw_radio_field('email_format', 'TEXT', ($email_format == 'TEXT' ? true : false), 'id="email-format-text"') . '<label class="radioButtonLabel" for="email-format-text">' . ENTRY_EMAIL_TEXT_DISPLAY . '</label>'; ?>
+<?php echo zen_draw_radio_field('email_format', 'HTML', ($email_format == 'HTML' ? true : false),'id="email-format-html" disabled="disabled"') . '<label class="radioButtonLabel" for="email-format-html">' . ENTRY_EMAIL_HTML_DISPLAY . '</label>' .  zen_draw_radio_field('email_format', 'TEXT', ($email_format == 'TEXT' ? true : false), 'id="email-format-text"') . '<label class="radioButtonLabel" for="email-format-text">' . ENTRY_EMAIL_TEXT_DISPLAY . '</label>'; ?>
 <br class="clearBoth">
 </fieldset>
 
@@ -254,7 +254,7 @@ END OF MODIFICATION
 
 <legend><?php echo TABLE_HEADING_REFERRAL_DETAILS; ?></legend>
 <label class="inputLabel" for="customers_referral"><?php echo ENTRY_CUSTOMERS_REFERRAL; ?></label>
-<?php echo zen_draw_input_field('customers_referral', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_referral', '15') . ' id="customers_referral"'); ?>
+<?php echo zen_draw_input_field('customers_referral', '', zen_set_field_length(TABLE_CUSTOMERS, 'customers_referral', '15') . ' id="customers_referral" disabled="disabled"'); ?>
 <br class="clearBoth">
 </fieldset>
 <?php } ?>

@@ -138,7 +138,7 @@ END OF MODIFICATION
 <br>
 
 <label class="inputLabel" for="street-address"><?php echo ENTRY_STREET_ADDRESS; ?></label>
-  <?php echo zen_draw_input_field('street_address', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address', '40') . ' id="street-address" placeholder="' . ENTRY_STREET_ADDRESS_TEXT . '"'. ((int)zen_config('ENTRY_STREET_ADDRESS_MIN_LENGTH') > 0 ? 'disabled' : '')); ?>
+  <?php echo zen_draw_input_field('street_address', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address', '40') . ' id="street-address" disabled="disabled" placeholder="' . ENTRY_STREET_ADDRESS_TEXT . '"'. ((int)zen_config('ENTRY_STREET_ADDRESS_MIN_LENGTH') > 0 ? 'disabled' : '')); ?>
 <br class="clearBoth">
 
 <?php echo zen_draw_input_field($antiSpamFieldName, '', ' size="40" id="CAAS" style="visibility:hidden; display:none;" autocomplete="off"'); ?>

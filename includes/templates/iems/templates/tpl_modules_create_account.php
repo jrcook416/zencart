@@ -41,7 +41,7 @@ jQuery(document).ready(function($) {
         alert("County ID is reported as " + countyId);
         
         // Instantly reset the unit dropdown to a loading state
-        $('#suburb').html('<option value="">Loading units...</option>');
+        $('#unit').html('<option value="">Loading units...</option>');
 
         if (countyId !== '') {
             // Trigger Zen Cart AJAX request to our custom page handler
@@ -59,20 +59,20 @@ jQuery(document).ready(function($) {
                     if (response.success && response.data.length > 0) {
                         // Loop through returned JSON objects and build HTML strings
                         $.each(response.data, function(index, suburb) {
-                            options += '<option value="' + suburb.id + '">' + suburb.name + '</option>';
+                            options += '<option value="' + unit.id + '">' + unit.name + '</option>';
                         });
                     } else {
                         options = '<option value="">No units found for this county</option>';
                     }
-                    $('#suburb').html(options);
+                    $('#unit').html(options);
                 },
                 error: function() {
-                    $('#suburb').html('<option value="">Error retrieving units</option>');
+                    $('#unit').html('<option value="">Error retrieving units</option>');
                 }
             });
         } else {
             // Reset to default if no county is chosen
-            $('#suburb').html('<option value="">Select a Unit</option>');
+            $('#unit').html('<option value="">Select a Unit</option>');
         }
     });
 });

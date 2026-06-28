@@ -80,14 +80,14 @@ jQuery(document).ready(function($) {
 
 <?php
 /**
-MODIFICATION - County and Unit identification are moving here in the IEMS specific template for work downstream. 
+MODIFICATION - County and Unit identification are moving here in the IEMS specific template for work downstream.
+Removing the if statement for the Suburb box to enable the code globally. 
 **/
-  if (zen_config('ACCOUNT_UNIT') === 'true') {
-    /**
-    IEMS Edited Code Block -- Beginning
-    **/      
-        unit_lookup();
-        county_lookup();
+/**
+IEMS Edited Code Block -- Beginning
+**/      
+unit_lookup();
+county_lookup();
     ?>
 <label class="inputLabel" for="county"><?php echo ENTRY_COUNTY; ?></label>
 <?php 
@@ -96,7 +96,6 @@ echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="count
 <label class="inputLabel" for="unit"><?php echo ENTRY_UNIT; ?></label>
 <?php
 echo zen_draw_pull_down_menu('unit', '$unit_array', 'entry_unit','id="unit"', 'required');
-  }
 /**
 IEMS Edited Code Block -- Ending
 END OF MODIFICATION

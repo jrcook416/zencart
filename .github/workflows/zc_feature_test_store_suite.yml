@@ -4,8 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-     if: ${{ github.ref != 'refs/heads/production' && (github.event_name != 'pull_request' || github.event.pull_request.base.ref != 'production') }}
-    permissions:
     permissions:
       contents: read
 

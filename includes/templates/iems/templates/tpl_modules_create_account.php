@@ -102,17 +102,11 @@ END OF MODIFICATION
 **/
 ?>
 <br class="clearBoth">
-<?php
-  if (zen_config('ACCOUNT_AGENCY') === 'true') {
-?>
 <fieldset>
 <legend><?php echo CATEGORY_AGENCY; ?></legend>
 <label class="inputLabel" for="agency"><?php echo ENTRY_AGENCY; ?></label>
 <?php echo zen_draw_input_field('agency', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_agency', '40') . ' id="agency" autocomplete="organization" placeholder="' . ENTRY_AGENCY_TEXT . '"'. (zen_config('ACCOUNT_AGENCY') === 'true' && (int)zen_config('ENTRY_AGENCY_MIN_LENGTH') != 0 ? ' required' : '')); ?>
 </fieldset>
-<?php
-  }
-?>
 
 <fieldset>
 <legend><?php echo TABLE_HEADING_ADDRESS_DETAILS; ?></legend>

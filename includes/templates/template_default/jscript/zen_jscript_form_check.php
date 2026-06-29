@@ -171,8 +171,8 @@
         check_input("dob", <?= (int)zen_config('ENTRY_DOB_MIN_LENGTH') ?>, "<?= ENTRY_DATE_OF_BIRTH_ERROR ?>");
         <?php }
 
-        if (zen_config('ACCOUNT_COMPANY') === 'true' && (int)zen_config('ENTRY_COMPANY_MIN_LENGTH') !== 0) { ?>
-        check_input("company", <?= (int)zen_config('ENTRY_COMPANY_MIN_LENGTH') ?>, "<?= ENTRY_COMPANY_ERROR ?>");
+        if (zen_config('ACCOUNT_AGENCY') === 'true' && (int)zen_config('ENTRY_AGENCY_MIN_LENGTH') !== 0) { ?>
+        check_input("agency", <?= (int)zen_config('ENTRY_AGENCY_MIN_LENGTH') ?>, "<?= ENTRY_AGENCY_ERROR ?>");
         <?php }
 
         if ((int)zen_config('ENTRY_EMAIL_ADDRESS_MIN_LENGTH') > 0) { ?>

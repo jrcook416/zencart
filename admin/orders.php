@@ -1378,7 +1378,7 @@ if ($show_orders_weights === true) {
                                             $keywords = zen_db_input(zen_db_prepare_input($_GET['search']));
                                             $keyword_search_fields = [
                                                     'o.customers_name',
-                                                    'o.customers_company',
+                                                    'o.customers_agency',
                                                     'o.customers_street_address',
                                                     'o.customers_city',
                                                     'o.customers_postcode',
@@ -1386,12 +1386,12 @@ if ($show_orders_weights === true) {
                                                     'o.customers_telephone',
                                                     'o.date_purchased',
                                                     'o.billing_name',
-                                                    'o.billing_company',
+                                                    'o.billing_agency',
                                                     'o.billing_street_address',
                                                     'o.billing_city',
                                                     'o.billing_postcode',
                                                     'o.delivery_name',
-                                                    'o.delivery_company',
+                                                    'o.delivery_agency',
                                                     'o.delivery_street_address',
                                                     'o.delivery_city',
                                                     'o.delivery_postcode',
@@ -1399,7 +1399,7 @@ if ($show_orders_weights === true) {
                                             ];
                                             $search = zen_build_keyword_where_clause($keyword_search_fields, trim($keywords), true);
                                     }
-                                    $new_fields .= ", o.customers_company, o.customers_email_address, o.customers_street_address, o.delivery_company, o.delivery_name, o.delivery_street_address, o.delivery_postcode, o.billing_company, o.billing_name, o.billing_street_address, o.billing_postcode, o.payment_module_code, o.shipping_module_code, o.orders_status, o.ip_address, o.language_code, o.delivery_state, o.delivery_country, o.customers_state, o.customers_country ";
+                                    $new_fields .= ", o.customers_agency, o.customers_email_address, o.customers_street_address, o.delivery_agency, o.delivery_name, o.delivery_street_address, o.delivery_postcode, o.billing_agency, o.billing_name, o.billing_street_address, o.billing_postcode, o.payment_module_code, o.shipping_module_code, o.orders_status, o.ip_address, o.language_code, o.delivery_state, o.delivery_country, o.customers_state, o.customers_country ";
 
                                     $order_by = " ORDER BY o.orders_id DESC";
                                     $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_SEARCH_PARMS', $keywords, $search, $search_distinct, $new_fields, $new_table, $order_by);
@@ -1501,7 +1501,7 @@ if ($show_orders_weights === true) {
                                         ?>
                                 <td class="dataTableContent text-center"><?= $show_difference . $orders->fields['orders_id'] ?></td>
                                 <td class="dataTableContent"><?= $show_payment_type ?></td>
-                                <td class="dataTableContent"><?= '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $orders->fields['customers_id'], 'NONSSL') . '"><i class="fa-solid fa-magnifying-glass"></i></a>&nbsp;' . $orders->fields['customers_name'] . ($orders->fields['customers_company'] !== '' ? '<br>' . zen_output_string_protected($orders->fields['customers_company']) : '') ?></td>
+                                <td class="dataTableContent"><?= '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $orders->fields['customers_id'], 'NONSSL') . '"><i class="fa-solid fa-magnifying-glass"></i></a>&nbsp;' . $orders->fields['customers_name'] . ($orders->fields['customers_agency'] !== '' ? '<br>' . zen_output_string_protected($orders->fields['customers_agency']) : '') ?></td>
 <?php if ($show_zone_info) { ?>
                                 <td class="dataTableContent text-left">
 <?php
@@ -1632,7 +1632,7 @@ if ($show_orders_weights === true) {
                                     $heading[] = ['text' => '<h4>' . TEXT_INFO_HEADING_DELETE_ORDER . '</h4>'];
 
                                     $contents = ['form' => zen_draw_form('orders', FILENAME_ORDERS, zen_get_all_get_params(['oID', 'action']) . '&action=deleteconfirm', 'post', 'class="form-horizontal"', true) . zen_draw_hidden_field('oID', $oInfo->orders_id)];
-                                    $contents[] = ['text' => TEXT_INFO_DELETE_INTRO . '<br><br><strong>' . ENTRY_ORDER_ID . $oInfo->orders_id . '<br>' . $oInfo->order_total . '<br>' . $oInfo->customers_name . ($oInfo->customers_company !== '' ? '<br>' . zen_output_string_protected($oInfo->customers_company) : '') . '</strong>'];
+                                    $contents[] = ['text' => TEXT_INFO_DELETE_INTRO . '<br><br><strong>' . ENTRY_ORDER_ID . $oInfo->orders_id . '<br>' . $oInfo->order_total . '<br>' . $oInfo->customers_name . ($oInfo->customers_agency !== '' ? '<br>' . zen_output_string_protected($oInfo->customers_agency) : '') . '</strong>'];
                                     $contents[] = ['text' => '<br><label>' . zen_draw_checkbox_field('restock', '1') . ' ' . TEXT_INFO_RESTOCK_PRODUCT_QUANTITY . '</label>'];
                                     $contents[] = ['align' => 'text-center', 'text' => '<br><button type="submit" class="btn btn-danger">' . IMAGE_DELETE . '</button> <a href="' . zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(['oID', 'action']) . 'oID=' . $oInfo->orders_id, 'NONSSL') . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>'];
                                     break;

@@ -23,8 +23,8 @@ class Address
             'postal_code' => str_replace(' ', '', $order_address['postcode']),
             'country_code' => CountryCodes::convertCountryCode($order_address['country']['iso_code_2']),
         ];
-        if (!empty($order_address['suburb'])) {
-            $paypal_address['address_line_2'] = $order_address['suburb'];
+        if (!empty($order_address['unit'])) {
+            $paypal_address['address_line_2'] = $order_address['unit'];
         }
         return $paypal_address;
     }

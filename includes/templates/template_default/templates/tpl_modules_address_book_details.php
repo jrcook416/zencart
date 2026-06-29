@@ -55,8 +55,8 @@
 <?php
   if (zen_config('ACCOUNT_SUBURB') === 'true') {
 ?>
-<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-<?php echo zen_draw_input_field('suburb', $entry->fields['entry_suburb'], zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
+<label class="inputLabel" for="unit"><?php echo ENTRY_SUBURB; ?></label>
+<?php echo zen_draw_input_field('unit', $entry->fields['entry_unit'], zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_unit', '40') . ' id="unit" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
 <br class="clearBoth">
 <?php
   }

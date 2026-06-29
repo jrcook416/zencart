@@ -275,18 +275,18 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
     $address['hr'] = $html ? '<hr>' : '----------------------------------------';
     $address['cr'] = $html ? ($boln == '' && $eoln == "\n" ? '<br>' : $eoln . $boln) : $eoln;
 
-    if (zen_config('ACCOUNT_SUBURB') !== 'true') $incoming['suburb'] = '';
+    if (zen_config('ACCOUNT_SUBURB') !== 'true') $incoming['unit'] = '';
     $address['company'] = !empty($incoming['company']) ? zen_output_string_protected($incoming['company']) : '';
     $address['firstname'] = !empty($incoming['firstname']) ? zen_output_string_protected($incoming['firstname']) : (!empty($incoming['name']) ? zen_output_string_protected($incoming['name']) : '');
     $address['lastname'] = !empty($incoming['lastname']) ? zen_output_string_protected($incoming['lastname']) : '';
     $address['street'] = !empty($incoming['street_address']) ? zen_output_string_protected($incoming['street_address']) : '';
-    $address['suburb'] = !empty($incoming['suburb']) ? zen_output_string_protected($incoming['suburb']) : '';
+    $address['unit'] = !empty($incoming['unit']) ? zen_output_string_protected($incoming['unit']) : '';
     $address['city'] = !empty($incoming['city']) ? zen_output_string_protected($incoming['city']) : '';
     $address['state'] = !empty($incoming['state']) ? zen_output_string_protected($incoming['state']) : '';
     $address['postcode'] = !empty($incoming['postcode']) ? zen_output_string_protected($incoming['postcode']) : '';
     $address['zip'] = $address['postcode'];
 
-    $address['streets'] = !empty($address['suburb']) ? $address['street'] . $address['cr'] . $address['suburb'] : $address['street'];
+    $address['streets'] = !empty($address['unit']) ? $address['street'] . $address['cr'] . $address['unit'] : $address['street'];
 
     $country = '';
     if (!empty($incoming['country_id'])) {
@@ -331,7 +331,7 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
     if (zen_config('ACCOUNT_COMPANY') === 'true' && !empty($address['$company']) && false === strpos($fmt, '$company')) {
         $address_out = $address['$company'] . $address['$cr'] . $address_out;
     }
-    if (zen_config('ACCOUNT_SUBURB') !== 'true') $address['suburb'] = '';
+    if (zen_config('ACCOUNT_SUBURB') !== 'true') $address['unit'] = '';
 
     // -----
     // "Package up" the various elements of an address and issue a notification that will enable
@@ -345,7 +345,7 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
             'firstname' => $address['$firstname'],
             'lastname' => $address['$lastname'],
             'street' => $address['$street'],
-            'suburb' => $address['$suburb'],
+            'unit' => $address['$unit'],
             'city' => $address['$city'],
             'state' => $address['$state'],
             'country' => $address['$country'],
@@ -378,7 +378,7 @@ function zen_address_label($customers_id, $address_id = 1, $html = false, $boln 
     global $db, $zco_notifier;
     $sql = "SELECT entry_firstname AS firstname, entry_lastname AS lastname,
                    entry_company AS company, entry_street_address AS street_address,
-                   entry_suburb AS suburb, entry_city AS city, entry_postcode AS postcode,
+                   entry_unit AS unit, entry_city AS city, entry_postcode AS postcode,
                    entry_state AS state, entry_zone_id AS zone_id,
                    entry_country_id AS country_id
             FROM " . TABLE_ADDRESS_BOOK . "

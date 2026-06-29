@@ -917,7 +917,7 @@ class paypaldp extends base {
                           'ZIP'         => $order->billing['postcode'],
                           'CITY'        => $order->billing['city'],
                           'STATE'       => $order->billing['state'],
-                          'STREET2'     => $order->billing['suburb'],
+                          'STREET2'     => $order->billing['unit'],
                           'COUNTRYCODE' => $order->billing['country']['iso_code_2'],
                           'EXPDATE'     => $cc_expdate_month . $cc_expdate_year,
                           'EMAIL'       => $order->customer['email_address'],
@@ -927,7 +927,7 @@ class paypaldp extends base {
       if (isset($order->delivery) && $order->delivery['street_address'] != '') {
         $optionsShip= array('SHIPTONAME'   => empty($order->delivery['name']) ? $order->delivery['firstname'] . ' ' . $order->delivery['lastname'] : $order->delivery['name'],
                             'SHIPTOSTREET' => $order->delivery['street_address'],
-                            'SHIPTOSTREET2' => $order->delivery['suburb'],
+                            'SHIPTOSTREET2' => $order->delivery['unit'],
                             'SHIPTOCITY'   => $order->delivery['city'],
                             'SHIPTOZIP'    => $order->delivery['postcode'],
                             'SHIPTOSTATE'  => $order->delivery['state'],

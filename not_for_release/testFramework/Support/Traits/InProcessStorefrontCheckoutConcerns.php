@@ -75,7 +75,7 @@ trait InProcessStorefrontCheckoutConcerns
                 [
                     'action' => 'process',
                     'company' => '',
-                    'suburb' => '',
+                    'unit' => '',
                     'nick' => '',
                     'fax' => '',
                     'customers_referral' => '',

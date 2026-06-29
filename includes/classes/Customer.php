@@ -995,7 +995,7 @@ class Customer extends base
             "SELECT ab.*,
                     entry_firstname AS firstname, entry_lastname AS lastname,
                     entry_company AS company, entry_street_address AS street_address,
-                    entry_suburb AS suburb, entry_city AS city, entry_postcode AS postcode,
+                    entry_unit AS unit, entry_city AS city, entry_postcode AS postcode,
                     entry_state AS state,
                     entry_zone_id AS zone_id,
                     zone_name, zone_code AS zone_iso,
@@ -1224,7 +1224,7 @@ class Customer extends base
                         entry_firstname = '',
                         entry_lastname = '" . $text_deleted . "',
                         entry_street_address = '" . $text_deleted . "',
-                        entry_suburb = ''
+                        entry_unit = ''
                   WHERE customers_id = " . (int)$this->customer_id
             );
 
@@ -1359,7 +1359,7 @@ class Customer extends base
             $sql_data_array[] = ['fieldName' => 'entry_company', 'value' => $data['company'], 'type' => 'stringIgnoreNull'];
         }
         if (zen_config('ACCOUNT_SUBURB') === 'true') {
-            $sql_data_array[] = ['fieldName' => 'entry_suburb', 'value' => $data['suburb'], 'type' => 'stringIgnoreNull'];
+            $sql_data_array[] = ['fieldName' => 'entry_unit', 'value' => $data['unit'], 'type' => 'stringIgnoreNull'];
         }
 
         if (zen_config('ACCOUNT_STATE') === 'true') {

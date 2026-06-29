@@ -133,7 +133,7 @@ class CheckoutAddressSelectionInProcessTest extends zcInProcessFeatureTestCaseSt
             'entry_state' => '',
             'entry_gender' => 'm',
             'entry_company' => '',
-            'entry_suburb' => '',
+            'entry_unit' => '',
         ]);
     }
 }

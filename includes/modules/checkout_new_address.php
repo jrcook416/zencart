@@ -38,7 +38,7 @@ if (isset($_POST['action']) && ($_POST['action'] === 'submit')) {
         $lastname = zen_db_prepare_input($_POST['lastname']);
         $street_address = zen_db_prepare_input($_POST['street_address']);
         if (zen_config('ACCOUNT_SUBURB') === 'true') {
-            $suburb = zen_db_prepare_input($_POST['suburb']);
+            $unit = zen_db_prepare_input($_POST['unit']);
         }
         $postcode = zen_db_prepare_input($_POST['postcode']);
         $city = zen_db_prepare_input($_POST['city']);
@@ -158,7 +158,7 @@ if (isset($_POST['action']) && ($_POST['action'] === 'submit')) {
                 $sql_data_array[] = ['fieldName' => 'entry_company', 'value' => $company, 'type' => 'stringIgnoreNull'];
             }
             if (zen_config('ACCOUNT_SUBURB') === 'true') {
-                $sql_data_array[] = ['fieldName' => 'entry_suburb', 'value' => $suburb, 'type' => 'stringIgnoreNull'];
+                $sql_data_array[] = ['fieldName' => 'entry_unit', 'value' => $unit, 'type' => 'stringIgnoreNull'];
             }
             if (zen_config('ACCOUNT_STATE') === 'true') {
                 if ($zone_id > 0) {

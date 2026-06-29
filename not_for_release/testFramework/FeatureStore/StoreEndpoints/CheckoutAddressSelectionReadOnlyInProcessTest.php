@@ -98,8 +98,8 @@ class CheckoutAddressSelectionReadOnlyInProcessTest extends zcInProcessFeatureTe
             'entry_zone_id' => $zoneId,
             'entry_state' => '',
             'entry_gender' => 'm',
-            'entry_company' => '',
-            'entry_suburb' => '',
+            'entry_agency' => '',
+            'entry_unit' => '',
         ]);
     }
 }

@@ -23,7 +23,7 @@ if (isset($action) && $action === 'edit') {
             // Note the ternary is used with empty() (instead of ?? ) so that blank-but-not-null elements are excluded
             (empty($order->{$address_type}['company']) ? '' : $order->{$address_type}['company'] . '\n') .
             $order->{$address_type}['street_address'] . '\n' .
-            (empty($order->{$address_type}['suburb']) ? '' : $order->{$address_type}['suburb'] . '\n') .
+            (empty($order->{$address_type}['unit']) ? '' : $order->{$address_type}['unit'] . '\n') .
             (empty($order->{$address_type}['city']) ? '' : $order->{$address_type}['city'] . '\n') .
             $order->{$address_type}['state'] . '\n' .
             $order->{$address_type}['postcode'] . '\n' .

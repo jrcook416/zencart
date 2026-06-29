@@ -81,7 +81,7 @@ jQuery(document).ready(function($) {
 <?php
 /**
 MODIFICATION - County and Unit identification are moving here in the IEMS specific template for work downstream.
-Removing the if statement for the Suburb box to enable the code globally. 
+Removing the if statement for the Unit box to enable the code globally. 
 **/
 /**
 IEMS Edited Code Block -- Beginning
@@ -103,12 +103,12 @@ END OF MODIFICATION
 ?>
 <br class="clearBoth">
 <?php
-  if (zen_config('ACCOUNT_COMPANY') === 'true') {
+  if (zen_config('ACCOUNT_AGENCY') === 'true') {
 ?>
 <fieldset>
-<legend><?php echo CATEGORY_COMPANY; ?></legend>
-<label class="inputLabel" for="company"><?php echo ENTRY_COMPANY; ?></label>
-<?php echo zen_draw_input_field('company', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" autocomplete="organization" placeholder="' . ENTRY_COMPANY_TEXT . '"'. (zen_config('ACCOUNT_COMPANY') === 'true' && (int)zen_config('ENTRY_COMPANY_MIN_LENGTH') != 0 ? ' required' : '')); ?>
+<legend><?php echo CATEGORY_AGENCY; ?></legend>
+<label class="inputLabel" for="agency"><?php echo ENTRY_AGENCY; ?></label>
+<?php echo zen_draw_input_field('agency', '', zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_agency', '40') . ' id="agency" autocomplete="organization" placeholder="' . ENTRY_AGENCY_TEXT . '"'. (zen_config('ACCOUNT_AGENCY') === 'true' && (int)zen_config('ENTRY_AGENCY_MIN_LENGTH') != 0 ? ' required' : '')); ?>
 </fieldset>
 <?php
   }

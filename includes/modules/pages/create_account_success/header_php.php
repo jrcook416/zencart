@@ -39,8 +39,8 @@ if ($_SESSION['cart']->count_contents() > 0) {
 
 /*  prepare address list */
 $addresses_query = "SELECT address_book_id, entry_firstname as firstname, entry_lastname as lastname,
-                           entry_company as company, entry_street_address as street_address,
-                           entry_suburb as suburb, entry_city as city, entry_postcode as postcode,
+                           entry_agency as agency, entry_street_address as street_address,
+                           entry_unit as unit, entry_city as city, entry_postcode as postcode,
                            entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id
                     FROM   " . TABLE_ADDRESS_BOOK . "
                     WHERE  customers_id = :customersID

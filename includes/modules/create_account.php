@@ -59,13 +59,13 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
         }
     }
 
-    $company = '';
+    $agency = '';
     $dob = '';
-    $suburb = '';
+    $unit = '';
     $state = '';
     $zone_id = false;
-    if (zen_config('ACCOUNT_COMPANY') === 'true') {
-        $company = zen_db_prepare_input($_POST['company']);
+    if (zen_config('ACCOUNT_AGENCY') === 'true') {
+        $agency = zen_db_prepare_input($_POST['agency']);
     }
     $firstname = zen_db_prepare_input(zen_sanitize_string($_POST['firstname']));
     $lastname = zen_db_prepare_input(zen_sanitize_string($_POST['lastname']));
@@ -76,7 +76,7 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
     $email_address = zen_db_prepare_input($_POST['email_address']);
     $street_address = zen_db_prepare_input($_POST['street_address']);
     if (zen_config('ACCOUNT_SUBURB') === 'true') {
-        $suburb = zen_db_prepare_input($_POST['suburb']);
+        $unit = zen_db_prepare_input($_POST['unit']);
     }
     $postcode = zen_db_prepare_input($_POST['postcode']);
     $city = zen_db_prepare_input($_POST['city']);
@@ -132,10 +132,10 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
         }
     }
 
-    if (zen_config('ACCOUNT_COMPANY') === 'true') {
-        if ((int)zen_config('ENTRY_COMPANY_MIN_LENGTH') > 0 && mb_strlen($company) < zen_config('ENTRY_COMPANY_MIN_LENGTH')) {
+    if (zen_config('ACCOUNT_AGENCY') === 'true') {
+        if ((int)zen_config('ENTRY_AGENCY_MIN_LENGTH') > 0 && mb_strlen($agency) < zen_config('ENTRY_AGENCY_MIN_LENGTH')) {
             $error = true;
-            $messageStack->add('create_account', ENTRY_COMPANY_ERROR);
+            $messageStack->add('create_account', ENTRY_AGENCY_ERROR);
         }
     }
 
@@ -285,8 +285,8 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
         $data = compact(
             'firstname', 'lastname', 'email_address', 'nick', 'email_format', 'telephone', 'fax',
             'newsletter', 'password', 'customers_authorization', 'customers_referral',
-            'gender', 'dob', 'company', 'street_address',
-            'suburb', 'city', 'zone_id', 'state', 'postcode', 'country', 'ip_address'
+            'gender', 'dob', 'agency', 'street_address',
+            'unit', 'city', 'zone_id', 'state', 'postcode', 'country', 'ip_address'
         );
 
         $result = $customer->create($data);

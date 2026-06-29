@@ -91,7 +91,13 @@ county_lookup();
     ?>
 <label class="inputLabel" for="county"><?php echo ENTRY_COUNTY; ?></label>
 <?php 
-echo zen_draw_pull_down_menu('county', $county_array, 'entry_county', 'id="county"', 'required');?>
+$county_array_with_default = array_merge(
+    [
+        ['id' => '', 'text' => 'Select a County'],
+    ],
+    $county_array
+);
+echo zen_draw_pull_down_menu('county', $county_array_with_default, '', 'id="county"', 'required');?>
 <br class="clearBoth"> 
 <label class="inputLabel" for="unit"><?php echo ENTRY_UNIT; ?></label>
 <?php

@@ -46,7 +46,7 @@ CREATE TABLE address_book (
   address_book_id int(11) NOT NULL auto_increment,
   customers_id int(11) NOT NULL default '0',
   entry_gender char(1) NOT NULL default '',
-  entry_company varchar(64) default NULL,
+  entry_agency varchar(64) default NULL,
   entry_firstname varchar(32) NOT NULL default '',
   entry_lastname varchar(32) NOT NULL default '',
   entry_street_address varchar(64) NOT NULL default '',
@@ -1086,7 +1086,7 @@ CREATE TABLE orders (
   orders_id int(11) NOT NULL auto_increment,
   customers_id int(11) NOT NULL default 0,
   customers_name varchar(64) NOT NULL default '',
-  customers_company varchar(64) default NULL,
+  customers_agency varchar(64) default NULL,
   customers_street_address varchar(64) NOT NULL default '',
   customers_unit varchar(32) default NULL,
   customers_city varchar(32) NOT NULL default '',
@@ -1097,7 +1097,7 @@ CREATE TABLE orders (
   customers_email_address varchar(96) NOT NULL default '',
   customers_address_format_id int(5) NOT NULL default 0,
   delivery_name varchar(64) NOT NULL default '',
-  delivery_company varchar(64) default NULL,
+  delivery_agency varchar(64) default NULL,
   delivery_street_address varchar(64) NOT NULL default '',
   delivery_unit varchar(32) default NULL,
   delivery_city varchar(32) NOT NULL default '',
@@ -1106,7 +1106,7 @@ CREATE TABLE orders (
   delivery_country varchar(64) NOT NULL default '',
   delivery_address_format_id int(5) NOT NULL default 0,
   billing_name varchar(64) NOT NULL default '',
-  billing_company varchar(64) default NULL,
+  billing_agency varchar(64) default NULL,
   billing_street_address varchar(64) NOT NULL default '',
   billing_unit varchar(32) default NULL,
   billing_city varchar(32) NOT NULL default '',
@@ -2449,7 +2449,7 @@ INSERT INTO configuration (configuration_title, configuration_key, configuration
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, val_function, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Date of Birth', 'ENTRY_DOB_MIN_LENGTH', '10', '{"error":"TEXT_MIN_ADMIN_DOB_LENGTH","id":"FILTER_VALIDATE_INT","options":{"options":{"min_range":0}}}', 'Minimum length of date of birth', '2', '3', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, val_function, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('E-Mail Address', 'ENTRY_EMAIL_ADDRESS_MIN_LENGTH', '6', '{"error":"TEXT_MIN_ADMIN_EMAIL_ADDRESS_LENGTH","id":"FILTER_VALIDATE_INT","options":{"options":{"min_range":0}}}', 'Minimum length of e-mail address', '2', '4', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, val_function, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Street Address', 'ENTRY_STREET_ADDRESS_MIN_LENGTH', '5', '{"error":"TEXT_MIN_ADMIN_STREET_ADDRESS_LENGTH","id":"FILTER_VALIDATE_INT","options":{"options":{"min_range":0}}}', 'Minimum length of street address', '2', '5', now());
-INSERT INTO configuration (configuration_title, configuration_key, configuration_value, val_function, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Company', 'ENTRY_COMPANY_MIN_LENGTH', '0', '{"error":"TEXT_MIN_ADMIN_COMPANY_LENGTH","id":"FILTER_VALIDATE_INT","options":{"options":{"min_range":0}}}', 'Minimum length of company name', '2', '6', now());
+INSERT INTO configuration (configuration_title, configuration_key, configuration_value, val_function, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Agency', 'ENTRY_AGENCY_MIN_LENGTH', '0', '{"error":"TEXT_MIN_ADMIN_AGENCY_LENGTH","id":"FILTER_VALIDATE_INT","options":{"options":{"min_range":0}}}', 'Minimum length of agency name', '2', '6', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, val_function, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Post Code', 'ENTRY_POSTCODE_MIN_LENGTH', '4', '{"error":"TEXT_MIN_ADMIN_POSTCODE_LENGTH","id":"FILTER_VALIDATE_INT","options":{"options":{"min_range":0}}}', 'Minimum length of post code', '2', '7', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, val_function, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('City', 'ENTRY_CITY_MIN_LENGTH', '2', '{"error":"TEXT_MIN_ADMIN_CITY_LENGTH","id":"FILTER_VALIDATE_INT","options":{"options":{"min_range":0}}}', 'Minimum length of city', '2', '8', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, val_function, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('State', 'ENTRY_STATE_MIN_LENGTH', '2', '{"error":"TEXT_MIN_ADMIN_STATE_LENGTH","id":"FILTER_VALIDATE_INT","options":{"options":{"min_range":0}}}', 'Minimum length of state', '2', '9', now());
@@ -2565,7 +2565,7 @@ INSERT INTO configuration (configuration_title, configuration_key, configuration
 
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Email Salutation', 'ACCOUNT_GENDER', 'false', 'Display salutation choice during account creation and with account information', '5', '1', 'zen_cfg_select_option(array(\'true\', \'false\'), ', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Date of Birth', 'ACCOUNT_DOB', 'false', 'Display date of birth field during account creation and with account information<br />NOTE: Set Minimum Value Date of Birth to blank for not required<br />Set Minimum Value Date of Birth > 0 to require', '5', '2', 'zen_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Company', 'ACCOUNT_COMPANY', 'true', 'Display company field during account creation and with account information', '5', '3', 'zen_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Agency', 'ACCOUNT_AGENCY', 'true', 'Display agency field during account creation and with account information', '5', '3', 'zen_cfg_select_option(array(\'true\', \'false\'), ', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Address Line 2', 'ACCOUNT_SUBURB', 'true', 'Display address line 2 field during account creation and with account information', '5', '4', 'zen_cfg_select_option(array(\'true\', \'false\'), ', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('State', 'ACCOUNT_STATE', 'true', 'Display state field during account creation and with account information', '5', '5', 'zen_cfg_select_option(array(\'true\', \'false\'), ', now());
 INSERT INTO configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('State field - Display as pulldown when possible?', 'ACCOUNT_STATE_DRAW_INITIAL_DROPDOWN', 'false', 'If zones have been defined for a country, the State field may be displayed as a dropdown populated by the defined zones. Otherwise a text field is displayed for customer entry.<br><strong>true</strong>: When a State field is used, display a pulldown menu whenever possible.<br><strong>false</strong>: When a State field is used, always display a text input field.', 5, '5', 'zen_cfg_select_option(array(\'true\', \'false\'), ', now());

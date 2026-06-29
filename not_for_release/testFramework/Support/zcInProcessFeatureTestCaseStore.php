@@ -273,7 +273,7 @@ abstract class zcInProcessFeatureTestCaseStore extends zcInProcessFeatureTestCas
             array_merge(
                 [
                     'action' => 'process',
-                    'company' => '',
+                    'agency' => '',
                     'unit' => '',
                     'nick' => '',
                     'fax' => '',

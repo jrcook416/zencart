@@ -61,7 +61,7 @@ $products_filter_name_model = (isset($_GET['products_filter_name_model']) ? $_GE
         if ($products_filter > 0) {
           // by products_id
           $chk_orders_products_query = "SELECT o.customers_id, op.orders_id, op.products_id, op.products_quantity, op.products_name, op.products_model,
-                                               o.customers_name, o.customers_company, o.customers_email_address, o.date_purchased
+                                               o.customers_name, o.customers_agency, o.customers_email_address, o.date_purchased
                                         FROM " . TABLE_ORDERS . " o,
                                              " . TABLE_ORDERS_PRODUCTS . " op
                                         WHERE op.products_id IN (" . $products_filter . ")
@@ -70,7 +70,7 @@ $products_filter_name_model = (isset($_GET['products_filter_name_model']) ? $_GE
         } else {
           // by products name or model
           $chk_orders_products_query = "SELECT o.customers_id, op.orders_id, op.products_id, op.products_quantity, op.products_name, op.products_model,
-                                               o.customers_name, o.customers_company, o.customers_email_address, o.date_purchased
+                                               o.customers_name, o.customers_agency, o.customers_email_address, o.date_purchased
                                         FROM " . TABLE_ORDERS . " o,
                                              " . TABLE_ORDERS_PRODUCTS . " op
                                         WHERE ((op.products_model LIKE '%" . $products_filter_name_model . "%')
@@ -116,7 +116,7 @@ $products_filter_name_model = (isset($_GET['products_filter_name_model']) ? $_GE
                 <td class="dataTableContent"><a href="<?php echo zen_href_link(FILENAME_CUSTOMERS, zen_get_all_get_params(array('cID', 'action', 'page', 'products_filter')) . 'cID=' . $orders_products['customers_id'] . '&action=edit', 'NONSSL'); ?>"><?php echo $orders_products['customers_id']; ?></a></td>
                 <td class="dataTableContent"><a href="<?php echo zen_href_link(FILENAME_ORDERS, zen_get_all_get_params(array('oID', 'action', 'page', 'products_filter')) . 'oID=' . $orders_products['orders_id'] . '&action=edit', 'NONSSL'); ?>"><?php echo $orders_products['orders_id']; ?></a></td>
                 <td class="dataTableContent"><?php echo zen_date_short($orders_products['date_purchased']); ?></td>
-                <td class="dataTableContent"><?php echo $orders_products['customers_name'] . ($orders_products['customers_company'] != '' ? '<br>' . zen_output_string_protected($orders_products['customers_company']) : '') . '<br>' . $orders_products['customers_email_address']; ?></td>
+                <td class="dataTableContent"><?php echo $orders_products['customers_name'] . ($orders_products['customers_agency'] != '' ? '<br>' . zen_output_string_protected($orders_products['customers_agency']) : '') . '<br>' . $orders_products['customers_email_address']; ?></td>
                 <td class="dataTableContent text-center"><?php echo $orders_products['products_quantity']; ?></td>
                 <td class="dataTableContent text-center"><a href="<?php echo zen_href_link(FILENAME_PRODUCT, '&product_type=' . $product_type . '&cPath=' . $cPath . '&pID=' . $orders_products['products_id'] . '&action=new_product'); ?>"><?php echo $orders_products['products_name']; ?></a></td>
                 <td class="dataTableContent text-center"><?php echo $orders_products['products_model']; ?></td>

@@ -43,6 +43,12 @@ ALTER TABLE admin ADD dashboard_layout TEXT NULL;
 ALTER TABLE reviews_description ADD reviews_title VARCHAR(128) NOT NULL DEFAULT '';
 ALTER TABLE products_description DROP COLUMN products_viewed;
 
+# Rename company fields to agency
+ALTER TABLE address_book RENAME COLUMN entry_company TO entry_agency;
+ALTER TABLE orders RENAME COLUMN customers_company TO customers_agency;
+ALTER TABLE orders RENAME COLUMN delivery_company TO delivery_agency;
+ALTER TABLE orders RENAME COLUMN billing_company TO billing_agency;
+
 
 #PROGRESS_FEEDBACK:!TEXT=Updating configuration settings...
 
@@ -56,6 +62,10 @@ DELETE FROM admin_pages WHERE page_key IN ('configNewListing', 'configFeaturedLi
 
 # Correct name for Bosnia and Herzegovina
 UPDATE countries SET countries_name = 'Bosnia and Herzegovina' WHERE countries_iso_code_2 = 'BA' LIMIT 1;
+
+# Rename company configuration keys to agency
+UPDATE configuration SET configuration_key = 'ACCOUNT_AGENCY', configuration_title = 'Agency', configuration_description = 'Display agency field during account creation and with account information' WHERE configuration_key = 'ACCOUNT_COMPANY';
+UPDATE configuration SET configuration_key = 'ENTRY_AGENCY_MIN_LENGTH', configuration_title = 'Agency', configuration_description = 'Minimum length of agency name' WHERE configuration_key = 'ENTRY_COMPANY_MIN_LENGTH';
 
 #PROGRESS_FEEDBACK:!TEXT=Finalizing ... Done!
 

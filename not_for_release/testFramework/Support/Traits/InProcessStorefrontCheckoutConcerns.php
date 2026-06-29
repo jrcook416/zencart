@@ -74,7 +74,7 @@ trait InProcessStorefrontCheckoutConcerns
             array_merge(
                 [
                     'action' => 'process',
-                    'company' => '',
+                    'agency' => '',
                     'unit' => '',
                     'nick' => '',
                     'fax' => '',

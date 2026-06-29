@@ -88,7 +88,7 @@ class AddressBookManagementInProcessTest extends zcInProcessFeatureTestCaseStore
             'entry_zone_id' => 42,
             'entry_state' => '',
             'entry_gender' => 'm',
-            'entry_company' => '',
+            'entry_agency' => '',
             'entry_unit' => '',
         ]);
 
@@ -140,7 +140,7 @@ class AddressBookManagementInProcessTest extends zcInProcessFeatureTestCaseStore
             'entry_zone_id' => 42,
             'entry_state' => '',
             'entry_gender' => 'm',
-            'entry_company' => '',
+            'entry_agency' => '',
             'entry_unit' => '',
         ]);
 

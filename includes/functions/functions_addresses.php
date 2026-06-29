@@ -276,7 +276,7 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
     $address['cr'] = $html ? ($boln == '' && $eoln == "\n" ? '<br>' : $eoln . $boln) : $eoln;
 
     if (zen_config('ACCOUNT_SUBURB') !== 'true') $incoming['unit'] = '';
-    $address['company'] = !empty($incoming['company']) ? zen_output_string_protected($incoming['company']) : '';
+    $address['agency'] = !empty($incoming['agency']) ? zen_output_string_protected($incoming['agency']) : '';
     $address['firstname'] = !empty($incoming['firstname']) ? zen_output_string_protected($incoming['firstname']) : (!empty($incoming['name']) ? zen_output_string_protected($incoming['name']) : '');
     $address['lastname'] = !empty($incoming['lastname']) ? zen_output_string_protected($incoming['lastname']) : '';
     $address['street'] = !empty($incoming['street_address']) ? zen_output_string_protected($incoming['street_address']) : '';
@@ -328,8 +328,8 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
     // do the substitutions
     $address_out = str_replace(array_keys($address), array_values($address), $fmt);
 
-    if (zen_config('ACCOUNT_COMPANY') === 'true' && !empty($address['$company']) && false === strpos($fmt, '$company')) {
-        $address_out = $address['$company'] . $address['$cr'] . $address_out;
+    if (zen_config('ACCOUNT_AGENCY') === 'true' && !empty($address['$agency']) && false === strpos($fmt, '$agency')) {
+        $address_out = $address['$agency'] . $address['$cr'] . $address_out;
     }
     if (zen_config('ACCOUNT_SUBURB') !== 'true') $address['unit'] = '';
 
@@ -350,7 +350,7 @@ function zen_address_format($address_format_id = 1, $incoming = array(), $html =
             'state' => $address['$state'],
             'country' => $address['$country'],
             'postcode' => $address['$postcode'],
-            'company' => $address['$company'],
+            'agency' => $address['$agency'],
             'streets' => $address['$streets'],
             'statecomma' => $address['$statecomma'],
             'zip' => $address['$zip'],
@@ -377,7 +377,7 @@ function zen_address_label($customers_id, $address_id = 1, $html = false, $boln 
 {
     global $db, $zco_notifier;
     $sql = "SELECT entry_firstname AS firstname, entry_lastname AS lastname,
-                   entry_company AS company, entry_street_address AS street_address,
+                   entry_agency AS agency, entry_street_address AS street_address,
                    entry_unit AS unit, entry_city AS city, entry_postcode AS postcode,
                    entry_state AS state, entry_zone_id AS zone_id,
                    entry_country_id AS country_id

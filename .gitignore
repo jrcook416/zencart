@@ -258,4 +258,5 @@ CLAUDE.local.md
 settings.local.json
 .ddev
 
-zc_install/
+zc_install/*
+.github/*

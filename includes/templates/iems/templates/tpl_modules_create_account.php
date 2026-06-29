@@ -81,7 +81,7 @@ jQuery(document).ready(function($) {
 <?php
 /**
 MODIFICATION - County and Unit identification are moving here in the IEMS specific template for work downstream.
-Removing the if statement for the Suburb box to enable the code globally. 
+Removing the if statement for the Unit box to enable the code globally. 
 **/
 /**
 IEMS Edited Code Block -- Beginning

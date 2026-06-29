@@ -422,7 +422,7 @@ class paypalwpp extends base {
           // set the address info
           $options['PAYMENTREQUEST_0_SHIPTONAME']    = $address_arr['entry_firstname'] . ' ' . $address_arr['entry_lastname'];
           $options['PAYMENTREQUEST_0_SHIPTOSTREET']  = $address_arr['entry_street_address'];
-          if ($address_arr['entry_suburb'] != '') $options['PAYMENTREQUEST_0_SHIPTOSTREET2'] = $address_arr['entry_suburb'];
+          if ($address_arr['entry_unit'] != '') $options['PAYMENTREQUEST_0_SHIPTOSTREET2'] = $address_arr['entry_unit'];
           $options['PAYMENTREQUEST_0_SHIPTOCITY']    = $address_arr['entry_city'];
           $options['PAYMENTREQUEST_0_SHIPTOZIP']     = $address_arr['entry_postcode'];
           $options['PAYMENTREQUEST_0_SHIPTOSTATE']   = $address_arr['zone_code'];
@@ -1771,7 +1771,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
           // set the address info
           $options['PAYMENTREQUEST_0_SHIPTONAME']    = substr($address_arr['entry_firstname'] . ' ' . $address_arr['entry_lastname'], 0, 128);
           $options['PAYMENTREQUEST_0_SHIPTOSTREET']  = substr($address_arr['entry_street_address'], 0, 100);
-          if ($address_arr['entry_suburb'] != '') $options['PAYMENTREQUEST_0_SHIPTOSTREET2'] = substr($address_arr['entry_suburb'], 0, 100);
+          if ($address_arr['entry_unit'] != '') $options['PAYMENTREQUEST_0_SHIPTOSTREET2'] = substr($address_arr['entry_unit'], 0, 100);
           $options['PAYMENTREQUEST_0_SHIPTOCITY']    = substr($address_arr['entry_city'], 0, 40);
           $options['PAYMENTREQUEST_0_SHIPTOZIP']     = substr($address_arr['entry_postcode'], 0, 20);
           $options['PAYMENTREQUEST_0_SHIPTOSTATE']   = substr($address_arr['zone_code'], 0, 40);
@@ -2178,7 +2178,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
         $customer_address_override['name'] = $paypal_ec_payer_info['payer_firstname'] . ' ' . $paypal_ec_payer_info['payer_lastname'];
         $customer_address_override['company'] = $paypal_ec_payer_info['payer_business'];
         $customer_address_override['street_address'] = $paypal_ec_payer_info['ship_street_1'];
-        $customer_address_override['suburb'] = $paypal_ec_payer_info['ship_street_2'];
+        $customer_address_override['unit'] = $paypal_ec_payer_info['ship_street_2'];
         $customer_address_override['city'] = $paypal_ec_payer_info['ship_city'];
         $customer_address_override['postcode'] = $paypal_ec_payer_info['ship_postal_code'];
         $customer_address_override['state'] = $paypal_ec_payer_info['ship_state'];
@@ -2197,7 +2197,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
         $billing_address_override['name'] = $paypal_ec_payer_info['payer_firstname'] . ' ' . $paypal_ec_payer_info['payer_lastname'];
         $billing_address_override['company'] = $paypal_ec_payer_info['payer_business'];
         $billing_address_override['street_address'] = $paypal_ec_payer_info['ship_street_1'];
-        $billing_address_override['suburb'] = $paypal_ec_payer_info['ship_street_2'];
+        $billing_address_override['unit'] = $paypal_ec_payer_info['ship_street_2'];
         $billing_address_override['city'] = $paypal_ec_payer_info['ship_city'];
         $billing_address_override['postcode'] = $paypal_ec_payer_info['ship_postal_code'];
         $billing_address_override['state'] = $paypal_ec_payer_info['ship_state'];
@@ -2215,7 +2215,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
             $delivery_address_override['name'] = $paypal_ec_payer_info['ship_name'];
             $delivery_address_override['company'] = trim($paypal_ec_payer_info['ship_name'] . ' ' . $paypal_ec_payer_info['payer_business']);
             $delivery_address_override['street_address'] = $paypal_ec_payer_info['ship_street_1'];
-            $delivery_address_override['suburb'] = $paypal_ec_payer_info['ship_street_2'];
+            $delivery_address_override['unit'] = $paypal_ec_payer_info['ship_street_2'];
             $delivery_address_override['city'] = $paypal_ec_payer_info['ship_city'];
             $delivery_address_override['postcode'] = $paypal_ec_payer_info['ship_postal_code'];
             $delivery_address_override['state'] = $paypal_ec_payer_info['ship_state'];
@@ -2417,7 +2417,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
             'entry_firstname'           => $paypal_ec_payer_info['payer_firstname'],
             'entry_lastname'            => $paypal_ec_payer_info['payer_lastname'],
             'entry_street_address'      => $paypal_ec_payer_info['ship_street_1'],
-            'entry_suburb'              => $paypal_ec_payer_info['ship_street_2'],
+            'entry_unit'              => $paypal_ec_payer_info['ship_street_2'],
             'entry_city'                => $paypal_ec_payer_info['ship_city'],
             'entry_zone_id'             => $state_id,
             'entry_postcode'            => $paypal_ec_payer_info['ship_postal_code'],
@@ -2615,7 +2615,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
 
       // now grab the address from the database and set it as the overridden address
       $sql = "SELECT entry_firstname, entry_lastname, entry_company,
-                     entry_street_address, entry_suburb, entry_city, entry_postcode,
+                     entry_street_address, entry_unit, entry_city, entry_postcode,
                      entry_country_id, entry_zone_id, entry_state
               FROM " . TABLE_ADDRESS_BOOK . "
               WHERE address_book_id = :addressId
@@ -2743,7 +2743,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
     $this->zcLog('findMatchingAddressBookEntry - 1-stats', 'lookups:' . "\n" . print_r(array_merge($country->fields, array('zone_country_id' => $country_zone_check->fields), $logMsg), true) . "\n" . 'check_zone: ' . $check_zone . "\n" . 'zone:' . $zone_id . "\nSubmittedAddress:".print_r($address_question_arr, TRUE));
 
     // do a match on address, street, street2, city
-    $sql = "SELECT address_book_id, entry_street_address, entry_suburb, entry_city, entry_company, entry_firstname, entry_lastname
+    $sql = "SELECT address_book_id, entry_street_address, entry_unit, entry_city, entry_company, entry_firstname, entry_lastname
                 FROM " . TABLE_ADDRESS_BOOK . "
                 WHERE customers_id = :customerId
                 AND entry_country_id = :countryId";
@@ -2758,12 +2758,12 @@ if (false) { // disabled until clarification is received about coupons in PayPal
     $this->zcLog('findMatchingAddressBookEntry - 2-read for match', "\nLookup RecordCount = " . $answers_arr->RecordCount());
 
     if (!$answers_arr->EOF) {
-      // build a base string to compare street+suburb+city content
+      // build a base string to compare street+unit+city content
       //$matchQuestion = str_replace("\n", '', $address_question_arr['company']);
       //$matchQuestion = str_replace("\n", '', $address_question_arr['name']);
       $matchQuestion = str_replace("\n", '', $address_question_arr['street_address']);
       $matchQuestion = trim($matchQuestion);
-      $matchQuestion = $matchQuestion . str_replace("\n", '', $address_question_arr['suburb']);
+      $matchQuestion = $matchQuestion . str_replace("\n", '', $address_question_arr['unit']);
       $matchQuestion = $matchQuestion . str_replace("\n", '', $address_question_arr['city']);
       $matchQuestion = str_replace("\t", '', $matchQuestion);
       $matchQuestion = trim($matchQuestion);
@@ -2780,8 +2780,8 @@ if (false) { // disabled until clarification is received about coupons in PayPal
 ///        $fromDb = str_replace("\n", '', $answers_arr->fields['entry_firstname'].$answers_arr->fields['entry_lastname']);
         $fromDb = str_replace("\n", '', $answers_arr->fields['entry_street_address']);
         $fromDb = trim($fromDb);
-        if (!empty($answers_arr->fields['entry_suburb'])) {
-           $fromDb = $fromDb . str_replace("\n", '', $answers_arr->fields['entry_suburb']);
+        if (!empty($answers_arr->fields['entry_unit'])) {
+           $fromDb = $fromDb . str_replace("\n", '', $answers_arr->fields['entry_unit']);
         }
         $fromDb = $fromDb . str_replace("\n", '', $answers_arr->fields['entry_city']);
         $fromDb = str_replace("\t", '', $fromDb);
@@ -2907,7 +2907,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
     // truncate long data
     $address_question_arr['company'] = substr($address_question_arr['company'], 0, zen_field_length(TABLE_ADDRESS_BOOK, 'entry_company'));
     $address_question_arr['street_address'] = substr($address_question_arr['street_address'], 0, zen_field_length(TABLE_ADDRESS_BOOK, 'entry_street_address'));
-    $address_question_arr['suburb'] = substr($address_question_arr['suburb'], 0, zen_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb'));
+    $address_question_arr['unit'] = substr($address_question_arr['unit'], 0, zen_field_length(TABLE_ADDRESS_BOOK, 'entry_unit'));
     $address_question_arr['city'] = substr($address_question_arr['city'], 0, zen_field_length(TABLE_ADDRESS_BOOK, 'entry_city'));
     $address_question_arr['state'] = substr($address_question_arr['state'], 0, zen_field_length(TABLE_ADDRESS_BOOK, 'entry_state'));
     $address_question_arr['postcode'] = substr($address_question_arr['postcode'], 0, zen_field_length(TABLE_ADDRESS_BOOK, 'entry_postcode'));
@@ -2927,7 +2927,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
     if (!empty($address_question_arr['payer_gender'])) {
     $sql_data_array[] = array('fieldName'=>'entry_gender', 'value'=>$address_question_arr['payer_gender'], 'type'=>'enum:m|f');
     }
-    $sql_data_array[] = array('fieldName'=>'entry_suburb', 'value'=>$address_question_arr['suburb'], 'type'=>'string');
+    $sql_data_array[] = array('fieldName'=>'entry_unit', 'value'=>$address_question_arr['unit'], 'type'=>'string');
     if ($zone_id > 0) {
       $sql_data_array[] = array('fieldName'=>'entry_zone_id', 'value'=>$zone_id, 'type'=>'integer');
       $sql_data_array[] = array('fieldName'=>'entry_state', 'value'=>'', 'type'=>'string');

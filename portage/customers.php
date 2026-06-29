@@ -107,7 +107,7 @@ if (!empty($action)) {
 
             $default_address_id = (int)$_POST['default_address_id'];
             $entry_street_address = zen_db_prepare_input($_POST['entry_street_address']);
-            $entry_suburb = zen_db_prepare_input($_POST['entry_suburb'] ?? '');
+            $entry_unit = zen_db_prepare_input($_POST['entry_unit'] ?? '');
             $entry_postcode = zen_db_prepare_input($_POST['entry_postcode']);
             $entry_city = zen_db_prepare_input($_POST['entry_city']);
             $entry_country_id = (int)$_POST['entry_country_id'];
@@ -220,7 +220,7 @@ if (!empty($action)) {
                     $sql_data_array[] = ['fieldName' => 'entry_company', 'value' => $entry_company, 'type' => 'stringIgnoreNull'];
                 }
                 if (zen_config('ACCOUNT_SUBURB') === 'true') {
-                    $sql_data_array[] = ['fieldName' => 'entry_suburb', 'value' => $entry_suburb, 'type' => 'stringIgnoreNull'];
+                    $sql_data_array[] = ['fieldName' => 'entry_unit', 'value' => $entry_unit, 'type' => 'stringIgnoreNull'];
                 }
 
                 if (zen_config('ACCOUNT_STATE') === 'true') {
@@ -270,7 +270,7 @@ if (!empty($action)) {
                 $cInfo = new objectInfo($_POST);
                 $cInfo->company = $cInfo->entry_company;
                 $cInfo->street_address = $cInfo->entry_street_address;
-                $cInfo->suburb = $cInfo->entry_suburb;
+                $cInfo->unit = $cInfo->entry_unit;
                 $cInfo->postcode = $cInfo->entry_postcode;
                 $cInfo->city =  $cInfo->entry_city;
                 $cInfo->state = $cInfo->entry_state;
@@ -662,16 +662,16 @@ if ($action === 'edit' || $action === 'update') {
     if (zen_config('ACCOUNT_SUBURB') === 'true') {
 ?>
             <div class="form-group">
-                <?= zen_draw_label(ENTRY_SUBURB, 'entry_suburb', 'class="col-sm-3 control-label"') ?>
+                <?= zen_draw_label(ENTRY_SUBURB, 'entry_unit', 'class="col-sm-3 control-label"') ?>
                 <div class="col-sm-9 col-md-6">
                     <?= zen_draw_input_field(
-                        'entry_suburb',
-                        htmlspecialchars((string)($cInfo->suburb ?? ''), ENT_COMPAT, CHARSET, true),
+                        'entry_unit',
+                        htmlspecialchars((string)($cInfo->unit ?? ''), ENT_COMPAT, CHARSET, true),
                         zen_set_field_length(
                             TABLE_ADDRESS_BOOK,
-                            'entry_suburb',
+                            'entry_unit',
                             50
-                        ) . ' class="form-control" id="entry_suburb"'
+                        ) . ' class="form-control" id="entry_unit"'
                     ) ?>
                 </div>
             </div>

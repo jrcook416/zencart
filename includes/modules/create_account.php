@@ -61,7 +61,7 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
 
     $company = '';
     $dob = '';
-    $suburb = '';
+    $unit = '';
     $state = '';
     $zone_id = false;
     if (zen_config('ACCOUNT_COMPANY') === 'true') {
@@ -76,7 +76,7 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
     $email_address = zen_db_prepare_input($_POST['email_address']);
     $street_address = zen_db_prepare_input($_POST['street_address']);
     if (zen_config('ACCOUNT_SUBURB') === 'true') {
-        $suburb = zen_db_prepare_input($_POST['suburb']);
+        $unit = zen_db_prepare_input($_POST['unit']);
     }
     $postcode = zen_db_prepare_input($_POST['postcode']);
     $city = zen_db_prepare_input($_POST['city']);
@@ -286,7 +286,7 @@ if (isset($_POST['action']) && ($_POST['action'] === 'process') && !isset($login
             'firstname', 'lastname', 'email_address', 'nick', 'email_format', 'telephone', 'fax',
             'newsletter', 'password', 'customers_authorization', 'customers_referral',
             'gender', 'dob', 'company', 'street_address',
-            'suburb', 'city', 'zone_id', 'state', 'postcode', 'country', 'ip_address'
+            'unit', 'city', 'zone_id', 'state', 'postcode', 'country', 'ip_address'
         );
 
         $result = $customer->create($data);

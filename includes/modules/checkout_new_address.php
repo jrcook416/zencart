@@ -31,8 +31,8 @@ if (isset($_POST['action']) && ($_POST['action'] === 'submit')) {
         if (zen_config('ACCOUNT_GENDER') === 'true') {
             $gender = zen_db_prepare_input($_POST['gender'] ?? '');
         }
-        if (zen_config('ACCOUNT_COMPANY') === 'true') {
-            $company = zen_db_prepare_input($_POST['company']);
+        if (zen_config('ACCOUNT_AGENCY') === 'true') {
+            $agency = zen_db_prepare_input($_POST['agency']);
         }
         $firstname = zen_db_prepare_input($_POST['firstname']);
         $lastname = zen_db_prepare_input($_POST['lastname']);
@@ -154,8 +154,8 @@ if (isset($_POST['action']) && ($_POST['action'] === 'submit')) {
             if (zen_config('ACCOUNT_GENDER') === 'true') {
                 $sql_data_array[] = ['fieldName' => 'entry_gender', 'value' => $gender, 'type' => 'enum:m|f'];
             }
-            if (zen_config('ACCOUNT_COMPANY') === 'true') {
-                $sql_data_array[] = ['fieldName' => 'entry_company', 'value' => $company, 'type' => 'stringIgnoreNull'];
+            if (zen_config('ACCOUNT_AGENCY') === 'true') {
+                $sql_data_array[] = ['fieldName' => 'entry_agency', 'value' => $agency, 'type' => 'stringIgnoreNull'];
             }
             if (zen_config('ACCOUNT_SUBURB') === 'true') {
                 $sql_data_array[] = ['fieldName' => 'entry_unit', 'value' => $unit, 'type' => 'stringIgnoreNull'];

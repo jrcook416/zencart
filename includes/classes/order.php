@@ -239,7 +239,7 @@ class order extends base
         $this->customer = [
             'id' => $order->fields['customers_id'],
             'name' => $order->fields['customers_name'],
-            'company' => $order->fields['customers_company'],
+            'agency' => $order->fields['customers_agency'],
             'street_address' => $order->fields['customers_street_address'],
             'unit' => $order->fields['customers_unit'],
             'city' => $order->fields['customers_city'],
@@ -254,7 +254,7 @@ class order extends base
 
         $this->delivery = [
             'name' => $order->fields['delivery_name'],
-            'company' => $order->fields['delivery_company'],
+            'agency' => $order->fields['delivery_agency'],
             'street_address' => $order->fields['delivery_street_address'],
             'unit' => $order->fields['delivery_unit'],
             'city' => $order->fields['delivery_city'],
@@ -272,7 +272,7 @@ class order extends base
 
         $this->billing = [
             'name' => $order->fields['billing_name'],
-            'company' => $order->fields['billing_company'],
+            'agency' => $order->fields['billing_agency'],
             'street_address' => $order->fields['billing_street_address'],
             'unit' => $order->fields['billing_unit'],
             'city' => $order->fields['billing_city'],
@@ -551,7 +551,7 @@ class order extends base
             $this->delivery = [
                 'firstname' => '',
                 'lastname' => '',
-                'company' => '',
+                'agency' => '',
                 'street_address' => '',
                 'unit' => '',
                 'city' => '',
@@ -895,7 +895,7 @@ class order extends base
         $sql_data_array = [
             'customers_id' => $_SESSION['customer_id'],
             'customers_name' => $this->customer['firstname'] . ' ' . $this->customer['lastname'],
-            'customers_company' => $this->customer['company'],
+            'customers_agency' => $this->customer['agency'],
             'customers_street_address' => $this->customer['street_address'],
             'customers_unit' => $this->customer['unit'],
             'customers_city' => $this->customer['city'],
@@ -906,7 +906,7 @@ class order extends base
             'customers_email_address' => $this->customer['email_address'],
             'customers_address_format_id' => $this->customer['format_id'],
             'delivery_name' => $this->delivery['firstname'] . ' ' . $this->delivery['lastname'],
-            'delivery_company' => $this->delivery['company'],
+            'delivery_agency' => $this->delivery['agency'],
             'delivery_street_address' => $this->delivery['street_address'],
             'delivery_unit' => $this->delivery['unit'],
             'delivery_city' => $this->delivery['city'],
@@ -915,7 +915,7 @@ class order extends base
             'delivery_country' => $this->delivery['country']['title'],
             'delivery_address_format_id' => (int)$this->delivery['format_id'],
             'billing_name' => $this->billing['firstname'] . ' ' . $this->billing['lastname'],
-            'billing_company' => $this->billing['company'],
+            'billing_agency' => $this->billing['agency'],
             'billing_street_address' => $this->billing['street_address'],
             'billing_unit' => $this->billing['unit'],
             'billing_city' => $this->billing['city'],
@@ -1553,7 +1553,7 @@ class order extends base
         return [
             'firstname' => $address['firstname'],
             'lastname' => $address['lastname'],
-            'company' => $address['company'],
+            'agency' => $address['agency'],
             'street_address' => $address['street_address'],
             'unit' => $address['unit'],
             'city' => $address['city'],

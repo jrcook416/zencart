@@ -111,7 +111,7 @@ if (!empty($action)) {
             $entry_postcode = zen_db_prepare_input($_POST['entry_postcode']);
             $entry_city = zen_db_prepare_input($_POST['entry_city']);
             $entry_country_id = (int)$_POST['entry_country_id'];
-            $entry_agency = zen_db_prepare_input($_POST['entry_agency'] ?? '');
+            $entry_company = zen_db_prepare_input($_POST['entry_company'] ?? '');
             $entry_state = zen_db_prepare_input($_POST['entry_state'] ?? '');
             $entry_zone_id = (int)($_POST['entry_zone_id'] ?? 0);
 
@@ -216,8 +216,8 @@ if (!empty($action)) {
                     ['fieldName' => 'entry_country_id', 'value' => $entry_country_id, 'type' => 'integer'],
                 ];
 
-                if (zen_config('ACCOUNT_AGENCY') === 'true') {
-                    $sql_data_array[] = ['fieldName' => 'entry_agency', 'value' => $entry_agency, 'type' => 'stringIgnoreNull'];
+                if (zen_config('ACCOUNT_COMPANY') === 'true') {
+                    $sql_data_array[] = ['fieldName' => 'entry_company', 'value' => $entry_company, 'type' => 'stringIgnoreNull'];
                 }
                 if (zen_config('ACCOUNT_SUBURB') === 'true') {
                     $sql_data_array[] = ['fieldName' => 'entry_unit', 'value' => $entry_unit, 'type' => 'stringIgnoreNull'];
@@ -268,7 +268,7 @@ if (!empty($action)) {
                 zen_redirect(zen_href_link(FILENAME_CUSTOMERS, zen_get_all_get_params(['cID', 'action']) . 'cID=' . $customers_id));
             } elseif ($error === true) {
                 $cInfo = new objectInfo($_POST);
-                $cInfo->agency = $cInfo->entry_agency;
+                $cInfo->company = $cInfo->entry_company;
                 $cInfo->street_address = $cInfo->entry_street_address;
                 $cInfo->unit = $cInfo->entry_unit;
                 $cInfo->postcode = $cInfo->entry_postcode;
@@ -610,26 +610,26 @@ if ($action === 'edit' || $action === 'update') {
 ?>
         </div>
 <?php
-    if (zen_config('ACCOUNT_AGENCY') === 'true') {
+    if (zen_config('ACCOUNT_COMPANY') === 'true') {
 ?>
         <div class="row">
             <?= zen_draw_separator('pixel_trans.gif', '1', '10') ?>
         </div>
         <div class="row formAreaTitle">
-            <?= CATEGORY_AGENCY ?>
+            <?= CATEGORY_COMPANY ?>
         </div>
         <div class="formArea">
             <div class="form-group">
-                <?= zen_draw_label(ENTRY_AGENCY, 'entry_agency', 'class="col-sm-3 control-label"') ?>
+                <?= zen_draw_label(ENTRY_COMPANY, 'entry_company', 'class="col-sm-3 control-label"') ?>
                 <div class="col-sm-9 col-md-6">
                     <?= zen_draw_input_field(
-                        'entry_agency',
-                        htmlspecialchars(($cInfo->agency ?? ''), ENT_COMPAT, CHARSET, true),
+                        'entry_company',
+                        htmlspecialchars(($cInfo->company ?? ''), ENT_COMPAT, CHARSET, true),
                         zen_set_field_length(
                             TABLE_ADDRESS_BOOK,
-                            'entry_agency',
+                            'entry_company',
                             50
-                        ) . ' class="form-control" id="entry_agency" minlength="' . zen_config('ENTRY_AGENCY_MIN_LENGTH') . '"'
+                        ) . ' class="form-control" id="entry_company" minlength="' . zen_config('ENTRY_COMPANY_MIN_LENGTH') . '"'
                     ) ?>
                 </div>
             </div>
@@ -1040,8 +1040,8 @@ if ($action === 'edit' || $action === 'update') {
         'group-desc' => "c.customers_group_pricing DESC",
         'lastname' => "c.customers_lastname, c.customers_firstname",
         'lastname-desc' => "c.customers_lastname DESC, c.customers_firstname",
-        'agency' => "a.entry_agency",
-        'agency-desc' => "a.entry_agency DESC",
+        'company' => "a.entry_company",
+        'company-desc' => "a.entry_company DESC",
         'login-asc' => "ci.customers_info_date_of_last_logon",
         'login-desc' => "ci.customers_info_date_of_last_logon DESC",
         'approval-asc' => "c.customers_authorization",
@@ -1098,20 +1098,20 @@ if ($action === 'edit' || $action === 'update') {
                                 </a>
                             </th>
 <?php
-    if (zen_config('ACCOUNT_AGENCY') === 'true') {
+    if (zen_config('ACCOUNT_COMPANY') === 'true') {
 ?>
                             <th class="dataTableHeadingContent">
-                                <?= ($_GET['list_order'] === 'agency' || $_GET['list_order'] === 'agency-desc') ?
-                                    '<span class="SortOrderHeader">' . TABLE_HEADING_AGENCY . '</span>' :
-                                    TABLE_HEADING_AGENCY ?>
+                                <?= ($_GET['list_order'] === 'company' || $_GET['list_order'] === 'company-desc') ?
+                                    '<span class="SortOrderHeader">' . TABLE_HEADING_COMPANY . '</span>' :
+                                    TABLE_HEADING_COMPANY ?>
                                 <br>
-                                <a href="<?= zen_href_link(FILENAME_CUSTOMERS, $list_order_params . 'list_order=agency') ?>">
-                                    <?= ($_GET['list_order'] === 'agency') ?
+                                <a href="<?= zen_href_link(FILENAME_CUSTOMERS, $list_order_params . 'list_order=company') ?>">
+                                    <?= ($_GET['list_order'] === 'company') ?
                                         '<span class="SortOrderHeader">' . TEXT_ASC . '</span>' :
                                         '<span class="SortOrderHeaderLink">' . TEXT_ASC . '</span>' ?>
                                 </a>&nbsp;
-                                <a href="<?= zen_href_link(FILENAME_CUSTOMERS, $list_order_params . 'list_order=agency-desc') ?>">
-                                    <?= ($_GET['list_order'] === 'agency-desc') ?
+                                <a href="<?= zen_href_link(FILENAME_CUSTOMERS, $list_order_params . 'list_order=company-desc') ?>">
+                                    <?= ($_GET['list_order'] === 'company-desc') ?
                                         '<span class="SortOrderHeader">' . TEXT_DESC . '</span>' :
                                         '<span class="SortOrderHeaderLink">' . TEXT_DESC . '</span>' ?>
                                 </a>
@@ -1287,7 +1287,7 @@ if ($action === 'edit' || $action === 'update') {
             'c.customers_email_address',
             'c.customers_telephone',
             'c.customers_id',
-            'a.entry_agency',
+            'a.entry_company',
             'a.entry_street_address',
             'a.entry_city',
             'a.entry_postcode',
@@ -1388,9 +1388,9 @@ if ($action === 'edit' || $action === 'update') {
                                 <td class="dataTableContent"><?= $customer['customers_lastname'] ?></td>
                                 <td class="dataTableContent"><?= $customer['customers_firstname'] ?></td>
 <?php
-        if (zen_config('ACCOUNT_AGENCY') === 'true') {
+        if (zen_config('ACCOUNT_COMPANY') === 'true') {
 ?>
-                                <td class="dataTableContent"><?= zen_output_string_protected($customer['agency'] ?? '') ?></td>
+                                <td class="dataTableContent"><?= zen_output_string_protected($customer['company'] ?? '') ?></td>
 <?php
         }
         if ($show_registration_ip_in_listing) {

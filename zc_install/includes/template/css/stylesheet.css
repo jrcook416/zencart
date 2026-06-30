@@ -1,0 +1,87 @@
+/**
+ * @access private
+ * @copyright Copyright 2003-2024 Zen Cart Development Team
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: DrByte 2024 Aug 11 Modified in v2.1.0-alpha2 $
+ */
+
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+.hero-unit {
+  height: 110px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 0 solid rgba(0,0,0,.25);
+  border-radius: 8px;
+  box-shadow: inset 0 0 2px 2px rgba(0,0,0,.0);
+  padding: 15px 0;
+}
+
+.logo {
+  background: url(../images/zen-cart-logo-lg.png) left no-repeat;
+  width: 270px;
+  float: left;
+  display: block;
+  height: 100%;
+}
+
+.modal-help-title {
+  font-size: 1.5em;
+  padding-bottom: 5px;
+  font-weight:bold;
+}
+
+input[readonly] {
+   background: #dddddd;
+}
+
+.version {
+    text-align: right;
+    margin: 20px 20px;
+    font-style: italic;
+}
+
+.icon-question-circle {
+    background: url(../images/question-circle.svg) left no-repeat;
+    padding-right: 20px;
+}
+
+.mt-n1 {
+    margin-top: -0.25rem !important;
+}
+.mt-n2 {
+    margin-top: -0.5rem !important;
+}
+.mt-n3 {
+    margin-top: -1rem !important;
+}
+
+/* breadcrumb styling */
+nav span, nav a {
+    font-size: large;
+    font-weight: normal;
+}
+nav li.breadcrumb-item {
+    margin-right: .3rem;
+}
+nav li.breadcrumb-divider {
+    text-align: center;
+    color: #6c757d;
+    width: 1rem;
+}
+
+/* progress meter */
+#progress-container {
+    max-width: 766px;
+    height: 180px;
+    background-color: #fff;
+    border: 1px solid #000;
+    overflow-y: clip;
+    margin-top: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#progress-info {
+    white-space: pre-line;
+}

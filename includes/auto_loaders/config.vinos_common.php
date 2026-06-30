@@ -9,9 +9,11 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 // -----
-// Instantiate and initialize the auto-loader.
+// Instantiate and initialize the auto-loader only when the legacy init script is present.
 //
-$autoLoadConfig[0][] = array (
-    'autoType' => 'init_script',
-    'loadFile' => 'init_vinos_autoload.php'
-);
+if (is_file(__DIR__ . '/../init_includes/init_vinos_autoload.php')) {
+    $autoLoadConfig[0][] = array (
+        'autoType' => 'init_script',
+        'loadFile' => 'init_vinos_autoload.php'
+    );
+}

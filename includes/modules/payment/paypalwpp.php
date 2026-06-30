@@ -352,7 +352,7 @@ class paypalwpp extends base {
     // send the PayPal-provided javascript to trigger the incontext checkout experience
     return "      <script>
         window.paypalCheckoutReady = function () {
-        paypal.checkout.setup('" . zen_config('MODULE_PAYMENT_PAYPALWPP_MERCHANTID') . "', {
+        paypal.checkout.setup(" . json_encode(zen_config('MODULE_PAYMENT_PAYPALWPP_MERCHANTID')) . ", {
           //locale: '" . $this->getLanguageCode('incontext') . "',"
           . (zen_config('MODULE_PAYMENT_PAYPALWPP_SERVER') === 'live' ? '' : "\n          environment: 'sandbox',") . "
           container: 'checkout_confirmation',
@@ -2556,7 +2556,6 @@ if (false) { // disabled until clarification is received about coupons in PayPal
     // set the shipping method if one is not already set
     // defaults to the cheapest shipping method
     if ((!isset($_SESSION['shipping']) || (!isset($_SESSION['shipping']['id']) || $_SESSION['shipping']['id'] == '') && zen_count_shipping_modules() >= 1)) {
-      require_once(DIR_WS_CLASSES . 'http_client.php');
       require_once(DIR_WS_CLASSES . 'shipping.php');
       $shipping_Obj = new shipping;
 

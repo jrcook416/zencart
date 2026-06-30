@@ -54,11 +54,11 @@ if (isset($_POST['action']) && (($_POST['action'] == 'process') || ($_POST['acti
   $process = true;
 
   if (zen_config('ACCOUNT_GENDER') === 'true') $gender = zen_db_prepare_input($_POST['gender']);
-  if (zen_config('ACCOUNT_COMPANY') === 'true') $company = zen_db_prepare_input($_POST['company']);
+  if (zen_config('ACCOUNT_AGENCY') === 'true') $agency = zen_db_prepare_input($_POST['agency']);
   $firstname = zen_db_prepare_input(zen_sanitize_string($_POST['firstname']));
   $lastname = zen_db_prepare_input(zen_sanitize_string($_POST['lastname']));
   $street_address = zen_db_prepare_input($_POST['street_address']);
-  if (zen_config('ACCOUNT_SUBURB') === 'true') $suburb = zen_db_prepare_input($_POST['suburb']);
+  if (zen_config('ACCOUNT_SUBURB') === 'true') $unit = zen_db_prepare_input($_POST['unit']);
   $postcode = zen_db_prepare_input($_POST['postcode']);
   $city = zen_db_prepare_input($_POST['city']);
 
@@ -178,8 +178,8 @@ if (isset($_POST['action']) && (($_POST['action'] == 'process') || ($_POST['acti
                            array('fieldName'=>'entry_country_id', 'value'=>$country, 'type'=>'integer'));
 
     if (zen_config('ACCOUNT_GENDER') === 'true') $sql_data_array[] = array('fieldName'=>'entry_gender', 'value'=>$gender, 'type'=>'enum:m|f');
-    if (zen_config('ACCOUNT_COMPANY') === 'true') $sql_data_array[] = array('fieldName'=>'entry_company', 'value'=>$company, 'type'=>'stringIgnoreNull');
-    if (zen_config('ACCOUNT_SUBURB') === 'true') $sql_data_array[] = array('fieldName'=>'entry_suburb', 'value'=>$suburb, 'type'=>'stringIgnoreNull');
+    if (zen_config('ACCOUNT_AGENCY') === 'true') $sql_data_array[] = array('fieldName'=>'entry_agency', 'value'=>$agency, 'type'=>'stringIgnoreNull');
+    if (zen_config('ACCOUNT_SUBURB') === 'true') $sql_data_array[] = array('fieldName'=>'entry_unit', 'value'=>$unit, 'type'=>'stringIgnoreNull');
     if (zen_config('ACCOUNT_STATE') === 'true') {
       if ($zone_id > 0) {
         $sql_data_array[] = array('fieldName'=>'entry_zone_id', 'value'=>$zone_id, 'type'=>'integer');
@@ -306,9 +306,9 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
   $entry->fields['entry_gender'] = 'm';
   $entry->fields['entry_firstname'] = '';
   $entry->fields['entry_lastname'] = '';
-  $entry->fields['entry_company'] = '';
+  $entry->fields['entry_agency'] = '';
   $entry->fields['entry_street_address'] = '';
-  $entry->fields['entry_suburb'] = '';
+  $entry->fields['entry_unit'] = '';
   $entry->fields['entry_city'] = '';
   $entry->fields['entry_state'] = '';
   $entry->fields['entry_zone_id'] = 0;

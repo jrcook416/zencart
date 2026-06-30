@@ -257,5 +257,5 @@ ppr_webhook.php
 CLAUDE.local.md
 settings.local.json
 .ddev
-
+.github/*.*
 

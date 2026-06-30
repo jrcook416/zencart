@@ -74,8 +74,8 @@ trait InProcessStorefrontCheckoutConcerns
             array_merge(
                 [
                     'action' => 'process',
-                    'company' => '',
-                    'suburb' => '',
+                    'agency' => '',
+                    'unit' => '',
                     'nick' => '',
                     'fax' => '',
                     'customers_referral' => '',

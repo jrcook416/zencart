@@ -40,10 +40,10 @@
 <br class="clearBoth">
 
 <?php
-  if (zen_config('ACCOUNT_COMPANY') === 'true') {
+  if (zen_config('ACCOUNT_AGENCY') === 'true') {
 ?>
-<label class="inputLabel" for="company"><?php echo ENTRY_COMPANY; ?></label>
-<?php echo zen_draw_input_field('company', $entry->fields['entry_company'], zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_company', '40') . ' id="company" autocomplete="organization" placeholder="' . ENTRY_COMPANY_TEXT . '"' . (zen_config('ACCOUNT_COMPANY') === 'true' && (int)zen_config('ENTRY_COMPANY_MIN_LENGTH') != 0 ? ' required' : '')); ?>
+<label class="inputLabel" for="agency"><?php echo ENTRY_AGENCY; ?></label>
+<?php echo zen_draw_input_field('agency', $entry->fields['entry_agency'], zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_agency', '40') . ' id="agency" autocomplete="organization" placeholder="' . ENTRY_AGENCY_TEXT . '"' . (zen_config('ACCOUNT_AGENCY') === 'true' && (int)zen_config('ENTRY_AGENCY_MIN_LENGTH') != 0 ? ' required' : '')); ?>
 <br class="clearBoth">
 <?php
   }
@@ -55,8 +55,8 @@
 <?php
   if (zen_config('ACCOUNT_SUBURB') === 'true') {
 ?>
-<label class="inputLabel" for="suburb"><?php echo ENTRY_SUBURB; ?></label>
-<?php echo zen_draw_input_field('suburb', $entry->fields['entry_suburb'], zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_suburb', '40') . ' id="suburb" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
+<label class="inputLabel" for="unit"><?php echo ENTRY_SUBURB; ?></label>
+<?php echo zen_draw_input_field('unit', $entry->fields['entry_unit'], zen_set_field_length(TABLE_ADDRESS_BOOK, 'entry_unit', '40') . ' id="unit" autocomplete="address-line2" placeholder="' . ENTRY_SUBURB_TEXT . '"'); ?>
 <br class="clearBoth">
 <?php
   }

@@ -55,6 +55,7 @@ CODE {font-family:arial, verdana, helvetica, sans-serif;font-size:1em;}
 FORM, SELECT, INPUT {display:inline;font-size:1em;margin:0 0.1em 0 0;}
 input{height:35px;padding-left:5px;margin-bottom:10px;}
 select{padding-left:5px;width:51%;}
+select#unit, select#county, select#unit{margin-bottom:10px;}
 TEXTAREA {margin:auto;display:block;width:66%;}
 input:focus, select:focus, textarea:focus {}
 legend{display:table;text-align:center;width:100%;padding:10px 0;font-size:1.3em;}
@@ -77,9 +78,9 @@ input[type=text]{width:50%;}
 input[type=radio], input[type=checkbox]{margin-top:8px;vertical-align:middle;height:auto;}
 input[type=file], input[type=image]{width:auto;height:auto;}
 input[type=tel], input[type=email], input[type=password]{width:50%;}
-select#country, .wrapperAttribsOptions select, #advSearchDefault select, select#stateZone {height:40px;}
+select#country, .wrapperAttribsOptions select, #advSearchDefault select, select#stateZone, select#county, select#unit{height:40px;}
 select#send-to {font-size: 1.1em; margin-bottom: 10px; margin-left: 0;}
-select#country, select#stateZone, #state {margin-left:0;}
+select#country, select#stateZone, #state, select#unit, select#county, select#unit{margin-left:0;}
 .ccinfo select{width:auto;height:25px;margin-bottom:10px;}
 .sideBoxContent select{width:90%;margin: auto auto 5px;}
 #currenciesContent select{height:35px;}

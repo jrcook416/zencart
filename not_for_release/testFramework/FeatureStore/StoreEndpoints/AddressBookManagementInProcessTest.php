@@ -88,8 +88,8 @@ class AddressBookManagementInProcessTest extends zcInProcessFeatureTestCaseStore
             'entry_zone_id' => 42,
             'entry_state' => '',
             'entry_gender' => 'm',
-            'entry_company' => '',
-            'entry_suburb' => '',
+            'entry_agency' => '',
+            'entry_unit' => '',
         ]);
 
         $page = $this->getSsl('/index.php?main_page=address_book_process&delete=' . $addressBookId)
@@ -140,8 +140,8 @@ class AddressBookManagementInProcessTest extends zcInProcessFeatureTestCaseStore
             'entry_zone_id' => 42,
             'entry_state' => '',
             'entry_gender' => 'm',
-            'entry_company' => '',
-            'entry_suburb' => '',
+            'entry_agency' => '',
+            'entry_unit' => '',
         ]);
 
         $page = $this->getSsl('/index.php?main_page=address_book_process&edit=' . $addressBookId)

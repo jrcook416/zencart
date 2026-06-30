@@ -106,7 +106,7 @@ class zcObserverNonCaptchaObserver extends base
             'contactname',
             'company',
             'street_address',
-            'suburb',
+            'unit',
             'city',
             'state',
             'zone_country_id',

@@ -110,6 +110,7 @@ require $template->get_template_dir('tpl_main_page.php', DIR_WS_TEMPLATE, $curre
 ?>
 </html>
 <?php
+print_r($_SESSION);
 /**
  * Load general code run before page closes
  */

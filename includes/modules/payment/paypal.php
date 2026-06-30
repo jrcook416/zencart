@@ -283,7 +283,7 @@ class paypal extends base {
                    'email' => $order->customer['email_address'],
                    );
     // address line 2 is optional
-    if ($order->customer['suburb'] != '') $optionsCust['address2'] = $order->customer['suburb'];
+    if ($order->customer['unit'] != '') $optionsCust['address2'] = $order->customer['unit'];
     // different format for Japanese address layout:
     if ($order->customer['country']['iso_code_2'] == 'JP') $optionsCust['zip'] = substr($order->customer['postcode'], 0, 3) . '-' . substr($order->customer['postcode'], 3);
     if ((int)zen_config('MODULE_PAYMENT_PAYPAL_ADDRESS_REQUIRED') === 2) {
@@ -298,7 +298,7 @@ class paypal extends base {
                    'country_code' => ($order->delivery['country']['iso_code_2'] != '' ? $order->delivery['country']['iso_code_2'] : $order->billing['country']['iso_code_2']),
                    'email' => $order->customer['email_address'],
                    );
-      if ($order->delivery['suburb'] != '') $optionsCust['address2'] = $order->delivery['suburb'];
+      if ($order->delivery['unit'] != '') $optionsCust['address2'] = $order->delivery['unit'];
       if ($order->delivery['country']['iso_code_2'] == 'JP') $optionsCust['zip'] = substr($order->delivery['postcode'], 0, 3) . '-' . substr($order->delivery['postcode'], 3);
     }
     $optionsShip['no_shipping'] = zen_config('MODULE_PAYMENT_PAYPAL_ADDRESS_REQUIRED');

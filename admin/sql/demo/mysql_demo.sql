@@ -12,6 +12,7 @@ UPDATE configuration SET configuration_value='true' WHERE configuration_key='DOW
 
 INSERT INTO address_book (address_book_id, customers_id, entry_gender, entry_agency, entry_firstname, entry_lastname, entry_street_address, entry_unit, entry_postcode, entry_city, entry_state, entry_country_id, entry_zone_id) VALUES (NULL, 1, 'm', 'JustaDemo', 'Bill', 'Smith', '123 Any Avenue', '', '12345', 'Here', '', 223, 12);
 
+
 #
 # Dumping data for table `categories`
 #

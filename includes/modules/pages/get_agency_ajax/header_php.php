@@ -16,9 +16,9 @@ if (isset($_POST['securityToken']) && $_POST['securityToken'] == $_SESSION['secu
     if ($county_id > 0) {
         // Replace 'your_table_name' with your actual database table
         // Replace 'county_id_field', 'unit_id', and 'unit_name' with your actual column names
-        $sql = "SELECT unit_id, unit_description 
-                FROM iems_units 
-                WHERE unit_countyID = :countyID 
+        $sql = "SELECT agency_id, agency_description 
+                FROM iems_agencies 
+                WHERE agency_countyID = :countyID 
                 ORDER BY unit_description ASC";
                 
         $sql = $db->bindVars($sql, ':countyID', $county_id, 'integer');
@@ -28,8 +28,8 @@ if (isset($_POST['securityToken']) && $_POST['securityToken'] == $_SESSION['secu
             $response['success'] = true;
             while (!$result->EOF) {
                 $response['data'][] = array(
-                    'id' => $result->fields['unit_id'],
-                    'name' => $result->fields['unit_description']
+                    'id' => $result->fields['agency_id'],
+                    'name' => $result->fields['agency_description']
                 );
                 $result->MoveNext();
             }

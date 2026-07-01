@@ -4,6 +4,7 @@
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  */
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Tests\Support\zcUnitTestCase;
 
 if (!defined('CHARSET')) {
@@ -13,6 +14,7 @@ if (!defined('CHARSET')) {
 /**
  * @see admin/includes/classes/message_stack.php
  */
+#[RunTestsInSeparateProcesses]
 class AdminOutputEscapingTest extends zcUnitTestCase
 {
     public function setUp(): void

@@ -6,11 +6,13 @@
 
 namespace Tests\Unit\testsSundry;
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Tests\Support\zcUnitTestCase;
 
 /**
  * @see /includes/functions/functions_lookups.php
  */
+#[RunTestsInSeparateProcesses]
 class AttributeLookupsTest extends zcUnitTestCase
 {
     public function setUp(): void
@@ -18,6 +20,20 @@ class AttributeLookupsTest extends zcUnitTestCase
         parent::setUp();
         require_once DIR_FS_CATALOG . DIR_WS_CLASSES . 'db/mysql/query_factory.php';
         require_once DIR_FS_CATALOG . 'includes/functions/functions_attributes.php';
+
+        $GLOBALS['configurationRepository'] = new class {
+            public function get(string $key): mixed
+            {
+                return defined($key) ? constant($key) : null;
+            }
+        };
+
+        $GLOBALS['productTypeLayoutRepository'] = new class {
+            public function get(string $key): mixed
+            {
+                return defined($key) ? constant($key) : null;
+            }
+        };
     }
 
     public function testZenHasProductAttributesDownloadsStatusWhenDownloadEnabledIsFalse()

@@ -4,10 +4,9 @@ on: [push, pull_request]
 
 jobs:
   call-canonical:
+    permissions:
+      contents: read
     uses: ./.github/workflows/iems_testing.yml
-    with:
-      test-command: vendor/bin/phpunit -c phpunit.xml
-      
   build:
     permissions:
       contents: read
@@ -17,8 +16,6 @@ jobs:
     strategy:
       matrix:
         php-version: ['8.3', '8.4', '8.5']
-
-    continue-on-error: ${{ matrix.php-version == '8.6' }}
 
     services:
       mysql:

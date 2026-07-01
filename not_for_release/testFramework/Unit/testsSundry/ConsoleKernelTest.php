@@ -228,6 +228,9 @@ PHP
             new class ($db) extends \Zencart\DbRepositories\ConfigurationRepository {
                 public function loadConfigSettings(): void
                 {
+                    if (!defined('CURL_PROXY_REQUIRED')) {
+                        define('CURL_PROXY_REQUIRED', 'True');
+                    }
                 }
 
                 public function get(string $configurationKey): mixed

@@ -383,6 +383,8 @@ class WhosOnline extends base
                     $extracted_data[$as] = $_SESSION[$field];
                 }
             }
+        } elseif ($session_id !== '') {
+            $this->purgeCorruptSessionRecord($session_id);
         }
 
         $_SESSION = $backupSessionArray;

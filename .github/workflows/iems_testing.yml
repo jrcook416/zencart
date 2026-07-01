@@ -1,0 +1,90 @@
+name: Canonical Test Job
+
+on:
+  workflow_call:
+    inputs:
+      test-command:
+        required: false
+        type: string
+        default: composer tests-unit
+    secrets: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: zencart_test
+          MARIADB_USER: zc
+          MARIADB_PASSWORD: zcpass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=20
+
+    env:
+      APP_ENV: test
+      TZ: UTC
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: zencart_test
+      DB_USERNAME: zc
+      DB_PASSWORD: zcpass
+      SESSION_SAVE_PATH: /tmp/zencart-sessions
+      CACHE_DIR: /tmp/zencart-cache
+      TMPDIR: /tmp
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, mysqli, pdo_mysql, curl, xml, zip, gd
+          ini-values: date.timezone=UTC, memory_limit=512M
+          coverage: none
+
+      - name: Validate runtime
+        run: |
+          php -v
+          php -m | sort
+          mysql --version
+
+      - name: Prepare writable dirs
+        run: |
+          mkdir -p /tmp/zencart-sessions /tmp/zencart-cache
+          chmod -R 777 /tmp/zencart-sessions /tmp/zencart-cache
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare the application
+        run: |
+          touch includes/configure.php
+
+      - name: Wait for DB readiness
+        run: |
+          for i in {1..30}; do
+          mysql -h 127.0.0.1 -uroot -proot -e "SELECT 1" && break
+          sleep 2
+          done
+        
+      - name: Reset test database
+        run: |
+            mysql -h 127.0.0.1 -uroot -proot -e "DROP DATABASE IF EXISTS zencart_test; CREATE DATABASE zencart_test;"
+            # put your schema/bootstrap command here, example:
+            # php tests/bootstrap-db.php
+
+      - name: Run tests (deterministic)
+        env:
+          XDEBUG_MODE: off
+        run: ${{ inputs.test-command }}

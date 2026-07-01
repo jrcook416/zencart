@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../vinos_favicon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+<title>One-Page Checkout</title>
+
+<style>
+a, a:active, a:visited { color: #006666; }
+a:hover { color:#00CC99; }
+BODY, P, H1, H2, H3, H4, H5, H6, LI {
+  font-family: Lato, Verdana, AvantGarde, Tahoma, Arial, sans-serif;
+  font-size: 12pt;
+  color: black;
+  padding: 0px;
+  margin: 20px;
+  line-height: 1.75em;
+}
+h1, h2, h3 { font-weight: bold; padding: 0.25rem 0.5rem; border: 1px solid #eee; }
+h1 { font-size: 20px; background-color: #ffd700; }
+h2 { font-size: 16px; background-color: #f0e68c; }
+h3 { background-color: #eee8aa; }
+ol li, ul li, ul li ul li { margin: 5px 0; padding: 0; }
+.corefile, .red { color: red; }
+.template { color: green; }
+.forward { float: right; }
+.added { color: #1f45fc; }
+.removed { text-decoration: line-through; }
+.back { float: left; }
+.clearBoth { clear: both; }
+.smaller { font-size: smaller; }
+.multi-list { width: 32%; float: left; }
+.box-border { margin: 5px 20px; border: 1px solid #444; border-radius: 6px; }
+.template-changed { color: #8ba6ca; font-weight: bold; }
+.scroll { overflow-x: scroll; }
+pre.scroll { border: 1px solid #666; padding: 5px; }
+.fs-larger { font-size: larger; }
+</style>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+
+<body>
+    <h1>One-Page Checkout &hellip; with Guest &hellip; <span class="smaller">for Zen Cart v1.5.8 (and later)</span></h1>
+    <h3>Version 2.6.3 by lat9, swguy, simon1066, marco-pm, drbyte, proseLA, brittainmark and hucario</h3>
+    <h3>Copyright &copy; 2013-2026 <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noopener">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
+    <p>Released under the General Public License (see the file named <code>license.txt</code> in the plugin's distribution for full details). This script is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</p>
+    <hr>
+    <div><i class="fas fa-exclamation-circle fa-5x red back"></i>&nbsp;&nbsp;<b>Important Notes:</b></div>
+    <p>This version of <em>One-Page Checkout</em> supports Zen Cart <em>1.5.8 and later, including 2.1.0 and 2.2.x</em> &hellip; <b>only</b>. The <a href="#install">installation instructions</a> for <em>OPC</em> differ, depending on the version of Zen Cart on which your site runs.</p>
+    <ol>
+        <li>For zc158, zc158a, zc20x and zc210, there are <span class="corefile">core-file overwrites</span> for the <code>order_status</code> page if you want to include <em>OPC</em>'s updates.</li>
+        <li>For zc221 and later, no such overwrites are needed as <em>OPC</em>'s now distributes that version of the files.</li>
+    </ol>
+
+    <p class="clearBoth"><b>Credits:</b></p>
+    <ol>
+        <li>The checkout-confirmation loading .gif file was created using the tool at <a href="https://preloaders.net/en/free" target="_blank" rel="noopener">https://preloaders.net/en/free</a>.</li>
+        <li>Browser detection class courtesy of <a href="https://github.com/cbschuld/Browser.php" target="_blank" rel="noopener">https://github.com/cbschuld/Browser.php</a>.</li>
+        <li>Simple CSS overlay courtesy of <a href="https://github.com/KorenLeslieCohen/simple-css-overlay" target="_blank" rel="noopener">https://github.com/KorenLeslieCohen/simple-css-overlay</a>.</li>
+        <li>Guest checkout, especially the <code>orders_status</code> page's processing, based on the <a href="https://www.zen-cart.com/showthread.php?196995-COWOA-%28for-ZC-v1-5-x%29" target="_blank" rel="noopener">COWOA</a> (by @DivaVocals, @countrycharm and others) and <a href="https://www.zen-cart.com/downloads.php?do=file&id=2131" target="_blank" rel="noopener">COWAA</a> (by @davewest) plugins.</li>
+    </ol>
+    <hr>
+    <p>Full documentation can be found in the plugin's <a href="https://github.com/lat9/one_page_checkout/wiki" target="_blank" rel="noopener">Wiki</a> page.</p>
+    <hr>
+    <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?220781-One-Page-Checkout-Support-Thread" target="_blank" rel="noopener">https://www.zen-cart.com/showthread.php?220781-One-Page-Checkout-Support-Thread</a></p>
+
+    <h2>Overview</h2>
+    <p>This plugin streamlines the flow that your customers see during your store's checkout process, combining the handling required for the <code>checkout_shipping</code>, <code>checkout_payment</code> and <code>checkout_confirmation</code> into a single-page display. With <em>OPC</em> installed, your customers can also <em>Checkout as Guest</em> or create <em>Registered Accounts</em>!  The <em>Checkout as Guest</em> feature provides customers with a more streamlined checkout experience (no account-creation required), while <em>Registered Accounts</em> enable your customers to create their account with minimal information (no address-book record required), making it easier for your customers to sign up for &quot;newsletter-only&quot; accounts and other account-holder features that your store might have.</p>
+
+    <p>The plugin's design utilizes <b><i>standard Zen Cart</i></b> HTML/CSS layout when rendering its new pages, so the look-and-feel of your store gets &quot;inherited&quot;.  Some templates make <em>drastic</em>  modifications to that layout &mdash; removing those <em>standard</em> HTML/CSS selectors &mdash; which causes this plugin's newly-added pages to display improperly.  The following templates are known to be incompatible with the <em>One-Page Checkout</em> plugin:<p>
+    <ol>
+        <li>Tableau (numinix)</li>
+        <li>YourStore (themeforest)</li>
+    </ol>
+    <p>One-Page Checkout has been validated with the <a href="https://www.zen-cart.com/downloads.php?do=file&id=2191" target="_blank" rel="noopener">ZCA Bootstrap Template</a>, <b>v3.7.8</b> and later; best supported by v3.7.9 and later.  It's also been validated with the built-in <code>responsive_classic</code> template provided by Zen Cart 2.2.1.</p>
+
+    <div class="box-border">
+        <p>The plugin checks (on confirmation) that the order's information hasn't changed by inspecting the customer's session, ensuring that what the customer saw on the checkout page is the same on confirmation page.  There are order-total modules that make changes to those session-based settings, resulting in an order-confirmation loop and are, as such, incompatible with <em>One-Page Checkout</em>:</p>
+        <ol>
+            <li>ot_prowebsoptions</li>
+        </ol>
+        <p>There are other order-total modules that require some <em>tweaks</em> to enable their interoperation with <em>One-Page Checkout</em>:</p>
+        <ol>
+            <li><a href="https://www.zen-cart.com/downloads.php?do=file&id=704" target="_blank" rel="noopener"><em>Reward Points Full Suite</em></a> v25.e and earlier, see <a href="https://www.zen-cart.com/showthread.php?220781-One-Page-Checkout-Support-Thread&p=1329034#post1329034" target="_blank" rel="noopener">this</a> posting on the <em>One-Page Checkout</em> support thread for details.</li>
+        </ol>
+    </div>
+
+    <p><em>One-Page Checkout's</em> installation loads all the plugin's files into the sub-directories associated with the <em>template_default</em> template's use; that way, the processing is available for <b>all</b> templates you might use in your store.  If you make changes to those default files, you'll use the Zen Cart &quot;override&quot; system to make your updates.  For example, if you're adding a top-of-page message, you'll copy the file /includes/languages/english/lang.checkout_one.php to the /includes/languages/english/YOUR_TEMPLATE sub-directory and make your changes there.</p>
+    <p>The plugin has been validated on Zen Cart 1.5.8 through 2.2.1 and PHP versions 7.4 through 8.5, using the following shipping, order-total and payment methods:</p>
+    <div class="multi-list">
+        <h4>Shipping Methods</h4>
+        <ol>
+          <li>Per Item</li>
+          <li>Flat Rate</li>
+          <li>Store Pickup</li>
+          <li>Table Rate (and various clones)</li>
+          <li>United States Postal Service (uspsr)</li>
+          <li>United Parcel Service (upsoauth)</li>
+          <li>FedEx (fedexrest)</li>
+          <li>Product Delivery by Postcode (PDP)</li>
+          <li>ZipShip <span class="smaller">(Requires v2.0.0 or later)</span></li>
+          <li>ozPost</li>
+        </ol>
+    </div>
+    <div class="multi-list">
+        <h4>Order Totals</h4>
+        <ol>
+          <li>Sub-total (ot_subtotal)</li>
+          <li>Tax (ot_tax)</li>
+          <li>Coupon (ot_coupon)</li>
+          <li>Gift Certificates (ot_gv)</li>
+          <li>Shipping (ot_shipping)</li>
+          <li>Total (ot_total)</li>
+          <li>Reward Points</li>
+          <li>COD Fee (ot_cod_fee)</li>
+          <li>Low-order Fee (ot_loworder_fee)</li>
+        </ol>
+    </div>
+    <div class="multi-list">
+        <h4>Payment Methods:</h4>
+        <ol>
+          <li>Authorize.net (AIM) (authorizenet_aim)</li>
+          <li>Authorize.net (CIM Card on File) (authorizenet_cim and authorizenet_cof)</li>
+          <li>Braintree</li>
+          <li>Ceon Manual Card</li>
+          <li>Check / Moneyorder (moneyorder)</li>
+          <li>Direct Bank Deposit</li>
+          <li>First Data Hosted Checkout Payment Pages</li>
+          <li>Layaway Plan</li>
+          <li>NoChex</li>
+          <li>PayPal Express Checkout (paypalwpp).  <strong>Note:</strong> Orders placed via the <em>PayPal Express Checkout</em> button, normally on a site's 'shopping-cart' or 'login' pages, will continue with the &quot;normal&quot; 3-page-checkout process.</li>
+          <li>PayPal RESTful (paypalr)</li>
+          <li>Purchase Order (purchaseorders)</li>
+          <li>Sage Pay Form</li>
+          <li>Square Web Pay, starting with <em>OPC</em> v2.4.1.</li>
+          <li>Stripe-Pay</li>
+          <li>Gateway Processing Services (gps).  <strong>Note:</strong> The payment method must be present in the OPC setting <em>Payment Methods Requiring Confirmation</em> for proper operation.</li>
+          <li>Ship2Pay (starting with <em>OPC</em> v2.2.2)</li>
+          <li>Ceon Sage Pay Direct (starting with <em>OPC</em> v2.2.2)</li>
+        </ol>
+    </div>
+
+    <h2 class="clearBoth">Installing / Upgrading / Removing</h2>
+    <p>This section identifies the procedure you'll use to install/update or remove the plugin for your Zen Cart.</p>
+
+    <h3 id="install">Initial Installation</h3>
+    <p class="fs-larger"><b>Note:</b> Starting with v2.5.5 of <em>OPC</em>, <b>an initial installation on Zen Cart versions prior to 1.5.8 is no longer supported</b>!</p>
+    <p>There are <span class="template">template-override</span> changes required by this plugin; you should <strong>always</strong> backup your cart's database and files prior to making any changes.  Unzip the plugin's package file and then:</p>
+    <ol type="A">
+        <li>If your store is running on a Zen Cart version <b>prior to 2.2.1</b>, there are <span class="corefile">core-file overwrites</span> required. If that's your case:<ol type="a">
+            <li>Rename your current <code>header_php.php</code> in the <code>/includes/modules/pages/order_status</code> sub-directory to <code>header_php.php.notused</code>.</li>
+            <li>Rename your current <code>tpl_order_status_default.php</code> in the <code>/includes/templates/template_default/templates</code> sub-directory to <code>tpl_order_status_default.php.notused</code>.</li>
+        </ol></li>
+        <li>If your store <b><i>is not using the Bootstrap template</i></b> (or a clone there-of), rename the YOUR_TEMPLATE sub-directories <b>(4 of them)</b> to match your store's template name.  The Bootstrap template (v3.4.0 and later) already includes its template-specific integration, so the files from <em>this</em> distribution are neither needed nor wanted!
+            <ol type="a">
+                <li>/includes/languages/english/html_includes/YOUR_TEMPLATE</li>
+                <li>/includes/languages/english/modules/order_total/YOUR_TEMPLATE</li>
+                <li>/includes/languages/english/YOUR_TEMPLATE</li>
+                <li><span class="template removed">/includes/modules/sideboxes/YOUR_TEMPLATE</span> <span class="smaller">(Removed in v2.5.5)</span></li>
+                <li>/includes/templates/YOUR_TEMPLATE</li>
+            </ol>
+            Merge the <span class="template">template-override</span> modifications required by this plugin with your store's existing copy of each file, using the plugin's version of the file if not currently present in your store's file-system.<ol>
+            <li><span class="template">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_coupon.php</span> <span class="smaller">(Added in v2.4.2)</span></li>
+            <li><span class="template">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_gv.php</span> <span class="smaller">(Added in v2.4.2)</span></li>
+            <li><span class="template removed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_coupon.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="template removed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_gv.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="template removed">/includes/modules/sideboxes/YOUR_TEMPLATE/information.php</span> <span class="smaller">(Removed in v2.5.5)</span></li>
+            <li><span class="template">/includes/languages/english/YOUR_TEMPLATE/lang.order_status.php</span> <span class="smaller">(Added in v2.4.4)</span></li>
+            <li><span class="template removed">/includes/languages/english/YOUR_TEMPLATE/order_status.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+        </ol></li>
+        <li>Rename the YOUR_ADMIN sub-directory to match your store's admin-sub-directory name.</li>
+        <li>Sign into your Zen Cart's admin panel.  Due the the number of files that require uploading, I suggest that you place the site into <em>Maintenance Mode</em> by setting <b><i>Configuration :: Website Maintenance :: Down for Maintenance: ON/OFF</i></b> to <em>true</em>.</li>
+        <li>Copy the plugin's <em>new</em> files &mdash; with the sub-directories renamed as identified in steps <b>A</b> and <b>B</b> and the file-merges performed as identified in step <b>B</b> &mdash; to your store's directory structure. <b>Note that there are two files that <i>should not be copied</i> for Zen Cart version 2.2.1 and later!</b> You'll use either your webhost's cPanel File Manager or an FTP program (like WinSCP or FileZilla) to perform this copy.<ol>
+            <li>/includes/auto_loaders/config.checkout_one.php</li>
+            <li>/includes/auto_loaders/paypal_ipn.checkout_one.php</li>
+            <li>/includes/classes/OnePageCheckout.php</li>
+            <li>/includes/classes/OnePageCheckoutNoPayment</li>
+            <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/classes/observers/CheckoutOneEmailObserver.php</li>
+            <li>/includes/extra_datafiles/checkout_one_filenames.php</li>
+            <li><span class="removed">/includes/functions/extra_functions/one_page_checkout_functions.php</span> <span class="smaller">(Removed in v2.6.2)</span></li>
+            <li>/includes/functions/extra_functions/zen_config.php <span class="smaller">(Added in v2.6.2)</span></li>
+            <li><span class="removed">/includes/langauges/english/address_book_register.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="removed">/includes/languages/english/checkout_one.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="removed">/includes/languages/english/checkout_one_confirmation.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="removed">/includes/languages/english/checkout_process_guest.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="removed">/includes/languages/english/checkout_success_guest.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="removed">/includes/languages/english/create_account_register.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="removed">/includes/langauges/english/create_account_success_register.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li>/includes/languages/english/lang.checkout_one.php</li>
+            <li>/includes/languages/english/lang.checkout_one_confirmation.php</li>
+            <li>/includes/languages/english/lang.checkout_process_guest.php</li>
+            <li>/includes/languages/english/lang.checkout_success_guest.php</li>
+            <li>/includes/languages/english/lang.create_account_register.php</li>
+            <li>/includes/languages/english/lang.create_account_success_register.php</li>
+            <li>/includes/languages/english/lang.login_guest.php</li>
+            <li><span class="removed">/includes/languages/english/login_guest.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="removed">/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li>/includes/languages/english/extra_definitions/lang.checkout_one_extra_definitions.php</li>
+            <li>/includes/languages/english/html_includes/define_checkout_success_guest.php</li>
+            <li>/includes/languages/english/html_includes/YOUR_TEMPLATE/define_checkout_success_guest.php</li>
+            <li><span class="template">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_coupon.php</span></li>
+            <li><span class="template">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_gv.php</span></li>
+            <li><span class="template removed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_coupon.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="template removed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_gv.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li><span class="template">/includes/languages/english/YOUR_TEMPLATE/lang.order_status.php</span></li>
+            <li><span class="template removed">/includes/languages/english/YOUR_TEMPLATE/order_status.php</span> <span class="smaller">(Removed in v2.5.4)</span></li>
+            <li>/includes/modules/pages/address_book/header_php_address_book_register.php</li>
+            <li>/includes/modules/pages/address_book/main_template_vars.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+            <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+            <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.js</li>
+            <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.min.js</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one/on_load_main.js</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_success/header_php_guest.php</li>
+            <li>/includes/modules/pages/checkout_success/main_template_vars.php</li>
+            <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+            <li>/includes/modules/pages/create_account/jscript_form_check_register.php</li>
+            <li>/includes/modules/pages/create_account/main_template_vars.php</li>
+            <li>/includes/modules/pages/create_account_success/header_php_create_account_success_register.php</li>
+            <li>/includes/modules/pages/create_account_success/main_template_vars.php</li>
+            <li>/includes/modules/pages/login/header_php_login_guest.php</li>
+            <li>/includes/modules/pages/login/jscript_opc_reset_guest_for_ppec.php</li>
+            <li>/includes/modules/pages/login/main_template_vars.php</li>
+            <li><span class="corefile">/includes/modules/pages/order_status/header_php.php <span class="smaller">(Copy <b class="larger">only</b> for Zen Cart versions prior to 2.2.1)</span></span></li>
+            <li>/includes/modules/pages/shopping_cart/jscript_opc_reset_guest_for_ppec.php</li>
+            <li>/includes/templates/template_default/css/checkout_one.css</li>
+            <li>/includes/templates/template_default/css/checkout_one_confirmation.css</li>
+            <li>/includes/templates/template_default/css/checkout_success.css</li>
+            <li>/includes/templates/template_default/css/create_account.css</li>
+            <li>/includes/templates/template_default/css/login.css</li>
+            <li>/includes/templates/template_default/images/confirmation_one_loading.gif</li>
+            <li>/includes/templates/template_default/templates/tpl_address_book_register.php</li>
+            <li>/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</li>
+            <li>/includes/templates/template_default/templates/tpl_checkout_one_default.php</li>
+            <li>/includes/templates/template_default/templates/tpl_checkout_success_guest.php</li>
+            <li>/includes/templates/template_default/templates/tpl_create_account_register.php</li>
+            <li>/includes/templates/template_default/templates/tpl_create_account_success_register.php</li>
+            <li>/includes/templates/template_default/templates/tpl_login_guest.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_checkout_one_shipping.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_billing_address.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_comments.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_conditions.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_credit_selections.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_customer_info.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_instructions.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_shipping_address.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_shipping_choices.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_shopping_cart.php</li>
+            <li>/includes/templates/template_default/templates/tpl_modules_opc_submit_block.php</li>
+            <li><span class="corefile">/includes/templates/template_default/templates/tpl_order_status_default.php <span class="smaller">(Copy <b class="larger">only</b> for Zen Cart versions prior to 2.2.1)</span></span></li>
+            <li>/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</li>
+            <li>/includes/templates/YOUR_TEMPLATE/css/checkout_one_confirmation.css</li>
+            <li>/includes/templates/YOUR_TEMPLATE/css/checkout_success.css</li>
+            <li>/includes/templates/YOUR_TEMPLATE/css/create_account.css</li>
+            <li>/includes/templates/YOUR_TEMPLATE/css/login.css</li>
+            <li>/YOUR_ADMIN/opc_admin.php</li>
+            <li>/YOUR_ADMIN/includes/auto_loaders/config.checkout_one.php</li>
+            <li>/YOUR_ADMIN/includes/classes/observers/CheckoutOneAdminObserver.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_install.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+            <li><span class="removed">/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</span> <span class="smaller">(Removed in v2.5.5)</span></li>
+            <li>/YOUR_ADMIN/includes/functions/extra_functions/zen_config.php <span class="smaller">(Added in v2.6.2)</span></li>
+            <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/checkout_one_name.php</li>
+        </ol></li>
+        <li>Click the &quot;Admin Home&quot; link in your Zen Cart's top admin menu.  This action will cause the plugin's installation script to run.</li>
+        <li>Now, check your store's <code>/includes/modules/pages/checkout_payment</code> directory's files. If you have plugins or additional payment methods that have added files to that directory, copy them to your store's <code>/includes/modules/pages/checkout_one</code> directory.  Those additional files will be required proper operation in the One-Page Checkout environment.</li>
+        <li>If you placed your store into <em>Maintenance Mode</em>, as suggested at step <b>D</b>, you can now safely take your site out of <em>Maintenance Mode</em>.</li>
+        <li>Note that the plugin, upon initial installation, defaults its enabling settings to <em>false</em>; see the <em>Overview / Configuration</em> tab of this readme for additional information.</li>
+        <li>One last item to &quot;tidy up&quot; ... registering the two new checkout pages into the <b>ROBOTS_PAGES_TO_SKIP</b> value.  I don't think this is a high-priority item since the pages' names don't appear on any menus and include it only for completeness!  If you want to make sure that robots aren't indexing the <code>checkout_one</code> and <code>checkout_one_confirmation</code> pages, you'll need to edit your site's version of <code>/includes/extra_configures/robots_pages_to_skip.php</code> and add those two page-names to the end of that constant's comma-separated-list.</li>
+    </ol>
+
+    <h3>Updating</h3>
+    <p class="fs-larger"><b>Note:</b> Starting with v2.5.5 of <em>OPC</em>, <b>upgrades on Zen Cart versions prior to 1.5.8 is no longer supported</b>!</p>
+    <p>There are <span class="template">template-override</span> changes required by this plugin; you should <strong>always</strong> backup your cart's database and files prior to making any changes.  Unzip the plugin's package file and then:</p>
+    <ol type="A">
+        <li>Sign into your Zen Cart's admin panel.  Since there might be a number of files that require uploading, I suggest that you place the site into <em>Maintenance Mode</em> by setting <b><i>Configuration :: Website Maintenance :: Down for Maintenance: ON/OFF</i></b> to <em>true</em>.</li>
+        <li>Make note of the version-number of your current <em>One-Page Checkout</em> installation; see your admin's <b><em>Configuration :: One-Page Checkout Settings :: Version/Release Date</em></b>.</li>
+        <li>Review the <a href="#change-history">Change History</a> section of this readme, noting all of the affected files starting with the <em>OPC</em> release just following your current version.  Copy those updated files from the <em>OPC</em> distribution to your store's file-system.</li>
+        <li>In the file-list created for step <b>C</b>, note any changes to <em>OPC</em>'s <span class="template-changed">base template and language files</span> and make sure to merge those changes with any template-override versions that you might have created!</li>
+        <li>Click the &quot;Admin Home&quot; link in your Zen Cart's top admin menu.  This action will cause the plugin's upgrade script to run.</li>
+        <li>If you placed your store into <em>Maintenance Mode</em>, as suggested at step <b>A</b>, you can now safely take your site out of <em>Maintenance Mode</em>.</li>
+    </ol>
+    <p><b>Note:</b> The file <em>/includes/languages/english/YOUR_TEMPLATE/checkout_confirmation.php</em> was distributed by <em>OPC</em> versions <em>prior to</em> v2.4.2.  If you've made no changes over-and-above the one marked section provided by <em>OPC</em>, you can safely remove this file from your template's language directory.</p>
+ 
+    <h3>Removing OPC</h3>
+    <p>First, delete the files that were copied to your Zen Cart installation's file-system. Then use your admin's <em>Tools :: Run SQL Patches</em> to run the file <code>/docs/one_page_checkout/uninstall/checkout_one_uninstall.sql</code>.</p>
+
+    <h2 id="change-history">Change History</h2>
+    <h3>Changes and Bugfixes</h3>
+    <p>You can view the details of these changes on the plugin's <a href="https://github.com/lat9/one_page_checkout/issues" target="_blank" rel="noopener">GitHub repository</a>. <span class="template-changed">Changes to the plugin's default templates are identified in this color</span>; remember to merge those changes with any template-override version you might have created!  Additions are identified by <span class="added">this</span> color and removals are indicated like <span class="removed">this</span>.</p>
+    <ul>
+        <li>v2.6.3-beta1, 2026-06-19 (lat9):<ul>
+            <li>BUGFIX: Correct PHP fatal error during <code>paypalwpp</code> special checkout, <b>really, this time</b></li>
+            <li>BUGFIX: Correct &quot;Shipping Address, Same as Billing&quot; state management.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </li>
+        <li>v2.6.2, 2026-06-05 (lat9):<ul>
+            <li>BUGFIX: Correct PHP fatal error during <code>paypalwpp</code> special checkout.</li>
+            <li>BUGFIX: Correct &quot;undefined constant&quot; PHP error when guest converts to full account on Zen Cart versions prior to v2.2.2.</li>
+            <li>BUGFIX: Correct OPC disable during <code>paypalwpp</code> special checkout.</li>
+            <li>BUGFIX: Correct missing <code>$gender</code> for account registration, if not enabled via configuration.</li>
+            <li>INTROP: Use zc300's <code>zen_config</code> when checking configuration settings.</li>
+            <li>BUGFIX: Remove no-longer-needed <code>one_page_checkout_functions.php</code>.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li><span class="added">/includes/functions/extra_functions/zen_config.php</span></li>
+                <li><span class="removed">/includes/functions/extra_functions/one_page_checkout_functions.php</span></li>
+                <li>/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_coupon.php</li>
+                <li>/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_gv.php</li>
+                <li>/includes/languages/english/lang.create_account_register.php</li>
+                <li>/includes/languages/english/lang.login_guest.php</li>
+                <li>/includes/modules/checkout_one_send_welcome_email.php</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/checkout_success/header_php_guest.php</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li>/includes/modules/pages/create_account/jscript_form_check_register.php</li>
+                <li>/includes/modules/pages/login/header_php_login_guest.php</li>
+                <li>/includes/modules/pages/order_status/header_php.php</li>
+                <li>/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</li>
+                <li>/includes/templates/template_default/templates/tpl_checkout_success_guest.php</li>
+                <li>/includes/templates/template_default/templates/tpl_create_account_register.php</li>
+                <li>/includes/templates/template_default/templates/tpl_login_guest.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_conditions.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_credit_selections.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_customer_info.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_shipping_address.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_shipping_choices.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_shopping_cart.php</li>
+                <li>/includes/templates/template_default/templates/tpl_order_status_default.php</li>
+                <li>/YOUR_ADMIN/includes/classes/observers/OnePageCheckoutAdminObserver.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_install.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/functions/extra_functions/zen_config.php</span></li>
+            </ol></li>
+        </li>
+        <li>v2.6.1, 2026-05-10 (lat9, hucario):<ul>
+            <li>BUGFIX: Remove redundant event listeners on the <code>checkout_one</code> page.</li>
+            <li>BUGFIX: Ensure order-id is an integer on the <code>order_status</code> page.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/order_status/header_php.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </li>
+        <li>v2.6.0, 2026-03-30 (lat9):<ul>
+            <li>BUGFIX: Correct unwanted PHP Fatal errors when OPC session is missing or isn't an object.</li>
+            <li>CHANGE: Ensure admin language files are in array format.</li>
+            <li>CHANGE: Complete updates recognizing features provided by zc158 and later.</li>
+            <li>CHANGE: Use zc220+ version of the <code>order_status</code> page's header/template.</li>
+            <li>CHANGE: Add optional text for payment module display.</li>
+            <li>CHANGE: Record customer's IP address on account registration and guest-account-conversion.</li>
+            <li>BUGFIX: Ensure that a <code>customers_info</code> table record exists for the guest-customer's id.</li>
+            <li>CHANGE: Telephone can now be optional during registration, overriding 'base' minimum length.</li>
+            <li>CHANGE: The customer's telephone number can now be modified during checkout.</li>
+            <li>CHANGE: Send 'welcome' email when guest-customer converts to regular account.</li>
+            <li>CHANGE: Add a list of customers for whom OPC is always <em>disabled</em>.</li>
+            <li>CHANGE: Add type-hints to class properties, inputs and returned values.</li>
+            <li>BUGFIX: Enable guest-checkout/registered-accounts when OPC's enabled conditionally.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/extra_datafiles/checkout_one_filenames.php</li>
+                <li>/includes/functions/extra_functions/one_page_checkout_functions.php</li>
+                <li>/includes/languages/english/lang.create_account_register.php</li>
+                <li><span class="added">/includes/modules/checkout_one_send_welcome_email.php</span></li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_success/header_php_guest.php</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li>/includes/modules/pages/create_account/jscript_form_check_register.php</li>
+                <li><span class="corefile">/includes/modules/pages/order_status/header_php.php</span></li>
+                <li>/includes/templates/template_default/templates/tpl_create_account_register.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php</li>
+                <li><span class="corefile">/includes/templates/template_default/templates/tpl_order_status_default.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+                <li><span class="removed">/YOUR_ADMIN/includes/languages/english/checkout_one_name.php</span></li>
+                <li><span class="added">/YOUR_ADMIN/includes/languages/english/lang.checkout_one_name.php</span></li>
+            </ol></li>
+        </li>
+        <li>v2.5.5, 2025-09-19 (lat9, proseLA):<ul>
+            <li>BUGFIX: Silently ignore shipping modules/methods with no specified <code>id</code> to prevent PHP warnings/deprecations.</li>
+            <li>BUGFIX: Correct integration with shipping modules that provide &quot;extra&quot; fields.</li>
+            <li>INTROP: E_USER_ERROR deprecated for PHP 8.4.</li>
+            <li>INTROP: Conditionally load order-related classes during AJAX processing.</li>
+            <li>BUGFIX: Ensure temporary-address updates include the updated 'state_code' for that address.</li>
+            <li>INTROP: Update order's cart display when shipping changed, as tax might have changed as well.</li>
+            <li>BUGFIX: Disallow guest-checkout with an unauthorized customer's email address.</li>
+            <li>BUGFIX: Remove no-longer-needed files that are included in zc158+ distributions.</li>
+            <li>The following files were changed or <span class="removed">removed</span>:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/ajax/ajaxOnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li><span class="removed">/includes/modules/sideboxes/YOUR_TEMPLATE/information.php</span></li>
+                <li>/includes/templates/template_default/templates/tpl_modules_checkout_one_shipping.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_shopping_cart.php</li>
+                <li><span class="removed">/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.5.4, 2024-11-05 (lat9):<ul>
+            <li>BUGFIX: Account for <samp>$_SESSION['opc_saved_order_total']</samp> not being set.</li>
+            <li>BUGFIX: Correct PHP Warning during <samp>paypaywpp</samp> processing.</li>
+            <li>INTROP: Remove storefront non-array-format language files from this distribution; <b>no longer supporting initial installation on zc157!</b></li>
+            <li>BUGFIX: Orders could be submitted via click of an &quot;Apply&quot; button for a credit-class order-total.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li><span class="removed">/includes/languages/english/address_book_register.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/checkout_one.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/checkout_one_confirmation.php<sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/checkout_process_guest.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/checkout_success_guest.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/create_account_register.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/create_account_success_register.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/login_guest.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_coupon.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_gv.php</span><sup>1</sup></li>
+                <li><span class="removed">/includes/languages/english/YOUR_TEMPLATE/order_status.php</span><sup>1</sup></li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+            <sup>1</sup>Removed from this distribution <em>only</em>; if your site runs on a version of Zen Cart 1.5.7, these files <b>must</b> be kept from your original installation.
+        </ul></li>
+        <li>v2.5.3, 2024-08-10 (lat9):<ul>
+            <li>BUGFIX: Correct PHP Warning when <samp>$_SESSION['opc_saved_order_total']</samp> isn't set and debug is enabled.</li>
+            <li>BUGFIX: Correct PHP Warning when <samp>$_SESSION['shipping']</samp> isn't set and debug is enabled.</li>
+            <li>BUGFIX: Correct missing guest-customer records; disallow various <samp>customers.php</samp> actions on that guest-customer.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/YOUR_ADMIN/includes/classes/observers/OnePageCheckoutAdminObserver.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+                <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/checkout_one_name.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.5.2, 2024-06-21 (lat9):<ul>
+            <li>BUGFIX: Remove no-longer-used (and problematic) <samp>CHECKOUT_ONE_OTTOTAL_SELECTOR</samp> setting.</li>
+            <li>BUGFIX: Further simplification of the transition from the <code>checkout_one</code> page to <code>checkout_confirmation</code>, ensuring <em>only</em> that the order's total-value hasn't changed.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.5.1, 2024-04-04 (lat9, proseLA):<ul>
+            <li>BUGFIX: Correct misspelling of <code>square_webPay</code> in the <i>Payment Methods Handling Form Submittal</i> setting.</li>
+            <li>BUGFIX: Correct interaction with payment-modules, like <code>square_webPay</code> that perform its own form-submittal.</li>
+            <li>BUGFIX: Ensure that input fields are properly 'sanitized'.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.5.0, 2024-03-18 (lat9, drbyte):<ul>
+            <li>BUGFIX: Correct PHP warning for registered-account creation (missing <code>$fax</code>).</li>
+            <li>BUGFIX: Correct 'missing' <code>id=</code> attribute on confirmation form button.</li>
+            <li>BUGFIX: Enable <code>checkout_one</code> page's submit-button timeout to be configurable.</li>
+            <li>BUGFIX: Ensure that temporary addresses' <code>zone_id</code> elements are an integer-type; the value was an empty string (non-integer) when the associated country doesn't have zones.</li>
+            <li>CHANGE: Simplify the transition from the <code>checkout_one</code> page to <code>checkout_confirmation</code> &mdash; no more session-checks.</li>
+            <li>CHANGE: Remove redirect to traditional 3-page checkout for processing by IE-9.</li>
+            <li>BUGFIX: Use pre-existing address-book entry's 'id' if a match is found.</li>
+            <li>CHANGE: Add notification (<code>NOTIFY_OPC_SET_DISABLED</code>) to allow an observer to force OPC to its disabled state.</li>
+            <li>CHANGE: <b>Major</b> restructuring to reduce page-loads required during the <code>checkout_one</code> page's data-gathering.</li>
+            <li>BUGFIX: Correct jQuery so that local validation of entered data is possible.</li>
+            <li>CHANGE: Update credit-selections to account for order-totals that don't have selections.</li>
+            <li>CHANGE: Update shipping-choices block to display the shipping-modules' heading block, even if there are no shipping methods available.</li>
+            <li>The following files were changed or <span class="removed">removed</span>:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li><span class="removed">/includes/classes/Vinos_Browser.php</span> <span class="smaller">(Removed from <em>this</em> distribution, but note that other plugins might still rely on its presence!)</span></li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/languages/english/lang.checkout_one.php</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_credit_selections.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shipping_choices.php</span></li>
+                <li><span class="removed">/YOUR_ADMIN/debug_opc_redirection_error.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.4.6, 2023-08-19 (lat9 and marco-pm):<ul>
+            <li>BUGFIX: Correct unwanted redirect when pricing includes an &amp;nbsp;.</li>
+            <li>BUGFIX: Redirect page correctly on AJAX return.</li>
+            <li>BUGFIX: Reset guest session values on 'conversion' to PayPal Express Checkout.</li>
+            <li>BUGFIX: Cast parameters for 'zen_get_zone_code' to prevent PHP Fatal error.</li>
+            <li>BUGFIX: Remove all but essential, i.e. interface errors, PHP user-error-exits, replacing with customer messaging and warning logs.</li>
+            <li>BUGFIX: Correct PHP Warnings when <code>ACCOUNT_STATE</code> is set to 'false'.</li>
+            <li>BUGFIX: Correct "Invalid form control, element is not visible" (square_webPay integration).</li>
+            <li>BUGFIX: Correct browser's pre-fill causes activation of hidden payment/shipping elements.</li>
+            <li>BUGFIX: Correct misspelled <code>curser</code> to <code>cursor</code> in CSS files.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/languages/english/lang.checkout_one.php</li>
+                <li>/includes/languages/english/lang.checkout_success_guest.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_success/header_php_guest.php</li>
+                <li><span class="added">/includes/modules/pages/login/jscript_opc_reset_guest_for_ppec.php</span></li>
+                <li><span class="added">/includes/modules/pages/shopping_cart/jscript_opc_reset_guest_for_ppec.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/css/checkout_one.css</span></li>
+                <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.4.5, 2022-12-27 (lat9, swguy, simon1066 and marco-pm):<ul>
+            <li>BUGFIX: Correct missing language constant &quot;ERROR_GUEST_CHECKOUT_PAGE_DISALLOWED&quot;.</li>
+            <li>BUGFIX: Script files are now HTML-5 validated.</li>
+            <li>BUGFIX: Correct PHP fatal error when viewing the 'order_status' page on zc157 installations.</li>
+            <li>BUGFIX: Save guest/register-customer's email address in session.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/functions/extra_functions/one_page_checkout_functions.php</li>
+                <li>/includes/languages/english/extra_definitions/lang.checkout_one_extra_definitions.php</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li>/includes/modules/pages/create_account/jscript_form_check_register.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.4.4, 2022-11-30 (lat9, marco-pm):<ul>
+            <li>BUGFIX: Indicate that no shipping-module is available if no quotes are returned.</li>
+            <li>BUGFIX: Correct PHP Warnings from 'zen_address_label' when temporary addresses are in use.</li>
+            <li>BUGFIX: Some countries' states/provinces aren't in alphabetical order after changing the country; thanks to marco-pm for the correction!</li>
+            <li>INTROP: Correct 'missing constants' issues for the 'order_status' page in zc158.</li>
+            <li>BUGFIX: Provide a notification just prior to recording the order, enabling customizations to disallow the order.</li>
+            <li>INTROP: Ensure that all class variables are defined, a requirement for PHP 8.2+.</li>
+            <li>BUGFIX: Include zc158 version of zen_cfg_read_only.php for use in zc157 installations.</li>
+            <li>BUGFIX: Correct PHP warnings on &quot;order_status&quot; page when posted variables are not present.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/CheckoutOneEmailObserver.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li><span class="removed">/includes/languages/english/order_status.php</span> <span class="smaller">(If the file is present in your site's file-system, I suggest keeping it as it will do no harm.)</span></li>
+                <li><span class="added">/includes/languages/english/YOUR_TEMPLATE/order_status.php</span></li>
+                <li><span class="added">/includes/languages/english/YOUR_TEMPLATE/lang.order_status.php</span></li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.min.js</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/order_status/header_php.php <span class="corefile smaller">(This is a core-file overwrite in zc158)</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_conditions.php</span></li>
+                <li>/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.4.3, 2022-07-23 (lat9):<ul>
+            <li>BUGFIX: Correcting DOB display on some Android devices.</li>
+            <li>BUGFIX: Correctly save guest shipping address on initial guest-customer checkout when &quot;shipping=billing&quot; is <b>false</b>.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.4.2, 2022-07-14 (lat9):<ul>
+            <li>BUGFIX: Guest shipping address 'overwritten' if billing address is changed.</li>
+            <li>BUGFIX: Disable <em>Confirm</em> and <em>Review</em> buttons if privacy-policy and/or conditions haven't been accepted.</li>
+            <li>BUGFIX: Correct PHP Warning issued during check for gift-certification restrictions on guest checkout.</li>
+            <li>BUGFIX: Enable HTML to be rendered for admin-entered order comments on the &quot;order_status&quot; page.</li>
+            <li>BUGFIX: Remove &quot;ot_coupon&quot; and &quot;ot_gv&quot; language constants no longer used in zc157+.</li>
+            <li>BUGFIX: Don't require 'conditions' or 'privacy' checkbox until order-confirmation (and no other errors).</li>
+            <li>BUGFIX: Correcting PHP warnings/errors when a GV/DC fully covers the cost of an order.</li>
+            <li>BUGFIX: Correcting duplicate-constant warnings, using the zc158 method of delivering language-related files.</li>
+            <li>BUGFIX: No longer distribute unneeded changes to <code>/includes/languages/english/YOUR_TEMPLATE/checkout_confirmation.php</code>.</li>
+            <li>BUGFIX: Require state-selection from dropdown for guest-checkout when the store's country uses zones, e.g. &quot;United States&quot;.</li>
+            <li>BUGFIX: Correct interaction with payment methods (like square_webPay) that dynamically add elements to their payment selections' inputs.  Thanks to @proseLA for the correction!</li>
+            <li>BUGFIX: Correctly force checkout to the '3-page' process when <em>PayPal Express Checkout</em> is in effect.</li>
+            <li>BUGFIX: Correct session-timeout on <em>order_status</em> page when &quot;Force Cookie Use&quot; is set to 'True'.</li>
+            <li>The following files were changed/<span class="added">added</span>:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/functions/extra_functions/one_page_checkout_functions.php</li>
+                <li>/includes/languages/english/checkout_one.php</li>
+                <li>/includes/languages/english/checkout_one_confirmation.php</li>
+                <li>/includes/languages/english/checkout_process_guest.php</li>
+                <li>/includes/languages/english/checkout_success_guest.php</li>
+                <li>/includes/languages/english/create_account_register.php</li>
+                <li>/includes/languages/english/create_account_success_register.php</li>
+                <li><span class="added">/includes/languages/english/lang.checkout_one.php</span></li>
+                <li><span class="added">/includes/languages/english/lang.checkout_one_confirmation.php</span></li>
+                <li><span class="added">/includes/languages/english/lang.checkout_process_guest.php</span></li>
+                <li><span class="added">/includes/languages/english/lang.checkout_success_guest.php</span></li>
+                <li><span class="added">/includes/languages/english/lang.create_account_register.php</span></li>
+                <li><span class="added">/includes/languages/english/lang.create_account_success_register.php</span></li>
+                <li><span class="added">/includes/languages/english/lang.login_guest.php</span></li>
+                <li>/includes/languages/english/login_guest.php</li>
+                <li>/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php</li>
+                <li><span class="added">/includes/languages/english/extra_definitions/lang.checkout_one_extra_definitions.php</span></li>
+                <li><span class="added">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_coupon.php</span></li>
+                <li><span class="added">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_gv.php</span></li>
+                <li><span class="template-changed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_coupon.php</span></li>
+                <li><span class="template-changed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_gv.php</span></li>
+                <li><span class="template-changed removed">/includes/languages/english/YOUR_TEMPLATE/checkout_confirmation.php</span></li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.min.js</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/order_status/header_php.php</li>
+                <li>/includes/templates/template_default/css/checkout_one.css</li>
+                <li><span class="template-changed">/includes/template/template_default/tpl_checkout_one_confirmation_default.php</span></li>
+                <li><span class="template-changed">/includes/template/template_default/tpl_order_status_default.php</span></li>
+                <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.4.1, 2022-05-19 (lat9):<ul>
+            <li>BUGFIX: Correct session-based message-stack messages lost during checkout_one_confirmation.</li>
+            <li>BUGFIX: Correct PHP Warning when there's an error in the selected shipping module.</li>
+            <li>BUGFIX: Apply ship-to address selected via shipping-estimator when shipping=billing is configured.</li>
+            <li>BUGFIX: Replacing use of <code>var_export</code> with <code>print_r</code> to prevent 'circular references' PHP warnings.</li>
+            <li>BUGFIX: Use 'zen_get_country_zones' to retrieve the country-specific zones.</li>
+            <li>BUGFIX: Correct use of deprecated jQuery.parseJSON and HTML validation errors in zone dropdowns' jQuery script.</li>
+            <li>BUGFIX: Correcting login-page display when PayPal block is not first.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.min.js</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/login/header_php_login_guest.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_login_guest.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_checkout_one_shipping.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.4.0, 2022-05-02 (lat9, marco-pm):<ul>
+            <li>BUGFIX: Provide overlay to 'hide' review/confirm buttons when address is changed via dropdown.</li>
+            <li>BUGFIX: Correct handling when &quot;Enable Shipping=Billing&quot; is set to <em>false</em>.</li>
+            <li>BUGFIX: Improve admin orders' listing performance for sites with large number of orders.</li>
+            <li>CHANGE: Drop support for Zen Cart versions prior to 1.5.7a.  Includes some reformatting.</li>
+            <li>BUGFIX: Add breadcrumb to the <em>order_status</em> page.</li>
+            <li>BUGFIX: Correct PHP error when OPC initialization messages are required.</li>
+            <li>CHANGE: Include the &quot;zone_code&quot; in the data for the &quot;NOTIFY_OPC_INIT_ADDRESS_FROM_DB&quot; notification.</li>
+            <li>BUGFIX: Correct parameter count for &quot;zen_prepare_country_zones_pull_down&quot;.</li>
+            <li>CHANGE: Enable integration with &quot;square_webPay&quot; payment method.</li>
+            <li>BUGFIX: Use <code>zen_cfg_read_only</code> as the plugin's version's configuration &quot;set_function&quot;.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/auto_loaders/config.checkout_one.php</li>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/languages/english/checkout_one.php</li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one_min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/jscript_main.php</li>
+                <li>/includes/modules/pages/order_status/header_php.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/tpl_modules_opc_address_block.php</span></li>
+                <li>/YOUR_ADMIN/includes/auto_loaders/config.checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/classes/observers/OnePageCheckoutAdminObserver.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</span></li>
+                <li><span class="removed">/zc155f/*.*</span></li>
+                <li><span class="removed">/zc156b/*.*</span></li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.12, 2022-04-03 (lat9):<ul>
+            <li>BUGFIX: Correct PHP Notice for missing 'HTTP_USER_AGENT'.</li>
+            <li>BUGFIX: Correct 'missing' gender in customer's record when guest account is converted.</li>
+            <li>BUGFIX: Correct misleading &quot;shipping options have changed&quot; message.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/functions/extra_functions/one_page_checkout_functions.php</li>
+                <li><span class="template-changed">/includes/languages/english/checkout_one.php</span></li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.11, 2022-02-13 (lat9):<ul>
+            <li>BUGFIX: Correct PHP Fatal Error (introduced in v2.3.10) due to observer load-point.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/auto_loaders/config.checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.10, 2022-02-09 (lat9, siliconforks):<ul>
+            <li>BUGFIX: Correct label attributes for billing/shipping &quot;Add to Address Book&quot; checkbox.</li>
+            <li>BUGFIX: OPC observer needs to be loaded earlier, so it properly responds to <code>zen_in_guest_checkout</code>.</li>
+            <li>BUGFIX: Update <code>ot_coupon</code> language override to include zc157-added definitions.</li>
+            <li>BUGFIX: Remove duplicate definition from <code>ot_coupon</code> language override.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/auto_loaders/config.checkout_one.php</li>
+                <li><span class="template-changed">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_coupon.php</span></li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_billing_address.php</li>
+                <li>/includes/templates/template_default/templates/tpl_modules_opc_shipping_address.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.9, 2021-07-10 (lat9):<ul>
+            <li>BUGFIX: Correct CSS styling for &quot;checkout_one&quot; page's overlay.</li>
+            <li>BUGFIX: Correcting 'ambiguous' field in coupon-select for customer registration.  The associated script was also updated to use zc157c as its basis.</li>
+            <li>BUGFIX:  Apply <em>specificity</em> to the address rendering so that browser autofill's will fill in the proper fields.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li>/includes/templates/template_default/css/checkout_one.css</li>
+                <li><span class="template">/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.8, 2021-04-17 (lat9):<ul>
+            <li>BUGFIX: zc158 interoperation, correct PHP error during AJAX processing (missing $languageLoader).</li>
+            <li>INTROP: PHP 8.1 interoperability, modifying use of <code>$GLOBALS</code> constructs.</li>
+            <li>BUGFIX: Re-order the checkout_one page's language file, grouping all jQuery constants together as an aid in language translations.</li>
+            <li>BUGFIX: Correct &quot;disappearing taxes&quot; when a store's country has zones and the tax-basis is <b>Store</b>.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/OnePageCheckoutEmailObserver.php</li>
+                <li>/includes/classes/observers/class.one_page_checkout_observer.php</li>
+                <li>/includes/functions/extra_functions/one_page_checkout_functions.php</li>
+                <li>/includes/languages/english/checkout_one.php</li>
+                <li>/includes/modules/pages/checkout_success/header_php_guest.php</li>
+                <li>/YOUR_ADMIN/includes/classes/observers/OnePageCheckoutAdminObserver.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.7, 2021-01-17 (lat9/drbyte):<ul>
+            <li>BUGFIX: Prevent blank-page on first load before admin installation is complete.</li>
+            <li>BUGFIX: Correct uninitialized-array PHP notice on information sidebox.</li>
+            <li>BUGFIX: Add 'required' attribute to <code>orders_status</code> page's form-fields.</li>
+            <li>BUGFIX: Don't display &quot;Missing elements&quot; alert if no shipping or payment modules are available.</li>
+            <li>BUGFIX: Don't display &quot;Free shipping over&quot; when it's free shipping over $0.00.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li><span class="template-changed">/includes/modules/sideboxes/YOUR_TEMPLATE/information.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shipping_choices.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_order_status_default.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.6, 2020-11-18:<ul>
+            <li>BUGFIX: Correct guest-checkout can't be used when state dropdowns are enabled.</li>
+            <li>BUGFIX: Remove unused CSS files from the distribution.</li>
+            <li>BUGFIX: Correct CSS validation issues for the <code>checkout_one</code> page.</li>
+            <li>The following files were changed or <span class="removed">removed</span>:<ol>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.min.js</li>
+                <li>/includes/templates/template_default/css/checkout_one.css</li>
+                <li><span class="removed">/includes/templates/template_default/css/create_account.css</span></li>
+                <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</span></li>
+                <li><span class="removed">/includes/templates/YOUR_TEMPLATE/css/create_account.css</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.5, 2020-11-13:<ul>
+            <li>BUGFIX: Correct processing for order-totals (e.g. <em>Reward Points</em>) that can result in a negative order-balance.</li>
+            <li>CHANGE: Add a diagnostic tool to retrieve the session-differences when a checkout-loop occurs.  See <a href="https://github.com/lat9/one_page_checkout/blob/master/pages/debugging_redirect.md" target="_blank" rel="noopener">this</a> on-line documentation for additional information.</li>
+            <li>BUGFIX: Correct <code>paypalwpp</code> Error 10730 during guest-checkout.  For versions of Zen Cart <em>prior to</em> <em>1.5.7<b>a</b></em>, there is a required edit to that payment module.  Refer to <a href="https://github.com/lat9/one_page_checkout/blob/master/pages/install_upgrade_v210_or_later.md" target="_blank" rel="noopener">these</a> additional instructions.</li>
+            <li>BUGFIX: Disable <em>Confirm Order</em> button on form submittal.</li>
+            <li>BUGFIX: Show <em>placeholder</em> in non-dropdown &quot;State&quot; field in address blocks.</li>
+            <li>BUGFIX: Migrate HTML from OPC's base class to the common address-block-formatting template.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.min.js</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</span></li>
+                <li><span class="added">/YOUR_ADMIN/opc_debug_redirection_error.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.4, 2020-08-28:<ul>
+            <li>BUGFIX: Enable address-editing buttons on input-focus instead of change.</li>
+            <li>BUGFIX: Ensure that guest billing/shipping addresses haven't been overwritten.  See <a href="https://github.com/lat9/one_page_checkout/blob/master/pages/opc_admin_usage.md" target="_blank" rel="noopener">this</a> on-line documentation for additional information.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.min.js</li>
+                <li><span class="added">/YOUR_ADMIN/opc_admin.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.3, 2020-07-07:<ul>
+            <li>BUGFIX: Ensure that the &quot;Add to Address Book&quot; checkbox is visible when required, in the shipping-address block.</li>
+            <li>BUGFIX: Account-holders, a change in &quot;Salutation&quot; was not being recorded in the database, when requested.  See <a href="https://github.com/lat9/one_page_checkout/blob/master/pages/address_management.md" target="_blank" rel="noopener">this</a> on-line documentation for additional information.</li>
+            <li>CHANGE: zc157 interoperation; the name of the login-form on the <code>login</code> page was changed, resulting in javascript errors.</li>
+            <li>BUGFIX: Correct state drop-down error when zone-names include single-quotes.  Thanks to @chenly for the correction!</li>
+            <li>CHANGE: Add address-handling notifications to enable site-specific customizations.</li>
+            <li>BUGFIX: Correct occasional slew of PHP notices and warnings when the session-based class isn't present.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/modules/pages/address_book/header_php_address_book_register.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li>/includes/modules/pages/create_account/main_template_vars.php</li>
+                <li>/includes/modules/pages/create_account_success/header_php_create_account_success_register.php</li>
+                <li>/includes/modules/pages/login/header_php_login_guest.php</li>
+                <li>/includes/modules/pages/login/main_template_vars.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_login_guest.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.2, 2020-05-25:<ul>
+            <li>BUGFIX: Don't check for <em>#otshipping</em> until address-related information is supplied (zc157 interoperability).</li>
+            <li>BUGFIX: Ensure that changes to an address' <em>company</em> are properly recorded.</li>
+            <li>BUGFIX: Correct potential PHP warning when store changes the &quot;Gender&quot; customer setting.</li>
+            <li>BUGFIX: Ensure that the &quot;Add to Address Book&quot; checkbox is visible when required.</li>
+            <li>BUGFIX: Guest order-status update emails, point to the <code>order_status</code> page.</li>
+            <li>BUGFIX: Correct address-entry, always use the state dropdown if the address' country has zones.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/auto_loaders/config.checkout_one.php</li>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li><span class="added">/includes/classes/observers/CheckoutOneEmailObserver.php</span></li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_billing_address.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shipping_address.php</span></li>
+                <li>/YOUR_ADMIN/includes/auto_loaders/config.checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.1, 2020-04-26:<ul>
+            <li>CHANGE: Notifications added for store-specific session handling.</li>
+            <li>BUGFIX: Correct address display when state dropdowns aren't being used.</li>
+            <li>BUGFIX: Ensure that the session's &quot;order_placed_by_guest&quot; element is cleared post checkout.</li>
+            <li>CHANGE: Enable site-specific customizations to add parameters to an address-related field.</li>
+            <li>BUGFIX: Conditionally load the &quot;Vinos_Browser&quot; class and update that class to v1.9.4 (Dec-2019).</li>
+            <li>BUGFIX: Remove <code>password_forgotten</code> from the list of pages disallowed during guest-checkout.</li>
+            <li>CHANGE: Additional session-values to ignore for the <em>Ceon Sage Pay Direct</em> payment-method.</li>
+            <li>BUGFIX: Correct layout within address-entry blocks for the customer's salutation.</li>
+            <li>BUGFIX: Disallow one-page checkout processing on robot accesses.</li>
+            <li>BUGFIX: Correct guest-customers' order-confirmation email address formatting.</li>
+            <li>BUGFIX: Make it clear that a guest-checkout can continue on the &quot;login&quot; page.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/Vinos_Browser.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li><span class="template-changed">/includes/languages/english/login_guest.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_login_guest.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/init_incldues/init_checkout_one_upgrade.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.3.0, 2020-02-18:<ul>
+            <li>CHANGE: Split admin initial-install and upgrade scripts, reducing usual memory 'footprint'.</li>
+            <li>CHANGE: Move template-specific 'location' of order's current total to a configuration setting.</li>
+            <li>CHANGE: Gather <b>all</b> 'address_book' fields for pre-existing customers.</li>
+            <li>BUGFIX: Correct 'coupon applied' message repeated.</li>
+            <li>BUGFIX: Use as-passed address information when validating an address.</li>
+            <li>CHANGE: Add a notification, enabling an observer to provide additional address-validation checks.</li>
+            <li>CHANGE: Remove no longer used method <em>OnePageCheckout::validatePostedAddress</em>.</li>
+            <li>CHANGE: Display 'compressed' addresses with an associated <em>Edit</em> button to conserve on-screen real-estate.</li>
+            <li>CHANGE: Dynamically update billing-address title, based on &quot;billing=shipping&quot; selection.</li>
+            <li>CHANGE: Use &quot;standard&quot; <code>responsive_classic</code> formatting for registered-account creation.</li>
+            <li>BUGFIX: Correct checkout processing for registered-account customers who have not yet supplied their default address.</li>
+            <li>BUGFIX: Correct address-display by the &quot;Shipping Estimator&quot; for guest-checkout and registered account-holders.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li><span class="template-changed">/includes/languages/english/checkout_one.php</span></li>
+                <li><span class="template-changed">/includes/languages/english/create_account_register.php</span></li>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery_checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/create_account/header_php_create_account_register.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/css/checkout_one.css</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_create_account_register.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_billing_address.php</span></li>
+                <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/init_includes/init_checkout_one_install.php</span></li>
+                <li><span class="added">/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php</span></li>
+            </ol></li>
+        </ul></li>
+        <li>v2.2.2, 2020-01-15:<ul>
+            <li>BUGFIX: Enable interoperation with <em>Ship2Pay</em> payment method.</li>
+            <li>BUGFIX: Use (bool)false to identify no HTML in address labels.</li>
+            <li>BUGFIX: PayPal Express Checkout, address override not recording address' format_id.</li>
+            <li>BUGFIX: Enable interoperation with <em>Ceon Sage Pay Direct</em> payment method.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.2.1, 2019-11-10:<ul>
+            <li>BUGFIX: Restore line-breaks in multi-line order comments.</li>
+            <li>CHANGE: Add notification to allow 'external' processing to disallow guest-checkout.</li>
+            <li>BUGFIX: Zen Cart version-specfic changes needed for the &quot;shipping_estimator&quot;; see <a href="https://github.com/lat9/one_page_checkout/issues/193" target="_blank" rel="noopener">this</a> GitHub issue for details.</li>
+            <li>BUGFIX: Changes to <code>paypalwpp.php</code> in the (now corrected) online <a href="https://github.com/lat9/one_page_checkout/blob/master/pages/install_upgrade_v210_or_later.md" target="_blank" rel="noopener">upgrade instructions</a> caused PHP fatal errors.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.2.0, 2019-10-13:<ul>
+            <li>BUGFIX: Correct PHP notices for no-longer-enabled payment methods.</li>
+            <li>CHANGE: Remove 'myDEBUG-' prefix on <em>OPC</em> debug filenames.</li>
+            <li>CHANGE: Guest checkout: Combine customer-info and billing-address steps.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.1.5, 2019-10-01:<ul>
+            <li>BUGFIX: Correct tax-locations returned when using temporary addresses and billing equals shipping.</li>
+            <li>CHANGE: Use common constant, if defined, as an option separator for products in the current cart.</li>
+            <li>BUGFIX: Use 'zen_is_logged_in' when checking to see if a customer is logged in.</li>
+            <li>BUGFIX: Correct interoperation with the 'gps' payment method (and possibly more).</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observer/class.checkout_one_observer.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shopping_cart.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.1.4, 2019-09-15:<ul>
+            <li>BUGFIX: <em>Guest</em> accessed to the checkout's shipping-/payment-address pages should go back to the main <em>OPC</em> page.</li>
+            <li>CHANGE: Future-proofing for the inclusion of &quot;Multi-lingual Country Names&quot; in zc157.</li>
+            <li>CHANGE: On entry to the main <em>OPC</em> page, display messages from the 'checkout' group, too.</li>
+            <li>BUGFIX: Correct interaction with paypalwpp, when the delivery address returned by PayPal is different from that entered in the store.</li>
+            <li>BUGFIX: Correct tax-calculations for order totals that use <code>zen_get_tax_locations</code>.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li><span class="corefile">/zc156b/includes/functions/functions_taxes.php</span> <span class="smaller added">(Added)</span><ul>
+                    <li><b>Note:</b> Stores running a version of Zen Cart <em>prior to</em> v1.5.6 should copy this file to their store's <code>/includes/functions</code> sub-directory.</li>
+                </ul></li>
+            </ol></li>
+        </ul></li>
+        <li>v2.1.3, 2019-08-04:<ul>
+            <li>BUGFIX: <code>order_status</code> page-link missing from information sidebox.</li>
+            <li>BUGFIX: Updates to properly handle the case where javascript is disabled.</li>
+            <li>BUGFIX: Additional guest-account address-book entries improperly recorded.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/functions/extra_functions/one_page_checkout_functions.php</li>
+                <li>/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php</li>
+                <li><span class="template">/includes/modules/sideboxes/YOUR_TEMPLATE/information.php</span> <span class="added smaller">(Added)</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.1.2, 2019-07-02:<ul>
+            <li>BUGFIX: Correct the <em>root-cause</em> of the &quot;virtual&quot; issue, previously changed for v2.1.1.</li>
+            <li>BUGFIX: PHP Notice thrown on initial guest account-creation form on the <code>checkout_success</code> page.</li>
+            <li>BUGFIX: Correct interaction with payment methods, e.g. <em>paypaldp</em>, that &quot;collect credit-card info on-site&quot;.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/checkout_success/header_php_guest.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.1.1, 2019-06-05:<ul>
+            <li>BUGFIX: PHP Notice &quot;thrown&quot; when the site <b><i>doesn't use</i></b> CSS buttons.</li>
+            <li>BUGFIX: Checkout fails if all products are &quot;virtual&quot;.</li>
+            <li>BUGFIX: Add email-format choice to guest account-creation on the <code>checkout_success</code> page.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/checkout_success/header_php_guest.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_success_guest.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_credit_selections.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.1.0, 2019-04-07:<ul>
+            <li>BUGFIX: Return the expected value from <code>OnePageCheckout::startGuestOnePageCheckout</code>.</li>
+            <li>BUGFIX: Correct conditional in the <code>checkout_one</code> page's header processing, causing PHP warnings.</li>
+            <li>CHANGE: zc156 interoperability, empty array from <code>ot_gv</code> causes PHP warning to be logged.</li>
+            <li>BUGFIX: Remove redundant, multiply-defined language constants.</li>
+            <li>BUGFIX: Correct guest-checkout validation.</li>
+            <li>BUGFIX: Customers' <em>temporary</em> addresses not registered if neither guest-checkout nor registered-accounts are enabled.</li>
+            <li>BUGFIX: Don't display address-selection drop-down unless the customer has more than 1 defined.</li>
+            <li>CHANGE: Restructure distribution, for zc156b interoperability.</li>
+            <li>BUGFIX: Correct undefined variable on <em>guest</em> &quot;checkout_success&quot; page.</li>
+            <li>CHANGE: Don't display shipping/payment blocks until associated address is valid.</li>
+            <li>BUGFIX: Correct undefined variables in debug-output on &quot;checkout_one_confirmation&quot; page when order is virtual.</li>
+            <li>BUGFIX: Guest-checkout, billing = shipping doesn't &quot;keep up&quot;.</li>
+            <li>BUGFIX: Correct PHP Notice logged when shipping method is untaxed.</li>
+            <li>CHANGE: Disallow guest-checkout when the customer's cart contains Gift Certificates.</li>
+            <li>CHANGE: Add date (yyyy-mm-dd) suffix to any <em>OPC</em> debug-logs.</li>
+            <li>BUGFIX: Disallow <em>One-Page Checkout</em> during the &quot;PayPal Express Checkout&quot;'s shortcut-button processing.</li>
+            <li>BUGFIX: Correct &quot;PHP Notice&quot; issues.</li>
+            <li>BUGFIX: Correct bof/eof HTML comments in the guest-customer's information template.</li>
+            <li>BUGFIX: Correct integration with <b>PayPal Express Checkout</b>.</li>
+            <li>CHANGE: Remove pre-fill of temporary address' state and zipcode, introduced in v2.0.5.</li>
+            <li>BUGFIX: Various corrections to the handling of <em>temporary</em> addresses.</li>
+            <li>BUGFIX: Check for session time-out when handling <em>each</em> AJAX response.</li>
+            <li>BUGFIX: Detect the condition where <em>OPC</em> is disabled in the middle of a customer's checkout.</li>
+            <li>BUGFIX: Include PHP <b>exit()</b> after triggering user errors.</li>
+            <li>CHANGE: Order the drop-down addresses' list to be less haphazard.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/auto_loaders/paypal_ipn.checkout_one.php <span class="smaller">(Added)</span></li>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/OnePageCheckoutNoPayment.php <span class="smaller">(Added)</span></li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li><span class="template-changed">/includes/languages/english/checkout_one.php</span></li>
+                <li><span class="template-changed">/includes/languages/english/checkout_one_confirmation.php</span></li>
+                <li><span class="template-changed">/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php</span></li>
+                <li><span class="template">/includes/languages/english/YOUR_TEMPLATE/checkout_confirmation.php</span></li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li>/includes/modules/pages/order_status/header_php.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_success_guest.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_checkout_one_shipping.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_credit_selections.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_customer_info.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shipping_choices.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.0.5, 2018-12-23:<ul>
+            <li>BUGFIX: Update totals' block on payment method change; corrects <code>ot_cod_fee</code> handling.</li>
+            <li>BUGFIX: Pick up more recent <code>download</code> class from the Zen Cart <em>zc156</em> repository.</li>
+            <li>BUGFIX: Customer's gender not being saved when address is changed.</li>
+            <li>BUGFIX: Initialize guest/registered-accounts' zip-code to bypass shipping-method errors.</li>
+            <li>BUGFIX: Taxed order-totals 'lose' their tax on a payment-method update.</li>
+            <li>BUGFIX: 'Square' payment-inputs disappear if the shipping-method is updated.</li>
+            <li>BUGFIX: Correct various &quot;PHP Notice&quot; issues.</li>
+            <li>CHANGE: Partial zc156 integration; downward-compatible changes <em>only</em>.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/auto.downloads_via_aws.php</li>
+                <li>/includes/classes/observers/auto.downloads_via_redirect.php</li>
+                <li>/includes/classes/observers/auto.downloads_via_streaming.php</li>
+                <li>/includes/classes/observers/auto.downloads_via_url.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li><span class="corefile">/includes/modules/pages/download/header_php.php</span></li>
+                <li><span class="corefile">/includes/modules/pages/login/header_php.php</span></li>
+                <li><span class="corefile">/includes/templates/template_default/templates/tpl_modules_downloads.php</span> <span class="smaller">(Added)</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.0.4, 2018-07-15:<ul>
+            <li>BUGFIX: &quot;Suburb&quot; (aka &quot;Address Line 2&quot;) and/or &quot;Company&quot; not saved when an address is updated.</li>
+            <li>BUGFIX: Maximum address-book entries not honoured.</li>
+            <li>BUGFIX: Downloaded products result in a 0-byte download file.</li>
+            <li>BUGFIX: Guest-customer downloads not honoured <em>automatically</em> on the &quot;checkout_success&quot; page.</li>
+            <li>BUGFIX: Correct interaction with payment methods that &quot;collectCreditCardDataOnSite&quot;.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/observers/auto.downloads_via_aws.php <span class="smaller">(Added)</span></li>
+                <li>/includes/classes/observers/auto.downloads_via_redirect.php <span class="smaller">(Added)</span></li>
+                <li>/includes/classes/observers/auto.downloads_via_streaming.php <span class="smaller">(Added)</span></li>
+                <li>/includes/classes/observers/auto.downloads_via_url.php <span class="smaller">(Added)</span></li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.0.3, 2018-06-21:<ul>
+            <li>BUGFIX: &quot;Temporary&quot; address shown in confirmation emails for guest-checkout.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.0.2, 2018-06-20:<ul>
+            <li>BUGFIX: Invalid "Some information incorrect" message displayed during guest checkout</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.0.1, 2018-06-08:<ul>
+            <li>BUGFIX: T's and C's checkbox not rendered for &quot;ZCA Bootstrap Template&quot;.</li>
+            <li>BUGFIX: Debug-log generated when no shipping methods are available.</li>
+            <li>BUGFIX: Recognize that some payment methods are dependent on the shipping-module selected.</li>
+            <li>BUGFIX: Out-of-stock products not notated in the <em>shopping-cart</em> display.</li>
+            <li>BUGFIX: Correct PHP Notice issued during payment-choices settings.</li>
+            <li>BUGFIX: Full-account shipping-address dropdown selection not rendered.</li>
+            <li>CHANGE: Show &quot;wait&quot; cursor during AJAX processing.</li>
+            <li>BUGFIX: Non-guest temporary addresses not included in order-confirmation email.</li>
+            <li>BUGFIX: Session variables not reset after successful non-guest checkout.</li>
+            <li>BUGFIX: jQuery updates not loaded if cached in the browser.</li>
+            <li>BUGFIX: Formatting variables not maintained during AJAX handling.</li>
+            <li>BUGFIX: Correct handling for the billing- and shipping-address changes.</li>
+            <li>BUGFIX: Correct alignment issue on OPC's replacement login page.</li>
+            <li>BUGFIX: Privacy-statement not displayed during guest checkout, when enabled.</li>
+            <li>BUGFIX: Ensure that temporary form entries have been validated.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/classes/OnePageCheckout.php</li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/languages/english/checkout_one_confirmation.php</li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li><span class="template-changed">/includes/templates/template_default/css/login.css</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_conditions.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shipping_address.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shipping_choices.php</span></li>
+                <li>/includes/templates/YOUR_TEMPLATE/css/login.css</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v2.0.0, 2018-04-27:<ul>
+            <li>CHANGE: Add processing to enable <em>guest-checkout</em> and <em>registered-accounts</em> features.</li>
+            <li>CHANGE: Enable interoperation with the <em>ZCA Bootstrap Template</em>.</li>
+            <li>BUGFIX: &quot;Align&quot; STOCK_CHECK clause in shipping checks with <code>checkout_shipping</code> current handling.</li>
+            <li>BUGFIX: Redirects to the <code>time_out</code> pages via SSL protocol.</li>
+            <li>BUGFIX: Correct integration with <em>Product Delivery by Postcode</em>.</li>
+            <li>BUGFIX: Correct integration with the <em>PayPal Express Checkout</em> shortcut button.</li>
+            <li>The following files were affected:<ol>
+                <li>/includes/auto_loaders/config.checkout_one.php</li>
+                <li><span class="added">/includes/classes/OnePageCheckout.php</span></li>
+                <li><span class="corefile">/includes/classes/order.php</span> <span class="smaller">(Added, one notifier)</span></li>
+                <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+                <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+                <li>/includes/extra_datafiles/checkout_one_filenames.php</li>
+                <li><span class="added">/includes/functions/extra_functions/one_page_checkout_functions.php</span></li>
+                <li><span class="added">/includes/languages/english/address_book_register.php</span></li>
+                <li>/includes/languages/english/checkout_one.php</li>
+                <li><span class="added">/includes/languages/english/checkout_process_guest.php</span></li>
+                <li><span class="added">/includes/languages/english/checkout_success_guest.php</span></li>
+                <li><span class="added">/includes/languages/english/create_account_register.php</span></li>
+                <li><span class="added">/includes/languages/english/create_account_success_register.php</span></li>
+                <li><span class="added">/includes/languages/english/login_guest.php</span></li>
+                <li><span class="added">/includes/languages/english/order_status.php</span></li>
+                <li>/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php</li>
+                <li><span class="added">/includes/languages/english/html_includes/define_checkout_success_guest.php</span></li>
+                <li><span class="added">/includes/languages/english/html_includes/YOUR_TEMPLATE/define_checkout_success_guest.php</span></li>
+                <li><span class="corefile">/includes/modules/order_total/ot_coupon.php</span> <span class="smaller">(Added, one notifier)</span></li>
+                <li><span class="added">/includes/modules/pages/address_book/header_php_address_book_register.php</span></li>
+                <li><span class="added">/includes/modules/pages/address_book/main_template_vars.php</span></li>
+                <li>/includes/modules/pages/checkout_one/header_php.php</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js</li>
+                <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</li>
+                <li><span class="added">/includes/modules/pages/checkout_one/jquery.checkout_one_addr.js</span></li>
+                <li><span class="added">/includes/modules/pages/checkout_one/jquery.checkout_one_addr.min.js</span></li>
+                <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+                <li><span class="added">/includes/modules/pages/address_book/main_template_vars.php</span></li>
+                <li><span class="added">/includes/modules/pages/checkout_success/header_php_guest.php</span></li>
+                <li><span class="added">/includes/modules/pages/checkout_success/main_template_vars.php</span></li>
+                <li><span class="added">/includes/modules/pages/create_account/header_php_create_account_register.php</span></li>
+                <li><span class="added">/includes/modules/pages/create_account/jscript_form_check_register.php</span></li>
+                <li><span class="added">/includes/modules/pages/create_account/main_template_vars.php</span></li>
+                <li><span class="added">/includes/modules/pages/create_account_success/header_php_create_account_success_register.php</span></li>
+                <li><span class="added">/includes/modules/pages/create_account_success/main_template_vars.php</span></li>
+                <li><span class="corefile">/includes/modules/pages/download/header_php.php</span> <span class="smaller">(Added, zc156 version with timeout pages in SSL)</span></li>
+                <li><span class="corefile">/includes/modules/pages/login/header_php.php</span> <span class="smaller">(Added, one notifier)</span></li>
+                <li><span class="added">/includes/modules/pages/login/header_php_guest.php</span></li>
+                <li><span class="added">/includes/modules/pages/login/main_template_vars.php</span></li>
+                <li><span class="added">/includes/modules/pages/order_status/header_php.php</span></li>
+                <li><span class="template">/includes/modules/YOUR_TEMPLATE/downloads.php</span> <span class="smaller">(Added, using the zc156 version)</span></li>
+                <li>/includes/templates/template_default/css/checkout_one.css</li>
+                <li><span class="added">/includes/templates/template_default/css/checkout_success.css</span></li>
+                <li><span class="added">/includes/templates/template_default/css/create_account.css</span></li>
+                <li><span class="added">/includes/templates/template_default/css/login.css</span></li>
+                <li><span class="added">/includes/templates/template_default/tpl_address_book_register.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+                <li><span class="added">/includes/templates/template_default/tpl_checkout_success_guest.php</span></li>
+                <li><span class="added">/includes/templates/template_default/tpl_create_account_register.php</span></li>
+                <li><span class="added">/includes/templates/template_default/tpl_create_account_success_register.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_login_guest.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_address_block.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_billing_address.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/tpl_modules_opc_credit_selections.php</span></li>
+                <li><span class="added">/includes/templates/template_default/tpl_modules_opc_customer_info.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shipping_address.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_shopping_cart.php</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_modules_opc_submit_block.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_order_status_default.php</span></li>
+                <li><span class="template">/includes/templates/YOUR_RC_CLONE/common/tpl_header.php</span> <span class="smaller">(Added)</span></li>
+                <li><span class="template">/includes/templates/YOUR_TEMPLATE/common/tpl_header.php</span> <span class="smaller">(Added)</span></li>
+                <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</span></li>
+                <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/checkout_success.css</span> <span class="smaller">(Added)</span></li>
+                <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/create_account.css</span> <span class="smaller">(Added)</span></li>
+                <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/login.css</span> <span class="smaller">(Added)</span></li>
+                <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_download.php</span> <span class="smaller">(Added, using the zc156 version)</span></li>
+                <li>/YOUR_ADMIN/includes/auto_loaders/config.checkout_one.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/classes/observers/OnePageCheckoutAdminObserver.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/checkout_one_name.php</li>
+            </ol></li>
+        </ul>
+        <li>v1.5.0, 2018-01-10:<ul>
+            <li>CHANGE: Defer installation until an admin is logged in.</li>
+            <li>CHANGE: Split major template-blocks on the <code>checkout_one</code> page into separate files.</li>
+            <li>CHANGE: Update the <code>checkout_one</code> page's jQuery to allow the major processing to be a separate file.</li>
+            <li>The following files were affected:<ol>
+                <li><span class="added">/includes/modules/pages/checkout_one/jquery.checkout_one.js</span></li>
+                <li><span class="added">/includes/modules/pages/checkout_one/jquery.checkout_one.min.js</span></li>
+                <li>/includes/pages/checkout_one/jscript_main.php</li>
+                <li>/includes/pages/checkout_one/on_load_main.js <span class="smaller">(No longer used; empty file)</span></li>
+                <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_billing_address.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_comments.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_conditions.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_credit_selections.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_instructions.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_shipping_address.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_shipping_choices.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_shopping_cart.php</span></li>
+                <li><span class="added">/includes/templates/template_default/templates/tpl_modules_opc_submit_block.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+                <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/checkout_one_name.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v1.4.2, 2017-12-11:<ul>
+          <li>BUGFIX: Correct interaction of PayPal Express Checkout's shortcut button.  See this readme's <em>Overview / Payment Method Interoperation</em> tab for additional information.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.4.1, 2017-10-08:<ul>
+          <li>BUGFIX: Correct display of confirmation page when a payment method &quot;collects credit-card data onsite&quot; and is configured to display its confirmation page.</li>
+          <li>BUGFIX: Errors from &quot;collects credit-card data onsite&quot; payment methods not displayed.</li>
+          <li>CHANGE: Updated the <em>Troubleshooting</em> section in this readme, to identify where to find what &quot;required elements&quot; are missing.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/jscript/jscript_framework.php</span></li>
+            <li><span class="removed">/includes/templates/template_default/jscript/jscript_framework.php</span> <span class="smaller">(Removed from this distribution <em>only</em>.)</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.4.0, 2017-08-12:<ul>
+          <li>BUGFIX: Correct HTML validation error when the &quot;Terms and Conditions&quot; block is present.</li>
+          <li>CHANGE: Enable payment methods that &quot;collect credit-card data on-site&quot; to be <em>one-page</em>, too!</li>
+          <li>BUGFIX: Correct HTML validation error when CSS buttons are configured for the store.</li>
+          <li>CHANGE: Check for multiple versions of jQuery and direct the customer to the &quot;alternate&quot; checkout if found.</li>
+          <li>CHANGE: Modify the &quot;confirmation email will be sent to&quot; language text, removing any reference to order-submittal to reduce potential customer confusion.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/languages/english/checkout_one.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li><span class="template-changed">/includes/templates/template_default/css/checkout_one.css</span></li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li>/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.3.0, 2017-07-12:<ul>
+          <li>CHANGE: Standardize processing flow through &quot;checkout_one&quot; page.</li>
+          <li>CHANGE: Add HTML comments around &quot;significant&quot; sections in the <em>OPC</em> main template.</li>
+          <li>CHANGE: Add configuration control to enable/disable the <em>Shipping Address, same as Billing</em> support.</li>
+          <li>CHANGE: Document the interoperability of the ozPost shipping module and the Payeezy payment module.</li>
+          <li>CHANGE: Move payment-modules requiring confirmation to a configurable setting.</li>
+          <li>CHANGE: Recognize payment methods that require confirmation, adjust the submit-button accordingly.</li>
+          <li>CHANGE: Modify distribution-method of core-file changes; most of those changes were &quot;up-leveling&quot; the current Zen Cart distribution version.</li>
+          <li>CHANGE: Provide an alternate link to the &quot;normal&quot; multi-page checkout if a jQuery error is detected on the <em>OPC</em> initial page.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li><span class="template-changed">/includes/languages/english/checkout_one.php</span></li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li><span class="template-changed">/includes/templates/template_default/css/checkout_one.css</span></li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.2.0, 2017-04-23:<ul>
+          <li>BUGFIX: Correct &quot;Shipping, same as Billing&quot; processing.</li>
+          <li>CHANGE: Add <em>Edit</em> button to shopping-cart block on checkout pages.</li>
+          <li>BUGFIX: Correct checkout-loop after a 100%-off coupon is applied to an order.</li>
+          <li>CHANGE: Document that the <em>YourSite</em> template and <em>ot_prowebsoptions</em> order-total are incompatible.</li>
+          <li>CHANGE: Document that the <em>NoChex</em> and <em>Authorize.net/SIM</em> payment methods are compatible.</li>
+          <li>BUGFIX: Unwanted &quot;Your order has changed&quot; message received after applying a credit-class order-total to the order.</li>
+          <li>BUGFIX: Correct conditionally-enabling the plugin causes checkout-loop.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li>/includes/templates/template_default/css/checkout_one.css</li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li><span class="template-changed">/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.1.0, 2017-01-22:<ul>
+          <li>BUGFIX: Shipping cost not updated if shopping-cart change results in a cost-change to the selected shipping-module.</li>
+          <li>BUGFIX: Checkout loop if order's currency's symbol uses an &quot;htmlentity&quot;, e.g. &amp;pound;.</li>
+          <li>BUGFIX: Order-totals duplicated on confirmation page.</li>
+          <li>CHANGE: Add configuration setting to &quot;conditionally&quot; enable the plugin for a list of customer_id values.</li>
+          <li>CHANGE: Add the <em>Gateway Processing Services Module (3-step redirect)</em> payment module to the &quot;confirmation-page required&quot; list.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul>
+        <li>v1.0.11, 2016-12-29:<ul>
+          <li>CHANGE: Position cursor on top-of-page when displaying the &quot;collectsCardDataOnsite&quot; confirmation.</li>
+          <li>CHANGE: Correct interoperation with <b><em>Ceon Manual Card</em></b> payment method.</li>
+          <li>BUGFIX: Correct checkout &quot;loop&quot; when <b>Free Shipping for Orders Over</b> is enabled in the shipping order-total.</li>
+          <li>BUGFIX: Correct checkout &quot;loop&quot; when a shipping module's cost is taxed.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.10, 2016-12-07:<ul>
+          <li>BUGFIX: Correct interaction with Zen Cart 1.5.4 version of <code>ot_gv</code>.</li>
+          <li>BUGFIX: Re-instate check for a change in the order's total during confirmation.</li>
+          <li>BUGFIX: Cheapest shipping not selected if only one shipping-method is available.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.9, 2016-11-23:<ul>
+          <li>BUGFIX: No payment modules displayed on the checkout_one page.</li>
+          <li>BUGFIX: No confirmation button for virtual-orders or orders with free shipping</li>
+          <li>BUGFIX: Missing <code>$order_totals</code> variable, required by some payment methods (e.g. firstdata_hco).</li>
+          <li>The following files were affected:<ol>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.8, 2016-11-19:<ul>
+          <li>BUGFIX: Correct interoperation with plugins that make use of other, e.g. <em>MooTools</em> javascript libraries.</li>
+          <li>BUGFIX: Conditionally render sections of the page, depending on the availability of a shipping-method and/or payment-method.</li>
+          <li>BUGFIX: Correct the change needed for the <em>Stripe</em> payment method.</li>
+          <li>BUGFIX: Can't checkout if order qualifies for &quot;free shipping&quot; by the shipping order-total.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+            <li><span class="added">/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php</span></li>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/jscript_main.php</li>
+            <li><span class="template-changed">/includes/templates/template_default/jscript/jscript_framework.php</span></li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li>/includes/templates/YOUR_TEMPLATE/jscript/jscript_framework.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.7, 2016-10-19:<ul>
+          <li>BUGFIX: Can't checkout due to session-information change.</li>
+          <li>CHANGE: Use updated /ajax.php from the Zen Cart repository's 155 branch ... again.</li>
+          <li>The following files were affected:<ol>
+            <li><span class="corefile">/ajax.php</span></li>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.6, 2016-10-18:<ul>
+          <li>CHANGE: Add support for the <em>Stripe</em> payment method; it requires the confirmation-page's display.</li>
+          <li>BUGFIX: Ensure that the order's total has been properly reviewed by the customer.</li>
+          <li>BUGFIX: Don't require shipping order-total selector if the order contains only virtual products.</li>
+          <li>BUGFIX: Correct product stock-check handling.</li>
+          <li>BUGFIX: Shipping, same as Billing not being honored after shipping address change.</li>
+          <li>CHANGE: Use updated /ajax.php from the Zen Cart repository's 155 branch.</li>
+          <li>The following files were affected:<ol>
+            <li><span class="corefile">/ajax.php</span></li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.5, 2016-09-24:<ul>
+          <li>CHANGE: Update jQuery to check for (and alert if missing) required selectors.</li>
+          <li>CHANGE: Replace occurrences of [code] to allow log files to be properly posted on the Zen Cart forums.</li>
+          <li>BUGFIX: Hide the &quot;bannerOne&quot; block on the confirmation page.</li>
+          <li>BUGFIX: Hide the &quot;Confirm Order&quot; button on the confirmation page.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/jscript_main.php</li>
+            <li>/includes/templates/template_default/css/checkout_one_confirmation.css</li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</span></li>
+            <li>/includes/templates/YOUR_TEMPLATE/css/checkout_one_confirmation.css</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.4, 2016-09-11:<ul>
+          <li>BUGFIX: Make sure that the <code>#bannerSix</code> block is also hidden on the plugin's confirmation page.</li>
+          <li>CHANGE: Add language constant for the confirmation page, allowing store-owners to have additional customization opportunities.</li>
+          <li>BUGFIX: Sanitize debug-output for non-standard credit-card numbers and CVV information.</li>
+          <li>BUGFIX: Don't allow one-page checkout on unsupported browsers (currently limited to IE versions less than 9.0).</li>
+          <li>BUGFIX: Correct spelling of <code>ROBOTS_PAGES_TO_SKIP</code> in the readme's installation instructions.</li>
+          <li>BUGFIX: Correct processing for orders that qualify for the &quot;free_free&quot; shipping method, e.g. virtual products only and free shipping as configured by the shipping order-total module.</li>
+          <li>BUGFIX: Correct readme references to <code>/includes/languages/english/order_total</code> to <code>/includes/languages/english/modules/order_total</code>.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/Vinos_Browser.php <span class="smaller">(Added)</span></li>
+            <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/languages/english/checkout_one.php</li>
+            <li>/includes/languages/english/checkout_one_confirmation.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/jscript_main.php</li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.3, 2016-09-02:<ul>
+          <li>CHANGE: Disable plugin if the active template doesn't include jscript_framework.php</li>
+          <li>CHANGE: Update documentation to ensure that the v1.5.5a version of <code>jscript_framework.php</code> gets copied.</li>
+          <li>BUGFIX: Correct handling of AJAX request timeouts on the shipping-method change.</li>
+          <li>BUGFIX: Correct interlock with &quot;collectsCardDataOnsite&quot; payment methods and shipping methods that require &quot;extra&quot; information.</li>
+          <li>BUGFIX: Correct Zen Cart 1.5.5a payment-class handling of &quot;collectsCardDataOnsite&quot; payment methods.</li>
+          <li>BUGFIX: Unfinished form submittal occurs when payment method &quot;collectsCardDataOnsite&quot;.</li>
+          <li>CHANGE: Identify known template incompatibilities in the readme.</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+            <li>/includes/languages/english/checkout_one.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li><span class="corefile">/includes/templates/template_default/jscript/jscript_framework.php</span> <span class="smaller">(Added, the ZC1.5.5a version of the file)</span></li>
+            <li><span class="template">/includes/templates/YOUR_TEMPLATE/jscript/jscript_framework.php</span> <span class="smaller">(Added, the ZC1.5.5a version of the file)</span></li>
+            <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_ajax_checkout_confirmation_default.php</span> <span class="smaller">(Added)</span></li>
+            <li><span class="corefile">/zc155a/includes/classes/payment.php</span> <span class="smaller">(Added)</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/checkout_one_name.php</li>
+            <li><span class="corefile removed">/pre_zc155a/includes/templates/template_default/jscript/jscript_framework.php</span> <span class="smaller">(Removed)</span></li>
+            <li><span class="template removed">/pre_zc155a/includes/templates/YOUR_TEMPLATE/jscript/jscript_framework.php</span> <span class="smaller">(Removed)</span></li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.2, 2016-08-19:<ul>
+          <li>BUGFIX: Display payment-method block when in &quot;special checkout&quot; (i.e. PayPal Express Checkout/Shortcut Button).</li>
+          <li>BUGFIX: Gracefully handle session timeouts during the checkout process.</li>
+          <li>BUGFIX: Correct AJAX session-save handling.</li>
+          <li>BUGFIX: Correct interoperation with shipping-methods that have additional data; also corrects handling when the chosen shipping method is no longer valid.</li>
+          <li>BUGFIX: Include both ZC1.5.4 and 1.5.5 versions of <em>collectsCardDataOnSite</em> handling.</li>
+          <li>BUGFIX: Check customer's authorization <em>after</em> checking that they're logged in.</li>
+          <li>BUGFIX: Form won't submit on IE-11 browser.</li>
+          <li>CHANGE: Provide pre-integration of <a href="https://www.zen-cart.com/downloads.php?do=file&id=1702">Product Delivery by Postcode (PDP)</a> plugin.</li>
+          <li>BUGFIX: Missing semi-colon in language-file override.</li>
+          <li>BUGFIX: Debug-log generated when coupon applied and shipping-method changed.</li>
+          <li>The following files were affected:<ol>
+            <li><span class="corefile">/ajax.php</span> <span class="smaller">(Added)</span></li>
+            <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+            <li>/includes/languages/english/checkout_one.php</li>
+            <li><span class="template">/includes/languages/english/YOUR_TEMPLATE/checkout_confirmation.php</span></li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/jscript_main.php</li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</span></li>
+            <li>/includes/templates/template_default/templates/tpl_modules_checkout_one_shipping.php <span class="smaller">(Added)</span></li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            <li><span class="corefile removed">/pre_zc155a/ajax.php</span> <span class="smaller">(Removed)</span></li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.1, 2016-08-06:<ul>
+          <li>BUGFIX: Check customer's authorization.</li>
+          <li>BUGFIX: Zen Cart base AJAX handling changes required for Zen Cart 1.5.5 (pre-a) installations, too.</li>
+          <li>BUGFIX: Display &quot;Terms and Conditions&quot; block, if configured.</li>
+          <li>BUGFIX: Enable support for payment methods (like eWay Rapid) that insert form-handling HTML into their &quot;process_button&quot; function's output.</li>
+          <li>BUGFIX: On initial entry, the order's total sometimes didn't include the proper shipping cost.</li>
+          <li>CHANGE: Additional debug configuration added to enable strict PHP processing for the <em>One-Page Checkout</em> page.</li>
+          <li>CHANGE: Provide pre-integration of the <a href="https://vinosdefrutastropicales.com/index.php?main_page=product_info&cPath=2_7&products_id=46" target="_blank" rel="noopener">Products' Options' Stock Manager</a>; yes, it's a shameless plug!</li>
+          <li>The following files were affected:<ol>
+            <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+            <li>/includes/languages/english/checkout_one_confirmation.php</li>
+            <li>/includes/modules/pages/checkout_one/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+            <li>/includes/modules/pages/checkout_one_confirmation/jscript_main.php</li>
+            <li>/includes/templates/template_default/css/checkout_one_confirmation.css</li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_default.php</span></li>
+            <li><span class="template-changed">/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</span></li>
+            <li>/includes/templates/YOUR_TEMPLATE/css/checkout_one_confirmation.css</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+            <li>/zc154_only/*.* renamed to /pre_zc155a/*.*</li>
+          </ol></li>
+        </ul></li>
+        <li>v1.0.0, 2016-07-30:<ul>
+          <li>Initial public release.</li>
+        </ul></li>
+    </ul>
+
+    <h3>Files Added and Removed by Version</h3>
+    <p>This section identifies <em>OPC</em>'s distribution history; see <a href="#install">Initial Installation</a> section for a concise list of currently-distributed files.<p>
+    <ol>
+        <li>/includes/auto_loaders/config.checkout_one.php</li>
+        <li>/includes/auto_loaders/paypal_ipn.checkout_one.php <span class="smaller">(Added in v2.1.0)</span></li>
+        <li>/includes/classes/OnePageCheckout.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/classes/OnePageCheckoutNoPayment.php <span class="smaller">(Added in v2.1.0)</span></li>
+        <li><span class="removed">/includes/classes/Vinos_Browser.php</span> <span class="smaller">(Added in v1.0.4, removed in v2.5.0)</span></li>
+        <li>/includes/classes/ajax/zcAjaxOnePageCheckout.php</li>
+        <li>/includes/classes/observers/class.checkout_one_observer.php</li>
+        <li>/includes/classes/observers/CheckoutOneEmailObserver.php <span class="smaller">(Added in v2.3.2)</span></li>
+        <li>/includes/extra_datafiles/checkout_one_filenames.php</li>
+        <li>/includes/functions/extra_functions/one_page_checkout_functions.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/languages/english/address_book_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/languages/english/checkout_one.php</li>
+        <li>/includes/languages/english/checkout_one_confirmation.php</li>
+        <li>/includes/languages/english/checkout_process_guest.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/languages/english/checkout_success_guest.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/languages/english/create_account_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/languages/english/create_account_success_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/languages/english/lang.checkout_one.php <span class="smaller">(Added in v2.4.2)</span></li>
+        <li>/includes/languages/english/lang.checkout_one_confirmation.php <span class="smaller">(Added in v2.4.2)</span></li>
+        <li>/includes/languages/english/lang.checkout_process_guest.php <span class="smaller">(Added in v2.4.2)</span></li>
+        <li>/includes/languages/english/lang.checkout_success_guest.php <span class="smaller">(Added in v2.4.2)</span></li>
+        <li>/includes/languages/english/lang.create_account_register.php <span class="smaller">(Added in v2.4.2)</span></li>
+        <li>/includes/languages/english/lang.create_account_success_register.php <span class="smaller">(Added in v2.4.2)</span></li>
+        <li>/includes/languages/english/lang.login_guest.php <span class="smaller">(Added in v2.4.2)</span></li>
+        <li>/includes/languages/english/login_guest.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li><span class="removed">/includes/languages/english/order_status.php</span> <span class="smaller">(Added in v2.0.0, removed in v2.4.4, <b>from this distribution <em>only</em></b>)</span></li>
+        <li>/includes/languages/english/extra_definitions/checkout_one_extra_definitions.php <span class="smaller">(Added in v1.0.8)</span></li>
+        <li>/includes/languages/english/extra_definitions/lang.checkout_one_extra_definitions.php</li>
+        <li>/includes/languages/english/YOUR_TEMPLATE/lang.order_status.php <span class="smaller">(Added in v2.4.4)</span></li>
+        <li>/includes/languages/english/YOUR_TEMPLATE/order_status.php <span class="smaller">(Added in v2.4.4)</span></li>
+        <li>/includes/languages/english/html_includes/define_checkout_success_guest.php <span class="smaller">(Added in v2.4.2)</span></li>
+        <li>/includes/languages/english/html_includes/YOUR_TEMPLATE/define_checkout_success_guest.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li><span class="template">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_coupon.php</span> <span class="smaller">(Added in v2.4.2)</span></li>
+        <li><span class="template">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/lang.ot_gv.php</span> <span class="smaller">(Added in v2.4.2)</span></li>
+        <li><span class="template">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_coupon.php</span></li>
+        <li><span class="template">/includes/languages/english/modules/order_total/YOUR_TEMPLATE/ot_gv.php</span></li>
+        <li><span class="template removed">/includes/languages/english/YOUR_TEMPLATE/checkout_confirmation.php</span> <span class="smaller">(Removed in v2.4.2, <b>from this distribution <em>only</em></b>)</span></li>
+        <li>/includes/modules/pages/address_book/header_php_address_book_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/address_book/main_template_vars.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/checkout_one/header_php.php</li>
+        <li>/includes/modules/pages/checkout_one/jquery.checkout_one.js <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/modules/pages/checkout_one/jquery.checkout_one.min.js <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.js <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/checkout_one/jquery.checkout_one_addr.min.js <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/checkout_one/jscript_main.php</li>
+        <li>/includes/modules/pages/checkout_one_confirmation/header_php.php</li>
+        <li>/includes/modules/pages/checkout_one_confirmation/jscript_main.php</li>
+        <li>/includes/modules/pages/checkout_success/header_php_guest.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/checkout_success/main_template_vars.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/create_account/header_php_create_account_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/create_account/jscript_form_check_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/create_account/main_template_vars.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/create_account_success/header_php_create_account_success_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/create_account_success/main_template_vars.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/login/header_php_login_guest.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/modules/pages/login/jscript_opc_reset_guest_for_ppec.php <span class="smaller">(Added in v2.4.6)</span></li>
+        <li>/includes/modules/pages/login/main_template_vars.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li><span class="corefile">/includes/modules/pages/order_status/header_php.php</span> <span class="smaller">(Added in v2.0.0, became a core-file in zc158)</span></li>
+        <li>/includes/modules/pages/shopping_cart/jscript_opc_reset_guest_for_ppec.php <span class="smaller">(Added in v2.4.6)</span></li>
+        <li><span class="template">/includes/modules/sideboxes/YOUR_TEMPLATE/information.php</span> <span class="smaller">(Added in v2.1.3)</li>
+        <li>/includes/templates/template_default/css/checkout_one.css</li>
+        <li>/includes/templates/template_default/css/checkout_one_confirmation.css</li>
+        <li>/includes/templates/template_default/css/checkout_success.css <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/css/create_account.css <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/css/login.css <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/images/confirmation_one_loading.gif</li>
+        <li>/includes/templates/template_default/templates/tpl_address_book_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_checkout_one_confirmation_default.php</li>
+        <li>/includes/templates/template_default/templates/tpl_checkout_one_default.php</li>
+        <li>/includes/templates/template_default/templates/tpl_checkout_success_guest.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_create_account_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_create_account_success_register.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_login_guest.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_checkout_one_shipping.php <span class="smaller">(Added in v1.0.2)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_address_block.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_billing_address.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_comments.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_conditions.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_credit_selections.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_customer_info.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_instructions.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_payment_choices.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_shipping_address.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_shipping_choices.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_shopping_cart.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li>/includes/templates/template_default/templates/tpl_modules_opc_submit_block.php <span class="smaller">(Added in v1.5.0)</span></li>
+        <li><span class="corefile">/includes/templates/template_default/templates/tpl_order_status_default.php</span> <span class="smaller">(Added in v2.0.0, became a core-file in zc158)</span></li>
+        <li>/includes/templates/YOUR_TEMPLATE/css/checkout_one.css</li>
+        <li>/includes/templates/YOUR_TEMPLATE/css/checkout_one_confirmation.css</li>
+        <li>/includes/templates/YOUR_TEMPLATE/css/checkout_success.css <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/YOUR_TEMPLATE/css/create_account.css <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/includes/templates/YOUR_TEMPLATE/css/login.css <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/YOUR_ADMIN/opc_admin.php <span class="smaller">(Added in v2.3.4)</span></li>
+        <li>/YOUR_ADMIN/includes/auto_loaders/config.checkout_one.php</li>
+        <li>/YOUR_ADMIN/includes/classes/observers/CheckoutOneAdminObserver.php <span class="smaller">(Added in v2.0.0)</span></li>
+        <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one.php</li>
+        <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_install.php <span class="smaller">(Added in v2.3.0)</span></li>
+        <li>/YOUR_ADMIN/includes/init_includes/init_checkout_one_upgrade.php <span class="smaller">(Added in v2.3.0)</span></li>
+        <li>/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php <span class="smaller">(Added in v2.4.0)</span></li>
+        <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/checkout_one_name.php</li>
+    </ol>
+
+</body>
+</html>

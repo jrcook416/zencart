@@ -6,24 +6,21 @@
 
 namespace Tests\Unit\testsSundry;
 
-use PHPUnit\Framework\TestCase;
-use Tests\Support\UnitTestBootstrap;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tests\Support\zcUnitTestCase;
 use Zencart\Console\CliConfigurationLoader;
 use Zencart\DbRepositories\ConfigurationRepository;
 use Zencart\DbRepositories\ProductTypeLayoutRepository;
 
-class CliConfigurationLoaderTest extends TestCase
+#[RunTestsInSeparateProcesses]
+class CliConfigurationLoaderTest extends zcUnitTestCase
 {
-
-    public static function setUpBeforeClass(): void
+    public function setUp(): void
     {
-        UnitTestBootstrap::initialize();
+        parent::setUp();
         require_once DIR_FS_CATALOG . 'includes/classes/Console/CliConfigurationLoader.php';
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testBootstrapLoadsRepositoriesIntoZenConfig(): void
     {
         $db = new \queryFactory();
@@ -33,6 +30,9 @@ class CliConfigurationLoaderTest extends TestCase
             public function loadConfigSettings(): void
             {
                 $this->loaded = true;
+                if (!defined('CURL_PROXY_REQUIRED')) {
+                    define('CURL_PROXY_REQUIRED', 'True');
+                }
             }
 
             public function get(string $configurationKey): mixed
@@ -56,13 +56,13 @@ class CliConfigurationLoaderTest extends TestCase
         };
 
         $loader = new CliConfigurationLoader($configurationRepository, $productTypeLayoutRepository);
-
         $loader->bootstrap($db);
 
         $this->assertSame($db, $GLOBALS['db']);
         $this->assertTrue($configurationRepository->loaded);
         $this->assertTrue($productTypeLayoutRepository->loaded);
         $this->assertTrue(function_exists('zen_config'));
+        $this->assertTrue(defined('CURL_PROXY_REQUIRED'));
         $this->assertSame('True', \zen_config('CURL_PROXY_REQUIRED'));
     }
 }

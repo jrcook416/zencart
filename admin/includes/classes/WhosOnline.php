@@ -423,10 +423,16 @@ class WhosOnline extends base
      */
     protected function decodeSessionData(string $session_data): bool
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            return false;
+        }
+
         set_error_handler(
-            static function (int $errno, string $errstr): bool {
-                return $errno === E_WARNING && str_starts_with($errstr, 'session_decode():');
-            },
+            static fn(): bool => true,
             E_WARNING
         );
 

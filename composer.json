@@ -1,0 +1,80 @@
+{
+    "name": "zencart/zencart",
+    "description": "Open Source E-commerce Application",
+    "homepage": "https://www.zen-cart.com",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "The Zen-Cart Team",
+            "homepage": "https://github.com/zencart/zencart/graphs/contributors"
+        }
+    ],
+    "funding": [
+        {
+            "type": "other",
+            "url": "https://zen-cart.com/donate"
+        }
+    ],
+    "support": {
+        "forum": "https://zen-cart.com/forum",
+        "source": "https://zen-cart.com/getit",
+        "docs": "https://docs.zen-cart.com"
+    },
+    "_comment": "compatible with PHP 8.2-8.5",
+    "require": {
+        "php": "^8.2",
+        "ext-curl": "*",
+        "ext-ctype": "*",
+        "ext-fileinfo": "*",
+        "ext-filter": "*",
+        "ext-gd": "*",
+        "ext-hash": "*",
+        "ext-iconv": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-pcre": "*"
+    },
+    "require-dev": {
+        "guzzlehttp/guzzle": "^7.7",
+        "mikey179/vfsstream": "^1.6",
+        "phpunit/phpunit": "^9.6",
+        "sempro/phpunit-pretty-print": "^1.4",
+        "symfony/browser-kit": "^6.0",
+        "symfony/css-selector": "^6.0",
+        "symfony/http-client": "^6.0",
+        "symfony/maker-bundle": "^1.49",
+        "symfony/mime": "^6.0",
+        "symfony/phpunit-bridge": "^7.0",
+        "symfony/test-pack": "^1.1"
+    },
+    "autoload": {
+        "classmap": ["includes/classes", "includes/modules"]
+    },
+    "include-path": ["includes/"],
+    "autoload-dev": {
+        "classmap": ["not_for_release/testFramework"],
+        "psr-4": {
+            "Tests\\": "not_for_release/testFramework/",
+            "Seeders\\": "not_for_release/testFramework/Support/database/Seeders/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.2.x-dev"
+        }
+    },
+    "config": {
+        "bin-dir": "vendor/bin",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "scripts": {
+        "feature-tests": "phpunit --verbose --testsuite FeatureStore,FeatureAdmin --printer 'Sempro\\PHPUnitPrettyPrinter\\PrettyPrinterForPhpUnit9'",
+        "feature-tests-store": "phpunit --verbose --testsuite FeatureStore --printer 'Sempro\\PHPUnitPrettyPrinter\\PrettyPrinterForPhpUnit9'",
+        "feature-tests-admin": "phpunit --verbose --testsuite FeatureAdmin --printer 'Sempro\\PHPUnitPrettyPrinter\\PrettyPrinterForPhpUnit9'",
+        "unit-tests": "phpunit --verbose  --process-isolation --testsuite Unit --printer 'Sempro\\PHPUnitPrettyPrinter\\PrettyPrinterForPhpUnit9'"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

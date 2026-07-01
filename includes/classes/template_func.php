@@ -1,0 +1,38 @@
+<?php
+/**
+ * template_func Class.
+ *
+ * @copyright Copyright 2003-2025 Zen Cart Development Team
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: DrByte 2025 Sep 18 Modified in v2.2.0 $
+ */
+if (!defined('IS_ADMIN_FLAG')) {
+    die('Illegal Access');
+}
+
+/**
+ * template_func Class.
+ * This class is used to for template-override calculations
+ *
+ * @since ZC v1.0.3
+ */
+class template_func extends base
+{
+    /**
+     * @since ZC v1.0.3
+     */
+    public function get_template_part(string $page_directory, string $template_part, string $file_extension = '.php'): array
+    {
+        $pageLoader = Zencart\PageLoader\PageLoader::getInstance();
+        return $pageLoader->getTemplatePart($page_directory, $template_part, $file_extension);
+    }
+
+    /**
+     * @since ZC v1.0.3
+     */
+    public function get_template_dir(string $template_code, string $current_template, string $current_page, string $template_dir): string
+    {
+        $pageLoader = Zencart\PageLoader\PageLoader::getInstance();
+        return $pageLoader->getTemplateDirectory($template_code, $current_template, $current_page, $template_dir);
+    }
+}

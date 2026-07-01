@@ -9,8 +9,6 @@ jobs:
     permissions:
       contents: read
     uses: ./.github/workflows/iems_testing.yml
-    with:
-      test-command: vendor/bin/phpunit -c phpunit.xml
 
   tests-unit:
     permissions:

@@ -6,7 +6,7 @@ on:
       test-command:
         required: false
         type: string
-        default: vendor/bin/phpunit -c phpunit.xml
+        default: composer tests-unit
     secrets: {}
 
 jobs:
@@ -66,6 +66,10 @@ jobs:
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare the application
+        run: |
+          touch includes/configure.php
 
       - name: Wait for DB readiness
         run: |

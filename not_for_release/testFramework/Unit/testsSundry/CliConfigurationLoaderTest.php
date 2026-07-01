@@ -30,6 +30,9 @@ class CliConfigurationLoaderTest extends zcUnitTestCase
             public function loadConfigSettings(): void
             {
                 $this->loaded = true;
+                if (!defined('CURL_PROXY_REQUIRED')) {
+                    define('CURL_PROXY_REQUIRED', 'True');
+                }
             }
 
             public function get(string $configurationKey): mixed
@@ -59,6 +62,7 @@ class CliConfigurationLoaderTest extends zcUnitTestCase
         $this->assertTrue($configurationRepository->loaded);
         $this->assertTrue($productTypeLayoutRepository->loaded);
         $this->assertTrue(function_exists('zen_config'));
+        $this->assertTrue(defined('CURL_PROXY_REQUIRED'));
         $this->assertSame('True', \zen_config('CURL_PROXY_REQUIRED'));
     }
 }

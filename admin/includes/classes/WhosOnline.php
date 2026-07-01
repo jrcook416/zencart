@@ -335,6 +335,12 @@ class WhosOnline extends base
             return null;
         }
 
+        $session_data = $this->normalizeSessionData($session_data);
+
+        if (empty($session_data)) {
+            return null;
+        }
+
         $extracted_data = [];
         $fields_to_extract = [
             'language' => 'language_name',
@@ -358,8 +364,9 @@ class WhosOnline extends base
 
         $adminSession = session_encode();
         $backupSessionArray = $_SESSION;
+        $_SESSION = [];
 
-        if (session_decode($session_data) !== false) {
+        if ($this->decodeSessionData($session_data)) {
             $cart = $_SESSION['cart'];
             $currency = $_SESSION['currency'] ?? zen_config('DEFAULT_CURRENCY');
 
@@ -378,16 +385,62 @@ class WhosOnline extends base
             }
         }
 
-        // protect against tampering
         $_SESSION = $backupSessionArray;
-        foreach ($_SESSION as $key => $value) {
-            if (!isset($backupSessionArray[$key])) {
-                unset($_SESSION[$key]);
-            }
+
+        if (is_string($adminSession) && $adminSession !== '') {
+            $this->decodeSessionData($adminSession);
         }
-        session_decode($adminSession);
+
         unset($adminSession, $backupSessionArray);
 
         return $extracted_data;
+    }
+
+    /**
+     * @since ZC v3.0.0
+     */
+    protected function normalizeSessionData(string $session_data): string
+    {
+        $session_data = trim($session_data);
+
+        if ($session_data === '') {
+            return '';
+        }
+
+        $decoded = base64_decode($session_data, true);
+        if ($decoded !== false && base64_encode($decoded) === $session_data) {
+            return $decoded;
+        }
+
+        if (str_starts_with($session_data, 'cart|O')) {
+            $decoded = base64_decode($session_data, true);
+            if (is_string($decoded)) {
+                $session_data = $decoded;
+            }
+        }
+
+        return $session_data;
+    }
+
+    /**
+     * @since ZC v3.0.0
+     */
+    protected function decodeSessionData(string $session_data): bool
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            return false;
+        }
+
+        set_error_handler(static fn(): bool => true, E_WARNING);
+
+        try {
+            return session_decode($session_data) !== false;
+        } finally {
+            restore_error_handler();
+        }
     }
 }

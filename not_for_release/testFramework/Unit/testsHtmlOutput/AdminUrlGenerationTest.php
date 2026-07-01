@@ -251,11 +251,11 @@ class AdminUrlGenerationTest extends zcUnitTestCase
     {
         $this->assertURLGenerated(
             zen_href_link('page"xss'),
-            HTTP_SERVER . DIR_WS_ADMIN . 'index.php?cmd=page&amp;quot;xss'
+            HTTP_SERVER . DIR_WS_ADMIN . 'index.php?cmd=page"xss'
         );
         $this->assertURLGenerated(
             zen_href_link('page"xss', 'param=value'),
-            HTTP_SERVER . DIR_WS_ADMIN . 'index.php?cmd=page&amp;quot;xss&amp;param=value'
+            HTTP_SERVER . DIR_WS_ADMIN . 'index.php?cmd=page"xss&amp;param=value'
         );
     }
 

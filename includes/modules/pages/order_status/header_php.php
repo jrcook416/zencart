@@ -45,11 +45,6 @@ $query_email_address = '';
 //
 $spam_input_name = hash('md5', zen_config('STORE_NAME'));
 
-// Normalize the posted order-id in place so downstream templates don't see raw input.
-if (isset($_POST['order_id'])) {
-    $_POST['order_id'] = (int) $_POST['order_id'];
-}
-
 if (isset($_GET['action']) && $_GET['action'] === 'status') {
     $error = false;
     unset($_SESSION['email_address'], $_SESSION['email_is_os']);
@@ -96,7 +91,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'status') {
         }
         $_SESSION['os_errors']++;
 
-        $slamming_threshold = (((int)ORDER_STATUS_SLAM_COUNT) > 0) ? (int)ORDER_STATUS_SLAM_COUNT : 3;
+        $slamming_threshold = (((int)zen_config('ORDER_STATUS_SLAM_COUNT')) > 0) ? (int)zen_config('ORDER_STATUS_SLAM_COUNT') : 3;
         $zco_notifier->notify('NOTIFY_ORDER_STATUS_SLAMMING_ALERT', $_SESSION['os_errors'], $slamming_threshold);
         if ($_SESSION['os_errors'] > (int)$slamming_threshold) {
             $zco_notifier->notify('NOTIFY_ORDER_STATUS_SLAMMING_LOCKOUT');
@@ -146,6 +141,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'status') {
             $_SESSION['email_is_os'] = true;
         }
     }
+}
+
+// -----
+// If there is a posted 'order_id', make sure it's cast to an int.
+//
+if (isset($_POST['order_id'])) {
+    $_POST['order_id'] = (int)$_POST['order_id'];
 }
 
 // -----

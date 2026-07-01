@@ -8,8 +8,6 @@
 require('includes/application_top.php');
 
 $currencies = new currencies();
-
-$canViewCustomers = check_page(FILENAME_CUSTOMERS, $_GET);
 ?>
 <!doctype html>
 <html <?php echo HTML_PARAMS; ?>>
@@ -52,9 +50,9 @@ $canViewCustomers = check_page(FILENAME_CUSTOMERS, $_GET);
             $customers_query_numrows = $customers_query_m->RecordCount();
             $customers = $db->Execute($customers_query_raw);
             foreach ($customers as $customer) { ?>
-            <tr class="dataTableRow"<?php echo ($canViewCustomers ? ' onclick="document.location.href = \'' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $customer['customers_id'], 'NONSSL') . '\'"' : ''); ?>>
+            <tr class="dataTableRow" onclick="document.location.href = '<?php echo zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $customer['customers_id'], 'NONSSL'); ?>'">
               <td class="dataTableContent text-right"><?php echo $customer['customers_id']; ?>&nbsp;&nbsp;</td>
-              <td class="dataTableContent"><?php echo ($canViewCustomers ? '<a href="' . zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $customer['customers_id'], 'NONSSL') . '">' : '') . $customer['customers_firstname'] . ' ' . $customers->fields['customers_lastname'] . ($canViewCustomers ? '</a>' : ''); ?></td>
+              <td class="dataTableContent"><a href="<?php echo zen_href_link(FILENAME_CUSTOMERS, 'cID=' . $customer['customers_id'], 'NONSSL'); ?>"><?php echo $customer['customers_firstname'] . ' ' . $customers->fields['customers_lastname']; ?></a></td>
               <td class="dataTableContent text-right"><?php echo $currencies->format($customer['ordersum']); ?></td>
             </tr>
             <?php } ?>

@@ -49,6 +49,7 @@ ALTER TABLE orders RENAME COLUMN customers_company TO customers_agency;
 ALTER TABLE orders RENAME COLUMN delivery_company TO delivery_agency;
 ALTER TABLE orders RENAME COLUMN billing_company TO billing_agency;
 
+
 #PROGRESS_FEEDBACK:!TEXT=Updating configuration settings...
 
 # update to new default, only if not customized from the original default of 50.

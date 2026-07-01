@@ -1,5 +1,4 @@
 name: Zen Cart Unit Tests
-name: <existing workflow name>
 
 on:
   push:

@@ -70,15 +70,15 @@ jobs:
       - name: Wait for DB readiness
         run: |
           for i in {1..30}; do
-            mariadb -h 127.0.0.1 -uroot -proot -e "SELECT 1" && break
-            sleep 2
+          mysql -h 127.0.0.1 -uroot -proot -e "SELECT 1" && break
+          sleep 2
           done
-
+        
       - name: Reset test database
         run: |
-          mariadb -h 127.0.0.1 -uroot -proot -e "DROP DATABASE IF EXISTS zencart_test; CREATE DATABASE zencart_test;"
-          # put your schema/bootstrap command here, example:
-          # php tests/bootstrap-db.php
+            mysql -h 127.0.0.1 -uroot -proot -e "DROP DATABASE IF EXISTS zencart_test; CREATE DATABASE zencart_test;"
+            # put your schema/bootstrap command here, example:
+            # php tests/bootstrap-db.php
 
       - name: Run tests (deterministic)
         env:

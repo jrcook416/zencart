@@ -59,7 +59,9 @@ class BasicTaxStoreNoShippingSEKTest extends zcFeatureTestCaseStore
         $this->browser->submitForm('btn_submit_x', []);
         $response = $this->browser->getResponse();
         $crawler = new Crawler((string)$response->getContent());
-        $this->assertStringContainsString('Your Order Number is:', $crawler->filter('#checkoutSuccessOrderNumber')->text());
+        $successNode = $crawler->filter('#checkoutSuccessOrderNumber, #orderNumber-card-body');
+        $this->assertGreaterThan(0, $successNode->count(), (string)$response->getContent());
+        $this->assertStringContainsString('Your Order Number is:', $successNode->first()->text());
     }
 
     /**
@@ -100,6 +102,8 @@ class BasicTaxStoreNoShippingSEKTest extends zcFeatureTestCaseStore
         ]);
         $response = $this->browser->getResponse();
         $crawler = new Crawler((string)$response->getContent());
-        $this->assertStringContainsString('Your Order Number is:', $crawler->filter('#checkoutSuccessOrderNumber')->text());
+        $successNode = $crawler->filter('#checkoutSuccessOrderNumber, #orderNumber-card-body');
+        $this->assertGreaterThan(0, $successNode->count(), (string)$response->getContent());
+        $this->assertStringContainsString('Your Order Number is:', $successNode->first()->text());
     }
 }

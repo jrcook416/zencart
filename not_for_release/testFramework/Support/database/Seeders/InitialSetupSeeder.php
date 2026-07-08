@@ -15,14 +15,6 @@ class InitialSetupSeeder
     public function run($mainConfigs)
     {
         $now = date('Y-m-d H:i:s');
-        
-        // set a admin login that won't trigger an expired password
-        TestDb::truncate('admin');
-        TestDb::update(
-            'template_select',
-            ['template_dir' => 'bootstrap'],
-            'template_language = :template_language',
-            [':template_language' => '0']
 );
         TestDb::insert('admin', [
             'admin_id' => 1,

@@ -6,7 +6,7 @@ use Tests\Support\zcFeatureTestCaseStore;
 
 class LowOrderFeeTest extends zcFeatureTestCaseStore
 {
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
         $this->switchToTaxNonInclusive();
@@ -14,7 +14,7 @@ class LowOrderFeeTest extends zcFeatureTestCaseStore
         $this->switchLowOrderFee('off');
     }
 
-    protected function tearDown(): void
+    public function tearDown(): void
     {
         $this->switchToTaxNonInclusive();
         $this->switchItemShippingTax('off');

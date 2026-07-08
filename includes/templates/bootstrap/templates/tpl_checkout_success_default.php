@@ -82,12 +82,12 @@ if (isset($_SESSION['customer_guest_id'])) {
     </div>
 <!--eof card deck-->
 
-<!--bof order number card--> 
-    <div id="orderNumber-card" class="card mb-3">
-        <div id="orderNumber-card-body" class="card-body p-3">
-            <?= TEXT_YOUR_ORDER_NUMBER . $zv_orders_id ?>
-        </div>
-    </div>
+<!--bof order number card-->
+<div id="orderNumber-card" class="card mb-3">
+  <div id="orderNumber-card-body" class="card-body p-3">
+    <span id="checkoutSuccessOrderNumber"><?= TEXT_YOUR_ORDER_NUMBER . $zv_orders_id ?></span>
+  </div>
+</div>
 <!--eof order number card--> 
 
 <!-- bof order details -->

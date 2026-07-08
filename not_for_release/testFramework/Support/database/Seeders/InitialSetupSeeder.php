@@ -15,7 +15,6 @@ class InitialSetupSeeder
     public function run($mainConfigs)
     {
         $now = date('Y-m-d H:i:s');
-);
         TestDb::insert('admin', [
             'admin_id' => 1,
             'admin_name' => 'Admin',

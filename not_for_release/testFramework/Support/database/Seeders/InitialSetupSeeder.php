@@ -6,7 +6,6 @@ use Tests\Support\Database\TestDb;
 
 class InitialSetupSeeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -15,6 +14,22 @@ class InitialSetupSeeder
     public function run($mainConfigs)
     {
         $now = date('Y-m-d H:i:s');
+        $hasGuestOrderColumn = (int) TestDb::selectValue(
+            'SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE()
+                   AND TABLE_NAME = :table
+               AND COLUMN_NAME = :column',
+            [
+            ':table' => 'orders',
+            ':column' => 'is_guest_order',
+            ]
+        );
+
+if ($hasGuestOrderColumn === 0) {
+    TestDb::pdo()->exec(
+        "ALTER TABLE `orders` ADD COLUMN `is_guest_order` TINYINT(1) NOT NULL DEFAULT 0"
+    );
+}
         TestDb::truncate('admin');
         TestDb::insert('admin', [
             'admin_id' => 1,

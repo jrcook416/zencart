@@ -1,0 +1,188 @@
+CHANGELOG
+
+Version 2.0.0c 8 October 2019:
+Files changed in 2.0.0c
+- Updated for ZC version 1.5.6c (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/167)
+- Added Back To Top Button (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/66)
+- Fixed special listing page, it now uses the product listing page layout (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/141)
+- Fixed non-functional shopping cart shipping estimator (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/146)
+- Fixed PHP Warning: count(): header_php_shopping_cart_zca_bootstrap.php (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/147)
+- Fixed typo in stylesheet_zca_colors.php (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/148)
+- Fixed single payment issue breaking DOM (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/152)
+- Fixed non styles "active" page # on listing pages (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/154)
+- Fixed single checkbox issue on checkout_success page for product update notifications (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/155)
+- Fixed specials center-box product query (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/156)
+-Added unique id's to center-boxes (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/157)
+- Added bootstrap cards to sub-categories for a consistent look (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/158)
+- -Fixed Undefined Constants in ADMIN zca_bootstrap_colors.php (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/159)
+- Fixed non-multi-language in tpl_photoswipe.php (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/161)
+- Fixed PHP warning in tpl_modules_shipping_estimator.php (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/162)
+- Removed LARGE_IMAGE_WIDTH constant (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/163)
+- Replaced messageStack icon images w/ font awesome icons (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/165)
+- Fixed shipping estimator on shopping cart page to be within form (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/164)
+- Fixed photoswipe issue not opening additional images as a gallery (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/issues/170)
+- Removed bs class in tpl_checkout_payment_default.php (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/pull/177/commits/5501ed09cefd2abf3caa4c126c0dfae3fbd35b40)
+- Update header_php_shopping_cart_zca_bootstrap.php to include $productArray check (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/pull/176/commits/773d6ab2b769eaea3bd982df15116236aa416934)
+- Added bs class to tpl_checkout_payment_default.php to ensure radio button custom style appears (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/pull/175/commits/c5ec408dce496d7a4776bbcd4503962f34f7c94b)
+- Updated tpl_page_not_found_default.php to ensure GV and COUPON status values set before referencing (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/pull/174/commits/056d2c11e2cc9ee4168006afb6f09a928e6bdf67)
+- Added a check instead of removing to YOUR_ADMIN/includes/init_includes/init_bc_config.php (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/pull/173/commits/970544206d8f2047fe3dae2a55971dc2a0e1556f#diff-5769ca6d8801df439706b02fa4ba9546)
+- Added a check to initialize variable in case it wasn't created in tpl_offcanvas_menu.php (https://github.com/zcadditions/ZCA-Bootstrap-Template-for-1.5.6-v2.0.0c/pull/172/commits/770391f727add6d2b799284edae1881ffc9885b6)
+- 
+
+
+Version 2.0.0a 10 January 2019:
+1.) Removes Optional-OPC-Template-Overrides
+    Note: Once this is updated for 1.5.6 I will provide a separate GitHub repository which will provide Bootstrap compatibility.
+    https://github.com/zcadditions/ZCA-OPC-for-1.5.6
+
+Files changed in 2.0.0a
+1 - includes/templates/bootstrap/templates/tpl_checkout_success_default.php 
+2 - includes/languages/english/bootstrap/button_names.php
+3 - includes/modules/order_total/ot_coupon.php
+4 - includes/templates/bootstrap/templates/tpl_checkout_payment_default.php
+5 - includes/templates/bootstrap/templates/tpl_ajax_checkout_confirmation_default.php
+6 - includes/classes/ajax/zcAjaxPayment.php
+
+Files deleted in 2.0.0a
+1 - All Optional-OPC-Template-Overrides file
+
+Version: 2.0.0 06 January 2019:
+1.) This version incorporates changes for 1.5.6 and 1.5.6a
+2.) Does not include updates for Optional-OPC-Template-Overrides
+
+Files Changed for 1.5.6 and 1.5.6a
+- includes/templates/bootstrap/common/tpl_offcanvas_menu.php
+- includes/templates/bootstrap/templates/tpl_site_map_default.php
+- includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php
+- includes/templates/bootstrap/templates/tpl_index_product_list.php
+- includes/templates/bootstrap/templates/tpl_ezpages_bar_header.php
+- includes/templates/bootstrap/templates/tpl_ezpages_bar_footer.php
+- includes/modules/sideboxes/bootstrap/information.php
+- includes/classes/order.php
+- includes/modules/pages/specials/main_template_vars.php
+- includes/modules/pages/create_account/jscript_addr_pulldowns_zca_bootstrap.php
+- includes/modules/pages/checkout_payment_address/jscript_addr_pulldowns_zca_bootstrap.php
+- includes/modules/pages/address_book_process/jscript_addr_pulldowns_zca_bootstrap.php
+- includes/templates/bootstrap/modalboxes/tpl_coupon_help.php
+- includes/templates/bootstrap/sideboxes/tpl_best_sellers.php
+- includes/templates/bootstrap/sideboxes/tpl_categories.php
+- includes/templates/bootstrap/sideboxes/tpl_document_categories.php
+- includes/templates/bootstrap/sideboxes/tpl_information.php
+- includes/templates/bootstrap/sideboxes/tpl_languages.php
+- includes/templates/bootstrap/sideboxes/tpl_more_information.php
+- includes/templates/bootstrap/sideboxes/tpl_order_history.php
+- includes/templates/bootstrap/sideboxes/tpl_search.php
+- includes/templates/bootstrap/sideboxes/tpl_search_header.php
+- includes/templates/bootstrap/sideboxes/tpl_whos_online.php
+- includes/templates/bootstrap/common/html_header.php
+- includes/templates/bootstrap/common/tpl_columnar_display.php
+- includes/templates/bootstrap/templates/tpl_account_newsletters_default.php
+- includes/templates/bootstrap/templates/tpl_checkout_payment_default.php
+- includes/templates/bootstrap/templates/tpl_checkout_success_default.php
+- includes/templates/bootstrap/templates/tpl_document_general_info_display.php
+- includes/templates/bootstrap/templates/tpl_document_product_info_display.php
+- includes/templates/bootstrap/templates/tpl_modules_attributes.php
+- includes/templates/bootstrap/templates/tpl_modules_create_account.php
+- includes/templates/bootstrap/templates/tpl_modules_downloads.php
+- includes/templates/bootstrap/templates/tpl_modules_media_manager.php
+- includes/templates/bootstrap/templates/tpl_product_free_shipping_info_display.php
+- includes/templates/bootstrap/templates/tpl_product_info_display.php
+- includes/templates/bootstrap/templates/tpl_product_music_info_display.php
+- includes/templates/bootstrap/templates/tpl_time_out_default.php
+- includes/templates/bootstrap/templates/tpl_shopping_cart_default.php
+- includes/templates/bootstrap/centerboxes/tpl_modules_upcoming_products.php
+- includes/templates/bootstrap/templates/tpl_zc_install_suggested_default.php
+- includes/modules/centerboxes/specials_index.php
+- includes/modules/centerboxes/specials_index.php
+- includes/modules/centerboxes/upcoming_products.php
+- includes/modules/centerboxes/featured_products.php
+- includes/modules/bootstrap/categories_tabs.php
+- includes/modules/bootstrap/attributes.php
+- includes/modules/order_total/ot_gv.php
+- includes/modules/order_total/ot_coupon.php
+- includes/classes/site_map.php
+- includes/classes/zca/zca_message_stack.php
+- includes/classes/order.php
+- includes/classes/observers/ZcaBootstrapObserver.php
+
+Files Deleted for 1.5.6 and 1.5.6a
+- includes/modules/bootstrap/shipping_estimator.php
+- includes/modules/bootstrap/product_prev_next.php
+- includes/modules/bootstrap/additional_images.php
+- includes/functions/html_output.php
+- includes/functions/functions_prices.php
+----------------------------------------------------------------------------------------------------------------------------
+Version: 1.0.5 08 July 2018:
+
+- Several HTML validations (github issue #62)
+- Adds Responsive Carousel Banners (github issue #63)
+- Adds the PhotoSwipe Lightbox to the document_general_info, document_product_info, page, product_free_shipping_info, product_info, product_music_info, product_reviews, product_reviews_info & product_reviews_write pages (github issue #64)
+- Adds Admin controlled Template Colors Configuration (github issue #65) 
+----------------------------------------------------------------------------------------------------------------------------
+Version: 1.0.5 25 Apr 2018:
+
+- OPC Template Override Integration
+(Optional-OPC-Template-Overrides)
+- Integrate ImageHandler in additional image modal
+(includes/modules/bootstrap/bootstrap_slide_additional_images.php)
+- Formatting issue of attributes with images
+(includes/modules/bootstrap/attributes.php)
+- Width of input fields on wider screens
+(includes/templates/bootstrap/css/stylesheet.css, includes/templates/bootstrap/templates/tpl_modules_create_account.php, includes/templates/bootstrap/templates/tpl_checkout_shipping_default.php, includes/templates/bootstrap/templates/tpl_checkout_payment_default.php, includes/templates/bootstrap/templates/tpl_checkout_confirmation_default.php)
+- Centering $free_tag & $call_tag icons
+(includes/classes/observers/ZcaBootstrapObserver.php)
+- Centering FREE_SHIPPING_ICON
+(includes/languages/english/bootstrap/product_free_shipping.php)
+----------------------------------------------------------------------------------------------------------------------------
+Version: 1.0.4 25 Apr 2018:
+
+- Added spacing to category tab links
+- Fixed the missing "PRIMARY_ADDRESS" define statement.
+- Added stock order-totals formatting so template is compatible with "One Page Checkout".
+- Replaced shopping cart icons w/ FA icons.
+- Added missing li tags on categories drop-down.
+- Removed extra double-quotes for observer class.
+- Implement updated regex quoting from ZC core for image matching.
+- Added unique names to the bootstrap modals.
+- Stylesheet change for class ezpagesBarHeader & ezpagesBarFooter.
+- Added padding to logo and tagline wrapper. 
+----------------------------------------------------------------------------------------------------------------------------
+Version: 1.0.3, 2 Apr 2018:
+
+- Update to move Required indicator for country pulldown menus right of label.
+- Rename configurations in init_zca_bootstrap_template_admin.php.
+- Update for a formatting issue when tagline is blank.
+- Update for when No Shipping Method exists.
+- Update for when (3rd Party) Payment Modules are installed.
+- Removed BS modal links to Authorize.net.
+- Added readme for cvv_help modal.
+- Update to Stylesheet for class ezpagesBar.
+- Update to Attribute textarea's and added BS classes.
+- Update to replace hardcoded require paths within the Modal files.
+----------------------------------------------------------------------------------------------------------------------------
+Version: 1.0.2, 26 Mar 2018:
+
+- Updated so the Clone a Template plugin can be used.
+- Replace page specific jscript_addr_pulldowns.php files with jscript_addr_pulldowns_zca_bootstrap.php to include bootstrap classes.
+- Update tpl_checkout_shipping_default.php to address a formatting issue.
+- Update "/includes/templates/bootstrap/" tpl_modules_create_account.php, tpl_contact_us_default.php, tpl_modules_address_book_details.php, tpl_modules_checkout_new_address.php, tpl_modules_checkout_new_shipping_address.php, tpl_modules_checkout_new_payment_address.php to address a formatting issue with drop-downs. This update also places the "required indicator" right of the drop-down label.
+- Update "/includes/languages/english/bootstrap/" document_general_info.php, document_product_info.php, product_free_shipping_info.php, product_info.php, product_music_info.php to reword "Larger Images" to "Additional Images".
+- Update "/includes/templates/bootstrap/modalboxes/" tpl_bootstrap_images.php so the Main Image thumb and Additional Images thumbs are same size.
+- Update "includes/templates/bootstrap/common" tpl_offcanvas_menu.php so the more_information drop-down adheres to the EZ-Pages Display Status - Sidebox configuration.
+----------------------------------------------------------------------------------------------------------------------------
+Version: 1.0.1, 18 Mar 2018:
+
+- Fixes the formatting issue with shipping options when multiple choices are available.
+- New page scripts (jscript_addr_pulldowns_zca_bootstrap.php) have been created to provide template-specific rendering if the bootstrap template is current. The css classes in these files will now use the BS classes.
+- An additional file (/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_id.php) is added. That file contains a single definition, the presence of which identifies the template as bootstrap or a clone. Support for the Clone a Template plugin. 
+----------------------------------------------------------------------------------------------------------------------------
+Version v1.0.0, 13 Mar 2018:
+
+- Admin Auto Install Script ( Thank you @lat9 )
+- Reduce core-file overwrites ( Thank you @lat9 )
+- Updated the non-carousel Image Links
+- Updated the Carousel
+- Removed stray Configuration Values
+- Removed unused DEFINES
+- Added center-box div's for consistency to ease styling
+- Added a template screenshot ( Thank you @DrByte )

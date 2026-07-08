@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap-4 Template for Zen Cart 2.0.0 and Later</title>
+<style>
+a, a:active,
+a:visited {
+    color: #006666;
+}
+a:hover {
+    color:#00CC99;
+}
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+li,
+td {
+    font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif;
+    font-size: 10pt;
+    color: black;
+    padding: 0px;
+    margin: 20px;
+}
+pre {
+    margin: 20px;
+}
+h1,
+h2,
+h3,
+h4 {
+    font-weight: bold
+}
+h1 {
+    font-size: 20px;
+}
+h2 {
+    font-size: 16px;
+    border-top: 1px solid black;
+    padding-top: 5px;
+}
+ol li,
+ul li {
+    margin: 5px 0;
+}
+.corefile,
+.impt {
+    color: red;
+}
+.added {
+    color: blue;
+}
+img {
+    margin-left: 20px;
+    max-width: 95%;
+}
+.removed {
+    text-decoration: line-through;
+}
+.smaller {
+    font-size: smaller;
+}
+</style>
+</head>
+
+<body>
+    <h1>Bootstrap-4 Template for Zen Cart v2.0.x, v2.1.0, v2.2.x and v3.0.0-dev</h1>
+    <p>Version 3.8.0 by lat9, drbyte, scottcwilson, marco-pm, dbltoe, dennisns7d, brittainmark, torvista, proseLA, daphilli224, retched, highburyeye and piloujp</p>
+    <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?223910-ZCA-Bootstrap-4-Template-Support-Thread" target="_blank">https://www.zen-cart.com/showthread.php?223910-ZCA-Bootstrap-4-Template-Support-Thread</a></p>
+    <p>Zen Cart Download Link: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2191" target="_blank">https://www.zen-cart.com/downloads.php?do=file&id=2191</a></p>
+    <p>GitHub repository: <a href="https://github.com/lat9/ZCA-Bootstrap-Template" target="_blank">https://github.com/lat9/ZCA-Bootstrap-Template</a></p>
+    <p>GitHub Wiki: <a href="https://github.com/lat9/ZCA-Bootstrap-Template/wiki" target="_blank">https://github.com/lat9/ZCA-Bootstrap-Template/wiki</a></p>
+
+    <h2>What it does</h2>
+    <p>This template uses <a href="https://getbootstrap.com/docs/4.6/getting-started/introduction/" target="_blank">Bootstrap-4.6.2</a> to provide its styling and builds on the base that Raymond Barbour provided over the past few years, supporting Zen Cart versions 2.0.0 and later &mdash; <em>best supported</em> by version 2.2.2 and later.</p>
+    <p>Starting with v3.4.0 of the template, the template-related files needed when used with <a href="https://www.zen-cart.com/downloads.php?do=file&id=2095" target="_blank">One-Page Checkout</a> are also provided:</p>
+    <ul>
+        <li>These changes have been validated with v2.6.2 of <em>OPC</em>, I'll suggest upgrading to that version or later prior to upgrading to v3.8.0 or later of the Bootstrap-4 template.</li>
+        <li>The <a href="https://www.zen-cart.com/downloads.php?do=file&id=2305" target="_blank">previously-distributed</a> (and separate) BS4/OPC integration is no longer supported.</li>
+        <li>If you have <em>OPC</em> <em>prior to v2.5.0</em> installed, its <b>Order Total: jQuery Selector</b> configuration setting should be set to <code>#ottotal > .ot-text</code> for the Bootstrap template's use.</li>
+    </ul>
+
+    <h2>Bootstrap Template, Files List</h2>
+    <p>The following files are provided in the current template distribution:</p>
+    <ol>
+        <li>/includes/auto_loaders/config.zca_bootstrap.php</li>
+        <li>/includes/classes/ajax/zcAjaxBootstrapSearch.php <span class="smaller">(Added in v3.2.0)</span></li>
+        <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+        <li>/includes/classes/zca/zca_message_stack.php</li>
+        <li>/includes/classes/zca/zca_split_page_result.php</li>
+        <li>/includes/classes/zca/zca_site_map.php</li>
+        <li>/includes/extra_datafiles/dist.site-specific-bootstrap-settings.php <span class="smaller">(Added in v3.6.0)</span></li>
+        <li>/includes/functions/zca_bootstrap_functions.php</li>
+        <li>/includes/functions/extra_functions/zen_add_filemtime.php <span class="smaller">(Added in v3.8.0)</span></li>
+        <li>/includes/functions/extra_functions/zen_config.php <span class="smaller">(Added in v3.8.0)</span></li>
+        <li>/includes/init_includes/init_zca_bootstrap.php</li>
+        <li>/includes/languages/bootstrap/lang.english.php <span class="smaller">(Added in v3.7.7)</span></li>
+        <li><span class="removed">/includes/languages/english/bootstrap/lang.account_history_info.php</span> <span class="smaller">(Added in v3.6.0, removed in v3.7.7)</span></li>
+        <li>/includes/languages/english/extra_definitions/bootstrap/*.php</li>
+        <li>/includes/modules/bootstrap/*.php</li>
+        <li>/includes/modules/bootstrap/centerboxes/*.php</li>
+        <li>/includes/modules/pages/account_history/header_php_account_history_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/featured_products/header_php_featured_products_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/page_not_found/header_php_page_not_found_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/product_reviews/header_php_product_reviews_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/product_reviews_info/header_php_product_reviews_info_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/product_reviews_write/header_php_product_reviews_write_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/products_all/header_php_products_all_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/products_new/header_php_products_new_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/shopping_cart/header_php_shopping_cart_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/shopping_cart/jscript_addr_pulldowns_bootstrap.php <span class="smaller">(Added in v3.6.4)</span></li>
+        <li>/includes/modules/pages/site_map/header_php_site_map_zca_bootstrap.php</li>
+        <li>/includes/modules/pages/specials/header_php_specials_zca_bootstrap.php</li>
+        <li>/includes/modules/sideboxes/bootstrap/*.php</li>
+        <li>/includes/templates/bootstrap/*.*</li>
+        <li>/YOUR_ADMIN/zca_bootstrap_colors.php</li>
+        <li>/YOUR_ADMIN/zca_bootstrap_uninstall.php <span class="smaller">(Added in v3.8.0)</span></li>
+        <li>/YOUR_ADMIN/includes/auto_loaders/config.bc.php</li>
+        <li>/YOUR_ADMIN/includes/auto_loaders/config.zca_bootstrap_admin.php</li>
+        <li>/YOUR_ADMIN/includes/css/colorpicker.css</li>
+        <li>/YOUR_ADMIN/includes/extra_datafiles/zca_bootstrap_colors.php</li>
+        <li><span class="removed">/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</span> <span class="smaller">(Added in v3.2.0, removed in v3.7.0)</span></li>
+        <li>/YOUR_ADMIN/includes/functions/extra_functions/zen_config.php <span class="smaller">(Added in v3.8.0)</span></li>
+        <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+        <li>/YOUR_ADMIN/includes/init_includes/init_bc_config_install_or_upgrade.php <span class="smaller">(Added in v3.5.2)</span></li>
+        <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+        <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_install.php <span class="smaller">(Added in v3.2.0)</span></li>
+        <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_update.php <span class="smaller">(Added in v3.2.0)</span></li>
+        <li>/YOUR_ADMIN/includes/javascript/colorpicker.js</li>
+        <li>/YOUR_ADMIN/includes/languages/english/lang.zca_bootstrap_colors.php</li>
+        <li>/YOUR_ADMIN/includes/languages/english/lang.zca_bootstrap_uninstall.php <span class="smaller">(Added in v3.8.0)</span></li>
+        <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/lang.zca_bootstrap_colors.php</li>
+        <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/lang.zca_bootstrap_messages.php</li>
+    </ol>
+
+    <h2>Initial Installation</h2>
+    <p>This template currently distributes no <span class="corefile">core-file overwrite</span>; you should <strong>always</strong> backup your cart's database and files prior to making any changes.</p>
+    <ol>
+        <li>Unzip the template's package file, which you've most likely already done if you're reading this!</li>
+        <li>Rename the distribution's <code>YOUR_ADMIN</code> sub-directory to match the name of your site's Zen Cart admin directory.</li>
+        <li>Copy the files present in the <code>includes</code> and the renamed <code>YOUR_ADMIN</code> sub-directories to your site's file-system.</li>
+        <li>Log into your Zen Cart admin to allow the template's initialization to be run.  If you want to enable the template:<ul>
+            <li>Navigate to <em>Tools :: Template Selection</em> to choose the bootstrap template as your site's current template.</li>
+            <li>Navigate to <em>Tools :: Layout Boxes Controller</em> to enable and position the sideboxes for your site's use.</li>
+            <li>Navigate to <em>Configuration :: Bootstrap Template Settings</em> to control the layout-related settings for the template.</li>
+            <li>Navigate to <em>Tools :: ZCA Bootstrap Colors</em> to set the coloring used by the template for your site.</li>
+        </ul></li>
+    </ol>
+    <p>As a suggestion, keep the as-distributed <code>bootstrap</code> template's files unmodified so that you can easily revert to see if your custom changes have affected the template's output.  Once you have installed the template and customized its sidebox use, you can <a href="https://www.zen-cart.com/downloads.php?do=file&id=2087" target="_blank">clone the template</a> for use on your site.</p>
+    <p><b>Note:</b> If you've made an initial installation of the template &mdash; as you <em>should</em> &mdash; in a test version of your live site, you've most likely customized the coloring to match your site. You can use the template's admin &quot;Tools :: ZCA Bootstrap Colors&quot; tool to download a CSV format of your coloring (see the bottom of that tool) and then upload that CSV once you're ready to enable the template on your live site!</p>
+
+    <h2>Upgrading</h2>
+    <p>This readme's <b>Version History</b> section, below, identifies each file changed, <span class="added">added</span> or <span class="removed">removed</span> for each release of the template, starting with v3.0.0.  When you're upgrading, note each of the changes from your currently-installed version to that associated with the upgrade.  Pay specific attention to the files added and removed!</p>
+    <p>Unzip the template's package file and use a file-comparison program (like WinMerge or BeyondCompare) to either overwrite (if you've made a <em>clone</em> of the template) or merge the differences into the 'base' <code>bootstrap</code> sub-directories.  If you haven't made a <em>clone</em> of the template, pay specific attention to any changes that you've made to those 'base' files!  If you <b>have</b> made a <em>clone</em>, use your file-comparison program to merge the 'base' template's updates into your cloned copy.  In either case, pay specific attention to the files added and removed!</p>
+
+    <h3>Version-Specific Upgrade Suggestions</h3>
+    <p>Sometimes, a template-upgrade introduces new language constants and/or color-configuration values. When this occurs, I'll suggest that you place your site into <var>Maintenance Mode</var> until the upgrade is completed.  Otherwise, it's possible that the site's storefront will experience PHP Warnings (at best) or PHP Errors (if the site runs on more strict versions of PHP) due to the template's use of those missing constants.</p>
+    <p>The following version-upgrades apply to this suggestion:</p>
+    <ul>
+        <li>v3.6.0</li>
+        <li>v3.7.0</li>
+        <li>v3.8.0</li>
+    </ul>
+    <h4>v3.8.0 Now Uses CSS Variables</h4>
+    <p>This change allows the <code>stylesheet_zca_colors.css</code> to be cached by the browser. All of the template's colors, set by the admin's <em>Tools :: ZCA Bootstrap Colors</em> tool, are now defined as CSS variables, enabling your site-specific CSS to also use these color definitions.</p>
+
+    <h2>Uninstalling</h2>
+    <p>Starting with v3.8.0 of the template, an admin tool is provided that removes all of the template's files and database settings: <code>zca_bootstrap_uninstall</code>. The tool is not registered in the admin's menu structure and is available <em>only</em> for superuser admin's.</p>
+    <p>To use, edit the link in the browser's address to include a <code>cmd=zca_bootstrap_uninstall</code> parameter. The tool will disallow its use if the <code>bootstrap</code> template is the template currently selected for your site. Otherwise, the tool provides a 2-page validation to ensure that you really want to remove all files and settings. Upon confirmation, all of the as-distributed bootstrap template files and associated database settings are <b>permanently</b> removed.</p>
+
+    <h2>Version History</h2>
+    <p>This section identifies the template's version history and changes, starting with its v2.0.0c release.  Prior version changes can be found in the root of the template's distribution zip-file (<code>CHANGELOG.txt</code>).</p>
+    <ul>
+        <li>v3.8.0, 2026-07-07 (lat9)<ul>
+            <li>BUGFIX: Remove additional checks for Zen Cart versions prior to 1.5.8.</li>
+            <li>CHANGE: Use <code>zen_config</code> to access configuration settings, preparation for encapsulation.</li>
+            <li>CHANGE: Update the <em>ZCA Bootstrap Colors</em> tool, allowing all colors to be modified in a single view.</li>
+            <li>BUGFIX: Initial install of the colors can result in missing colors.</li>
+            <li>CHANGE: Add <code>zen_add_filemtime</code> usage and merge version-specific CSS files back into <code>stylesheet.css</code>.</li>
+            <li>CHANGE: Use CSS <var>variables</var> for the Bootstrap Colors.</li>
+            <li>CHANGE: Add a tool that removes the template's files and database settings.</li>
+            <li>BUGFIX: Supply 2nd parameter to <code>nl2br</code> so that HTML5 tags are generated.</li>
+            <li>CHANGE: Using <code>$tplSetting</code> to access template-specific configuration settings.</li>
+            <li>CHANGE: Using a 'soft setting' to control the presence of the products' listing sort-by selection.</li>
+            <li>CHANGE: Include a <var>nosniff</var> content-header.</li>
+            <li>CHANGE: <b class="impt">Support is dropped for Zen Cart 1.5.8/1.5.8a.</b></li>
+            <li>BUGFIX: Correct <code>zca_split_page_results.php</code> nested <var>li</var> tags.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li><span class="removed">/docs/bootstrap/uninstall/bootstrap_colors_uninstall.sql</span></li>
+                <li>/includes/classes/ajax/zcAjaxBootstrapSearch.php</li>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/classes/zca/zca_split_page_results.php</li>
+                <li>/includes/functions/zca_bootstrap_functions.php</li>
+                <li><span class="added">/includes/functions/extra_functions/zen_add_filemtime.php</span></li>
+                <li><span class="added">/includes/functions/extra_functions/zen_config.php</span></li>
+                <li><span class="added">/includes/languages/english/extra_definitions/lang.zca_bootstrap_id.php</span></li>
+                <li><span class="removed">/includes/languages/english/extra_definitions/zca_bootstrap_id.php</span></li>
+                <li>/includes/modules/bootstrap/centerboxes/also_purchased_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_categories.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/new_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/specials_index.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/upcoming_products.php</li>
+                <li>/includes/modules/bootstrap/attributes.php</li>
+                <li>/includes/modules/bootstrap/bootstrap_additional_images.php</li>
+                <li>/includes/modules/bootstrap/bootstrap_slide_additional_images.php</li>
+                <li>/includes/modules/bootstrap/category_row.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/pages/account_history/header_php_account_history_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/featured_products/header_php_featured_products_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/product_reviews/header_php_product_reviews_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/products_all/header_php_products_all_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/products_new/header_php_products_new_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/shopping_cart/jscript_addr_pulldowns_bootstrap.php</li>
+                <li>/includes/modules/pages/specials/header_php_specials_zca_bootstrap.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/information.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/more_information.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/search_header.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_featured_products.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_specials_default.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_whats_new.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/common/html_header_css_loader.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_footer.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_offcanvas_menu.php</li>
+                <li><span class="added">/includes/templates/css/bootstrap_color_vars.php</span></li>
+                <li>/includes/templates/bootstrap/css/stylesheet.css</li>
+                <li><span class="removed">/includes/templates/bootstrap/css/stylesheet_360.css</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/css/stylesheet_361.css</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/css/stylesheet_364.css</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/css/stylesheet_365.css</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/css/stylesheet_373.css</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/css/stylesheet_374.css</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/css/stylesheet_378.css</span></li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_zca_colors.css</span></li>
+                <li>/includes/templates/bootstrap/css/stylesheet_zca_colors.php <span class="smaller">(Note: This file is simply an overwrite for any previous file version)</span></li>
+                <li>/includes/templates/bootstrap/jscript/jscript_bs4_ajax_search.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_ajax_search.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_attributes_qty_prices.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_bootstrap_images.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_best_sellers.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_categories.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_document_categories.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_featured.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_reviews_random.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_shopping_cart.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_specials.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_whats_new.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_edit_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_history_info_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_register.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ajax_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ask_a_question_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_one_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_one_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_address_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_address_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_success_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_success_guest.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_conditions_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_contact_us_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_create_account_register.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_discount_coupon_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_down_for_maintenance_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_send_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_categories.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_product_list.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_slider.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_login_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_login_guest.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_additional_images.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_categories_tabs.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_common_address_format.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_create_account.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_listing_display_order.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_main_product_image.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_conditions.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_credit_selections.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_customer_info.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_payment_choices.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_shipping_address.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_shipping_choices.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_shopping_cart.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_product_image.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_product_listing.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_specials_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_order_status_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_2_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_3_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_4_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_not_found_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_privacy_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_write_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_products_all_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_reviews_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_search_result_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_site_map_default.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/YOUR_ADMIN/zca_bootstrap_colors.php</li>
+                <li><span class="added">/YOUR_ADMIN/zca_bootstrap_uninstall.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config_install_or_upgrade.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_update.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/functions/extra_functions/zen_config.php</span></li>
+                <li>/YOUR_ADMIN/includes/javascript/colorpicker.js</li>
+                <li>/YOUR_ADMIN/includes/languages/english/lang.zca_bootstrap_colors.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/languages/english/lang.zca_bootstrap_uninstall.php</span></li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.10, 2026-05-12 (lat9, piloujp)<ul>
+            <li>BUGFIX: Move <code>base</code> tag prior to any <code>link</code> tags.</li>
+            <li>CHANGE: Add jQuery module to show/hide password entry on storefront.</li>
+            <li>CHANGE: Remove use of <code>matchHeight.js</code> due to jQuery 4.0 incompatibility.</li>
+            <li>BUGFIX: Display labels for model, manufacturer and weight in non-table-display product listings.</li>
+            <li>BUGFIX: Ensure order-id is an integer on the <code>order_status</code> page.</li>
+            <li>BUGFIX: Correcting display of 'required' symbol on <b>State</b> fields in address blocks.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_columnar_display_carousel.php</li>
+                <li><span class="removed">/includes/templates/bootstrap/jscript/jquery.matchHeight.js</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/jscript/jquery.matchHeight.min.js</span></li>
+                <li>/includes/templates/bootstrap/jscript/jscript_bs4_matching_heights.php</li>
+                <li><span class="added">/includes/templates/bootstrap/jscript/jscript_view_password.js</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_common_address_format.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_create_account.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_order_status_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.9, 2026-03-30 (lat9, dbltoe)<ul>
+            <li>BUGFIX: Don't display empty add-to-cart block for products that can't be added to the cart.</li>
+            <li>BUGFIX: PHP 8.4 requires additional parameters for <code>fputcsv</code> and <code>fgetcsv</code>.</li>
+            <li>BUGFIX: Convert language files to use zc158+ array-based format.</li>
+            <li>INTROP: Display additional payment-module information.</li>
+            <li>INTROP: Align with zc210's category_tabs updates.</li>
+            <li>INTROP: Use <code>Product</code> class information in listings, if present.</li>
+            <li>INTROP: Account for zc220 change in <code>ask_a_question</code> parameters.</li>
+            <li>INTROP: Sync <code>search_result</code> page with zc220 changes.</li>
+            <li>BUGFIX: Correcting layout of filter-by/sort-by section of index products' listing.</li>
+            <li>BUGFIX: Search keywords pasted via browser's &quot;Paste&quot; button weren't being recognized.</li>
+            <li>BUGFIX: Correct off-canvas menu ARIA labelling.</li>
+            <li>INTROP: Sync with OPC v2.6.0's account-registration page updates.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/includes/languages/english/extra_definitions/bootstrap/lang.zca_bootstrap_common.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_id.php</li>
+                <li>/includes/modules/bootstrap/category_tabs.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_offcanvas_menu.php</li>
+                <li>/includes/templates/bootstrap/jscript/ajax_search.js</li>
+                <li>/includes/templates/bootstrap/jscript/ajax_search.min.js</li>
+                <li>/includes/templates/bootstrap/jscript/jscript_bs4_ajax_search.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ask_a_question_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_create_account_register.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_product_list.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_listing_display_order.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_category_tabs.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_payment_choices.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_search_result_default.php</li>
+                <li>/YOUR_ADMIN/zca_bootstrap_colors.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/languages/english/extra_definitions/lang.zca_bootstrap_colors.php</span></li>
+                <li><span class="added">/YOUR_ADMIN/includes/languages/english/extra_definitions/lang.zca_bootstrap_messages.php</span></li>
+                <li><span class="removed">/YOUR_ADMIN/includes/languages/english/extra_definitions/zca_bootstrap_colors.php</span></li>
+                <li><span class="removed">/YOUR_ADMIN/includes/languages/english/extra_definitions/zca_bootstrap_messages.php</span></li>
+                <li><span class="added">/YOUR_ADMIN/includes/languages/english/lang.zca_bootstrap_colors.php</span></li>
+                <li><span class="removed">/YOUR_ADMIN/includes/languages/english/zca_bootstrap_colors.php</span></li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.8, 2025-09-17 (lat9)<ul>
+            <li>INTROP: Mimic zc220's removal of <code>zen_break_string</code> in template.</li>
+            <li>INTROP: Add column-specific classes to support OPC's cart updates when shipping is changed (OPC v2.5.5+).</li>
+            <li>BUGFIX: Align layout of OPC address-change form with the base address-book layout.</li>
+            <li>BUGFIX: Remove unneeded <code>tpl_customers_authorization_default.php</code>, using the base Zen Cart version.</li>
+            <li>BUGFIX: Move min/max/units above add-to-cart block (was previously below).</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_378.css</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/templates/tpl_customers_authorization_default.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_shopping_cart.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_info_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.7, 2025-06-19 (lat9)<ul>
+            <li>BUGFIX: Correct missing language constant on <code>checkout_success</code> page when shipping information is missing.</li>
+            <li>INTROP: Add notification for site-specific product details.</li>
+            <li>BUGFIX: Don't display prev/next controls if home-page slider includes only one banner.</li>
+            <li>INTROP: Recognize information-sidebox override flag for <em>Order Status</em> link.</li>
+            <li>INTROP: Display featured-categories' link on categories' sidebox, if enabled.</li>
+            <li>INTROP: Add template for zc220's <code>password_reset</code> page.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li><span class="added">/includes/languages/bootstrap/lang.english.php</span></li>
+                <li><span class="removed">/includes/languages/english/bootstrap/lang.account_history_info.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/information.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_categories.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_slider.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_password_reset_default.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display_details.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.6, 2025-03-08 (lat9, retched, highburyeye)<ul>
+            <li>BUGFIX: Correct XSS vulnerabilty in Bootstrap carousels.</li>
+            <li>BUGFIX: Correct duplicate ID <var>featuredCenterbox-card-header</var> in featured-categories centerbox.</li>
+            <li>BUGFIX: Retire use of E_USER_ERROR; deprecated for PHP 8.4.</li>
+            <li>CHANGE: Add icons to upper nav-bar links.</li>
+            <li>BUGFIX: Correct font-awesome class used for front-page slider.</li>
+            <li>BUGFIX: Correct <var>action</var> used for product notifications on the <code>checkout_success</code> page.</li>
+            <li>BUGFIX: Add <code>about_us</code> page-link to <code>site_map</code> page listing.</li>
+            <li>BUGFIX: Use consistent heading numbers for <code>checkout_shipping_address</code> page.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_categories.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_columnar_display_carousel.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_zca_banner_carousel.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_bootstrap_images.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_address_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_success_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_slider.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_site_map_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.5, 2025-01-21 (lat9, scottcwilson, highburyeye)<ul>
+            <li>BUGFIX: Correct comments in products-all/new page headers.</li>
+            <li>BUGFIX: Indicate to zc210's Layout Boxes Controller that the template doesn't support mobile sideboxes.</li>
+            <li>BUGFIX: Correct 3-page checkout country-selection is reset on form errors.</li>
+            <li>BUGFIX: Correct PHP Deprecation in tpl_columnar_display_carousel.php.</li>
+            <li>BUGFIX: Correct shopping-cart update &quot;not working&quot; on specific configuration.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/modules/pages/products_all/header_php_products_all_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/products_new/header_php_products_new_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_columnar_display_carousel.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_common_address_format.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.4, 2024-10-14 (lat9, drbyte, daphilli224)<ul>
+            <li>INTROP: Include zc210's retirement of the use of `banners::banners_on_ssl`.</li>
+            <li>BUGFIX: Update matching-heights' jQuery script to the most recent.</li>
+            <li>BUGFIX: Correct product listing image 'overflow'.</li>
+            <li>INTROP: Include zc210's notifications for start of header CSS/JS insertion and the main-page's start.</li>
+            <li>BUGFIX: Correct product-price entry width on listings.</li>
+            <li>INTROP: Set the color-setting's configuration group to not-visible.</li>
+            <li>BUGFIX: Correct best-sellers' sidebox display; also requires the <span class="corefile">core change</span> provided by <a href="https://github.com/zencart/zencart/pull/6769" target="_blank">this</a> base Zen Cart PR.</li>
+            <li>INTROP: Include notifications on <var>account_history_info</var> template in the status-history table display.</li>
+            <li>INTROP: Include footer notifier now provided in zc210.</li>
+            <li>CHANGE: Add soft setting to enable load of Font Awesome 'Brands' icons.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/extra_datafiles/dist.site-specific-bootstrap-settings.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_footer.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_zca_banners_carousel.php</li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_374.css</span></li>
+                <li>/includes/templates/bootstrap/css/stylesheet_zca_colors.php</li>
+                <li>/includes/templates/bootstrap/jscript/jquery.matchHeight.js</li>
+                <li>/includes/templates/bootstrap/jscript/jquery.matchHeight.min.js</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_best_sellers.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_history_info.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config_install_or_upgrade.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.3, 2024-08-30 (lat9, drbyte)<ul>
+            <li>BUGFIX: AJAX search's keywords submitted must be of type <samp>string</samp>.</li>
+            <li>BUGFIX: Display shipping-module errors in the shipping-estimator.</li>
+            <li>INTROP: Use <code>$template</code> class to locate 'site_specific_styles.php' (zc201+ <em>only</em>)</li>
+            <li>INTROP: Use Zen Cart 'base' CSS/JS loading, when available (i.e. zc210+).</li>
+            <li>INTROP: Add notification added to <samp>account_history_info</samp> page's template in zc210.</li>
+            <li>INTROP: Replace usage of <code>ezpages::page_is_ssl</code> with <code>'SSL'</code>; the field's being removed in zc210.</li>
+            <li>BUGFIX: Don't display back-to-top on small/medium screens; those devices <em>normally</em> have a touchscreen.</li>
+            <li>BUGFIX: Correct layout inconsistencies between the notifications and manufacturers_info centerboxes.</li>
+            <li>INTROP: Recognize mobile-menu settings for EZ-Pages, added in zc210.</li>
+            <li>BUGFIX: Correct background bleed-through on list-containing sideboxes and add-to-cart block.</li>
+            <li>BUGFIX: Correct <b>Centerbox Background Color</b> applied to containing cards, not the wrapper.</li>
+            <li>INTROP: Align with zc210's inclusion of the OPC <samp>order_status</samp> page processing.</li>
+            <li>INTROP: Include zc210's <em>Featured Categories</em> feature.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/classes/ajax/zcAjaxBootstrapSearch.php</li>
+                <li><span class="added">/includes/modules/bootstrap/centerboxes/featured_categories.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/centerboxes/tpl_modules_featured_categories.php</span></li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_manufacturer_info.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_no_notifications.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_yes_notifications.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li><span class="added">/includes/templates/bootstrap/common/html_header_css_loader.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/common/html_header_js_loader.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_373.css</span></li>
+                <li>/includes/templates/bootstrap/css/stylesheet_zca_colors.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_offcanvas_menu.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_history_info_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_order_status_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_site_map_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.2, 2024-07-17 (lat9, retched)<ul>
+            <li>BUGFIX: AJAX search's product count can be 'off' (again); variant-managed products might again 'explode' the count!</li>
+            <li>BUGFIX: Correct HTML <samp>id</samp> parameter in shipping-estimator modal.</li>
+            <li>BUGFIX: Use language-constant for modal shipping-estimator instead of hard-coded English.</li>
+            <li>BUGFIX: Reformat shipping-estimator layout to use 2-column display on medium and above viewports.</li>
+            <li>BUGFIX: Correct AJAX search not including keywords in a product's description; note, new configuration setting added!.</li>
+            <li>BUGFIX: Correct accessibility issue with <samp>shopping_cart</samp> page's template.</li>
+            <li>BUGFIX: Remove pre-zc158 processing from AJAX search class.</li>
+            <li>BUGFIX: Restore product-pricing display when the site's running on PHP 7.4.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/ajax/zcAjaxBootstrapSearch.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/lang.zca_bootstrap_common.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_ajax_search.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_shipping_estimator.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_update.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.1, 2024-06-21 (lat9, brittainmark)<ul>
+            <li>BUGFIX: Correct PHP Warning on <code>checkout_payment</code> page.</li>
+            <li>BUGFIX: Remove extraneous comments from <samp>template_info.php</samp>.</li>
+            <li>INTROP: Support forthcoming zc210's additional-images' handling.</li>
+            <li>BUGFIX: Correct <samp>gv_faq</samp> page's form-entry default.</li>
+            <li>BUGFIX: Correct variable name for shipping-estimator display.</li>
+            <li>BUGFIX: Add styling to display non-Bootstrap-formatted checkbox inputs on checkout pages.</li>
+            <li>BUGFIX: Correct title of base image's additional-images' carousel-indicator.</li>
+            <li>BUGFIX: Pull in base ZC change for <samp>tpl_account_default.php</samp>.</li>
+            <li>BUGFIX: AJAX search's product count can be 'off' for variant-managed model-numbers.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/classes/ajax/zcAjaxBootstrapSearch.php</li>
+                <li>/includes/modules/bootstrap/bootstrap_additional_images.php</li>
+                <li>/includes/modules/bootstrap/bootstrap_slide_additional_images.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_365.css</span></li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_bootstrap_images.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_faq_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.7.0, 2024-05-19 (lat9, proseLA, brittainmark)<ul>
+            <li>CHANGE: Add 'soft' configuration setting to exclude categories with no products from the display.</li>
+            <li>BUGFIX: Correct layout for products' listings and category-row when displaying in 'columns'.</li>
+            <li>BUGFIX: Incorporate Zen Cart base changes for attributes' module.</li>
+            <li>BUGFIX: Correct MySQL ANSI-mode issues.</li>
+            <li>BUGFIX: Make pre-loading of styles and scripts work.</li>
+            <li>CHANGE: Load font-awesome 6.5.2 and v4-shims.css if required</li>
+            <li>CHANGE: Drop support for Zen Cart versions <em>prior to</em> 1.5.8.</li>
+            <li>CHANGE: Make <code>tpl_product_info_display.php</code> the default for <b>all</b> product-types.</li>
+            <li>BUGFIX: Corrections the 'Bootstrap Colors' tool's SQL uninstall script.</li>
+            <li>CHANGE: Incorporate the <a href="https://github.com/lat9/bs4_home_slider" target="_blank">Home Page Slider</a> feature.</li>
+            <li>BUGFIX: Correctly place <samp>&lt;main&gt;</samp> tag.</li>
+            <li>CHANGE: Enable different Bootstrap containers to be used for the header, main-content and footer.</li>
+            <li>BUGFIX: Show 'Contact Us' instead of 'Continue' when no shipping methods are available; added <em>soft</em> configuration setting.</li>
+            <li>CHANGE: Add configuration setting to control pricing location(s) when a product has attributes.</li>
+            <li>BUGFIX: Move <samp>charset=</samp> meta-tag to top of &lt;head&gt;, HTML validation issue.</li>
+            <li>BUGFIX: Correct <code>zca_rating_stars</code> output; it was always creating 5 stars.</li>
+            <li>CHANGE: Add configuration settings to enable various sideboxes to 'scroll' or 'fade' via a Bootstrap <em>carousel</em>.</li>
+            <li>CHANGE: Add <code>jquery.matchHeight.js</code> to deal with various sidebox and centerbox carousels.</li>
+            <li>CHANGE: Enable centerboxes to be rendered via carousels.</li>
+            <li>BUGFIX: Correct <code>checkout_confirm</code> coloring; was using those for <code>checkout_continue</code>.</li>
+            <li>CHANGE: Add notifications to sideboxes, enabling no overrides.</li>
+            <li>BUGFIX: 'header' messages (like down-for-maintenance) were not being displayed.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/docs/bootstrap/uninstall/bootstrap_colors_uninstall.sql</li>
+                <li>/includes/extra_datafiles/dist.site-specific-bootstrap-settings.php</li>
+                <li>/includes/functions/zca_bootstrap_functions.php</li>
+                <li><span class="removed">/includes/languages/english/bootstrap/account_history_info.php</span></li>
+                <li><span class="removed">/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php</span></li>
+                <li>/includes/modules/bootstrap/attributes.php</li>
+                <li>/includes/modules/bootstrap/category_row.php</li>
+                <li>/includes/modules/bootstrap/categories_tabs.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/information.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/more_information.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_featured_products.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_specials_default.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_whats_new.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li><span class="added">/includes/templates/bootstrap/common/tpl_columnar_display_carousel.php</span></li>
+                <li>/includes/templates/bootstrap/common/tpl_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/css/stylesheet_zca_colors.php</li>
+                <li><span class="added">/includes/templates/bootstrap/jscript/jquery.matchHeight.js</span></li>
+                <li><span class="added">/includes/templates/bootstrap/jscript/jquery.matchHeight.min.js</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/jscript/jscript_addr_pulldowns_zca_bootstrap.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/jscript/jscript_bs4_matching_heights.php</span></li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_ajax_search.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_attributes_qty_prices.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_best_sellers.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_categories.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_featured.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_reviews_random.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_search.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_search_header.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_specials.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_whats_new.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_history_info_default.php</li>
+                <li><span class="removed">/includes/templates/bootstrap/templates/tpl_advanced_search_default.php</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/templates/tpl_advanced_search_results_default.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_ajax_search_results.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_contact_us_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_general_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_faq_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_send_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_categories.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_default.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_index_slider.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_checkout_address_book.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_common_address_format.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_create_account.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_not_found_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_free_shipping_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_product_info_display_details.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_music_info_display.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_product_music_info_display_details.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_product_music_info_display_extra.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_products_all_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_site_map_default.php</li>
+                <li><span class="removed">/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_update.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.6.5, 2024-04-23 (lat9, brittainmark, torvista)<ul>
+            <li>BUGFIX: Preserve listing filters in listings' display-order form.</li>
+            <li>BUGFIX: Correct &quot;Missing constant&quot; logs for zc158 on the <code>products_all</code> page.</li>
+            <li>BUGFIX: Add display-order selection for products' and specials' listings (zc200 or later, <b>only</b>).</li>
+            <li>INTROP: Use <code>zen_get_products_name</code> to display products' names in listings.</li>
+            <li>BUGFIX: Correct products' table formatting on the AJAX <code>checkout_payment</code> page.</li>
+            <li>BUGFIX: Change products items title from heading to paragraph for accessibility.</li>
+            <li>BUGFIX: Enable the <code>zca_splitPageResults</code> class to be overridden.</li>
+            <li>BUGFIX: Provide <code>title</code> HTML attributes on header-navigation links.</li>
+            <li>BUGFIX: <em>Always</em> display the &quot;Home&quot; link in the header; ensure header-messages are displayed even if the header is disabled.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/init_includes/init_zca_bootstrap.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/lang.zca_bootstrap_common.php</li>
+                <li>/includes/modules/pages/specials/header_php_specials_zca_bootstrap.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_header.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ajax_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_product_list.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_listing_display_order.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_specials_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.6.4, 2024-03-18 (lat9, drbyte, scottcwilson)<ul>
+            <li>BUGFIX: Correct &quot;dead&quot; link in stylesheet's comments.</li>
+            <li>BUGFIX: Preserve listing's <var>disp_order</var>, if present.</li>
+            <li>BUGFIX: Remove redundant section from <var>checkout_success</var> page's template.</li>
+            <li>BUGFIX: Use new-product-specific image width/height in new product's centerbox.</li>
+            <li>BUGFIX: Address-pulldown jscript no loaded when shipping-estimator is used as a modal pop-up.</li>
+            <li>BUGFIX: Increase Lighthouse score by styling links with an underline.</li>
+            <li>INTROP: Add a link to the zc200 <code>accessibility</code> page, if present and enabled.</li>
+            <li>BUGFIX: Centerboxes now use an <code>h3</code> class instead of a tag for accessibility.</li>
+            <li>BUGFIX: Remove <em>Delete</em> buttons from primary address in address' display.</li>
+            <li>BUGFIX: Also-purchased products' centerbox, add <code>card-deck</code> wrapper.</li>
+            <li>BUGFIX: Missing <var>id=</var> when categories displayed in 'fluid' mode.  Also re-aligns  <var>tpl_columnar_display.php</var> to be more re-usable.</li>
+            <li>BUGFIX: Correct &quot;Missing constants&quot; logs for zc157/zc158 on the <code>products_all</code> page.</li>
+            <li>BUGFIX: Enable &quot;Add Selected to Cart&quot; button to be fixed-position, adding an associated configuration setting.</li>
+            <li>BUGFIX: Correct alpha-sorter accessibility issue on the products' listing page.</li>
+            <li>INTROP: Identify support for zc200 (and PHP 8.3) in the template's <code>template_info.php</code> file.</li>
+            <li>INTROP: Update <em>OPC</em> credit-selections to account for order-totals that don't have selections.</li>
+            <li>INTROP: Update <em>OPC</em>'s shipping-choices block to display the shipping-modules' heading block, even if there are no shipping methods available.</li>
+            <li>INTROP: Define 'TOPMOST_CATEGORY_PARENT_ID', if not present, for templates used with zc157.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php <span class="smaller">(For zc157 installations <em>only</em>.)</span></li>
+                <li>/includes/modules/sideboxes/bootstrap/information.php</li>
+                <li>/includes/modules/bootstrap/category_row.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/also_purchased_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/new_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/specials_index.php</li>
+                <li><span class="added">/includes/modules/pages/shopping_cart/jscript_addr_pulldowns_bootstrap.php</span></li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/css/dist-site_specific_styles.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_also_purchased_products.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_featured_products.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_specials_default.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_whats_new.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_columnar_display.php</li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_364.css</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_success_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_create_account_success_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_product_list.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_category_row.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_credit_selections.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_shipping_choices.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_product_listing.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_products_all_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_update.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.6.3, 2024-02-09 (lat9, dennisns7d, daphilli224, drbyte)<ul>
+            <li>BUGFIX: Correct template's <var>template_info.php</var> to report the current version.</li>
+            <li>BUGFIX: Two trashcan icons displayed on <var>shopping_cart</var> page when viewing on a 'small' screen.</li>
+            <li>INTROP: Add support for zc200's <em>Wholesale Pricing</em> pricing displays.</li>
+            <li>INTROP: Updates to SNAF pages' <var>header_php.php</var> files in support of zc200.</li>
+            <li>BUGFIX: Correct PHP Warnings on products' listing display order if no matching product is found.</li>
+            <li>BUGFIX: Correct display on Chrome browser's device-toolbar (used to test various devices' display).</li>
+            <li>BUGFIX: Use page-specific maximums for SNAF listings' display.</li>
+            <li>BUGFIX: Correct PHP Warning on index listing when no sort is selected.</li>
+            <li>BUGFIX: Add alpha-filter to <var>products_all</var> page, if enabled.</li>
+            <li>BUGFIX: Upgrade from very old version winds up missing configuration settings.</li>
+            <li>BUGFIX: Enabling a fluid display on category listings.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/modules/bootstrap/category_row.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/pages/featured_products/header_php_featured_products_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/products_all/header_php_products_all_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/products_new/header_php_products_new_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/specials/header_php_specials_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_product_list.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_category_row.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_listing_display_order.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_products_all_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_install.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.6.2, 2024-01-13 (lat9, drbyte, torvista)<ul>
+            <li>BUGFIX: Correct submit-button HTML <var>id</var> attribute on <var>checkout_one_confirmation</var> page.</li>
+            <li>BUGFIX: Remove unwanted list-item tags from suggested value for the breadcrumb-separator from the <var>zca_bootstrap_*.log</var>.</li>
+            <li>INTROP: Variable containing customer information's name changed in zc200 for <var>product_reviews_write</var> page.</li>
+            <li>INTROP: Add zc200-added notifications on the <var>account_history_info</var> page.</li>
+            <li>BUGFIX: Updated <em>default</em> coloring for the rating-stars' color and background; any existing value isn't overwritten!</li>
+            <li>CHANGE: <b><i>Tools :: ZCA Bootstrap Colors</i></b> UI improvements; default color-code now included in downloaded <var>.csv</var> files.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/templates/bootstrap/templates/tpl_account_history_info_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_one_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_write_default.php</li>
+                <li>/YOUR_ADMIN/zca_bootstrap_colors.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config_install_or_upgrade.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li>/YOUR_ADMIN/includes/languages/english/zca_bootstrap_colors.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.6.1, 2023-11-13 (lat9, scottcwilson, brittainmark, torvista)<ul>
+            <li>BUGFIX: Adding <var>title</var> attributes to storefront Previous/Next navigation buttons (accessibility).</li>
+            <li>BUGFIX: Correct spelling of <var>cursor</var> in <var>checkout_one.css</var>; was <var>curser</var>.</li>
+            <li>BUGFIX: Correct empty level-1 headings (accessibility issue) on index pages.</li>
+            <li>BUGFIX: Don't let the on-page shipping-estimator's fields expand to 100%, use fit-to-content instead.</li>
+            <li>BUGFIX: Missing intervening spaces on min/max/units and out-of-stock indicators on <var>shopping_cart</var> page.</li>
+            <li>BUGFIX: More 'shrinking' of shopping-cart page's products' table.</li>
+            <li>BUGFIX: Correct &quot;Update&quot; icon display on the shopping cart page when <var>ICON_UPDATE_ALT</var> is shortened from the default value.</li>
+            <li>BUGFIX: Correct display of the right-most icon-delete/delete-checkbox column if a product has a fixed display quantity.</li>
+            <li>BUGFIX: Update jQuery to use v3.7.1 instead of v3.5.1, pulling in various bugfixes and performance improvements.</li>
+            <li>BUGFIX: Correcting layout of the logo section of the header.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/languages/english/extra_definitions/bootstrap/lang.zca_bootstrap_common.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php</li>
+                <li>/includes/modules/pages/shopping_cart/header_php_shopping_cart_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_header.php</li>
+                <li>/includes/templates/bootstrap/css/checkout_one.css</li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_361.css</span></li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_bootstrap_images.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_categories.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_products_next_previous.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.6.0, 2023-07-20 (lat9, dbltoe, dennisns7d, brittainmark, proseLA)<ul>
+            <li>BUGFIX: Simplify page-header processing for featured_products, products_all and products_new pages.</li>
+            <li>BUGFIX: Don't provide changes for pricing-related notifications if they've already been handled.</li>
+            <li>BUGFIX: &quot;Add Address&quot; button on <code>address_book</code> displays as &quot;Back&quot;.</li>
+            <li>CHANGE: Sites can now disable the back-to-top control via a &quot;soft&quot; configuration setting.</li>
+            <li>BUGFIX: Ensure accessibility for table-mode product listings images' columns.</li>
+            <li>BUGFIX: Add <var>role="button"</var> to AJAX header's search link for SEO improvement.</li>
+            <li>BUGFIX: Add spacing for prices and min-max-unit elements for table-based product listings.</li>
+            <li>BUGFIX: AJAX Search jQuery was using undefined constant; use Zen Cart default handling for timeouts.</li>
+            <li>CHANGE: AJAX Search, enable observers to make modification(s) to query clauses; significant restructuring!</li>
+            <li>CHANGE: Colors added (and some defaults changed) for <em>Advanced Accessibility Standards</em>.</li>
+            <li>CHANGE: <var>Header Nav Bar Button</var> settings' titles and descriptions renamed to <var>Header Nav Bar Toggler</var>, since that's all they apply to.</li>
+            <li>CHANGE: Adding text/background/border color-constants for extra <var>navbar</var> buttons, like that used by the <var>search_header.php</var> sidebox.</li>
+            <li>BUGFIX: Adding text/background/border color-constants for the <var>Sold Out</var> button and disable that button so it doesn't appear clickable (which it isn't).</li>
+            <li>BUGFIX: Correcting HTML validation error on additional images' modal pop-up.</li>
+            <li>CHANGE: Supporting zc158+ call-for-price product's interaction with ask-a-question.</li>
+            <li>CHANGE: Supporting zc158a+ newly defined constant for the <var>account_history_info</var> page.</li>
+            <li>CHANGE: 'Float' the <em>Add Selected to Cart</em> button as it tends to get &quot;lost&quot;.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/classes/ajax/zcAjaxBootstrapSearch.php</li>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li><span class="added">/includes/extra_datafiles/dist.site-specific-bootstrap-settings.php</span></li>
+                <li>/includes/functions/zca_bootstrap_functions.php</li>
+                <li><span class="added">/includes/languages/english/bootstrap/account_history_info.php</span></li>
+                <li><span class="added">/includes/languages/english/bootstrap/lang.account_history_info.php</span></li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/lang.zca_bootstrap_common.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/pages/featured_products/header_php_featured_products_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/products_all/header_php_products_all_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/products_new/header_php_products_new_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_360.css</span></li>
+                <li>/includes/templates/bootstrap/css/stylesheet_zca_colors.php</li>
+                <li>/includes/templates/bootstrap/jscript/ajax_search.js</li>
+                <li>/includes/templates/bootstrap/jscript/ajax_search.min.js</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_image_additional.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_ajax_search_header.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_history_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ask_a_question_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config_install_or_upgrade.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.5.3, 2023-04-15 (lat9, brittainmark)<ul>
+            <li>BUGFIX: Correct PHP Parse error for payment methods that collect credit card data on-site.</li>
+            <li>BUGFIX: Correct unwanted PHP Warning logged by shopping-cart page's template.</li>
+            <li>BUGFIX: Align products' model-numbers centered, regardless of table vs. row layout.</li>
+            <li>BUGFIX: Add language constant ('PAGE_ACCOUNT_HISTORY'), not present in zc157; added in zc158.</li>
+            <li>BUGFIX: Missing label for products' quantities on listing pages.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/languages/english/extra_definitions/zca_bootstrap_common.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ajax_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.5.2, 2023-03-06 (lat9, dbltoe, dennisns7d)<ul>
+            <li>BUGFIX: Correct shopping-cart display when both icon and checkbox is rendered.</li>
+            <li>BUGFIX: Correct heading structure and add landscape for accessibility.</li>
+            <li>BUGFIX: Remove unneeded code from the admin's <code>Tools :: ZCA Bootstrap Colors</code> tool.</li>
+            <li>BUGFIX: Remove unwanted bootstrap base color classes, so the &quot;ZCA Bootstrap Colors&quot; control the sections.</li>
+            <li>BUGFIX: Updating/adding various color settings for the &quot;ZCA Bootstrap Colors&quot; tool</li>
+            <li>BUGFIX: Updates to &quot;ZCA Bootstrap Colors&quot; and <code>/css/stylesheet_zca_colors.php</code> to make it easier to add/update colors now and in the future.  Refer to the template's <a href="https://github.com/lat9/ZCA-Bootstrap-Template/wiki" target="_blank">Wiki</a> for additional information.</li>
+            <li>BUGFIX: Coupon modal pop-up not displaying <em>any</em> text when there are no category-related restrictions.</li>
+            <li>BUGFIX: Correct 'run-on' sentence structure in coupon modal pop-up.</li>
+            <li>BUGFIX: zc158<b>a</b> no longer includes &lt;strong&gt; tags in 3-page checkout guidance language constants.</li>
+            <li>BUGFIX: Coupon modal pop-up creates PHP Warning when coupon has product-related restrictions.</li>
+            <li>BUGFIX: Use FA-5 classes for FA-icons (some were still using FA-4 'syntax').</li>
+            <li>BUGFIX: Correcting header-tag hierarchy and adding labels for accessibility.</li>
+            <li>BUGFIX: Correct notification name for coupon-link update.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li><span class="added">/docs/bootstrap/uninstall/bootstrap_colors_uninstall.sql</span></li>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/also_purchased_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/new_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/specials_index.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_zca_banner_carousel.php</li>
+                <li>/includes/templates/bootstrap/css/stylesheet.css</li>
+                <li><span class="removed">/includes/templates/bootstrap/css/stylesheet_colors.css</span></li>
+                <li>/includes/templates/bootstrap/css/stylesheet_zca_colors.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_no_notifications.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_yes_notifications.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_ajax_search.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_bootstrap_images.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_coupon_help.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_ajax_search_header.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_document_categories.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_order_history.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_notifications_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ajax_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_address_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_address_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_success_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_create_account_register.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_create_account_success_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_general_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_categories.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_login_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_login_guest.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_attributes.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_checkout_address_book.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/YOUR_ADMIN/zca_bootstrap_colors.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/init_includes/init_bc_config_install_or_upgrade.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li>/YOUR_ADMIN/includes/languages/english/zca_bootstrap_colors.php</li>
+                <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/zca_bootstrap_colors.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.5.1, 2023-02-09 (lat9, brittainmark, torvista)<ul>
+            <li>BUGFIX: Move repetitive calculations outside of products' listing loop for efficiency.</li>
+            <li>BUGFIX: Customer's existing addresses not rendered (zc157) when changing shipping/payment addresses.</li>
+            <li>BUGFIX: Update product icon on <code>shopping_cart</code> page is rendered as an image instead of an FA glyph.</li>
+            <li>BUGFIX: Product-delete checkboxes were not displayed on the <code>shopping_cart</code> page.</li>
+            <li>BUGFIX: Show product-delete icons/checkboxes underneath quantity input for small screens.</li>
+            <li>BUGFIX: Correct HTML validation error (missing space between attributes) for the shipping-estimator.</li>
+            <li>BUGFIX: &quot;Sold Out&quot; buttons displaying as images on Zen Cart 1.5.8+.</li>
+            <li>BUGFIX: Ensure <em>Terms and Conditions</em> are checked prior to continuing on the <code>checkout_payment</code> page.</li>
+            <li>BUGFIX: Top-most banner (Header Position 1) overlaid with upper navigation bar; unneeded whitespace removed from page header.</li>
+            <li>BUGFIX: Correct display of banner-carousels' indicators and previous-next icons.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/pages/shopping_cart/header_php_shopping_cart_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_zca_banner_carousel.php</li>
+                <li>/includes/templates/bootstrap/css/stylesheet_bootstrap_carousel.css</li>
+                <li>/includes/templates/bootstrap/css/stylesheet_colors.css</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_checkout_address_book.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shopping_estimator.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.5.0, 2022-12-25 (lat9, dbltoe, torvista)<ul>
+            <li>BUGFIX: Correct PHP warning on various product details' templates.</li>
+            <li>BUGFIX: Add ARIA labels for centerboxes, sideboxes and the common header.</li>
+            <li>CHANGE: Add notification just after &lt;head&gt; tag, enabling observers to insert scripts early in that section.</li>
+            <li>BUGFIX: Show header-search only when &quot;layout_box_status_single&quot; is enabled.</li>
+            <li>CHANGE: Remove the local version of the jquery.min.js; makes no sense to keep.</li>
+            <li>BUGFIX: Off-canvas menu processing overwrites EZ-Pages' next-link.</li>
+            <li>CHANGE: Add &quot;activeLink&quot; class to currently-active EZ-Page link in TOC.</li>
+            <li>CHANGE: Update Bootstrap to 4.6.2; Font Awesome to 5.15.4.</li>
+            <li>CHANGE: Various updates/refactorings.</li>
+            <li>BUGFIX: Correcting HTML validation errors for trailing slashes on void elements.</li>
+            <li>BUGFIX: Correcting HTML validation errors for buttons that are descendants of anchors.</li>
+            <li>BUGFIX: Correcting various other page-specific HTML validation errors.</li>
+            <li>CHANGE: Refactoring/simplification of modal product additional images' display.</li>
+            <li>BUGFIX: Correcting HTML validation errors for pages that display an order's totals.</li>
+            <li>The following files were changed or <span class="removed">removed</span>:<ol>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/functions/zca_bootstrap_functions.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/lang.zca_bootstrap_common.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php</li>
+                <li>/includes/modules/bootstrap/bootstrap_additional_images.php</li>
+                <li>/includes/modules/bootstrap/bootstrap_slide_additional_images.php</li>
+                <li>/includes/modules/bootstrap/attributes.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/also_purchased_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/new_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/manufacturers_info.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/specials_index.php</li>
+                <li>/includes/modules/bootstrap/sideboxes/search_header.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_no_notifications.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_yes_notifications.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_header.php <span class="smaller"><b>Note:</b> Includes refactoring!</span></li>
+                <li>/includes/templates/bootstrap/common/tpl_offcanvas_menu.php</li>
+                <li><span class="removed">/includes/templates/bootstrap/jscript/jquery.min.js</span></li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_bootstrap_images.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_image_additional.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_featured.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_reviews_random.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_shopping_cart.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_specials.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_whats_new.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_edit_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_history_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_newsletters_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_notifications_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_password_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_process_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_register.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ajax_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ask_a_question_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_one_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_address_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_address_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_success_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_conditions_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_contact_us_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_cookie_usage_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_create_account_register.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_create_account_success_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_create_account_success_register.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_customers_authorization_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_discount_coupon_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_general_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_down_for_maintenance_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_faq_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_redeem_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_send_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_login_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_login_guest.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_checkout_address_book.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_common_address_format.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_downloads.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_main_product_image.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_opc_shopping_cart.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_order_totals.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_products_quantity_discounts.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_send_or_spend.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_2_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_3_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_4_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_not_found_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_password_forgotten_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_privacy_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_free_shipping_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_noproduct.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_music_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_info_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_write_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_products_next_previous.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_reviews_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_search_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shippinginfo_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_site_map_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ssl_check_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_unsubscribe_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.4.1, 2022-11-29 (lat9)<ul>
+            <li>BUGFIX: Correct unwanted display of main-page define-page on listings of categories with sub-categories.</li>
+            <li>BUGFIX: Use 'isset' rather than the null-coalesce (??) operator/assignment since zc157 supports PHP versions back to 5.6.</li>
+            <li>BUGFIX: Correct layout on product pages when a product has both onetime charges and is priced by attribute.</li>
+            <li>INTROP: Recognize the zc158 flags now being set for inclusion of the about_us and brands pages in the information sidebox.</li>
+            <li>INTROP: Correct PHP 8.2 deprecations for undefined class variables; includes re-factoring.</li>
+            <li>BUGFIX: Correct PHP warning when a product has attribute-based quantity discounts.</li>
+            <li>BUGFIX: Enable (for zc158a and later) the admin &quot;Layout Controller&quot; to display single-column settings for the template.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/zca/zca_split_pages_result.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/information.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_attributes_qty_prices.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_discount_coupon_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_general_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_faq_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_send_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_categories.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_free_shipping_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_music_info_display.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.4.0, 2022-10-14 (lat9, dennisns7d)<ul>
+            <li>BUGFIX: Restore HTML class and id attributes to the &quot;attributes&quot; block's rendering.</li>
+            <li>BUGFIX: Display HTML-formatted admin-entered comments when viewing an order's detailed history.</li>
+            <li>BUGFIX: Preparing <code>contact_us</code> page's template for use in zc158.</li>
+            <li>CHANGE: Updating new-products' centerbox to mimic the zc158 implementation.</li>
+            <li>CHANGE: Updating category-row module to mimic the zc158 implementation.</li>
+            <li>CHANGE: Various updates for PSR-12 refactoring and zc158 integration.</li>
+            <li>BUGFIX: Remove 'dead' code from product-details manufacturer information display template.</li>
+            <li>CHANGE: Move country selection above State/Province for address-entry displays.</li>
+            <li>BUGFIX: Don't offer 'Set as primary' for pages other than <em>address_book_process</em>.</li>
+            <li>CHANGE: Include Bootstrap-formatted templates for &quot;One-Page Checkout&quot;.</li>
+            <li>CHANGE: Preload Bootstrap, jQuery and Font Awesome CDN file (performance).</li>
+            <li>BUGFIX: Don't display the OPC 'conditions' block until there's a shipping-method available.</li>
+            <li>CHANGE: Use 'standard' HTML id attribute and class for products' display as well as centerboxes.</li>
+            <li>CHANGE: Enable additional content to be displayed on the &quot;shopping_cart&quot; page.</li>
+            <li>CHANGE: Modification to the storefront observer; dynamic properties deprecated.</li>
+            <li>CHANGE: Update &quot;zen_cfg_read_only&quot; function for zc157; it's in-core for zc158+.</li>
+            <li>BUGFIX: Remove unused language constants.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>:<ol>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/functions/zca_bootstrap_functions.php</li>
+                <li><span class="added">/includes/languages/english/extra_definitions/bootstrap/lang.zca_bootstrap_common.php</span></li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php</li>
+                <li>/includes/modules/bootstrap/category_row.php</li>
+                <li><span class="removed">/includes/modules/bootstrap/shipping_estimator.php</span></li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/new_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/specials_index.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/upcoming_products.php</li>
+                <li><span class="corefile removed">/includes/modules/order_total/ot_coupon.php</span> <span class="smaller">(Removed from this distribution <b>only</b>)</span></li>
+                <li>/includes/modules/pages/account_history/header_php_account_history_bootstrap.php</li>
+                <li><span class="added">/includes/modules/sideboxes/bootstrap/information.php</span></li>
+                <li><span class="removed">/includes/modules/sideboxes/bootstrap/music_genres.php</span></li>
+                <li><span class="removed">/includes/modules/sideboxes/bootstrap/record_companies.php</span></li>
+                <li><span class="removed">/includes/modules/sideboxes/bootstrap/search.php</span></li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_featured_products.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_manufacturer_info.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_specials_default.php</li>
+                <li>/includes/templates/bootstrap/centerboxes/tpl_modules_whats_new.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_box_default_left.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_box_default_right.php</li>
+                <li><span class="added">/includes/templates/bootstrap/css/checkout_one.css</span></li>
+                <li><span class="added">/includes/templates/bootstrap/css/checkout_one_confirmation.css</span></li>
+                <li><span class="added">/includes/templates/bootstrap/css/checkout_success.css</span></li>
+                <li>/includes/templates/bootstrap/css/stylesheet.css</li>
+                <li>/includes/templates/bootstrap/jscript/jscript_addr_pulldowns_zca_bootstrap.php</li>
+                <li><span class="added">/includes/templates/bootstrap/jscript/jscript_sidebox_select_form.php</span></li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_ajax_search_results.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_coupon_help.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_cvv_help.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_info_shopping_cart.php</li>
+                <li><span class="removed">/includes/templates/bootstrap/sideboxes/tpl_manufacturers_select.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/sideboxes/tpl_brands.php</span></li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_search.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_search_header.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_shopping_cart.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_history_info_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_password_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_default.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_address_book_register.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_advanced_search_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_advanced_search_result_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ajax_search_results.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ask_a_question_default.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_brands_default.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_confirmation_default.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_checkout_one_confirmation_default.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_checkout_one_default.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_default.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_checkout_success_guest.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_contact_us_default.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_create_account_register.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_create_account_success_register.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_discount_coupon_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_general_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_gv_send_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_index_categories.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_login_default.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_login_guest.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_attributes.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_checkout_address_book.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_create_account.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_common_address_format.php</li>
+                <li><span class="removed">/includes/templates/bootstrap/templates/tpl_modules_products_all_listing.php</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/templates/tpl_modules_products_featured_listing.php</span></li>
+                <li><span class="removed">/includes/templates/bootstrap/templates/tpl_modules_products_new_listing.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_address_block.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_billing_address.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_comments.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_conditions.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_credit_selections.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_customer_info.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_instructions.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_payment_choices.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_shipping_address.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_shipping_choices.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_shopping_cart.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_modules_opc_submit_block.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_order_status_default.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_page_not_found_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_password_forgotten_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_free_shipping_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_music_info_display.php</li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_search_default.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_search_result_default.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_site_map_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_unsubscribe_default.php</li>
+                <li>/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.3.0, 2022-04-13 (lat9, scottcwilson)<ul>
+            <li>BUGFIX: Correcting HTML validation issue on the <code>site_map</code> page.</li>
+            <li>BUGFIX: Ensure sideboxes are disabled if they're not enabled via either &quot;Layout Settings&quot; or &quot;Bootstrap Template Settings&quot;.</li>
+            <li>CHANGE: Enable inclusion of site-specific styling (it's loaded last) to enable styling overrides for your site.</li>
+            <li>BUGFIX: 'checkout_payment_address' page incorrectly identifies shipping address (not billing address) as current.</li>
+            <li>BUGFIX: Correcting HTML validation error on storefront breadcrumbs.</li>
+            <li>BUGFIX: Ensure intervening space added between 'select' tags' class attributes.</li>
+            <li>CHANGE: Enable integration with the &quot;COWOA&quot; plugin.</li>
+            <li>BUGFIX: Add additional HTML attributes for accessibility.</li>
+            <li>BUGFIX: Correct MySQL fatal error on AJAX search for strict MySQL 5.7+ installations.</li>
+            <li>BUGFIX: Adding 'aria-label' attribute to dropdown label fields.</li>
+            <li>BUGFIX: Correcting HTML validation on product-listing pagination.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li>/includes/classes/ajax/zcAjaxBootstrapSearch.php</li>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/classes/zca/zca_split_page_results.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li><span class="added">/includes/templates/bootstrap/css/dist-site_specific_styles.php</span></li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/jscript/jscript_addr_pulldowns_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_checkout_address_book.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_login_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_site_map_default.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.2.0, 2021-12-04 (lat9/marco-pm)<ul>
+            <li>BUGFIX: Screen-reader updates for products' rating-stars.</li>
+            <li>CHANGE: Using lazy-loading for category and product images.</li>
+            <li>BUGFIX: Correcting javascript error on address-entry and create-account pages.</li>
+            <li>BUGFIX: Correcting missplaced ending-div on products' listings.</li>
+            <li>CHANGE: Create template-specific configuration-settings' group.</li>
+            <li>CHANGE: Add AJAX search feature, must be enabled via configuration settings.</li>
+            <li>BUGFIX: Include <em>More Information</em> sidebox content in mobile-menu, if currently enabled.</li>
+            <li>CHANGE: Add product-listing default grids for 12-column and 9-column center sections.</li>
+            <li>CHANGE: Enable site-specific customization for product-listing 'grid' layout.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li><span class="added">/includes/classes/ajax/zcAjaxBootstrapSearch.php</span></li>
+                <li>/includes/functions/zca_bootstrap_functions.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php</li>
+                <li>/includes/modules/bootstrap/category_row.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/more_information.php</li>
+                <li><span class="added">/includes/modules/sideboxes/bootstrap/search_header.php</span></li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_offcanvas_menu.php</li>
+                <li><span class="added">/includes/templates/bootstrap/css/stylesheet_ajax_search.css</span></li>
+                <li><span class="added">/includes/templates/bootstrap/jscript/ajax_search.js</span></li>
+                <li><span class="added">/includes/templates/bootstrap/jscript/ajax_search.min.js</span></li>
+                <li><span class="added">/includes/templates/bootstrap/jscript/jscript_bs4_ajax_search.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/modalboxes/tpl_ajax_search.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/sideboxes/tpl_ajax_search_header.php</span></li>
+                <li><span class="added">/includes/templates/bootstrap/templates/tpl_ajax_search_results.php</span></li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_common_address_format.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_create_account.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_product_listing.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</span></li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin.php</li>
+                <li><span class="added">/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_install.php</span></li>
+                <li><span class="added">/YOUR_ADMIN/includes/init_includes/init_zca_bootstrap_template_admin_update.php</span></li>
+                <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/zca_bootstrap_messages.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.1.5, 2021-09-21 (lat9/marco-pm)<ul>
+            <li>BUGFIX: Adding <code>alt=</code> tag to additional images.</li>
+            <li>BUGFIX: Adding language-translation for <em>Back to Top</em> button's <code>title=</code> tag.</li>
+            <li>BUGFIX: Adding aria-label and -title to shopping-cart buttons.</li>
+            <li>BUGFIX: Correct form-start tag placement to correct invalid HTML on <code>checkout_confirmation</code>.</li>
+            <li>BUGFIX: Correct data-overflow on <code>account</code> page's <em>Previous Orders</em>.</li>
+            <li>BUGFIX: Correct PHP notices issued when left/right columns are fully disabled.</li>
+            <li>BUGFIX: Enable integration with attribute image-swapper plugins.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php</li>
+                <li>/includes/modules/pages/shopping_cart/header_php_shopping_cart_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_image.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_account_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_main_product_image.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.1.4, 2021-08-19 (lat9/marco-pm)<ul>
+            <li>BUGFIX: Remove redundant code from <code>tpl_specials_default.php</code>.</li>
+            <li>BUGFIX: Apply ARIA attribute to previous page-link (split-page-results).</li>
+            <li>BUGFIX: Back-to-top link covers checkout-confirmation (and other) buttons.</li>
+            <li>BUGFIX: Correct products' quantity min/max/unit display on the product-information pages.</li>
+            <li>BUGFIX: Correct duplicate <code>id=</code> attributes on centerboxes' display.</li>
+            <li>BUGFIX: Adding <code>.forward</code> and <code>.back</code> styling to stylesheet.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/zca/zca_split_page_results.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/specials_index.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/css/stylesheet.css</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_general_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_free_shipping_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_music_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_specials_default.php</li>
+             </ol></li>
+        </ul></li>
+        <li>v3.1.3, 2021-07-08 (lat9/scottcwilson)<ul>
+            <li>BUGFIX: Remove redundant code from the <code>product_listing</code> module.</li>
+            <li>BUGFIX: Standardize centerbox image sizes, all now using 'SMALL_IMAGE_WIDTH' and 'SMALL_IMAGE_HEIGHT'.</li>
+            <li>BUGFIX: Apply <em>specificity</em> to the address rendering so that browser autofill's will fill in the proper fields.</li>
+            <li>BUGFIX: Correcting duplicate sort-orders for color settings added in v3.1.2.</li>
+            <li>BUGFIX: Need the <code>clearBoth</code> CSS class defined, used by <code>template_default</code> templates.</li>
+            <li>BUGFIX: Shopping-cart display requires horizontal scroll on extra-small screens.</li>
+            <li>BUGFIX: &quot;Shopping for ...&quot; message from admin <em>Place Order</em> button doesn't use font-awesome icons.<sup>1</sup></li>
+            <li>The following files were changed:<ol>
+                <li>/includes/auto_loaders/config.zca_bootstrap.php<sup>1</sup></li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/specials_index.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/css/stylesheet.css</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_common_address_format.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_create_account.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+            </ol></li>
+            <li><sup>1</sup><b>Note:</b> For this change to be effective for stores running zc157c and earlier, a <span class="corefile">core-file edit</span> of <code>/includes/auto_loaders/config.core.php</code> is required. Find the following section:
+            <pre>
+/**
+ * Breakpoint 130.
+ *
+ * require('includes/init_includes/init_customer_auth.php');
+ * messageStack = new messageStack();
+ *
+ */
+  $autoLoadConfig[130][] = array('autoType'=>'classInstantiate',
+                                 'className'=>'messageStack',
+                                 'objectName'=>'messageStack');
+  $autoLoadConfig[130][] = array('autoType'=>'init_script',
+                                 'loadFile'=> 'init_customer_auth.php');
+            </pre>
+            and make the highlighted changes:
+            <pre>
+/**
+ * Breakpoint 130.
+ *
+ * require('includes/init_includes/init_customer_auth.php');
+ * messageStack = new messageStack();
+ *
+ */
+  $autoLoadConfig[130][] = array('autoType'=>'classInstantiate',
+                                 'className'=>'messageStack',
+                                 'objectName'=>'messageStack');
+<span class="corefile">//-bof-bootstrap-v313-Moving load point</span>
+  $autoLoadConfig[<span class="corefile">135</span>][] = array('autoType'=>'init_script',
+                                 'loadFile'=> 'init_customer_auth.php');
+<span class="corefile">//-eof-bootstrap-v313</span>
+            </pre>
+            </li>
+        </ul></li>
+        <li>v3.1.2, 2021-06-02 (lat9/torvista)<ul>
+            <li>BUGFIX: Remove unwanted background color from EZ-Pages' footer links.</li>
+            <li>BUGFIX: Correcting header-messages 'hidden' by upper nav-bar and logo displays.</li>
+            <li>BUGFIX: Reduce HTML 'footprint' associated with stylesheet_zca_colors.php (reducing number of bytes).</li>
+            <li>BUGFIX: Non-product-listing pages redirect to index-page on add-multiple-to-cart action.</li>
+            <li>BUGFIX: Correct PHP notice generated on specials and products_new listings.</li>
+            <li>BUGFIX: Correct various HTML issues in the admin coloring tool.</li>
+            <li>BUGFIX: Add coloring for the product*_info pages' add-to-cart element for the admin coloring tool.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/pages/products_new/header_php_products_new_zca_bootstrap.php</li>
+                <li>/includes/modules/pages/specials/header_php_specials_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_header.php</li>
+                <li>/includes/templates/bootstrap/css/stylesheet_colors.css</li>
+                <li>/includes/templates/bootstrap/css/stylesheet_zca_colors.php</li>
+                <li>/YOUR_ADMIN/zca_bootstrap_colors.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.1.1, 2021-02-14 (lat9)<ul>
+            <li>BUGFIX: Correct shipping-estimator display when using dropdown states.</li>
+            <li>The following files were changed or <span class="added">added</span>:<ol>
+                <li><span class="added">/includes/modules/bootstrap/shipping_estimator.php</span></li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.1.0, 2021-02-01 (lat9/drbyte/dennisns7d)<ul>
+            <li>BUGFIX: Correct PHP notice when a payment method doesn't return 'fields'.</li>
+            <li>BUGFIX: Correct duplicate classes created for CSS buttons.</li>
+            <li>CHANGE: Use 'font-awesome' stars for various product rating indicators.</li>
+            <li>BUGFIX: Correct missing language constants on SNAF pages.</li>
+            <li>CHANGE: Various mobile layout improvements.</li>
+            <li>BUGFIX: Set scrollable area on mobile menu.</li>
+            <li>CHANGE: 'Sync' template files, using zc157b as the change-basis.</li>
+            <li>BUGFIX: Correct various HTML validation issues.</li>
+            <li>BUGFIX: Correct colors applied to the navigation menus; base/hover colors were reversed.</li>
+            <li>BUGFIX: Apply bootstrap classes to module-based displays in checkout pages.</li>
+            <li>BUGFIX: Correct PHP notices issued for the 'Also Purchased Products' centerbox.</li>
+            <li>BUGFIX: Clarify description of category-tab's hover color.</li>
+            <li>CHANGE: Update <code>Tools :: ZCA Bootstrap Colors</code>, enabling import/export via .csv.</li>
+            <li>BUGFIX: Shipping Estimator pop-up doesn't change zones when the country is changed; change to a modal.</li>
+            <li>CHANGE: Updating the Bootstrap base to v4.6.0 from v4.5.3.</li>
+            <li>CHANGE: Reuse information-sidebox for the offcanvas menu, including only if the base sidebox is enabled via the <em>Layout Boxes Controller</em>.</li>
+            <li>CHANGE: Update order-totals display to accept a column-count.</li>
+            <li>The following files were changed:<ol>
+                <li>/includes/classes/observers/ZcaBootstrapObserver.php</li>
+                <li>/includes/functions/zca_bootstrap_functions.php</li>
+                <li>/includes/languages/english/extra_definitions/bootstrap/zca_bootstrap_common.php</li>
+                <li>/includes/modules/bootstrap/attributes.php</li>
+                <li>/includes/modules/bootstrap/category_row.php</li>
+                <li>/includes/modules/bootstrap/product_listing.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/also_purchased_products.php</li>
+                <li>/includes/modules/bootstrap/centerboxes/featured_products.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/information.php</li>
+                <li>/includes/modules/sideboxes/bootstrap/search.php</li>
+                <li>/includes/templates/bootstrap/template_info.php</li>
+                <li>/includes/templates/bootstrap/common/html_header.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_columnar_display.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_main_page.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_offcanvas_menu.php</li>
+                <li>/includes/templates/bootstrap/common/tpl_tabular_display.php</li>
+                <li>/includes/templates/bootstrap/css/stylesheet.css</li>
+                <li>/includes/templates/bootstrap/css/stylesheet_colors.css</li>
+                <li>/includes/templates/bootstrap/css/stylesheet_zca_colors.php</li>
+                <li>/includes/templates/bootstrap/jscript/jscript_addr_pulldowns_zca_bootstrap.php</li>
+                <li>/includes/templates/bootstrap/modalboxes/tpl_shipping_estimator.php</li>
+                <li>/includes/templates/bootstrap/sideboxes/tpl_reviews_random.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_address_book_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_ajax_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_confirmation_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_payment_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_checkout_shipping_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_document_general_info_display.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_order_totals.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_product_listing.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_modules_shipping_estimator.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_info_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_product_reviews_write_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_reviews_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_shopping_cart_default.php</li>
+                <li>/includes/templates/bootstrap/templates/tpl_specials_default.php</li>
+                <li>/YOUR_ADMIN/zca_bootstrap_colors.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_bc_config.php</li>
+                <li>/YOUR_ADMIN/includes/languages/english/zca_bootstrap_colors.php</li>
+            </ol></li>
+        </ul></li>
+        <li>v3.0.0, 2020-11-26 (lat9/drbyte)<ul>
+            <li>BUGFIX: Correct various PHP notices, deprecations and warnings.</li>
+            <li>CHANGE: Use zc157b version of <code>/includes/modules/order_total/ot_coupon.php</code> as the change-basis.</li>
+            <li>CHANGE: Remove <code>/includes/classes/ajax/zcAjaxPayment.php</code> from this distribution, no change needed.</li>
+            <li>CHANGE: &quot;Rename&quot; the template's <code>jscript_zca_bootstrap.php</code> to use a <code>.js</code> extension, so it's cacheable.</li>
+            <li>CHANGE: Use the zc157+ version of the <code>breadcrumb.php</code> class; no longer a core-file overwrite.</li>
+            <li>CHANGE: Restore the use of a common-format address-block.</li>
+            <li>CHANGE: Remove <code>/includes/classes/order.php</code> from this distribution; using the zc157+ version.</li>
+            <li>CHANGE: Update jQuery to v3.5.1 and don't use <code>document.write</code>.</li>
+            <li>CHANGE: Override <em>only</em> the messageStack's <code>add</code> function (future-proofing).</li>
+            <li>CHANGE: Enable a store to control the justification for the order-totals' section on various pages.</li>
+            <li>CHANGE: Remove <code>/includes/modules/order_total/ot_gv.php</code> from this distribution; using the zc157+ version.</li>
+            <li>CHANGE: Use the <code>template_default</code> version of <code>jscript_framework.php</code> (future-proofing).</li>
+            <li>CHANGE: Incorporate the zc157+ <code>ask_a_question</code> page's formatting.</li>
+            <li>CHANGE: Reduce language-related template overrides.</li>
+            <li>CHANGE: Don't display <em>Model</em> block if no model is supplied.</li>
+            <li>CHANGE: <code>DISPLAY_PAGE_PARSE_TIME</code> setting removed in zc157+.</li>
+            <li>CHANGE: Reduce sidebox-related template overrides.</li>
+            <li>CHANGE: Ensure that <code>zca_bootstrap_active</code> is present prior to calling.</li>
+            <li>CHANGE: <code>specials</code> page SQL, <code>products_description</code> is keyed on both products_id and language_id.</li>
+            <li>BUGFIX: Correct <em>PHP deprecated</em> log in product listings.</li>
+            <li>BUGFIX: Correct <em>PHP warning</em> for specials' centerbox.</li>
+            <li>BUGFIX: Correct missing prev/next icons in image-carousel display.</li>
+            <li>CHANGE: Remove core-file overwrite requirement for the <code>specials</code> page.</li>
+            <li>CHANGE: Remove core-file overwrite requirement for the <code>site_map.php</code> class.</li>
+            <li>CHANGE: Remove the <em>ZCA Photoswipe</em> feature as it's no longer supported by its author.</li>
+            <li>BUGFIX: Correct HTML validation issues on products*_info pages.</li>
+            <li>CHANGE: Products' notification centerboxes, interoperability with guest-checkout.</li>
+            <li>CHANGE: Update font-awesome support to 5.15.1, using the minified version with integrity.</li>
+            <li>CHANGE: Update bootstrap support to 4.5.3 (bundled).</li>
+            <li>For this release, continue as if <em>all</em> files in the distribution have changed!</li>
+        </ul></li>
+    </ul>
+
+</body>
+</html>

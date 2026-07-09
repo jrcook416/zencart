@@ -28,7 +28,59 @@ When submitting bug reports, issues, plugins, or code as pull requests, please a
 Thank you for your contributions!
 
 
-&nbsp;  
-  
-*&copy;Copyright 2003-2026, Zen Cart&reg;. All rights reserved.*
+## Local Feature Tests (Docker-only)
 
+For local Store/Admin feature tests, use Docker MySQL to mirror CI.
+Do not rely on local Homebrew Apache/MySQL/phpMyAdmin for test runs.
+
+### CI-matching database container
+
+```bash
+docker rm -f zc-mysql57 2>/dev/null || true
+docker run -d --name zc-mysql57 \
+  -e MYSQL_ROOT_PASSWORD=root \
+  -e MYSQL_DATABASE=db \
+  -e MYSQL_USER=db \
+  -e MYSQL_PASSWORD=root \
+  -p 3306:3306 \
+  --health-cmd='mysqladmin ping -h127.0.0.1 -udb -proot --silent' \
+  --health-interval=10s --health-timeout=5s --health-retries=12 \
+  mysql:5.7
+
+# wait for healthy
+until [ "$(docker inspect -f '{{.State.Health.Status}}' zc-mysql57)" = "healthy" ]; do sleep 2; done
+```
+
+### Start app server for tests
+
+```bash
+HTTP_SERVER=http://localhost:8000 \
+ZENCART_TESTFRAMEWORK_RUNNING=1 \
+ZENCART_TESTFRAMEWORK_CONFIG_USER=runner \
+php -d display_errors=1 -d display_startup_errors=1 \
+  -d auto_prepend_file="$(pwd)/not_for_release/testFramework/Support/php_server_prepend.php" \
+  -S localhost:8000 -t .
+```
+
+### Run suites serially (fresh DB each suite)
+
+Run **Store** and **Admin** separately, recreating the container between suites to guarantee a clean DB state.
+
+```bash
+# Store
+USER=runner HTTP_SERVER=http://localhost:8000 php vendor/bin/phpunit --testsuite FeatureStore
+
+# Recreate zc-mysql57 (fresh DB), then Admin
+USER=runner HTTP_SERVER=http://localhost:8000 php vendor/bin/phpunit --testsuite FeatureAdmin
+```
+
+### Cleanup
+
+```bash
+docker rm -f zc-mysql57 2>/dev/null || true
+```
+
+
+&nbsp;  
+   
+*&copy;Copyright 2003-2026, Zen Cart&reg;. All rights reserved.*

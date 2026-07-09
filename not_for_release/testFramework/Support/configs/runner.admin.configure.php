@@ -49,7 +49,19 @@ define('DIR_WS_HTTPS_CATALOG', '/');
  * This is the complete physical path to your store's files.  eg: /var/www/vhost/accountname/public_html/store/
  * Should have a closing / on it.
  */
-define('DIR_FS_CATALOG', '/home/runner/work/zencart/zencart/');
+$catalogRoot = getenv('ZC_TESTFRAMEWORK_ROOT');
+if (!$catalogRoot) {
+    $catalogRoot = getenv('GITHUB_WORKSPACE');
+}
+if (!$catalogRoot && defined('ROOTCWD')) {
+    $catalogRoot = ROOTCWD;
+}
+if (!$catalogRoot) {
+    $catalogRoot = realpath(dirname(__DIR__, 4)) ?: dirname(__DIR__, 4);
+}
+if (!defined('DIR_FS_CATALOG')) {
+    define('DIR_FS_CATALOG', rtrim($catalogRoot, '/\\') . '/');
+}
 
 /**
  * NOTE about DIR_FS_ADMIN

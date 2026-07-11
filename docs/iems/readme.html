@@ -79,6 +79,13 @@ current template (iems) &rarr; parent template (bootstrap) &rarr; template_defau
     <td><code>includes/templates/iems/images/ZCA_BOOTSTRAP_TEMPLATE.png</code></td>
     <td>Placeholder admin "Layout Controller" screenshot; replace with an IEMS-specific screenshot.</td>
   </tr>
+  <tr>
+    <td><code>includes/templates/iems/jscript/jscript_framework.php</code></td>
+    <td>Verbatim copy of Bootstrap's file (no IEMS-specific change needed). It simply requires
+      <code>template_default/jscript/jscript_framework.php</code> to load the AJAX framework for
+      any non-<code>template_default</code> template. Present here explicitly rather than relying
+      on parent-template inheritance.</td>
+  </tr>
 </table>
 
 <h2>Files inherited from Bootstrap (not present in IEMS)</h2>

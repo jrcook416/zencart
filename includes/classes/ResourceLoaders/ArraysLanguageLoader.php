@@ -107,10 +107,16 @@ class ArraysLanguageLoader extends BaseLanguageLoader
 
         $defineListMain = $this->loadDefinesFromArrayFile($rootPath, $language, $fileName, $extraPath);
 
+        $defineListParentTemplate = [];
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
+            $defineListParentTemplate = $this->loadDefinesFromArrayFile($rootPath, $language, $fileName, $extraPath . '/' . $parentTemplateDir);
+        }
+
         $extraPath .= '/' . $this->templateDir;
         $defineListTemplate = $this->loadDefinesFromArrayFile($rootPath, $language, $fileName, $extraPath);
 
-        $defineList = array_merge($defineListMain, $defineListTemplate);
+        $defineList = array_merge($defineListMain, $defineListParentTemplate, $defineListTemplate);
         $this->makeConstants($defineList);
     }
 
@@ -161,6 +167,16 @@ class ArraysLanguageLoader extends BaseLanguageLoader
         // Finally, gather any template-override definitions **for the current session language**. Any language
         // definitions found here overwrite any previously-loaded ones.
         //
+        // If the active template inherits from a parent template (DIR_WS_TEMPLATE_PARENT), the
+        // parent's module-override file (if any) is loaded first so the active template's own
+        // override still takes precedence.
+        //
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
+            $defineListParentTemplate = $this->loadModuleDefinesFromArrayFile($_SESSION['language'], $fileName, $module_type, $parentTemplateDir . '/');
+            $defineList = array_merge($defineList, $defineListParentTemplate);
+        }
+
         $defineListTemplate = $this->loadModuleDefinesFromArrayFile($_SESSION['language'], $fileName, $module_type, $this->templateDir . '/');
         $defineList = array_merge($defineList, $defineListTemplate);
 
@@ -311,6 +327,12 @@ class ArraysLanguageLoader extends BaseLanguageLoader
 
             $pluginDefineList = $this->loadDefinesWithFallback($mainFile, $fallbackFile);
             $defineList = array_merge($defineList, $pluginDefineList);
+        }
+
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
+            $parentTemplateFile = $rootDir . $_SESSION['language'] . $extraDir . '/' . $parentTemplateDir . '/' . $fileName;
+            $defineList = array_merge($defineList, $this->loadArrayDefineFile($parentTemplateFile));
         }
 
         $templateFile = $rootDir . $_SESSION['language'] . $extraDir . '/' . $this->templateDir . '/' . $fileName;

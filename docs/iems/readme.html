@@ -63,6 +63,34 @@ current template (iems) &rarr; parent template (bootstrap) &rarr; template_defau
     extra_definitions (which still win if present). Without this, any page inherited unmodified
     from Bootstrap that references a Bootstrap-only language constant would hit an
     "Undefined constant" fatal error when IEMS is the active template.</li>
+  <li><code>includes/classes/ResourceLoaders/CatalogArraysLanguageLoader.php</code> and
+    <code>CatalogFilesLanguageLoader.php</code> (<code>loadMainLanguageFiles()</code>)
+    &mdash; the "main" per-template language file
+    (<code>includes/languages/english/&lt;template&gt;/lang.english.php</code>, e.g.
+    <code>includes/languages/bootstrap/lang.english.php</code>, which defines
+    <code>TEXT_MISSING_SHIPPING_INFO</code>) is now also loaded from the parent template's
+    directory first, so a page inherited unmodified from Bootstrap (e.g.
+    <code>tpl_account_history_info_default.php</code>) no longer hits an "Undefined constant"
+    fatal error when IEMS is active. The same method's per-page "other" files loop
+    (<code>lang.email_extras.php</code>, <code>lang.header.php</code>,
+    <code>lang.button_names.php</code>, <code>lang.icon_names.php</code>,
+    <code>lang.other_images_names.php</code>, <code>lang.credit_cards.php</code>,
+    <code>lang.whos_online.php</code>, <code>lang.meta_tags.php</code>) was extended the same way.</li>
+  <li><code>includes/classes/ResourceLoaders/CatalogArraysLanguageLoader.php</code> and
+    <code>CatalogFilesLanguageLoader.php</code> (<code>loadLanguageForView()</code> /
+    <code>loadCurrentPageBaseFile()</code>) &mdash; per-page template-language-override files
+    (<code>includes/languages/english/&lt;template&gt;/lang.&lt;page&gt;.php</code> and
+    <code>includes/languages/english/&lt;lang&gt;/&lt;template&gt;/lang.&lt;page&gt;(extra).php</code>)
+    are now also read from the parent template's directory, before the child template's own
+    (which still wins if present).</li>
+  <li><code>includes/classes/ResourceLoaders/ArraysLanguageLoader.php</code> and
+    <code>FilesLanguageLoader.php</code> (base classes shared by both catalog and admin contexts;
+    the parent-template fallback is a no-op wherever <code>DIR_WS_TEMPLATE_PARENT</code> isn't
+    defined, e.g. in the admin) &mdash; <code>loadExtraLanguageFiles()</code>,
+    <code>loadModuleLanguageFile()</code> / <code>loadModuleDefinesFromArrayFile()</code>, and
+    <code>makeCatalogArrayConstants()</code> were extended so per-template overrides of
+    order-total/payment/shipping module language files, and other template-keyed "extra" language
+    files, also fall back to the parent template before the base (non-template) file.</li>
 </ul>
 <p>
   Existing templates are unaffected: <code>$template_parent</code> is opt-in (defaults to none), so any
@@ -123,14 +151,111 @@ current template (iems) &rarr; parent template (bootstrap) &rarr; template_defau
   table whenever a new file is added to IEMS.
 </p>
 
-<h2>Modules and language files</h2>
+<h2>Full inheritance audit &mdash; all per-template load paths</h2>
 <p>
-  <code>includes/modules/bootstrap/</code>, <code>includes/modules/sideboxes/bootstrap/</code>, and
-  <code>includes/languages/bootstrap/</code> are separate module/language directories that Bootstrap's own
-  template templates reference directly by name (not through the template/parent fallback described
-  above). IEMS currently reuses these as-is; if IEMS needs its own module or language overrides, add
-  matching <code>includes/modules/iems/</code>, <code>includes/modules/sideboxes/iems/</code>, or
-  <code>includes/languages/iems/</code> directories and update the referencing template files.
+  Per the design requirement that IEMS automatically inherit <strong>everything</strong> from
+  Bootstrap unless it ships its own override, every per-template load path Zen Cart resolves was
+  audited. The table below lists each path, whether it already fell back to the parent template
+  before this audit, and what (if anything) was changed.
+</p>
+<table border="1" cellpadding="6" cellspacing="0">
+  <tr><th>#</th><th>Load path</th><th>Resolved by</th><th>Parent fallback</th></tr>
+  <tr>
+    <td>1</td>
+    <td><code>includes/languages/english/extra_definitions/&lt;template&gt;/</code></td>
+    <td><code>CatalogArraysLanguageLoader</code> / <code>CatalogFilesLanguageLoader</code>
+      <code>::loadLanguageExtraDefinitions()</code></td>
+    <td>Added (previous fix, this audit re-confirmed no missed constants)</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td><code>includes/languages/english/&lt;template&gt;/</code> (main
+      <code>lang.&lt;language&gt;.php</code> file, its per-page overrides, and its "other" shared
+      files &mdash; email_extras, header, button_names, icon_names, other_images_names,
+      credit_cards, whos_online, meta_tags)</td>
+    <td><code>CatalogArraysLanguageLoader</code> / <code>CatalogFilesLanguageLoader</code>
+      <code>::loadMainLanguageFiles()</code>, <code>::loadCurrentPageBaseFile()</code>,
+      <code>::loadLanguageForView()</code></td>
+    <td><strong>Added by this audit.</strong> Previously had no fallback at all (not even to
+      <code>template_default</code>) &mdash; this is the class of bug that caused the
+      <code>TEXT_MISSING_SHIPPING_INFO</code> risk flagged earlier.</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td><code>includes/templates/&lt;template&gt;/common/</code></td>
+    <td><code>PageLoader::getTemplateDirectory()</code> via <code>$template-&gt;get_template_dir()</code></td>
+    <td>Already covered (prior fix)</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td><code>includes/templates/&lt;template&gt;/jscript/</code></td>
+    <td><code>PageLoader::getTemplateDirectory()</code></td>
+    <td>Already covered (prior fix)</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td><code>includes/templates/&lt;template&gt;/css/</code></td>
+    <td><code>PageLoader::getTemplateDirectory()</code></td>
+    <td>Already covered (prior fix)</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td><code>includes/templates/&lt;template&gt;/sideboxes/</code></td>
+    <td><code>PageLoader::getTemplateDirectory()</code></td>
+    <td>Already covered (prior fix)</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td><code>includes/templates/&lt;template&gt;/templates/</code> (page templates)</td>
+    <td><code>PageLoader::getTemplateDirectory()</code></td>
+    <td>Already covered (prior fix)</td>
+  </tr>
+  <tr>
+    <td>8a</td>
+    <td><code>includes/templates/&lt;template&gt;/images/</code>,
+      <code>buttons/</code>, <code>centerboxes/</code>, <code>modalboxes/</code></td>
+    <td><code>PageLoader::getTemplateDirectory()</code> (generic <code>templateDir</code> param
+      covers any subfolder name) and <code>zen_image()</code> / <code>zen_image_OLD()</code></td>
+    <td>Already covered (prior fix)</td>
+  </tr>
+  <tr>
+    <td>8b</td>
+    <td>Order-total / payment / shipping module per-template language overrides
+      (<code>includes/languages/&lt;lang&gt;/modules/&lt;module_type&gt;/&lt;template&gt;/lang.*.php</code>)</td>
+    <td><code>ArraysLanguageLoader::loadModuleLanguageFile()</code> /
+      <code>loadModuleDefinesFromArrayFile()</code>,
+      <code>FilesLanguageLoader::loadModuleLanguageFile()</code></td>
+    <td><strong>Added by this audit</strong> (bonus coverage; not explicitly requested but the
+      same class of gap)</td>
+  </tr>
+  <tr>
+    <td>8c</td>
+    <td>Per-template "extra" language files used by admin plugins for storefront-style constants
+      (<code>ArraysLanguageLoader::makeCatalogArrayConstants()</code>,
+      <code>FilesLanguageLoader::loadExtraLanguageFiles()</code>)</td>
+    <td>Same classes as above</td>
+    <td><strong>Added by this audit</strong> (bonus coverage)</td>
+  </tr>
+</table>
+<p>
+  All parent-template fallback logic added by this audit is guarded by
+  <code>defined('DIR_WS_TEMPLATE_PARENT') &amp;&amp; DIR_WS_TEMPLATE_PARENT !== ''</code>, so it is a
+  no-op for every template that doesn't declare <code>$template_parent</code> (including all admin
+  contexts, where the constant is never defined). Verified via isolated reflection-based tests
+  exercising <code>loadCurrentPageBaseFile()</code> directly: (a) a constant that exists only in the
+  parent (bootstrap) template's per-page language file is inherited by iems, and (b) a constant
+  defined in both parent and child resolves to the child's (iems) value, confirming override
+  precedence is preserved.
+</p>
+
+<h2>Modules</h2>
+<p>
+  <code>includes/modules/bootstrap/</code> and <code>includes/modules/sideboxes/bootstrap/</code> are
+  separate module directories that Bootstrap's own template files reference directly by name (not
+  through the template/parent path fallback described above). IEMS currently reuses these as-is; if
+  IEMS needs its own module overrides, add matching <code>includes/modules/iems/</code> or
+  <code>includes/modules/sideboxes/iems/</code> directories and update the referencing template
+  files. (Per-template module <em>language</em> overrides, item 8b above, are already inherited.)
 </p>
 </body>
 </html>

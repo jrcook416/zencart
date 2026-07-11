@@ -74,6 +74,18 @@ class CatalogArraysLanguageLoader extends ArraysLanguageLoader
         }
 
         // -----
+        // Next, if this template inherits from a parent template (see DIR_WS_TEMPLATE_PARENT),
+        // bring in that parent's additional per-page files for the current session language, so
+        // a child template doesn't need to duplicate them. These are overwritten below by the
+        // active template's own per-page files, if present.
+        //
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
+            $definesListParentTemplate = $this->loadCurrentPageExtraFilesFromDir(DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . $parentTemplateDir);
+            $definesList = array_merge($definesList, $definesListParentTemplate);
+        }
+
+        // -----
         // Finally, if there are additional per-page files in the current language's active template's
         // directory, those overwrite any definitions previously loaded.
         //
@@ -127,6 +139,16 @@ class CatalogArraysLanguageLoader extends ArraysLanguageLoader
         // Any definitions found in this file overwrite all previously-loaded definitions for
         // the page-specific base language file.
         //
+        // If the active template inherits from a parent template (DIR_WS_TEMPLATE_PARENT), load
+        // the parent's page-specific override file first, so the active template's own override
+        // (if present) still takes precedence.
+        //
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parentTemplateDir = '/' . basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
+            $parentTemplateMainFile = DIR_WS_LANGUAGES . $_SESSION['language'] . $parentTemplateDir . $currentPageBaseFile;
+            $defineList = array_merge($defineList, $this->loadArrayDefineFile($parentTemplateMainFile));
+        }
+
         $template_dir = '/' . $this->templateDir;
         $templateMainFile = DIR_WS_LANGUAGES . $_SESSION['language'] . $template_dir . $currentPageBaseFile;
         $defineList = array_merge($defineList, $this->loadArrayDefineFile($templateMainFile));
@@ -262,6 +284,17 @@ class CatalogArraysLanguageLoader extends ArraysLanguageLoader
         //
         // Any definitions found in this file overwrite the 'base' main language files.
         //
+        // If the active template inherits from a parent template (DIR_WS_TEMPLATE_PARENT), load
+        // the parent's main template-language file first, so the active template's own file (if
+        // present) still takes precedence.
+        //
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
+            $parentTemplateMainFile = DIR_WS_LANGUAGES . $parentTemplateDir . '/lang.' . $_SESSION['language'] . '.php';
+            $defineList = $this->loadArrayDefineFile($parentTemplateMainFile);
+            $this->addLanguageDefines($defineList);
+        }
+
         $templateMainFile = DIR_WS_LANGUAGES . $this->templateDir . '/lang.' . $_SESSION['language'] . '.php';
         $defineList = $this->loadArrayDefineFile($templateMainFile);
         $this->addLanguageDefines($defineList);
@@ -272,7 +305,8 @@ class CatalogArraysLanguageLoader extends ArraysLanguageLoader
         //
         // Each of these files is first loaded from the 'fallback' (i.e. 'english') subdirectory,
         // followed by the current session language directory and finally (if present) in the current
-        // language's template-override directory.
+        // language's template-override directory (preceded, for a "child" template, by the parent
+        // template's own override, if any).
         //
         // Note: These files are not checked for presence in zc_plugins!
         //
@@ -286,9 +320,15 @@ class CatalogArraysLanguageLoader extends ArraysLanguageLoader
             FILENAME_WHOS_ONLINE,
             FILENAME_META_TAGS,
         ];
+        $parentTemplateDir = (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') ? basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/')) : '';
         foreach ($extraFiles as $file) {
             $file = basename($file, '.php') . '.php';
             $this->loadDefinesFromDirFileWithFallback(DIR_WS_LANGUAGES, $file);
+
+            if ($parentTemplateDir !== '') {
+                $defineList = $this->loadArrayDefineFile(DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . $parentTemplateDir . '/lang.' . $file);
+                $this->addLanguageDefines($defineList);
+            }
 
             $defineList = $this->loadArrayDefineFile(DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . $this->templateDir . '/lang.' . $file);
             $this->addLanguageDefines($defineList);

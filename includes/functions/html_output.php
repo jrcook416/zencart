@@ -131,8 +131,15 @@ function zen_image_OLD($src, $title = '', $width = '', $height = '', $parameters
         return false;
     }
 
-    // if not in current template switch to template_default
+    // if not in current template, try the template's parent template (if any), then template_default
     $file_exists = is_file($src);
+    if ($file_exists === false && defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+        $parent_src = str_replace(DIR_WS_TEMPLATES . $template_dir, rtrim(DIR_WS_TEMPLATE_PARENT, '/'), $src);
+        if (is_file($parent_src)) {
+            $src = $parent_src;
+            $file_exists = true;
+        }
+    }
     if ($file_exists === false) {
         $src = str_replace(DIR_WS_TEMPLATES . $template_dir, DIR_WS_TEMPLATES . 'template_default', $src);
         $file_exists = is_file($src);
@@ -210,9 +217,17 @@ function zen_image($src, $title = '', $width = '', $height = '', $parameters = '
         return false;
     }
 
-    // if not in current template switch to template_default
+    // if not in current template, try the template's parent template (if any), then template_default
     if (!is_file($src)) {
-        $src = str_replace(DIR_WS_TEMPLATES . $template_dir, DIR_WS_TEMPLATES . 'template_default', $src);
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parent_src = str_replace(DIR_WS_TEMPLATES . $template_dir, rtrim(DIR_WS_TEMPLATE_PARENT, '/'), $src);
+            if (is_file($parent_src)) {
+                $src = $parent_src;
+            }
+        }
+        if (!is_file($src)) {
+            $src = str_replace(DIR_WS_TEMPLATES . $template_dir, DIR_WS_TEMPLATES . 'template_default', $src);
+        }
     }
 
     // hook for handle_image() function such as Image Handler etc

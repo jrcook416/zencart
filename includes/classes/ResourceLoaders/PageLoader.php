@@ -127,16 +127,29 @@ class PageLoader
             $currentTemplate = DIR_WS_TEMPLATES . $currentTemplate . '/';
         }
 
+        // -----
+        // A "child" template (one whose template_info.php declares a $template_parent,
+        // exposed here as the DIR_WS_TEMPLATE_PARENT constant) inherits any file it doesn't
+        // itself override from that parent template, before falling back to template_default.
+        //
+        $parentTemplate = (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') ? DIR_WS_TEMPLATE_PARENT : '';
+
         $path = DIR_WS_TEMPLATES . 'template_default/' . $templateDir;
 
         if ($this->fileSystem->fileExistsInDirectory($currentTemplate . $currentPage, $templateCode)) {
             return $currentTemplate . $currentPage . '/';
+        }
+        if ($parentTemplate !== '' && $this->fileSystem->fileExistsInDirectory($parentTemplate . $currentPage, $templateCode)) {
+            return $parentTemplate . $currentPage . '/';
         }
         if ($this->fileSystem->fileExistsInDirectory(DIR_WS_TEMPLATES . 'template_default/' . $currentPage, preg_replace('/\//', '', $templateCode))) {
             return DIR_WS_TEMPLATES . 'template_default/' . $currentPage;
         }
         if ($this->fileSystem->fileExistsInDirectory($currentTemplate . $templateDir, preg_replace('/\//', '', $templateCode))) {
             return $currentTemplate . $templateDir;
+        }
+        if ($parentTemplate !== '' && $this->fileSystem->fileExistsInDirectory($parentTemplate . $templateDir, preg_replace('/\//', '', $templateCode))) {
+            return $parentTemplate . $templateDir;
         }
         if ($tplPluginDir = $this->getTemplatePluginDir($templateCode, $templateDir)) {
             return $tplPluginDir;

@@ -29,27 +29,12 @@ class CatalogFilesLanguageLoader extends FilesLanguageLoader
      */
     public function loadLanguageForView(): void
     {
+        $directory = DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . $this->templateDir;
         if (defined('NO_LANGUAGE_SUBSTRING_MATCH') && in_array($this->currentPage, NO_LANGUAGE_SUBSTRING_MATCH)) {
             $files_to_match = $this->currentPage;
         } else {
             $files_to_match = $this->currentPage . '(.*)';
         }
-
-        // -----
-        // If this template inherits from a parent template (see DIR_WS_TEMPLATE_PARENT), load
-        // the parent's per-page files first so the active template's own per-page files (loaded
-        // below) still take precedence.
-        //
-        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
-            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
-            $directory = DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . $parentTemplateDir;
-            $files = $this->fileSystem->listFilesFromDirectoryAlphaSorted($directory, '~^' . $files_to_match  . '\.php$~i');
-            foreach ($files as $file) {
-                $this->loadFileDefineFile($directory . '/' . $file);
-            }
-        }
-
-        $directory = DIR_WS_LANGUAGES . $_SESSION['language'] . '/' . $this->templateDir;
         $files = $this->fileSystem->listFilesFromDirectoryAlphaSorted($directory, '~^' . $files_to_match  . '\.php$~i');
         foreach ($files as $file) {
             $this->loadFileDefineFile($directory . '/' . $file);
@@ -78,16 +63,6 @@ class CatalogFilesLanguageLoader extends FilesLanguageLoader
             FILENAME_META_TAGS,
         ];
 
-        // -----
-        // If this template inherits from a parent template (see DIR_WS_TEMPLATE_PARENT), load
-        // the parent's main template-language file and 'other' per-template files first, so the
-        // active template's own files (loaded below) still take precedence.
-        //
-        $parentTemplateDir = (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') ? basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/')) : '';
-        if ($parentTemplateDir !== '') {
-            $this->loadFileDefineFile(DIR_WS_LANGUAGES . $parentTemplateDir . '/' . $_SESSION['language'] . '.php');
-        }
-
         $this->loadFileDefineFile(DIR_WS_LANGUAGES . $this->templateDir . '/' . $_SESSION['language'] . '.php');
         $this->loadFileDefineFile(DIR_WS_LANGUAGES . $_SESSION['language'] . '.php');
         foreach ($extraFiles as $file) {
@@ -108,22 +83,8 @@ class CatalogFilesLanguageLoader extends FilesLanguageLoader
 
         $folderList = [
             $extraDefsDir => $extraDefs,
+            $extraDefsDirTpl => $extraDefsTpl,
         ];
-
-        // -----
-        // If this template declares a parent template (see DIR_WS_TEMPLATE_PARENT, set from
-        // $template_parent in template_info.php), also pick up that parent's extra_definitions
-        // files for the current session language, so a child template doesn't need to duplicate
-        // them. These are loaded before the child template's own extra_definitions, below, so the
-        // child's own files still take precedence.
-        //
-        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
-            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
-            $extraDefsDirParent = $extraDefsDir . '/' . $parentTemplateDir;
-            $folderList[$extraDefsDirParent] = $this->fileSystem->listFilesFromDirectoryAlphaSorted($extraDefsDirParent);
-        }
-
-        $folderList[$extraDefsDirTpl] = $extraDefsTpl;
 
         $foundList = [];
         foreach ($folderList as $folder => $entries) {

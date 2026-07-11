@@ -64,26 +64,6 @@ define('DIR_WS_TEMPLATE_IMAGES', DIR_WS_TEMPLATE . 'images/');
  */
 define('DIR_WS_TEMPLATE_ICONS', DIR_WS_TEMPLATE_IMAGES . 'icons/');
 
-/**
- * Support for "child" templates that inherit from a "parent" template.
- *
- * A template may declare, in its template_info.php, a $template_parent
- * variable naming another template directory (e.g. 'bootstrap') to fall
- * back to for any file it doesn't itself override. When set, and when that
- * parent template exists on disk, DIR_WS_TEMPLATE_PARENT is defined so the
- * rest of the template-resolution code (PageLoader::getTemplateDirectory(),
- * zen_image(), etc.) can consult it before falling back to template_default.
- */
-$template_parent = '';
-if (file_exists(DIR_WS_TEMPLATE . 'template_info.php')) {
-    require DIR_WS_TEMPLATE . 'template_info.php';
-}
-if ($template_parent !== '' && is_dir(DIR_WS_TEMPLATES . $template_parent)) {
-    define('DIR_WS_TEMPLATE_PARENT', DIR_WS_TEMPLATES . $template_parent . '/');
-} else {
-    define('DIR_WS_TEMPLATE_PARENT', '');
-}
-
 if (empty($tpl_settings) || !is_array($tpl_settings)) {
     $tpl_settings = [];
 }

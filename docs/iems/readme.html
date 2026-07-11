@@ -2,260 +2,114 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>IEMS Template &mdash; Inheritance from Bootstrap</title>
+<title>IEMS Template</title>
 </head>
 <body>
 <h1>IEMS Template</h1>
 <p>
-  <strong>IEMS</strong> (<code>includes/templates/iems/</code>) is a "child" template built on top of the
-  ZCA <strong>Bootstrap-4</strong> template (<code>includes/templates/bootstrap/</code>). It does not duplicate
-  Bootstrap's files. Instead, it declares Bootstrap as its parent template
-  (<code>$template_parent = 'bootstrap';</code> in <code>includes/templates/iems/template_info.php</code>), and
-  the core template-resolution code automatically serves any file IEMS doesn't ship from Bootstrap, and
-  anything neither of them ship from <code>template_default</code>.
+  <strong>IEMS</strong> (<code>includes/templates/iems/</code>) started as a complete, standalone
+  copy of the ZCA <strong>Bootstrap-4</strong> template (<code>includes/templates/bootstrap/</code>).
+  It does <em>not</em> depend on Bootstrap at runtime and does <em>not</em> modify any core Zen Cart
+  files. Every file IEMS needs is physically present under its own template directory (and the
+  matching per-template <code>includes/modules/</code>, <code>includes/modules/sideboxes/</code>,
+  and <code>includes/languages/</code> directories, described below). IEMS can be edited freely
+  without any risk to Bootstrap or to other templates.
 </p>
 
-<h2>How the inheritance works</h2>
+<h2>Why a full copy instead of a "parent template" mechanism</h2>
 <p>
-  Zen Cart normally only supports a single fallback: current template &rarr; <code>template_default</code>.
-  This was extended (see "Core changes" below) so a template can name a parent template to check first:
+  An earlier iteration of this work experimented with extending Zen Cart's core template-resolution
+  and language-loading code so that a "child" template (IEMS) could automatically inherit any file
+  it didn't override from a declared "parent" template (Bootstrap), without duplicating files. That
+  approach was <strong>abandoned</strong> for two reasons:
 </p>
-<pre>
-current template (iems) &rarr; parent template (bootstrap) &rarr; template_default
-</pre>
-<p>
-  Resolution order used for every template lookup
-  (<code>$template-&gt;get_template_dir()</code> / <code>$template-&gt;get_template_part()</code>,
-  which covers <code>common/</code>, <code>templates/</code>, <code>sideboxes/</code>,
-  <code>centerboxes/</code>, <code>modalboxes/</code>, <code>css/</code>, <code>jscript/</code>,
-  <code>images/</code>, <code>buttons/</code>, etc.), plus the <code>zen_image()</code>/<code>zen_image_OLD()</code>
-  image-src fallback:
-</p>
-<ol>
-  <li><code>includes/templates/iems/&lt;page-specific subfolder&gt;/</code></li>
-  <li><code>includes/templates/bootstrap/&lt;page-specific subfolder&gt;/</code></li>
-  <li><code>includes/templates/template_default/&lt;page-specific subfolder&gt;/</code></li>
-  <li><code>includes/templates/iems/&lt;generic subfolder&gt;/</code></li>
-  <li><code>includes/templates/bootstrap/&lt;generic subfolder&gt;/</code></li>
-  <li>installed zc_plugins template dirs</li>
-  <li><code>includes/templates/template_default/&lt;generic subfolder&gt;/</code> (final fallback)</li>
-</ol>
-
-<h2>Core changes that enable this</h2>
 <ul>
-  <li><code>includes/init_includes/init_templates.php</code> &mdash; after resolving the active
-    <code>$template_dir</code>, reads the (optional) <code>$template_parent</code> variable from that
-    template's <code>template_info.php</code> and, if the named parent template exists on disk, defines
-    the <code>DIR_WS_TEMPLATE_PARENT</code> constant.</li>
-  <li><code>includes/classes/ResourceLoaders/PageLoader.php</code> (<code>getTemplateDirectory()</code>)
-    &mdash; consults <code>DIR_WS_TEMPLATE_PARENT</code> (when defined) between the current template and
-    <code>template_default</code>.</li>
-  <li><code>includes/functions/html_output.php</code> (<code>zen_image()</code> /
-    <code>zen_image_OLD()</code>) &mdash; same parent-template fallback for template-relative image
-    <code>src</code> paths that aren't resolved through <code>get_template_dir()</code>.</li>
-  <li><code>includes/classes/ResourceLoaders/CatalogArraysLanguageLoader.php</code> and
-    <code>CatalogFilesLanguageLoader.php</code> (<code>loadLanguageExtraDefinitions()</code>)
-    &mdash; language constants defined in a template's
-    <code>includes/languages/english/extra_definitions/&lt;template&gt;/</code> directory (e.g.
-    <code>TEXT_HEADER_ARIA_LABEL_NAVBAR</code> in
-    <code>includes/languages/english/extra_definitions/bootstrap/</code>) are now also loaded from
-    <code>DIR_WS_TEMPLATE_PARENT</code>'s directory, before the child template's own
-    extra_definitions (which still win if present). Without this, any page inherited unmodified
-    from Bootstrap that references a Bootstrap-only language constant would hit an
-    "Undefined constant" fatal error when IEMS is the active template.</li>
-  <li><code>includes/classes/ResourceLoaders/CatalogArraysLanguageLoader.php</code> and
-    <code>CatalogFilesLanguageLoader.php</code> (<code>loadMainLanguageFiles()</code>)
-    &mdash; the "main" per-template language file
-    (<code>includes/languages/english/&lt;template&gt;/lang.english.php</code>, e.g.
-    <code>includes/languages/bootstrap/lang.english.php</code>, which defines
-    <code>TEXT_MISSING_SHIPPING_INFO</code>) is now also loaded from the parent template's
-    directory first, so a page inherited unmodified from Bootstrap (e.g.
-    <code>tpl_account_history_info_default.php</code>) no longer hits an "Undefined constant"
-    fatal error when IEMS is active. The same method's per-page "other" files loop
-    (<code>lang.email_extras.php</code>, <code>lang.header.php</code>,
-    <code>lang.button_names.php</code>, <code>lang.icon_names.php</code>,
-    <code>lang.other_images_names.php</code>, <code>lang.credit_cards.php</code>,
-    <code>lang.whos_online.php</code>, <code>lang.meta_tags.php</code>) was extended the same way.</li>
-  <li><code>includes/classes/ResourceLoaders/CatalogArraysLanguageLoader.php</code> and
-    <code>CatalogFilesLanguageLoader.php</code> (<code>loadLanguageForView()</code> /
-    <code>loadCurrentPageBaseFile()</code>) &mdash; per-page template-language-override files
-    (<code>includes/languages/english/&lt;template&gt;/lang.&lt;page&gt;.php</code> and
-    <code>includes/languages/english/&lt;lang&gt;/&lt;template&gt;/lang.&lt;page&gt;(extra).php</code>)
-    are now also read from the parent template's directory, before the child template's own
-    (which still wins if present).</li>
-  <li><code>includes/classes/ResourceLoaders/ArraysLanguageLoader.php</code> and
-    <code>FilesLanguageLoader.php</code> (base classes shared by both catalog and admin contexts;
-    the parent-template fallback is a no-op wherever <code>DIR_WS_TEMPLATE_PARENT</code> isn't
-    defined, e.g. in the admin) &mdash; <code>loadExtraLanguageFiles()</code>,
-    <code>loadModuleLanguageFile()</code> / <code>loadModuleDefinesFromArrayFile()</code>, and
-    <code>makeCatalogArrayConstants()</code> were extended so per-template overrides of
-    order-total/payment/shipping module language files, and other template-keyed "extra" language
-    files, also fall back to the parent template before the base (non-template) file.</li>
+  <li>It required modifying core files (<code>includes/init_includes/init_templates.php</code>,
+    <code>includes/classes/ResourceLoaders/PageLoader.php</code>,
+    <code>includes/functions/html_output.php</code>, and the language-loader classes) &mdash;
+    changes to shared core code are out of scope unless explicitly requested.</li>
+  <li>Auditing it further surfaced a real design gap: Zen Cart's pattern-based, multi-file directory
+    scans (used for example by the CSS loader to find all <code>style*.css</code>/<code>print*.css</code>
+    files, and by the JS loader for all <code>jscript_*.js</code> files) resolve to a
+    <strong>single winning directory</strong> (child or parent), then list only the files in that one
+    directory. The moment a child template shipped even one file matching such a pattern, the parent's
+    other matching files would be silently dropped entirely &mdash; a subtle, hard-to-detect class of
+    bug (missing CSS/JS &rarr; broken spacing/sizing) that would be easy to reintroduce later.</li>
 </ul>
 <p>
-  Existing templates are unaffected: <code>$template_parent</code> is opt-in (defaults to none), so any
-  template that doesn't declare it behaves exactly as before.
+  All core-file changes from that experiment have been fully reverted; the core files listed above
+  are byte-identical to their state before this work began. <code>includes/templates/bootstrap/</code>
+  itself was never modified. IEMS is now a fully self-contained copy instead.
 </p>
 
-<h2>Files overridden by IEMS (as of initial scaffold)</h2>
+<h2>What was copied</h2>
 <table border="1" cellpadding="6" cellspacing="0">
-  <tr><th>File</th><th>Purpose</th></tr>
+  <tr><th>Source (Bootstrap)</th><th>Destination (IEMS)</th><th>Contents</th></tr>
+  <tr>
+    <td><code>includes/templates/bootstrap/</code></td>
+    <td><code>includes/templates/iems/</code></td>
+    <td>Full recursive copy (182 files): <code>common/</code>, <code>templates/</code>,
+      <code>sideboxes/</code>, <code>centerboxes/</code>, <code>modalboxes/</code>,
+      <code>css/</code>, <code>jscript/</code>, <code>images/</code>, <code>buttons/</code>,
+      <code>template_info.php</code>, etc.</td>
+  </tr>
+  <tr>
+    <td><code>includes/modules/bootstrap/</code></td>
+    <td><code>includes/modules/iems/</code></td>
+    <td>Per-template module overrides (e.g. <code>categories_tabs.php</code>,
+      <code>product_listing.php</code>, <code>attributes.php</code>, and the
+      <code>centerboxes/</code> subfolder) resolved dynamically at runtime by
+      <code>zen_get_module_directory()</code> based on the active template's directory name.
+      Required: Bootstrap's own copied template files reference these by filename only, and
+      <code>zen_get_module_directory()</code> does not fall back to any other template's directory
+      if the active template's own copy is missing.</td>
+  </tr>
+  <tr>
+    <td><code>includes/modules/sideboxes/bootstrap/</code></td>
+    <td><code>includes/modules/sideboxes/iems/</code></td>
+    <td>Per-template sidebox overrides (e.g. <code>search_header.php</code>,
+      <code>information.php</code>, <code>more_information.php</code>), resolved the same way by
+      <code>zen_get_module_sidebox_directory()</code>.</td>
+  </tr>
+  <tr>
+    <td><code>includes/languages/bootstrap/lang.english.php</code></td>
+    <td><code>includes/languages/iems/lang.english.php</code></td>
+    <td>Main per-template language file (defines constants such as
+      <code>TEXT_MISSING_SHIPPING_INFO</code> used by inherited-style page templates).</td>
+  </tr>
+  <tr>
+    <td><code>includes/languages/english/extra_definitions/bootstrap/*.php</code></td>
+    <td><code>includes/languages/english/extra_definitions/iems/*.php</code></td>
+    <td>Extra per-template language definitions (e.g. <code>TEXT_HEADER_ARIA_LABEL_NAVBAR</code>,
+      <code>BOOTSTRAP_PLEASE_SELECT</code>) referenced by the copied common templates.</td>
+  </tr>
+</table>
+<p>
+  Each copy above was verified byte-identical to its Bootstrap source via <code>diff -rq</code> at
+  the time of copy.
+</p>
+
+<h2>IEMS-specific customizations (not verbatim copies)</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+  <tr><th>File</th><th>Change from Bootstrap</th></tr>
   <tr>
     <td><code>includes/templates/iems/template_info.php</code></td>
-    <td>Template metadata; declares <code>$template_parent = 'bootstrap'</code>.</td>
+    <td>Renamed template metadata (<code>$template_name</code>, <code>$template_version</code>,
+      <code>$template_author</code>, <code>$template_description</code>) to identify it as IEMS.
+      No <code>$template_parent</code> setting is used &mdash; IEMS is fully standalone.</td>
   </tr>
   <tr>
     <td><code>includes/templates/iems/template_settings.php</code></td>
-    <td>IEMS-specific <code>$tpl_settings[]</code> overrides (e.g. <code>TEMPLATE_NAME</code>).</td>
-  </tr>
-  <tr>
-    <td><code>includes/templates/iems/css/site_specific_styles.php</code></td>
-    <td>IEMS branding/style overrides, loaded last (after Bootstrap's own CSS) by the inherited
-      <code>common/html_header_css_loader.php</code>.</td>
-  </tr>
-  <tr>
-    <td><code>includes/templates/iems/images/ZCA_BOOTSTRAP_TEMPLATE.png</code></td>
-    <td>Placeholder admin "Layout Controller" screenshot; replace with an IEMS-specific screenshot.</td>
-  </tr>
-  <tr>
-    <td><code>includes/templates/iems/jscript/jscript_framework.php</code></td>
-    <td>Verbatim copy of Bootstrap's file (no IEMS-specific change needed). It simply requires
-      <code>template_default/jscript/jscript_framework.php</code> to load the AJAX framework for
-      any non-<code>template_default</code> template. Present here explicitly rather than relying
-      on parent-template inheritance.</td>
+    <td>New file (Bootstrap has none): sets <code>$tpl_settings['TEMPLATE_NAME'] = 'IEMS';</code>.</td>
   </tr>
 </table>
 
-<h2>Files inherited from Bootstrap (not present in IEMS)</h2>
+<h2>Going forward</h2>
 <p>
-  Everything else &mdash; all of <code>includes/templates/bootstrap/common/</code>,
-  <code>templates/</code>, <code>sideboxes/</code>, <code>centerboxes/</code>, <code>modalboxes/</code>,
-  <code>jscript/</code>, and the base Bootstrap/Font-Awesome <code>css/</code> files (e.g.
-  <code>stylesheet.css</code>, <code>stylesheet_bootstrap.carousel.css</code>,
-  <code>bootstrap_color_vars.php</code>, etc.) &mdash; is inherited unmodified from
-  <code>includes/templates/bootstrap/</code>. Notably:
-</p>
-<ul>
-  <li><code>common/html_header.php</code>, <code>tpl_header.php</code>, <code>tpl_footer.php</code>,
-    <code>tpl_main_page.php</code>, <code>tpl_columnar_display.php</code>, <code>tpl_tabular_display.php</code></li>
-  <li>All <code>templates/tpl_*.php</code> page templates</li>
-  <li>All <code>sideboxes/</code>, <code>centerboxes/</code>, and <code>modalboxes/</code> partials</li>
-  <li><code>jscript/jscript_zca_bootstrap.js</code>, <code>jscript_framework.php</code>, etc.</li>
-  <li><code>css/stylesheet.css</code>, <code>css/bootstrap_color_vars.php</code>, and the other base
-    Bootstrap stylesheets</li>
-</ul>
-<p>
-  As IEMS-specific behavior is developed, override individual files by copying them from
-  <code>includes/templates/bootstrap/</code> into the matching path under
-  <code>includes/templates/iems/</code> and modifying the copy. Update this document's "overridden"
-  table whenever a new file is added to IEMS.
-</p>
-
-<h2>Full inheritance audit &mdash; all per-template load paths</h2>
-<p>
-  Per the design requirement that IEMS automatically inherit <strong>everything</strong> from
-  Bootstrap unless it ships its own override, every per-template load path Zen Cart resolves was
-  audited. The table below lists each path, whether it already fell back to the parent template
-  before this audit, and what (if anything) was changed.
-</p>
-<table border="1" cellpadding="6" cellspacing="0">
-  <tr><th>#</th><th>Load path</th><th>Resolved by</th><th>Parent fallback</th></tr>
-  <tr>
-    <td>1</td>
-    <td><code>includes/languages/english/extra_definitions/&lt;template&gt;/</code></td>
-    <td><code>CatalogArraysLanguageLoader</code> / <code>CatalogFilesLanguageLoader</code>
-      <code>::loadLanguageExtraDefinitions()</code></td>
-    <td>Added (previous fix, this audit re-confirmed no missed constants)</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td><code>includes/languages/english/&lt;template&gt;/</code> (main
-      <code>lang.&lt;language&gt;.php</code> file, its per-page overrides, and its "other" shared
-      files &mdash; email_extras, header, button_names, icon_names, other_images_names,
-      credit_cards, whos_online, meta_tags)</td>
-    <td><code>CatalogArraysLanguageLoader</code> / <code>CatalogFilesLanguageLoader</code>
-      <code>::loadMainLanguageFiles()</code>, <code>::loadCurrentPageBaseFile()</code>,
-      <code>::loadLanguageForView()</code></td>
-    <td><strong>Added by this audit.</strong> Previously had no fallback at all (not even to
-      <code>template_default</code>) &mdash; this is the class of bug that caused the
-      <code>TEXT_MISSING_SHIPPING_INFO</code> risk flagged earlier.</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td><code>includes/templates/&lt;template&gt;/common/</code></td>
-    <td><code>PageLoader::getTemplateDirectory()</code> via <code>$template-&gt;get_template_dir()</code></td>
-    <td>Already covered (prior fix)</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td><code>includes/templates/&lt;template&gt;/jscript/</code></td>
-    <td><code>PageLoader::getTemplateDirectory()</code></td>
-    <td>Already covered (prior fix)</td>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td><code>includes/templates/&lt;template&gt;/css/</code></td>
-    <td><code>PageLoader::getTemplateDirectory()</code></td>
-    <td>Already covered (prior fix)</td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td><code>includes/templates/&lt;template&gt;/sideboxes/</code></td>
-    <td><code>PageLoader::getTemplateDirectory()</code></td>
-    <td>Already covered (prior fix)</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td><code>includes/templates/&lt;template&gt;/templates/</code> (page templates)</td>
-    <td><code>PageLoader::getTemplateDirectory()</code></td>
-    <td>Already covered (prior fix)</td>
-  </tr>
-  <tr>
-    <td>8a</td>
-    <td><code>includes/templates/&lt;template&gt;/images/</code>,
-      <code>buttons/</code>, <code>centerboxes/</code>, <code>modalboxes/</code></td>
-    <td><code>PageLoader::getTemplateDirectory()</code> (generic <code>templateDir</code> param
-      covers any subfolder name) and <code>zen_image()</code> / <code>zen_image_OLD()</code></td>
-    <td>Already covered (prior fix)</td>
-  </tr>
-  <tr>
-    <td>8b</td>
-    <td>Order-total / payment / shipping module per-template language overrides
-      (<code>includes/languages/&lt;lang&gt;/modules/&lt;module_type&gt;/&lt;template&gt;/lang.*.php</code>)</td>
-    <td><code>ArraysLanguageLoader::loadModuleLanguageFile()</code> /
-      <code>loadModuleDefinesFromArrayFile()</code>,
-      <code>FilesLanguageLoader::loadModuleLanguageFile()</code></td>
-    <td><strong>Added by this audit</strong> (bonus coverage; not explicitly requested but the
-      same class of gap)</td>
-  </tr>
-  <tr>
-    <td>8c</td>
-    <td>Per-template "extra" language files used by admin plugins for storefront-style constants
-      (<code>ArraysLanguageLoader::makeCatalogArrayConstants()</code>,
-      <code>FilesLanguageLoader::loadExtraLanguageFiles()</code>)</td>
-    <td>Same classes as above</td>
-    <td><strong>Added by this audit</strong> (bonus coverage)</td>
-  </tr>
-</table>
-<p>
-  All parent-template fallback logic added by this audit is guarded by
-  <code>defined('DIR_WS_TEMPLATE_PARENT') &amp;&amp; DIR_WS_TEMPLATE_PARENT !== ''</code>, so it is a
-  no-op for every template that doesn't declare <code>$template_parent</code> (including all admin
-  contexts, where the constant is never defined). Verified via isolated reflection-based tests
-  exercising <code>loadCurrentPageBaseFile()</code> directly: (a) a constant that exists only in the
-  parent (bootstrap) template's per-page language file is inherited by iems, and (b) a constant
-  defined in both parent and child resolves to the child's (iems) value, confirming override
-  precedence is preserved.
-</p>
-
-<h2>Modules</h2>
-<p>
-  <code>includes/modules/bootstrap/</code> and <code>includes/modules/sideboxes/bootstrap/</code> are
-  separate module directories that Bootstrap's own template files reference directly by name (not
-  through the template/parent path fallback described above). IEMS currently reuses these as-is; if
-  IEMS needs its own module overrides, add matching <code>includes/modules/iems/</code> or
-  <code>includes/modules/sideboxes/iems/</code> directories and update the referencing template
-  files. (Per-template module <em>language</em> overrides, item 8b above, are already inherited.)
+  Because IEMS is now a complete, independent copy, it can be edited directly &mdash; there is no
+  "inherited vs. overridden" distinction to track anymore. When Bootstrap itself receives upstream
+  updates, review its changelog and manually port relevant fixes into the corresponding IEMS files
+  if desired; IEMS will not pick them up automatically.
 </p>
 </body>
 </html>

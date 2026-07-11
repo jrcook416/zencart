@@ -23,23 +23,9 @@ class FilesLanguageLoader extends BaseLanguageLoader
     {
         if ($this->mainLoader->hasLanguageFile($rootPath, $language, $fileName, $extraPath .  '/' . $this->templateDir)) {
             $this->loadFileDefineFile($rootPath . $language . $extraPath . '/' . $this->templateDir . '/' . $fileName);
-            return;
+        } else {
+            $this->loadFileDefineFile($rootPath . $language . $extraPath . '/' . $fileName);
         }
-
-        // -----
-        // If the active template has no override of its own but inherits from a parent template
-        // (see DIR_WS_TEMPLATE_PARENT), use the parent template's file instead of falling straight
-        // through to the base (non-template) file.
-        //
-        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
-            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
-            if ($this->mainLoader->hasLanguageFile($rootPath, $language, $fileName, $extraPath . '/' . $parentTemplateDir)) {
-                $this->loadFileDefineFile($rootPath . $language . $extraPath . '/' . $parentTemplateDir . '/' . $fileName);
-                return;
-            }
-        }
-
-        $this->loadFileDefineFile($rootPath . $language . $extraPath . '/' . $fileName);
     }
 
     /**
@@ -55,17 +41,6 @@ class FilesLanguageLoader extends BaseLanguageLoader
 
         if ($this->loadFileDefineFile($rootPath . $extraPath . $this->templateDir . '/' . $fileName) === true) {
             return true;
-        }
-
-        // -----
-        // If the active template has no module-language override of its own but inherits from a
-        // parent template (see DIR_WS_TEMPLATE_PARENT), try the parent template's override next.
-        //
-        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
-            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
-            if ($this->loadFileDefineFile($rootPath . $extraPath . $parentTemplateDir . '/' . $fileName) === true) {
-                return true;
-            }
         }
 
         return $this->loadFileDefineFile($rootPath . $extraPath . $fileName);

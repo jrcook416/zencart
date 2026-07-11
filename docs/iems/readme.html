@@ -53,6 +53,16 @@ current template (iems) &rarr; parent template (bootstrap) &rarr; template_defau
   <li><code>includes/functions/html_output.php</code> (<code>zen_image()</code> /
     <code>zen_image_OLD()</code>) &mdash; same parent-template fallback for template-relative image
     <code>src</code> paths that aren't resolved through <code>get_template_dir()</code>.</li>
+  <li><code>includes/classes/ResourceLoaders/CatalogArraysLanguageLoader.php</code> and
+    <code>CatalogFilesLanguageLoader.php</code> (<code>loadLanguageExtraDefinitions()</code>)
+    &mdash; language constants defined in a template's
+    <code>includes/languages/english/extra_definitions/&lt;template&gt;/</code> directory (e.g.
+    <code>TEXT_HEADER_ARIA_LABEL_NAVBAR</code> in
+    <code>includes/languages/english/extra_definitions/bootstrap/</code>) are now also loaded from
+    <code>DIR_WS_TEMPLATE_PARENT</code>'s directory, before the child template's own
+    extra_definitions (which still win if present). Without this, any page inherited unmodified
+    from Bootstrap that references a Bootstrap-only language constant would hit an
+    "Undefined constant" fatal error when IEMS is the active template.</li>
 </ul>
 <p>
   Existing templates are unaffected: <code>$template_parent</code> is opt-in (defaults to none), so any

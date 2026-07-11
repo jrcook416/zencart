@@ -83,8 +83,22 @@ class CatalogFilesLanguageLoader extends FilesLanguageLoader
 
         $folderList = [
             $extraDefsDir => $extraDefs,
-            $extraDefsDirTpl => $extraDefsTpl,
         ];
+
+        // -----
+        // If this template declares a parent template (see DIR_WS_TEMPLATE_PARENT, set from
+        // $template_parent in template_info.php), also pick up that parent's extra_definitions
+        // files for the current session language, so a child template doesn't need to duplicate
+        // them. These are loaded before the child template's own extra_definitions, below, so the
+        // child's own files still take precedence.
+        //
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
+            $extraDefsDirParent = $extraDefsDir . '/' . $parentTemplateDir;
+            $folderList[$extraDefsDirParent] = $this->fileSystem->listFilesFromDirectoryAlphaSorted($extraDefsDirParent);
+        }
+
+        $folderList[$extraDefsDirTpl] = $extraDefsTpl;
 
         $foundList = [];
         foreach ($folderList as $folder => $entries) {

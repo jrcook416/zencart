@@ -210,6 +210,22 @@ class CatalogArraysLanguageLoader extends ArraysLanguageLoader
         $defineList = array_merge($defineList, $defineListPlugin);
 
         // -----
+        // Next, if this template declares a parent template (i.e. it's a "child" template that
+        // inherits from another, per $template_parent in template_info.php / the
+        // DIR_WS_TEMPLATE_PARENT constant), load that parent template's extra definitions **for
+        // the current session language**. This lets a child template pick up constants defined
+        // in the parent template's extra_definitions directory without duplicating the files.
+        //
+        // Any definitions found here overwrite the base/plugin definitions above, but are
+        // themselves overwritten by the current template's own extra_definitions below.
+        //
+        $defineListParentTemplate = [];
+        if (defined('DIR_WS_TEMPLATE_PARENT') && DIR_WS_TEMPLATE_PARENT !== '') {
+            $parentTemplateDir = basename(rtrim(DIR_WS_TEMPLATE_PARENT, '/'));
+            $defineListParentTemplate = $this->loadArraysFromDirectory(DIR_WS_LANGUAGES, $_SESSION['language'], '/extra_definitions/' . $parentTemplateDir);
+        }
+
+        // -----
         // Finally, load any extra definitions in the current template's override directory, **for the current session language*.
         //
         // Any definitions found here overwrite **all** previous-found definitions.
@@ -220,7 +236,7 @@ class CatalogArraysLanguageLoader extends ArraysLanguageLoader
         // Add these extra definitions to the array of definitions to be created, if not further overridden
         // by any 'legacy' language files to be loaded.
         //
-        $this->addLanguageDefines(array_merge($defineList, $defineListTemplate));
+        $this->addLanguageDefines(array_merge($defineList, $defineListParentTemplate, $defineListTemplate));
     }
 
     /**

@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS `iems_agencies` (
   PRIMARY KEY (`agency_ID`),
   UNIQUE KEY `idx_iems_agencies_county_identifier` (`county_ID`, `agency_identifier`),
   KEY `idx_iems_agencies_status` (`status`),
-  CONSTRAINT `chk_iems_agencies_identifier_format` CHECK (`agency_identifier` REGEXP '^[A-Z0-9]{1,10}$'),
   CONSTRAINT `fk_iems_agencies_county` FOREIGN KEY (`county_ID`)
     REFERENCES `iems_counties` (`county_ID`)
     ON DELETE RESTRICT ON UPDATE CASCADE
@@ -84,7 +83,6 @@ CREATE TABLE IF NOT EXISTS `iems_units` (
   UNIQUE KEY `idx_iems_units_agency_identifier` (`agency_ID`, `unit_identifier`),
   KEY `idx_iems_units_county` (`county_ID`),
   KEY `idx_iems_units_status` (`status`),
-  CONSTRAINT `chk_iems_units_identifier_format` CHECK (`unit_identifier` REGEXP '^[A-Z0-9]{1,10}$'),
   CONSTRAINT `fk_iems_units_county` FOREIGN KEY (`county_ID`)
     REFERENCES `iems_counties` (`county_ID`)
     ON DELETE RESTRICT ON UPDATE CASCADE,

@@ -108,19 +108,21 @@ CREATE TABLE IF NOT EXISTS `iems_import_log` (
 
 -- ============================================================================
 -- Seed data: full Indiana county list (92 counties), standard alphabetical
--- state county-code numbering (e.g. 49 = Marion), matching selector contract
--- "<county_number> <county_name>" (example: "49 Marion").
+-- state county-code numbering, zero-padded to 2 digits (e.g. 49 = Marion,
+-- 03 = Bartholomew) to match the zero-padded convention used in real IEMS
+-- agency data, matching selector contract "<county_number> <county_name>"
+-- (example: "49 Marion").
 -- ============================================================================
 INSERT INTO `iems_counties` (`county_ID`, `county_number`, `county_name`) VALUES
-(1, '1', 'Adams'),
-(2, '2', 'Allen'),
-(3, '3', 'Bartholomew'),
-(4, '4', 'Benton'),
-(5, '5', 'Blackford'),
-(6, '6', 'Boone'),
-(7, '7', 'Brown'),
-(8, '8', 'Carroll'),
-(9, '9', 'Cass'),
+(1, '01', 'Adams'),
+(2, '02', 'Allen'),
+(3, '03', 'Bartholomew'),
+(4, '04', 'Benton'),
+(5, '05', 'Blackford'),
+(6, '06', 'Boone'),
+(7, '07', 'Brown'),
+(8, '08', 'Carroll'),
+(9, '09', 'Cass'),
 (10, '10', 'Clark'),
 (11, '11', 'Clay'),
 (12, '12', 'Clinton'),
@@ -207,16 +209,173 @@ INSERT INTO `iems_counties` (`county_ID`, `county_number`, `county_name`) VALUES
 ON DUPLICATE KEY UPDATE `county_name` = VALUES(`county_name`);
 
 -- ============================================================================
--- Seed data: iems_agencies / iems_units
+-- Seed data: iems_agencies
 -- ============================================================================
--- NO SEED ROWS ARE INCLUDED for iems_agencies or iems_units in this branch.
--- No authoritative agency/unit dataset exists anywhere in this repository
--- (checked: no CSV/SQL/data files referencing agency or unit lists beyond
--- the county-code mapping above). Fabricating agency/unit names would risk
--- introducing incorrect real-world EMS/fire agency data. Schema for both
--- tables is fully in place and ready to receive a real dataset via a
--- follow-up seed file (e.g. `iems_agencies_seed.sql`, `iems_units_seed.sql`)
--- once the actual county->agency->unit list is supplied.
+-- Imported from a legacy `iems_agencies_old` phpMyAdmin dump (123 rows,
+-- old agency_id 4-126). Mapped from the legacy shape
+-- (agency_id, agency_countyID, agency_filter, agency_customer_group,
+-- agency_description, agency_address) to the new schema
+-- (agency_ID, county_ID, agency_identifier, agency_name) as follows:
+--   - agency_countyID -> resolved to county_ID via a join on county_number
+--     (zero-padded to 2 digits, e.g. '03', '49').
+--   - agency_description, formatted as "<county_number> <IDENTIFIER> <name>",
+--     split into agency_identifier and agency_name.
+--   - agency_filter, agency_customer_group, agency_address: dropped. Not
+--     part of the new schema; customer-group derivation is handled
+--     separately per the county+agency model (see iems_data.md governance
+--     notes / handoff doc Branch 4).
+--
+-- Data corrections applied during import, confirmed with the data owner:
+--   - old agency_id 17 ("29 CFD Cicero Fire Department"): legacy
+--     agency_countyID was 28 (Greene), but Cicero is in Hamilton County
+--     (29), matching the surrounding Hamilton-county cluster and the
+--     description text. Corrected to county 29.
+--   - old agency_id 72 ("49 EHS Security"): duplicated the 'EHS' identifier
+--     already used by "Eskenazi Health Services" (agency_id 71) in the same
+--     county, which is not allowed under the new per-county uniqueness
+--     constraint. Renamed to identifier 'EHPD', name "Eskenazi Health
+--     Police Department".
+--   - old agency_id 73 ("49 Franciscan Health EMS Education"): had no
+--     distinct short identifier in the legacy free-text description.
+--     Assigned identifier 'FH'.
+-- ============================================================================
+INSERT INTO `iems_agencies` (`county_ID`, `agency_identifier`, `agency_name`)
+SELECT c.`county_ID`, v.`agency_identifier`, v.`agency_name`
+FROM (
+  SELECT '03' AS county_number, 'ECIFD' AS agency_identifier, 'East Columbus Independent Fire Department' AS agency_name
+  UNION ALL SELECT '03' AS county_number, 'FSSLC' AS agency_identifier, 'Four Seasons Senior Living Community' AS agency_name
+  UNION ALL SELECT '06' AS county_number, 'AVFD' AS agency_identifier, 'Advance Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '06' AS county_number, 'HVSLC' AS agency_identifier, 'Hoosier Village Senior Living Community' AS agency_name
+  UNION ALL SELECT '06' AS county_number, 'WFD' AS agency_identifier, 'Whitestown Fire Department' AS agency_name
+  UNION ALL SELECT '06' AS county_number, 'WMPD' AS agency_identifier, 'Whitestown Metropolitan Police Department' AS agency_name
+  UNION ALL SELECT '06' AS county_number, 'ZFD' AS agency_identifier, 'Zionsville Fire Department' AS agency_name
+  UNION ALL SELECT '12' AS county_number, 'RVAS' AS agency_identifier, 'Rossville Volunteer Ambulance Service' AS agency_name
+  UNION ALL SELECT '21' AS county_number, 'FCEMS' AS agency_identifier, 'Fayette County EMS' AS agency_name
+  UNION ALL SELECT '27' AS county_number, 'CTVFD' AS agency_identifier, 'Center Township Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '27' AS county_number, 'MTFD' AS agency_identifier, 'Mill Township Fire Department' AS agency_name
+  UNION ALL SELECT '28' AS county_number, 'CJFT' AS agency_identifier, 'Center-Jackson Fire Territory' AS agency_name
+  UNION ALL SELECT '28' AS county_number, 'GCAS' AS agency_identifier, 'Greene County Ambulance service' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'CFD' AS agency_identifier, 'Cicero Fire Department' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'CFHD' AS agency_identifier, 'City of Fishers Health Department' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'CP' AS agency_identifier, 'Conner Prairie' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'CPD' AS agency_identifier, 'Carmel Police Department' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'FFD' AS agency_identifier, 'Fishers Fire Department' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'JTFD' AS agency_identifier, 'Jackson Township Fire Department' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'SFD' AS agency_identifier, 'Sheridan Fire Department' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'WFD' AS agency_identifier, 'Westfield Fire Department' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'WRTFD' AS agency_identifier, 'White River Township Fire Department (Hamilton)' AS agency_name
+  UNION ALL SELECT '29' AS county_number, 'WTVFD' AS agency_identifier, 'Wayne Township Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '30' AS county_number, 'BCTFD' AS agency_identifier, 'Buck Creek Township Fire Department' AS agency_name
+  UNION ALL SELECT '30' AS county_number, 'SCTFD' AS agency_identifier, 'Sugar Creek Township Fire Department' AS agency_name
+  UNION ALL SELECT '30' AS county_number, 'VTFD' AS agency_identifier, 'Vernon Township Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'AVFD' AS agency_identifier, 'Amo Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'BFT' AS agency_identifier, 'Brownsburg Fire Territory' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'CFD' AS agency_identifier, 'Coatesville Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'DFD' AS agency_identifier, 'Danville Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'ERTFD' AS agency_identifier, 'Eel River Township Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'FDLT' AS agency_identifier, 'Fire Department of Liberty Township' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'HCCO' AS agency_identifier, 'Hendricks County Coroner''s Office' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'LFD' AS agency_identifier, 'Lizton Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'LPD' AS agency_identifier, 'Lizton Police Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'NSFD' AS agency_identifier, 'North Salem Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'PFD' AS agency_identifier, 'Pittsboro Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'PFTHQ' AS agency_identifier, 'Plainfield Fire Territory' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'SVFD' AS agency_identifier, 'Stilesville Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '32' AS county_number, 'WTAFD' AS agency_identifier, 'Washington Township/Avon Fire Department' AS agency_name
+  UNION ALL SELECT '34' AS county_number, 'HCEM' AS agency_identifier, 'Howard County Emergency Management' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'BFD' AS agency_identifier, 'Bargersville Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'CSVFD' AS agency_identifier, 'Cordry-Sweetwater Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'EFD' AS agency_identifier, 'Edinburgh Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'FFD' AS agency_identifier, 'Franklin Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'GFD' AS agency_identifier, 'Greenwood Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'NCVFD' AS agency_identifier, 'Needham Community Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'NTVFD' AS agency_identifier, 'Nineveh Township Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'NWFD' AS agency_identifier, 'New Whiteland Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'PLPD' AS agency_identifier, 'Princes Lakes Police Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'TFD' AS agency_identifier, 'Trafalgar Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'WRTFD' AS agency_identifier, 'White River Township Fire Department' AS agency_name
+  UNION ALL SELECT '41' AS county_number, 'WVFD' AS agency_identifier, 'Whiteland Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '48' AS county_number, 'AMFPT' AS agency_identifier, 'Adams Markleville Fire Protection Territory' AS agency_name
+  UNION ALL SELECT '48' AS county_number, 'CUTFD' AS agency_identifier, 'Chesterfield Union Township Fire Department' AS agency_name
+  UNION ALL SELECT '48' AS county_number, 'EVFD' AS agency_identifier, 'Edgewood Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '48' AS county_number, 'FVAS' AS agency_identifier, 'Frankton Volunteer Ambulance Service' AS agency_name
+  UNION ALL SELECT '48' AS county_number, 'LSCTFT' AS agency_identifier, 'Lapel Stony Creek Township Fire Territory' AS agency_name
+  UNION ALL SELECT '48' AS county_number, 'PEAI' AS agency_identifier, 'Pendleton Emergency Ambulance Incorporated' AS agency_name
+  UNION ALL SELECT '48' AS county_number, 'PVFD' AS agency_identifier, 'Pendleton Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '48' AS county_number, 'RTFD' AS agency_identifier, 'Richland Township Fire Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'AIC' AS agency_identifier, 'Assessment and Intervention Center' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'ARC' AS agency_identifier, 'American Red Cross' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'BGEMS' AS agency_identifier, 'City of Beech Grove EMS' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'CLPD' AS agency_identifier, 'City of Lawrence Police Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'DTFDHQ' AS agency_identifier, 'Decatur Township Headquarters' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'EHPT' AS agency_identifier, 'Eskenazi Transportation Services' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'Eskenazi Health Services' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'EHPD' AS agency_identifier, 'Eskenazi Health Police Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'FH' AS agency_identifier, 'Franciscan Health EMS Education' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'Indianapolis EMS' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'IFD' AS agency_identifier, 'Indianapolis Fire Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'IIAFD' AS agency_identifier, 'Indianapolis International Airport Fire Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'IMPD' AS agency_identifier, 'Indianapolis Metropolitan Police Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'IN-TF1' AS agency_identifier, 'Indiana Task Force One' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'IPSF' AS agency_identifier, 'Indianapolis Public Safety Foundation' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'ISDH' AS agency_identifier, 'Indiana State Department of Health' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'JELCC' AS agency_identifier, 'J. Everett Light Career Center' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'LFD' AS agency_identifier, 'City of Lawrence Fire Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'MCCC' AS agency_identifier, 'Marion County Community Corrections' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'MESH' AS agency_identifier, 'MESH Coalition' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'MSDPT' AS agency_identifier, 'Metropolitan School District of Pike Township' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'OPHS' AS agency_identifier, 'Office of Public Health and Safety' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'PSC' AS agency_identifier, 'Public Safety Communications' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'PTFD' AS agency_identifier, 'Pike Township Fire Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'ROC' AS agency_identifier, 'Regional Operations Center' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'SCC' AS agency_identifier, 'Shepherd Community Center' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'SFD' AS agency_identifier, 'Town of Speedway Fire Department' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'SLEH' AS agency_identifier, 'Sidney and Lois Eskenazi Hospital' AS agency_name
+  UNION ALL SELECT '49' AS county_number, 'TCA' AS agency_identifier, 'TransCare Ambulance' AS agency_name
+  UNION ALL SELECT '53' AS county_number, 'HHCC' AS agency_identifier, 'Hoosier Hills Career Center' AS agency_name
+  UNION ALL SELECT '54' AS county_number, 'CFD' AS agency_identifier, 'Crawfordsville Fire Department' AS agency_name
+  UNION ALL SELECT '54' AS county_number, 'LR' AS agency_identifier, 'Ladoga Rescue' AS agency_name
+  UNION ALL SELECT '54' AS county_number, 'WTFD' AS agency_identifier, 'Walnut Township Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'AAVFD' AS agency_identifier, 'Adams and Ashland Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'BTFD' AS agency_identifier, 'Brown Township Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'BVFD' AS agency_identifier, 'Brooklyn Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'GTFD' AS agency_identifier, 'Gregg Township Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'GTFR' AS agency_identifier, 'Green Township Fire Rescue' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'HTFD' AS agency_identifier, 'Harrison Township Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MAFD' AS agency_identifier, 'Martinsville Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MCEMA' AS agency_identifier, 'Morgan County Emergency Management Agency' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MCEMS' AS agency_identifier, 'Morgan County EMS' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MCSD' AS agency_identifier, 'Morgan County Sheriff''s Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MFD' AS agency_identifier, 'Mooresville Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MOFD' AS agency_identifier, 'Morgantown Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MOTFD' AS agency_identifier, 'Monroe Township Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MSDMH' AS agency_identifier, 'MSD of Martinsville' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'MTFD' AS agency_identifier, 'Madison Township Fire Department' AS agency_name
+  UNION ALL SELECT '55' AS county_number, 'WTFD' AS agency_identifier, 'Washington Township Fire Department' AS agency_name
+  UNION ALL SELECT '64' AS county_number, 'VFD' AS agency_identifier, 'Valparaiso Fire Department' AS agency_name
+  UNION ALL SELECT '67' AS county_number, 'A30CC' AS agency_identifier, 'Area 30 Career Center' AS agency_name
+  UNION ALL SELECT '67' AS county_number, 'FTFD' AS agency_identifier, 'Floyd Township Fire Department' AS agency_name
+  UNION ALL SELECT '67' AS county_number, 'PCEMS' AS agency_identifier, 'Putnam County EMS' AS agency_name
+  UNION ALL SELECT '70' AS county_number, 'CVFD' AS agency_identifier, 'Carthage Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '73' AS county_number, 'SFD' AS agency_identifier, 'Shelbyville Fire Department' AS agency_name
+  UNION ALL SELECT '75' AS county_number, 'SCEMS' AS agency_identifier, 'Starke County EMS' AS agency_name
+  UNION ALL SELECT '79' AS county_number, 'CHLVFD' AS agency_identifier, 'Clarks Hill-Lauramie Volunteer Fire Department' AS agency_name
+  UNION ALL SELECT '79' AS county_number, 'TCEMA' AS agency_identifier, 'Tippecanoe County Emergency Management Agency' AS agency_name
+  UNION ALL SELECT '79' AS county_number, 'TEAS' AS agency_identifier, 'Tippecanoe Emergency Ambulance Service' AS agency_name
+  UNION ALL SELECT '79' AS county_number, 'WTFD' AS agency_identifier, 'Wabash Township Fire Department' AS agency_name
+  UNION ALL SELECT '81' AS county_number, 'UCEMA' AS agency_identifier, 'Union County Emergency Management Agency' AS agency_name
+  UNION ALL SELECT '89' AS county_number, 'RLEMS' AS agency_identifier, 'Red Line EMS' AS agency_name
+) v
+JOIN `iems_counties` c ON c.`county_number` = v.`county_number`;
+
+-- ============================================================================
+-- Seed data: iems_units
+-- ============================================================================
+-- NO SEED ROWS ARE INCLUDED for iems_units in this branch. No authoritative
+-- unit-level dataset has been supplied yet (only the legacy agencies dump
+-- was provided). Schema is ready to receive a real dataset via a follow-up
+-- seed file (e.g. `iems_units_seed.sql`) once the actual unit list is
+-- supplied.
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
@@ -225,9 +384,10 @@ ON DUPLICATE KEY UPDATE `county_name` = VALUES(`county_name`);
 INSERT INTO `iems_import_log`
   (`table_name`, `source_file`, `file_version`, `imported_by`, `rows_affected`, `notes`)
 VALUES
-  ('iems_counties', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-01', 'dev-seed', 92,
-   'Full Indiana county reference list (92 counties), standard alphabetical state county-code numbering.'),
-  ('iems_agencies', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-01', 'dev-seed', 0,
-   'Schema only -- no rows imported. Awaiting authoritative agency dataset.'),
-  ('iems_units', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-01', 'dev-seed', 0,
+  ('iems_counties', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-02', 'dev-seed', 92,
+   'Full Indiana county reference list (92 counties), zero-padded 2-digit state county-code numbering.'),
+  ('iems_agencies', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-02', 'dev-seed', 123,
+   'Imported from legacy iems_agencies_old dump (123 rows). 3 data corrections applied and confirmed with data owner: agency_id 17 county corrected 28->29 (Cicero is in Hamilton County); agency_id 72 identifier changed EHS->EHPD (Eskenazi Health Police Department, to resolve duplicate EHS identifier); agency_id 73 assigned identifier FH (Franciscan Health EMS Education, had no distinct code in source).'),
+  ('iems_units', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-02', 'dev-seed', 0,
    'Schema only -- no rows imported. Awaiting authoritative unit dataset.');
+

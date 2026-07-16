@@ -10,7 +10,7 @@ of truth: `zc_install/sql/iems_custom/iems_foundation.sql`.
 | Field | Type/Role |
 |---|---|
 | `county_ID` | Auto-number primary key |
-| `county_number` | Indiana state county code |
+| `county_number` | Indiana state county code, zero-padded to 2 digits (e.g. `01`, `03`, `49`) to match the convention used in real IEMS agency records |
 | `county_name` | Indiana county name |
 
 ### `iems_agencies`

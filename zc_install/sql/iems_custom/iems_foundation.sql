@@ -371,12 +371,137 @@ JOIN `iems_counties` c ON c.`county_number` = v.`county_number`;
 -- ============================================================================
 -- Seed data: iems_units
 -- ============================================================================
--- NO SEED ROWS ARE INCLUDED for iems_units in this branch. No authoritative
--- unit-level dataset has been supplied yet (only the legacy agencies dump
--- was provided). Schema is ready to receive a real dataset via a follow-up
--- seed file (e.g. `iems_units_seed.sql`) once the actual unit list is
--- supplied.
+-- Imported and reconciled from legacy iems_units_old dump (146 rows), all for
+-- Marion County (49). Only rows with a distinct legacy unit code are included
+-- in this pass (109 rows). See reconciliation notes above the INSERT block
+-- and the import log entry below for the full list of corrections/decisions,
+-- all confirmed with the data owner.
+--
+-- DEFERRED (not imported in this pass): 32 rows that never had a distinct
+-- unit code in the legacy data (pure location/functional names only, e.g.
+-- EHS clinic locations such as "Pecar CHC", "Blackburn CHC"; IEMS functional
+-- units like "Safety Officer", "Logistics", "Indiana State Fair"; and the
+-- self-referential IPSF/AIC/IMPD/SLEH rows where the "unit" is just the
+-- agency's own name). The data owner will assign unit_identifier values for
+-- these case-by-case in a follow-up pass -- do not auto-generate codes for
+-- them.
 -- ============================================================================
+
+INSERT INTO iems_units (county_ID, agency_ID, unit_identifier, unit_name)
+SELECT c.county_ID, a.agency_ID, v.unit_identifier, v.unit_name
+FROM (
+  SELECT '49' AS county_number, 'EHPT' AS agency_identifier, 'AMB001' AS unit_identifier, 'Eskenazi Transportation Services Ambulance 001' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHPT' AS agency_identifier, 'AMB002' AS unit_identifier, 'Eskenazi Transportation Services Ambulance 002' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHPT' AS agency_identifier, 'AMB003' AS unit_identifier, 'Eskenazi Transportation Services Ambulance 003' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHPT' AS agency_identifier, 'AMB004' AS unit_identifier, 'Eskenazi Transportation Services Ambulance 004' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM001' AS unit_identifier, 'IEMS Ambulance 001' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM003' AS unit_identifier, 'IEMS Ambulance 003' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM005' AS unit_identifier, 'IEMS Ambulance 005' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM011' AS unit_identifier, 'IEMS Ambulance 011' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM013' AS unit_identifier, 'IEMS Ambulance 013' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM015' AS unit_identifier, 'IEMS Ambulance 015' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM019' AS unit_identifier, 'IEMS Ambulance 019' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM020' AS unit_identifier, 'IEMS Ambulance 020' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM022' AS unit_identifier, 'IEMS Ambulance 022' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM025' AS unit_identifier, 'IEMS Ambulance 025' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM027' AS unit_identifier, 'IEMS Ambulance 027' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM043' AS unit_identifier, 'IEMS Ambulance 043' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM046' AS unit_identifier, 'IEMS Ambulance 046' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM051' AS unit_identifier, 'IEMS Ambulance 051' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM052' AS unit_identifier, 'IEMS Ambulance 052' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM092' AS unit_identifier, 'IEMS Ambulance 092' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM099' AS unit_identifier, 'IEMS Ambulance 099' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'DST1' AS unit_identifier, 'IEMS District 1' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'DST2' AS unit_identifier, 'IEMS District 2' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'DST3' AS unit_identifier, 'IEMS District 3' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'DST4' AS unit_identifier, 'IEMS District 4' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'DST6' AS unit_identifier, 'IEMS District 6' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS027' AS unit_identifier, 'IEMS District Medic EMS027' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS051' AS unit_identifier, 'IEMS District Medic EMS051' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS053' AS unit_identifier, 'IEMS District Medic EMS053' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS059' AS unit_identifier, 'IEMS District Medic EMS059' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS091' AS unit_identifier, 'IEMS District Medic EMS091' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS092' AS unit_identifier, 'IEMS District Medic EMS092' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS093' AS unit_identifier, 'IEMS District Medic EMS093' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS094' AS unit_identifier, 'IEMS District Medic EMS094' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'FED_TEMS' AS unit_identifier, 'State Federal TEMS' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'IEMSET' AS unit_identifier, 'IEMS Education and Training' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'IEMS_MIH' AS unit_identifier, 'IEMS Mobile Integrated Healthcare' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'IEMS_TERG' AS unit_identifier, 'IEMS ERG TEMS' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'IEMS_TIMPD' AS unit_identifier, 'IEMS IMPD TEMS' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD000' AS unit_identifier, 'IEMS Medic 000' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD001' AS unit_identifier, 'IEMS Medic 001' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD002' AS unit_identifier, 'IEMS Medic 002' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD003' AS unit_identifier, 'IEMS Medic 003' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD004' AS unit_identifier, 'IEMS Medic 004' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD004R' AS unit_identifier, 'IEMS Reserve Medic 004' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD005' AS unit_identifier, 'IEMS Medic 005' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD005R' AS unit_identifier, 'IEMS Reserve Medic 005' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD009' AS unit_identifier, 'IEMS Medic 009' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD010' AS unit_identifier, 'IEMS Medic 010' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD011' AS unit_identifier, 'IEMS Medic 011' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD011R' AS unit_identifier, 'IEMS Reserve Medic 011' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD012' AS unit_identifier, 'IEMS Medic 012' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD012R' AS unit_identifier, 'IEMS Reserve Medic 012' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD013' AS unit_identifier, 'IEMS Medic 013' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD014' AS unit_identifier, 'IEMS Medic 014' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD015' AS unit_identifier, 'IEMS Medic 015' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD016' AS unit_identifier, 'IEMS Medic 016' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD017' AS unit_identifier, 'IEMS Medic 017' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD018' AS unit_identifier, 'IEMS Medic 018' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD019' AS unit_identifier, 'IEMS Medic 019' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD020' AS unit_identifier, 'IEMS Medic 020' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD021' AS unit_identifier, 'IEMS Medic 021' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD021R' AS unit_identifier, 'IEMS Reserve Medic 021' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD022' AS unit_identifier, 'IEMS Medic 022' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD023' AS unit_identifier, 'IEMS Medic 023' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD023R' AS unit_identifier, 'IEMS Reserve Medic 023' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD024' AS unit_identifier, 'IEMS Medic 024' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD025' AS unit_identifier, 'IEMS Medic 025' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD026' AS unit_identifier, 'IEMS Medic 026' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD026R' AS unit_identifier, 'IEMS Reserve Medic 026' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD027' AS unit_identifier, 'IEMS Medic 027' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD029' AS unit_identifier, 'IEMS Medic 029' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD029R' AS unit_identifier, 'IEMS Reserve Medic 029' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD030' AS unit_identifier, 'IEMS Medic 030' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD030R' AS unit_identifier, 'IEMS Reserve Medic 030' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD031' AS unit_identifier, 'IEMS Medic 031' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD032' AS unit_identifier, 'IEMS Medic 032' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD035' AS unit_identifier, 'IEMS Medic 035' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD041' AS unit_identifier, 'IEMS Medic 041' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD042' AS unit_identifier, 'IEMS Medic 042' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD044' AS unit_identifier, 'IEMS Medic 044' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD044R' AS unit_identifier, 'IEMS Reserve Medic 044' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD045' AS unit_identifier, 'IEMS Medic 045' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD046' AS unit_identifier, 'IEMS Medic 046' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD047' AS unit_identifier, 'IEMS Medic 047' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD048' AS unit_identifier, 'IEMS Medic 048' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD049' AS unit_identifier, 'IEMS Medic 049' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD051' AS unit_identifier, 'IEMS Medic 051' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD052' AS unit_identifier, 'IEMS Medic 052' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD053' AS unit_identifier, 'IEMS Medic 053' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD053R' AS unit_identifier, 'IEMS Reserve Medic 053' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD054' AS unit_identifier, 'IEMS Medic 054' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD081' AS unit_identifier, 'IEMS Medic 081' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD082' AS unit_identifier, 'IEMS Medic 082' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD083' AS unit_identifier, 'IEMS Medic 083' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD084' AS unit_identifier, 'IEMS Medic 084' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD085' AS unit_identifier, 'IEMS Medic 085' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD089' AS unit_identifier, 'IEMS Medic 089' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD089R' AS unit_identifier, 'IEMS Reserve Medic 089' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD091' AS unit_identifier, 'IEMS Medic 91 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD092' AS unit_identifier, 'IEMS Medic 92 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD093' AS unit_identifier, 'IEMS Medic 93 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD094' AS unit_identifier, 'IEMS Medic 94 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD095' AS unit_identifier, 'IEMS Medic 95 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD096' AS unit_identifier, 'IEMS Medic 96 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD097' AS unit_identifier, 'IEMS Medic 97 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD098' AS unit_identifier, 'IEMS Medic 98 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD099' AS unit_identifier, 'IEMS Medic 99 SET' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'OC' AS unit_identifier, 'IEMS Operations Command' AS unit_name
+) v
+JOIN `iems_counties` c ON c.`county_number` = v.`county_number`
+JOIN `iems_agencies` a ON a.`county_ID` = c.`county_ID` AND a.`agency_identifier` = v.`agency_identifier`;
 
 -- ----------------------------------------------------------------------------
 -- Audit log entry for this import run
@@ -388,6 +513,6 @@ VALUES
    'Full Indiana county reference list (92 counties), zero-padded 2-digit state county-code numbering.'),
   ('iems_agencies', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-02', 'dev-seed', 123,
    'Imported from legacy iems_agencies_old dump (123 rows). 3 data corrections applied and confirmed with data owner: agency_id 17 county corrected 28->29 (Cicero is in Hamilton County); agency_id 72 identifier changed EHS->EHPD (Eskenazi Health Police Department, to resolve duplicate EHS identifier); agency_id 73 assigned identifier FH (Franciscan Health EMS Education, had no distinct code in source).'),
-  ('iems_units', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-02', 'dev-seed', 0,
-   'Schema only -- no rows imported. Awaiting authoritative unit dataset.');
+  ('iems_units', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-03', 'dev-seed', 109,
+   'Imported from legacy iems_units_old dump (146 rows), Marion County only. Reconciliation confirmed with data owner: excluded old_id=1 UI placeholder row (blank county/agency); deduped exact-duplicate MD019 row (old ids 101/102); dropped 3 superseded "(OLD)" rows for MD097/MD098/MD099, keeping the "SET" successor rows; shortened oversized code IEMS_TFEDIN (11 chars) to FED_TEMS (old_id 81); kept "SET" suffix in unit_name for MD091-MD099 as directed. 32 rows with no distinct legacy unit code (pure location/functional names, e.g. EHS clinic sites, IPSF/AIC/IMPD/SLEH self-referential rows) are DEFERRED -- data owner will assign unit_identifier values case-by-case in a follow-up pass; not auto-generated.');
 

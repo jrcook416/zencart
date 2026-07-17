@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'HEADING_IEMS_AFFILIATION' => 'Affiliation Details',
     'ENTRY_IEMS_COUNTY' => 'County',
     'ENTRY_IEMS_AGENCY' => 'Agency',
     'ERROR_IEMS_COUNTY_REQUIRED' => 'Please select your county.',

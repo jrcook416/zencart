@@ -25,6 +25,7 @@ $iemsPlaceholder = defined('PULL_DOWN_DEFAULT') ? PULL_DOWN_DEFAULT : 'Please Se
 
 $iemsCountyLabel = defined('ENTRY_IEMS_COUNTY') ? ENTRY_IEMS_COUNTY : 'County';
 $iemsAgencyLabel = defined('ENTRY_IEMS_AGENCY') ? ENTRY_IEMS_AGENCY : 'Agency';
+$iemsAffiliationHeading = defined('HEADING_IEMS_AFFILIATION') ? HEADING_IEMS_AFFILIATION : 'Affiliation Details';
 
 $iemsCountyRequired = ($iemsSelectedCountyId > 0) ? '' : ' required';
 $iemsAgencyRequired = ($iemsSelectedAgencyId > 0) ? '' : ' required';
@@ -66,7 +67,7 @@ if (zen_config('ACCOUNT_COMPANY') === 'true') {
 }
 ?>
     <div id="iemsAffiliation-card" class="card mb-3">
-        <h4 id="iemsAffiliation-card-header" class="card-header"><?= HEADING_CONTACT_DETAILS ?></h4>
+        <h4 id="iemsAffiliation-card-header" class="card-header"><?= $iemsAffiliationHeading ?></h4>
         <div id="iemsAffiliation-card-body" class="card-body p-3">
             <label class="inputLabel" for="iems-county-id"><?= $iemsCountyLabel ?></label>
             <select name="iems_county_id" id="iems-county-id" class="form-control"<?= $iemsCountyRequired ?>>

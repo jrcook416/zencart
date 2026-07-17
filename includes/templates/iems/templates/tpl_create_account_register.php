@@ -26,6 +26,8 @@ $iemsAgencyOptions = $iemsAgencyOptionsByCounty[$iemsSelectedCountyId] ?? [];
 $iemsPlaceholder = defined('PULL_DOWN_DEFAULT') ? PULL_DOWN_DEFAULT : 'Please Select';
 $iemsCountyLabel = defined('ENTRY_IEMS_COUNTY') ? ENTRY_IEMS_COUNTY : 'County';
 $iemsAgencyLabel = defined('ENTRY_IEMS_AGENCY') ? ENTRY_IEMS_AGENCY : 'Agency';
+$iemsAffiliationHeading = defined('HEADING_IEMS_AFFILIATION') ? HEADING_IEMS_AFFILIATION : 'Affiliation Details';
+$contactDetailsHeading = defined('HEADING_CONTACT_DETAILS') ? HEADING_CONTACT_DETAILS : 'Contact Details';
 $iemsAgencyOptionsJson = json_encode(
     $iemsAgencyOptionsByCounty,
     JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
@@ -62,7 +64,7 @@ if (zen_config('ACCOUNT_COMPANY') === 'true') {
 }
 ?>
     <div class="card mb-3">
-        <h4 class="card-header"><?= HEADING_CONTACT_DETAILS ?></h4>
+        <h4 class="card-header"><?= $iemsAffiliationHeading ?></h4>
         <div class="card-body">
             <label class="inputLabel" for="iems-county-id-register"><?= $iemsCountyLabel ?></label>
             <select name="iems_county_id" id="iems-county-id-register" class="form-control" required>
@@ -93,7 +95,7 @@ foreach ($iemsAgencyOptions as $agencyOption) {
     </div>
 
     <div class="card mb-3">
-        <h4 class="card-header"><?= HEADING_CONTACT_DETAILS ?></h4>
+        <h4 class="card-header"><?= $contactDetailsHeading ?></h4>
         <div class="card-body">
 <?php
 if (zen_config('ACCOUNT_GENDER') === 'true') {

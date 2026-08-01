@@ -6,3 +6,5 @@
 $define = [
     'BOX_CONFIGURATION_IEMS_SETTINGS' => 'IEMS Settings',
 ];
+
+return $define;

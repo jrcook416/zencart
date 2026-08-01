@@ -22,6 +22,87 @@ if ($messageStack->size('account_edit') > 0){
     echo $messageStack->output('account_edit');
 }
 ?>
+<?php
+$iemsCountyOptions          = is_array($GLOBALS['iems_county_options'] ?? null) ? $GLOBALS['iems_county_options'] : [];
+$iemsAgencyOptionsByCounty  = is_array($GLOBALS['iems_agency_options_by_county'] ?? null) ? $GLOBALS['iems_agency_options_by_county'] : [];
+$iemsSelectedCountyId       = (int)($GLOBALS['iems_selected_county_id'] ?? 0);
+$iemsSelectedAgencyId       = (int)($GLOBALS['iems_selected_agency_id'] ?? 0);
+$iemsAgencyOptions          = $iemsAgencyOptionsByCounty[$iemsSelectedCountyId] ?? [];
+$iemsPlaceholder            = defined('PULL_DOWN_DEFAULT') ? PULL_DOWN_DEFAULT : 'Please Select';
+$iemsCountyLabel            = defined('ENTRY_IEMS_COUNTY') ? ENTRY_IEMS_COUNTY : 'County';
+$iemsAgencyLabel            = defined('ENTRY_IEMS_AGENCY') ? ENTRY_IEMS_AGENCY : 'Agency';
+$iemsAffiliationHeading     = defined('HEADING_IEMS_AFFILIATION') ? HEADING_IEMS_AFFILIATION : 'Affiliation Details';
+$iemsAgencyOptionsJson      = json_encode(
+    $iemsAgencyOptionsByCounty,
+    JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+);
+?>
+<!--bof iems affiliation card-->
+    <div id="iemsAffiliation-card" class="card mb-3">
+        <div id="iemsAffiliation-card-header" class="card-header"><h4><?= $iemsAffiliationHeading ?></h4></div>
+        <div id="iemsAffiliation-card-body" class="card-body p-3">
+            <label class="inputLabel" for="iems-county-id-edit"><?= $iemsCountyLabel ?></label>
+            <select name="iems_county_id" id="iems-county-id-edit" class="form-control" required>
+                <option value=""><?= htmlspecialchars($iemsPlaceholder, ENT_QUOTES, CHARSET, true) ?></option>
+<?php
+foreach ($iemsCountyOptions as $countyOption) {
+    $countyId   = (int)($countyOption['id'] ?? 0);
+    $countyText = htmlspecialchars((string)($countyOption['text'] ?? ''), ENT_QUOTES, CHARSET, true);
+    $selected   = ($countyId === $iemsSelectedCountyId) ? ' selected' : '';
+    echo '                <option value="' . $countyId . '"' . $selected . '>' . $countyText . '</option>' . "\n";
+}
+?>
+            </select>
+
+            <div class="p-2"></div>
+            <label class="inputLabel" for="iems-agency-id-edit"><?= $iemsAgencyLabel ?></label>
+            <select name="iems_agency_id" id="iems-agency-id-edit" class="form-control" required>
+                <option value=""><?= htmlspecialchars($iemsPlaceholder, ENT_QUOTES, CHARSET, true) ?></option>
+<?php
+foreach ($iemsAgencyOptions as $agencyOption) {
+    $agencyId   = (int)($agencyOption['id'] ?? 0);
+    $agencyText = htmlspecialchars((string)($agencyOption['text'] ?? ''), ENT_QUOTES, CHARSET, true);
+    $selected   = ($agencyId === $iemsSelectedAgencyId) ? ' selected' : '';
+    echo '                <option value="' . $agencyId . '"' . $selected . '>' . $agencyText . '</option>' . "\n";
+}
+?>
+            </select>
+        </div>
+    </div>
+<!--eof iems affiliation card-->
+<script>
+(() => {
+    const countySelect = document.getElementById('iems-county-id-edit');
+    const agencySelect = document.getElementById('iems-agency-id-edit');
+    if (!countySelect || !agencySelect) {
+        return;
+    }
+
+    const agencyOptionsByCounty = <?= $iemsAgencyOptionsJson ?: '{}' ?>;
+    const initialAgency         = '<?= (int)$iemsSelectedAgencyId ?>';
+    const placeholder           = '<?= htmlspecialchars($iemsPlaceholder, ENT_QUOTES, CHARSET, true) ?>';
+
+    const rebuildAgencies = (preserveSelected = false) => {
+        const countyId       = countySelect.value;
+        const agencies       = agencyOptionsByCounty[countyId] || [];
+        const selectedAgency = preserveSelected ? agencySelect.value : initialAgency;
+
+        agencySelect.innerHTML = '';
+        agencySelect.append(new Option(placeholder, ''));
+        agencies.forEach((agency) => {
+            const option = new Option(agency.text, String(agency.id));
+            if (String(agency.id) === String(selectedAgency)) {
+                option.selected = true;
+            }
+            agencySelect.append(option);
+        });
+    };
+
+    countySelect.addEventListener('change', () => rebuildAgencies(false));
+    rebuildAgencies(true);
+})();
+</script>
+
 <!--bof my account information card-->
     <div id="myAccountInfo-card" class="card mb-3">
         <div id="myAccountInfo-card-header" class="card-header"><?= '<h2>' . HEADING_TITLE . '</h2>' ?></div>

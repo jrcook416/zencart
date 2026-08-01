@@ -372,19 +372,16 @@ JOIN `iems_counties` c ON c.`county_number` = v.`county_number`;
 -- Seed data: iems_units
 -- ============================================================================
 -- Imported and reconciled from legacy iems_units_old dump (146 rows), all for
--- Marion County (49). Only rows with a distinct legacy unit code are included
--- in this pass (109 rows). See reconciliation notes above the INSERT block
--- and the import log entry below for the full list of corrections/decisions,
+-- Marion County (49). This pass now includes both originally-coded units and
+-- previously deferred no-code rows that have now been assigned explicit unit
+-- identifiers by the data owner (141 rows total). See reconciliation notes and
+-- the import log entry below for the full list of corrections/decisions,
 -- all confirmed with the data owner.
 --
--- DEFERRED (not imported in this pass): 32 rows that never had a distinct
--- unit code in the legacy data (pure location/functional names only, e.g.
--- EHS clinic locations such as "Pecar CHC", "Blackburn CHC"; IEMS functional
--- units like "Safety Officer", "Logistics", "Indiana State Fair"; and the
--- self-referential IPSF/AIC/IMPD/SLEH rows where the "unit" is just the
--- agency's own name). The data owner will assign unit_identifier values for
--- these case-by-case in a follow-up pass -- do not auto-generate codes for
--- them.
+-- Not imported from legacy source:
+--   - old_id=1 UI placeholder row ("00 PLEASE PICK YOUR UNIT")
+--   - one exact duplicate MD019 row (old ids 101/102; one retained)
+--   - three superseded "(OLD)" rows for MD097/MD098/MD099 (SET successors retained)
 -- ============================================================================
 
 INSERT INTO iems_units (county_ID, agency_ID, unit_identifier, unit_name)
@@ -394,6 +391,23 @@ FROM (
   UNION ALL SELECT '49' AS county_number, 'EHPT' AS agency_identifier, 'AMB002' AS unit_identifier, 'Eskenazi Transportation Services Ambulance 002' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'EHPT' AS agency_identifier, 'AMB003' AS unit_identifier, 'Eskenazi Transportation Services Ambulance 003' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'EHPT' AS agency_identifier, 'AMB004' AS unit_identifier, 'Eskenazi Transportation Services Ambulance 004' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'AIC' AS unit_identifier, 'Assessment and Intervention Center' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'BACHC' AS unit_identifier, 'Barton Annex CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'BLKCHC' AS unit_identifier, 'Blackburn CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'CCDENT' AS unit_identifier, 'Cottage Corner Dental Clinic' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'EAGCHC' AS unit_identifier, 'Eagledale CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'EHGEN' AS unit_identifier, 'Eskenazi Health General' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'EHSPD' AS unit_identifier, 'Eskenazi Health Police Department' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'FMCHC' AS unit_identifier, 'Forest Manor CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'GCCHC' AS unit_identifier, 'Grassy Creek CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'LINCHC' AS unit_identifier, 'Linwood CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'MEACHC' AS unit_identifier, 'Meadows CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'NACHC' AS unit_identifier, 'North Arlington CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'PECCHC' AS unit_identifier, 'Pecar CHC' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'W38CHC' AS unit_identifier, 'West 38th Street Clinic' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'W38DENT' AS unit_identifier, 'West 38th Street Dental' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'W38URG' AS unit_identifier, 'West 38th Street Urgent Care' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'EHS' AS agency_identifier, 'WESTCHC' AS unit_identifier, 'Westside CHC' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM001' AS unit_identifier, 'IEMS Ambulance 001' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM003' AS unit_identifier, 'IEMS Ambulance 003' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'AM005' AS unit_identifier, 'IEMS Ambulance 005' AS unit_name
@@ -424,11 +438,19 @@ FROM (
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS092' AS unit_identifier, 'IEMS District Medic EMS092' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS093' AS unit_identifier, 'IEMS District Medic EMS093' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EMS094' AS unit_identifier, 'IEMS District Medic EMS094' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'CHESTOCK' AS unit_identifier, 'Regional Stock Community East' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'CLOWES' AS unit_identifier, 'Clowes Hall' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'DOC' AS unit_identifier, 'Physicians' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'EVENTS' AS unit_identifier, 'Special Events' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'FLOAT' AS unit_identifier, 'Float' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'FLTRES' AS unit_identifier, 'Fleet Ready Reserve' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'FED_TEMS' AS unit_identifier, 'State Federal TEMS' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'GEN' AS unit_identifier, 'General Account' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'IEMSET' AS unit_identifier, 'IEMS Education and Training' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'IEMS_MIH' AS unit_identifier, 'IEMS Mobile Integrated Healthcare' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'IEMS_TERG' AS unit_identifier, 'IEMS ERG TEMS' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'IEMS_TIMPD' AS unit_identifier, 'IEMS IMPD TEMS' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'LOG' AS unit_identifier, 'Logistics' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD000' AS unit_identifier, 'IEMS Medic 000' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD001' AS unit_identifier, 'IEMS Medic 001' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD002' AS unit_identifier, 'IEMS Medic 002' AS unit_name
@@ -499,6 +521,13 @@ FROM (
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD098' AS unit_identifier, 'IEMS Medic 98 SET' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'MD099' AS unit_identifier, 'IEMS Medic 99 SET' AS unit_name
   UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'OC' AS unit_identifier, 'IEMS Operations Command' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'SAFETY' AS unit_identifier, 'Safety Officer' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, '3930STOCK' AS unit_identifier, 'Regional Stock Georgetown' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'STATEFAIR' AS unit_identifier, 'Indiana State Fair' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IEMS' AS agency_identifier, 'UNKNOWN' AS unit_identifier, 'Unknown Unit' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IMPD' AS agency_identifier, 'IMPD' AS unit_identifier, 'Indianapolis Metropolitan Police Department' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'IPSF' AS agency_identifier, 'IPSF' AS unit_identifier, 'Indianapolis Public Safety Foundation' AS unit_name
+  UNION ALL SELECT '49' AS county_number, 'SLEH' AS agency_identifier, 'SLEH' AS unit_identifier, 'Sidney and Lois Eskenazi Hospital' AS unit_name
 ) v
 JOIN `iems_counties` c ON c.`county_number` = v.`county_number`
 JOIN `iems_agencies` a ON a.`county_ID` = c.`county_ID` AND a.`agency_identifier` = v.`agency_identifier`;
@@ -513,6 +542,5 @@ VALUES
    'Full Indiana county reference list (92 counties), zero-padded 2-digit state county-code numbering.'),
   ('iems_agencies', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-02', 'dev-seed', 123,
    'Imported from legacy iems_agencies_old dump (123 rows). 3 data corrections applied and confirmed with data owner: agency_id 17 county corrected 28->29 (Cicero is in Hamilton County); agency_id 72 identifier changed EHS->EHPD (Eskenazi Health Police Department, to resolve duplicate EHS identifier); agency_id 73 assigned identifier FH (Franciscan Health EMS Education, had no distinct code in source).'),
-  ('iems_units', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-07-16-03', 'dev-seed', 109,
-   'Imported from legacy iems_units_old dump (146 rows), Marion County only. Reconciliation confirmed with data owner: excluded old_id=1 UI placeholder row (blank county/agency); deduped exact-duplicate MD019 row (old ids 101/102); dropped 3 superseded "(OLD)" rows for MD097/MD098/MD099, keeping the "SET" successor rows; shortened oversized code IEMS_TFEDIN (11 chars) to FED_TEMS (old_id 81); kept "SET" suffix in unit_name for MD091-MD099 as directed. 32 rows with no distinct legacy unit code (pure location/functional names, e.g. EHS clinic sites, IPSF/AIC/IMPD/SLEH self-referential rows) are DEFERRED -- data owner will assign unit_identifier values case-by-case in a follow-up pass; not auto-generated.');
-
+  ('iems_units', 'zc_install/sql/iems_custom/iems_foundation.sql', '2026-08-01-01', 'dev-seed', 141,
+   'Imported from legacy iems_units_old dump (146 rows), Marion County only. Reconciliation confirmed with data owner: excluded old_id=1 UI placeholder row (blank county/agency); deduped exact-duplicate MD019 row (old ids 101/102); dropped 3 superseded "(OLD)" rows for MD097/MD098/MD099, keeping the "SET" successor rows; shortened oversized code IEMS_TFEDIN (11 chars) to FED_TEMS (old_id 81); kept "SET" suffix in unit_name for MD091-MD099 as directed. Previously deferred no-code rows were mapped with explicit identifiers, including reidentifying AIC and Eskenazi Health Police Department as subordinate EHS units.');

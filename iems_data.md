@@ -35,15 +35,13 @@ Each table also carries a `status` flag (active/inactive) and `date_added` /
 
 ### Units import status (Marion County legacy data)
 
-109 of 146 legacy unit records have been imported. 32 records with no
-distinct unit code in the legacy data (pure location/functional names, e.g.
-EHS clinic locations, IEMS functional units like "Safety Officer", and the
-self-referential IPSF/AIC/IMPD/SLEH rows) are intentionally **deferred** —
-the data owner will assign `unit_identifier` values for these case-by-case
-in a follow-up pass rather than have them auto-generated. See the
-reconciliation notes and `iems_import_log` entry in
-`iems_foundation.sql` for the full list of corrections applied (duplicate
-removal, superseded "(OLD)" rows dropped, oversized identifier shortened).
+141 of 146 legacy unit records have been imported. The remaining 5 are
+intentional non-imports from source cleanup: one UI placeholder row, one
+exact duplicate MD019 row, and three superseded "(OLD)" MD097/MD098/MD099
+rows. Previously deferred no-code rows (EHS clinic locations, IEMS
+functional/location rows, and self-referential agency-name rows) have now
+been assigned explicit `unit_identifier` values and imported; see
+reconciliation notes and `iems_import_log` in `iems_foundation.sql`.
 
 ## 2) Constraints
 

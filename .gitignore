@@ -2,6 +2,7 @@ configure.php
 configure.php.save
 local/configure*.php
 /vendor
+/tmp/
 
 *.php1
 *.bak
@@ -10,20 +11,22 @@ devtools.php
 Thumbs.db
 clover.xml
 .DS_Store
-.phpunit.result.cache
 
 dev-*.*
 
 # IDE-specific things...
-# Ignore eclipse project files
+/.idea
+*.iml
+/.vscode
+/.cursor/
+/.zed
+/auth.json
+_ide_helper.php
+# Eclipse project files:
 .project
 .settings
 .buildpath
 
-# Ignore phpStorm/intellij configuration
-.idea
-*.iml
-.vscode
 
 # dbv
 /data/meta/revision
@@ -235,8 +238,22 @@ admin/includes/*.config.save
 #release process
 modified_files.txt
 
-# ddev
-.ddev
-
 # ensure test plugin is not checked in
 zc_plugins/zenTestPlugin
+
+# ignore ppr handler files:
+ppr_listener.php
+ppr_webhook.php
+
+# Tests, Linting and Analysis
+.phpunit.cache/
+.phpunit.result.cache
+.php-cs-fixer.php
+.php-cs-fixer.cache
+
+# local per-dev control
+CLAUDE.local.md
+settings.local.json
+.ddev
+
+

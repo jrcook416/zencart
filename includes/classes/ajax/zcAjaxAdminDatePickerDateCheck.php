@@ -1,20 +1,27 @@
 <?php
+
 /**
  * zcAjaxAdminDateCheck
  *
  * @copyright Copyright 2003-2025 Zen Cart Development Team
  * @license https://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: DrByte 2025 Sep 18 Modified in v2.2.0 $
+ *
  * @since ZC v2.0.0
  */
 class zcAjaxAdminDatePickerDateCheck extends base
 {
+    /** @var list<string> */
+    public const ALLOWED_METHODS = [
+        'check',
+    ];
+
     /**
-     * check.  Checks a 'datepicker' date for validity
+     * Checks a 'datepicker' date for validity
      *
      * @since ZC v2.0.0
      */
-    public function check()
+    public function check(): string
     {
         // -----
         // Deny access unless running under the admin.
@@ -36,7 +43,7 @@ class zcAjaxAdminDatePickerDateCheck extends base
             $dt = DateTime::createFromFormat($local_fmt, $date_raw);
             $date_raw = false;
             if (!empty($dt)) {
-              $date_raw = $dt->format('Y-m-d');
+                $date_raw = $dt->format('Y-m-d');
             }
         }
         return ($date_raw !== false && zcDate::validateDate($date_raw) === true) ? 'true' : 'false';

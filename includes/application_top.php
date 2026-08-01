@@ -206,6 +206,8 @@ if (!$contaminated && isset($_GET['action']) && $_GET['action'] === 'buy_now') {
         $contaminated = true;
     }
 }
+
+
 if ($contaminated) {
     header('HTTP/1.1 406 Not Acceptable');
     exit(0);

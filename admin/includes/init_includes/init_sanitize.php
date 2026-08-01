@@ -212,7 +212,7 @@ $group = [
     'tax_class_description', 'tax_class_title', 'tax_description', 'entry_company', 'customers_firstname',
     'customers_lastname', 'entry_street_address', 'entry_suburb', 'entry_city', 'entry_state', 'customers_referral',
     'symbol_left', 'symbol_right', 'products_model', 'alt_url', 'email_to_name', 'zone_page', 'search',
-    'referrer_domain',
+    'referrer_domain', 'comments',
 ];
 $sanitizer->addSimpleSanitization('WORDS_AND_SYMBOLS_REGEX', $group);
 
@@ -237,7 +237,7 @@ $sanitizer->addSimpleSanitization('FILE_PATH_OR_URL', $group);
 $group = ['coupon_min_order'];
 $sanitizer->addSimpleSanitization('CURRENCY_VALUE_REGEX', $group);
 
-$group = ['categories_name', 'products_name', 'orders_status_name', 'configuration'];
+$group = ['categories_name', 'products_name', 'orders_status_name', 'configuration', 'original'];
 $sanitizer->addSimpleSanitization('PRODUCT_NAME_DEEP_REGEX', $group);
 
 $group = ['configuration_key', 'query_string'];

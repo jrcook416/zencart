@@ -245,6 +245,12 @@ class paypaldp extends base {
      * @var string
      */
      public  $transactiontype;
+
+    /**
+     * A copy of MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY, so that the constant's
+     * availability can be registered.
+     */
+     protected ?string $merchant_country;
   /**
    * class constructor
    */
@@ -255,11 +261,12 @@ class paypaldp extends base {
     $this->codeVersion = '1.5.8';
     $this->enableDirectPayment = true;
     $this->enabled = (defined('MODULE_PAYMENT_PAYPALDP_STATUS') && (MODULE_PAYMENT_PAYPALDP_STATUS === 'True' || (IS_ADMIN_FLAG === true && MODULE_PAYMENT_PAYPALDP_STATUS === 'Retired')));
+    $this->merchant_country = (defined('MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY')) ? MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY : null;
     // Set the title & description text based on the mode we're in
     if (IS_ADMIN_FLAG === true) {
       $this->description = sprintf(MODULE_PAYMENT_PAYPALDP_TEXT_ADMIN_DESCRIPTION, ' (rev' . $this->codeVersion . ')');
 
-      $merchant_country = (defined('MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY')) ? MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY : null;
+      $merchant_country = $this->merchant_country;
       $country = $merchant_country ?? STORE_COUNTRY;
       $this->title = $country == '223' || $country == 'USA' ? MODULE_PAYMENT_PAYPALDP_TEXT_ADMIN_TITLE_WPP : MODULE_PAYMENT_PAYPALDP_TEXT_ADMIN_TITLE_NONUSA;
       $this->title .= ($merchant_country !== null) ? " ($merchant_country)" : '';
@@ -285,7 +292,7 @@ class paypaldp extends base {
     $this->enableDebugging = (MODULE_PAYMENT_PAYPALDP_DEBUGGING == 'Log File' || MODULE_PAYMENT_PAYPALDP_DEBUGGING =='Log and Email');
     $this->emailAlerts = (MODULE_PAYMENT_PAYPALDP_DEBUGGING == 'Log File' || MODULE_PAYMENT_PAYPALDP_DEBUGGING =='Log and Email' || MODULE_PAYMENT_PAYPALDP_DEBUGGING == 'Alerts Only');
 
-    $this->buttonSource = (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK') ? 'ZenCart-DP_uk' : 'ZenCart-DP_us';
+    $this->buttonSource = ($this->merchant_country == 'UK') ? 'ZenCart-DP_uk' : 'ZenCart-DP_us';
 
     $this->order_pending_status = MODULE_PAYMENT_PAYPALDP_ORDER_PENDING_STATUS_ID;
     if ((int)MODULE_PAYMENT_PAYPALDP_ORDER_STATUS_ID > 0) {
@@ -297,7 +304,7 @@ class paypaldp extends base {
 
     // offer credit card choices for pull-down menu -- only needed for UK version
     $this->cards = array();
-    if (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK') {
+    if ($this->merchant_country == 'UK') {
       if (CC_ENABLED_VISA=='1')    $this->cards[] = array('id' => 'Visa', 'text' => 'Visa');
       if (CC_ENABLED_MC=='1')      $this->cards[] = array('id' => 'MasterCard', 'text' => 'MasterCard');
       if (CC_ENABLED_MAESTRO=='1') $this->cards[] = array('id' => 'Maestro', 'text' => 'Maestro');
@@ -310,7 +317,7 @@ class paypaldp extends base {
     // the PayFlow-UK mode is currently in use, that class variable is 'reset' to enable the 3DS handling
     // to proceed without issue.
     //
-    if (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY === 'UK' || (MODULE_PAYMENT_PAYPALWPP_PFVENDOR !== '' && MODULE_PAYMENT_PAYPALWPP_PFPASSWORD !== '')) {
+    if ($this->merchant_country === 'UK' || (MODULE_PAYMENT_PAYPALWPP_PFVENDOR !== '' && MODULE_PAYMENT_PAYPALWPP_PFPASSWORD !== '')) {
       $this->collectsCardDataOnsite = false;
     }
 
@@ -474,7 +481,7 @@ class paypaldp extends base {
                        'module' => MODULE_PAYMENT_PAYPALDP_TEXT_TITLE,
                        'fields' => $fieldsArray);
 
-    if (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK' && (CC_ENABLED_MAESTRO=='1' || CC_ENABLED_SOLO=='1')) {
+    if ($this->merchant_country == 'UK' && (CC_ENABLED_MAESTRO=='1' || CC_ENABLED_SOLO=='1')) {
       // add extra fields for UK cards
       for ($i = $today['year'] - 10; $i <= $today['year']; $i++) {
         $issue_year[] = array('id' => $zcDate->output('%y', mktime(0,0,0,1,1,$i)), 'text' => $zcDate->output('%Y', mktime(0,0,0,1,1,$i)));
@@ -545,6 +552,7 @@ class paypaldp extends base {
     $this->cc_expiry_month = $cc_validation->cc_expiry_month;
     $this->cc_expiry_year = $cc_validation->cc_expiry_year;
     $this->cc_checkcode = $_POST['paypalwpp_cc_checkcode'];
+    $_SESSION['paypaldp_cc_checkcode'] = $_POST['paypalwpp_cc_checkcode'];
 
 
     // In the case of UK cards, hook 3D-Secure if appropriate
@@ -564,7 +572,7 @@ class paypaldp extends base {
      * transactions using credit and debit cards that are unable to be
      * authenticated to complete and proceed with authorization.
      */
-    if (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK' && (!isset($_POST['MD']))) {
+    if ($this->merchant_country == 'UK' && (!isset($_POST['MD']))) {
       if (isset($_SESSION['3Dsecure_auth_status']) && isset($_SESSION['3Dsecure_auth_xid']) && isset($_SESSION['3Dsecure_auth_cavv']) && isset($_SESSION['3Dsecure_auth_eci'])) {
         // at this point we have 3d-secure auth data
       } else {
@@ -679,9 +687,9 @@ class paypaldp extends base {
     global $zcDate;
     $confirmation = array('title' => '',
                           'fields' => array(array('title' => MODULE_PAYMENT_PAYPALDP_TEXT_CREDIT_CARD_FIRSTNAME,
-                                                  'field' => $_POST['paypalwpp_cc_firstname']),
+                                                  'field' => zen_output_string_protected($_POST['paypalwpp_cc_firstname'])),
                                             array('title' => MODULE_PAYMENT_PAYPALDP_TEXT_CREDIT_CARD_LASTNAME,
-                                                  'field' => $_POST['paypalwpp_cc_lastname']),
+                                                  'field' => zen_output_string_protected($_POST['paypalwpp_cc_lastname'])),
                                             array('title' => MODULE_PAYMENT_PAYPALDP_TEXT_CREDIT_CARD_TYPE,
                                                   'field' => $this->cc_card_type),
                                             array('title' => MODULE_PAYMENT_PAYPALDP_TEXT_CREDIT_CARD_NUMBER,
@@ -689,10 +697,10 @@ class paypaldp extends base {
                                             array('title' => MODULE_PAYMENT_PAYPALDP_TEXT_CREDIT_CARD_EXPIRES,
                                                   'field' => $zcDate->output('%B, %Y', mktime(0,0,0,$_POST['paypalwpp_cc_expires_month'], 1, '20' . $_POST['paypalwpp_cc_expires_year'])),
                                             (isset($_POST['paypalwpp_cc_issuenumber']) ? array('title' => MODULE_PAYMENT_PAYPALDP_TEXT_ISSUE_NUMBER,
-                                                  'field' => $_POST['paypalwpp_cc_issuenumber']) : '')
+                                                  'field' => zen_output_string_protected($_POST['paypalwpp_cc_issuenumber'])) : ''),
                                             )));
     // 3D-Secure
-    if (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK' && $this->requiresLookup($_POST['paypalwpp_cc_number']) == true) {
+    if ($this->merchant_country == 'UK' && $this->requiresLookup($_POST['paypalwpp_cc_number']) == true) {
           $confirmation['fields'][count($confirmation['fields'])] = array(
               'title' => '',
               'field' => '<div id="' . $this->code.'-cc-securetext"><p>' .
@@ -712,16 +720,17 @@ class paypaldp extends base {
     global $order;
     $_SESSION['paypal_ec_markflow'] = 1;
     $process_button_string = '';
-    $process_button_string .= "\n" . zen_draw_hidden_field('wpp_cc_type', $_POST['paypalwpp_cc_type'] ?? '') . "\n" .
-        zen_draw_hidden_field('wpp_cc_expdate_month', $_POST['paypalwpp_cc_expires_month'] ?? '') . "\n" .
-        zen_draw_hidden_field('wpp_cc_expdate_year', $_POST['paypalwpp_cc_expires_year'] ?? '') . "\n" .
-        zen_draw_hidden_field('wpp_cc_issuedate_month', $_POST['paypalwpp_cc_issue_month'] ?? '') . "\n" .
-        zen_draw_hidden_field('wpp_cc_issuedate_year', $_POST['paypalwpp_cc_issue_year'] ?? '') . "\n" .
-        zen_draw_hidden_field('wpp_cc_issuenumber', $_POST['paypalwpp_cc_issuenumber'] ?? '') . "\n" .
-        zen_draw_hidden_field('wpp_cc_number', $_POST['paypalwpp_cc_number']) . "\n" .
-        zen_draw_hidden_field('wpp_cc_checkcode', $_POST['paypalwpp_cc_checkcode']) . "\n" .
-        zen_draw_hidden_field('wpp_payer_firstname', $_POST['paypalwpp_cc_firstname']) . "\n" .
-        zen_draw_hidden_field('wpp_payer_lastname', $_POST['paypalwpp_cc_lastname']) . "\n";
+    if (empty($this->collectsCardDataOnsite)) {
+      $process_button_string .= "\n" . zen_draw_hidden_field('wpp_cc_type', $_POST['paypalwpp_cc_type'] ?? '') . "\n" .
+          zen_draw_hidden_field('wpp_cc_expdate_month', $_POST['paypalwpp_cc_expires_month'] ?? '') . "\n" .
+          zen_draw_hidden_field('wpp_cc_expdate_year', $_POST['paypalwpp_cc_expires_year'] ?? '') . "\n" .
+          zen_draw_hidden_field('wpp_cc_issuedate_month', $_POST['paypalwpp_cc_issue_month'] ?? '') . "\n" .
+          zen_draw_hidden_field('wpp_cc_issuedate_year', $_POST['paypalwpp_cc_issue_year'] ?? '') . "\n" .
+          zen_draw_hidden_field('wpp_cc_issuenumber', $_POST['paypalwpp_cc_issuenumber'] ?? '') . "\n" .
+          zen_draw_hidden_field('wpp_cc_number', $_POST['paypalwpp_cc_number']) . "\n" .
+          zen_draw_hidden_field('wpp_payer_firstname', $_POST['paypalwpp_cc_firstname']) . "\n" .
+          zen_draw_hidden_field('wpp_payer_lastname', $_POST['paypalwpp_cc_lastname']) . "\n";
+    }
     $process_button_string .= zen_draw_hidden_field(zen_session_name(), zen_session_id());
     return $process_button_string;
   }
@@ -729,6 +738,7 @@ class paypaldp extends base {
    * @since ZC v1.5.4
    */
   function process_button_ajax() {
+    $_SESSION['paypaldp_ajax_relay'] = true;
     $processButton = array('ccFields'=>array('wpp_cc_type'=>'paypalwpp_cc_type',
         'wpp_cc_expdate_month'=>'paypalwpp_cc_expires_month',
         'wpp_cc_expdate_year'=>'paypalwpp_cc_expires_year',
@@ -736,7 +746,7 @@ class paypaldp extends base {
         'wpp_cc_issuedate_year'=>'paypalwpp_cc_issue_year',
         'wpp_cc_issuenumber'=>'paypalwpp_cc_issuenumber',
         'wpp_cc_number'=>'paypalwpp_cc_number',
-        'wpp_cc_checkcode'=>'paypalwpp_cc_checkcode',
+        // wpp_cc_checkcode is deliberately excluded here
         'wpp_payer_firstname'=>'paypalwpp_cc_firstname',
         'wpp_payer_lastname'=>'paypalwpp_cc_lastname',
     ), 'extraFields'=>array(zen_session_name()=>zen_session_id()));
@@ -748,6 +758,14 @@ class paypaldp extends base {
    */
   function before_process() {
     global $order, $doPayPal, $messageStack;
+    $cameFromAjaxRelay = !empty($_SESSION['paypaldp_ajax_relay']);
+    unset($_SESSION['paypaldp_ajax_relay']);
+    if (!empty($this->collectsCardDataOnsite) && $cameFromAjaxRelay === false) {
+      unset($_SESSION['paypaldp_cc_checkcode']);
+      $messageStack->add_session('checkout_payment', MODULE_PAYMENT_PAYPALDP_CANNOT_BE_COMPLETED . '<!-- [' . $this->code . '] onsite-relay-required -->', 'error');
+      zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL', true, false));
+    }
+
     $options = array();
     $optionsShip = array();
     $optionsNVP = array();
@@ -806,7 +824,7 @@ class paypaldp extends base {
       $cc_number = $cc_validation->cc_number;
       $cc_first_name = ($_POST['wpp_payer_firstname'] != '' ? $_POST['wpp_payer_firstname'] : $_SESSION['customer_first_name']);
       $cc_last_name = ($_POST['wpp_payer_lastname'] != '' ? $_POST['wpp_payer_lastname'] : $_SESSION['customer_last_name']);
-      $cc_checkcode = $_POST['wpp_cc_checkcode'];
+      $cc_checkcode = $_SESSION['paypaldp_cc_checkcode'] ?? '';
       $cc_expdate_month = $cc_validation->cc_expiry_month;
       $cc_expdate_year = $cc_validation->cc_expiry_year;
       $cc_issuedate_month = $_POST['wpp_cc_issuedate_month'];
@@ -835,7 +853,7 @@ class paypaldp extends base {
 
 
       // 3D-Secure
-      if (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK') {
+      if ($this->merchant_country == 'UK') {
         // determine the card type and validate that authentication was attempted and completed if applicable
         if (($_SESSION['3Dsecure_requires_lookup'] || $this->requiresLookup($_POST['wpp_cc_number']) == true)) {  // authentication attempt required?
             $secureflags = [];
@@ -947,7 +965,7 @@ class paypaldp extends base {
 //       $optionsAll['SOFTDESCRIPTOR'] = substr(preg_replace('/[^a-zA-Z0-9. ]/', '', STORE_NAME), 0, 23);
 //       $optionsAll['SOFTDESCRIPTORCITY'] = substr(preg_replace('/[^a-zA-Z0-9. !,' . preg_quote('"$%&\'()+-*/:;<=>?@') . ']/', '', STORE_TELEPHONE_CUSTSERVICE), 0, 23);
 
-      if (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK' || (MODULE_PAYMENT_PAYPALWPP_PFVENDOR != '' && MODULE_PAYMENT_PAYPALWPP_PFPASSWORD != '')) { // Payflow params required
+      if ($this->merchant_country == 'UK' || (MODULE_PAYMENT_PAYPALWPP_PFVENDOR != '' && MODULE_PAYMENT_PAYPALWPP_PFPASSWORD != '')) { // Payflow params required
         if (isset($optionsAll['COUNTRYCODE'])) {
           $optionsAll['COUNTRY'] = $optionsAll['COUNTRYCODE'];
           unset($optionsAll['COUNTRYCODE']);
@@ -969,6 +987,8 @@ class paypaldp extends base {
                                            $cc_first_name, $cc_last_name,
                                            $cc_type,
                                            $optionsAll, array_merge($optionsNVP, $optionsShip));
+
+      unset($_SESSION['paypaldp_cc_checkcode']);
 
       $this->zcLog('before_process - DP-5', 'resultset:' . "\n" . urldecode(print_r($response, true)));
 
@@ -1052,7 +1072,7 @@ class paypaldp extends base {
     $paypal_order = array('order_id' => $insert_id,
                           'txn_type' => $this->transactiontype,
                           'module_name' => $this->code,
-                          'module_mode' => MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY,
+                          'module_mode' => (string)$this->merchant_country,
                           'reason_code' => $this->reasoncode,
                           'payment_type' => $this->payment_type,
                           'payment_status' => $this->payment_status,
@@ -1180,7 +1200,7 @@ class paypaldp extends base {
     /**
      * Read data from PayPal
      */
-    $response = $doPayPal->TransactionSearch($startDate, $txnID, $email, $criteria);
+    $response = $doPayPal->TransactionSearch($startDate, $txnID, $email ?? '', $criteria);
 
     $error = $this->_errorHandler($response, 'TransactionSearch');
     if ($error === false) {
@@ -1319,7 +1339,7 @@ class paypaldp extends base {
   function paypal_init() {
     $nvp = (MODULE_PAYMENT_PAYPALWPP_APIPASSWORD != '' && MODULE_PAYMENT_PAYPALWPP_APISIGNATURE != '') ? true : false;
     $ec = ($nvp && isset($_GET['type']) && $_GET['type'] == 'ec') ? true : false;
-    if (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK' && !$ec) {
+    if ($this->merchant_country == 'UK' && !$ec) {
       $doPayPal = new paypal_curl(array('mode' => 'payflow',
                                         'user' =>   trim(MODULE_PAYMENT_PAYPALWPP_PFUSER),
                                         'vendor' => trim(MODULE_PAYMENT_PAYPALWPP_PFVENDOR),
@@ -1541,7 +1561,7 @@ class paypaldp extends base {
     $dpus_currencies = array('CAD', 'EUR', 'GBP', 'JPY', 'USD', 'AUD');
 
     // in USA, only 6 currencies are supported. But UK and Canada support 16 currencies (as of Jan 2011):
-    $paypalSupportedCurrencies = (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK' || MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'Canada') ? $dp_currencies : $dpus_currencies;
+    $paypalSupportedCurrencies = ($this->merchant_country == 'UK' || $this->merchant_country == 'Canada') ? $dp_currencies : $dpus_currencies;
 
     $my_currency = substr(MODULE_PAYMENT_PAYPALDP_CURRENCY, 5);
     if (MODULE_PAYMENT_PAYPALDP_CURRENCY == 'Selected Currency') {
@@ -1549,7 +1569,7 @@ class paypaldp extends base {
     }
 
     if (!in_array($my_currency, $paypalSupportedCurrencies)) {
-      $my_currency = (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'UK') ? 'GBP' : (MODULE_PAYMENT_PAYPALDP_MERCHANT_COUNTRY == 'Canada' ? 'CAD' : 'USD');
+      $my_currency = ($this->merchant_country == 'UK') ? 'GBP' : ($this->merchant_country == 'Canada' ? 'CAD' : 'USD');
     }
     return $my_currency;
   }
@@ -2026,7 +2046,7 @@ class paypaldp extends base {
            ((isset($_SESSION['paypal_ec_token']) && isset($response['TOKEN'])) && $_SESSION['paypal_ec_token'] != urldecode($response['TOKEN'])) ) {
             // Error, so send the store owner a complete dump of the transaction.
           if ($this->enableDebugging) {
-            $this->_doDebug('PayPal Error Log - before_process() - DP', "In function: before_process() - Direct Payment \r\nDid first contact attempt return error? " . ($error_occurred ? "Yes" : "No") . " \r\n\r\nValue List:\r\n" . str_replace('&',"\r\n", urldecode($doPayPal->_sanitizeLog($doPayPal->_parseNameValueList($doPayPal->lastParamList)))) . "\r\n\r\nResponse:\r\n" . urldecode(print_r($response, true)));
+            $this->_doDebug('PayPal Error Log - before_process() - DP', "In function: before_process() - Direct Payment \r\n\r\nValue List:\r\n" . str_replace('&',"\r\n", urldecode($doPayPal->_sanitizeLog($doPayPal->_parseNameValueList($doPayPal->lastParamList)))) . "\r\n\r\nResponse:\r\n" . urldecode(print_r($response, true)));
           }
           $errorText = MODULE_PAYMENT_PAYPALDP_INVALID_RESPONSE;
           $errorNum = urldecode($response['L_ERRORCODE0'] . ' ' . ($response['RESULT'] ?? '') . ' <!-- ' . ($response['RESPMSG'] ?? '') . ' -->');
@@ -2075,8 +2095,8 @@ class paypaldp extends base {
             $this->_doDebug('PayPal Error Log - ' . $operation, "Value List:\r\n" . str_replace('&',"\r\n", $doPayPal->_sanitizeLog($doPayPal->_parseNameValueList($doPayPal->lastParamList))) . "\r\n\r\nResponse:\r\n" . print_r($response, true));
           }
           $errorText = MODULE_PAYMENT_PAYPALDP_TEXT_REFUND_ERROR;
-          if ($response['L_ERRORCODE0'] == 10009) $errorText = MODULE_PAYMENT_PAYPALDP_TEXT_REFUNDFULL_ERROR;
-          if ((!empty($response['RESULT']) && $response['RESULT'] == 105) || isset($response['RESPMSG'])) $response['L_SHORTMESSAGE0'] = ($response['RESULT'] ?? '') . ' ' . $response['RESPMSG'];
+          if ((string)$response['L_ERRORCODE0'] === '10009') $errorText = MODULE_PAYMENT_PAYPALDP_TEXT_REFUNDFULL_ERROR;
+          if ((!empty($response['RESULT']) && (string)$response['RESULT'] === '105') || isset($response['RESPMSG'])) $response['L_SHORTMESSAGE0'] = ($response['RESULT'] ?? '') . ' ' . $response['RESPMSG'];
           if (urldecode($response['L_LONGMESSAGE0']) == 'This transaction has already been fully refunded') $response['L_SHORTMESSAGE0'] = urldecode($response['L_LONGMESSAGE0']);
           if (urldecode($response['L_LONGMESSAGE0']) == 'Can not do a full refund after a partial refund') $response['L_SHORTMESSAGE0'] = urldecode($response['L_LONGMESSAGE0']);
           if (urldecode($response['L_LONGMESSAGE0']) == 'The partial refund amount must be less than or equal to the remaining amount') $response['L_SHORTMESSAGE0'] = urldecode($response['L_LONGMESSAGE0']);
@@ -2106,7 +2126,7 @@ class paypaldp extends base {
             $this->_doDebug('PayPal Error Log - ' . $operation, "Value List:\r\n" . str_replace('&',"\r\n", $doPayPal->_sanitizeLog($doPayPal->_parseNameValueList($doPayPal->lastParamList))) . "\r\n\r\nResponse:\r\n" . print_r($response, true));
           }
           $errorText = MODULE_PAYMENT_PAYPALDP_TEXT_CAPT_ERROR;
-          if (!empty($response['RESULT']) && $response['RESULT'] == 111) $response['L_SHORTMESSAGE0'] = $response['RESULT'] . ' ' . $response['RESPMSG'];
+          if (!empty($response['RESULT']) && (string)$response['RESULT'] === '111') $response['L_SHORTMESSAGE0'] = $response['RESULT'] . ' ' . $response['RESPMSG'];
           $errorText .= ' (' . urldecode($response['L_SHORTMESSAGE0']) . ') ' . $response['L_ERRORCODE0'];
           $messageStack->add_session($errorText, 'error');
           return true;
@@ -2119,8 +2139,8 @@ class paypaldp extends base {
             $this->_doDebug('PayPal Error Log - ' . $operation, "Value List:\r\n" . str_replace('&',"\r\n", $doPayPal->_sanitizeLog($doPayPal->_parseNameValueList($doPayPal->lastParamList))) . "\r\n\r\nResponse:\r\n" . print_r($response, true));
           }
           $errorText = MODULE_PAYMENT_PAYPALDP_TEXT_VOID_ERROR;
-          if (!empty($response['RESULT']) && $response['RESULT'] == 12) $response['L_SHORTMESSAGE0'] = $response['RESULT'] . ' ' . $response['RESPMSG'];
-          if (!empty($response['RESULT']) && $response['RESULT'] == 108) $response['L_SHORTMESSAGE0'] = $response['RESULT'] . ' ' . $response['RESPMSG'];
+          if (!empty($response['RESULT']) && (string)$response['RESULT'] === '12') $response['L_SHORTMESSAGE0'] = $response['RESULT'] . ' ' . $response['RESPMSG'];
+          if (!empty($response['RESULT']) && (string)$response['RESULT'] === '108') $response['L_SHORTMESSAGE0'] = $response['RESULT'] . ' ' . $response['RESPMSG'];
           $errorText .= ' (' . urldecode($response['L_SHORTMESSAGE0']) . ') ' . $response['L_ERRORCODE0'];
           $messageStack->add_session($errorText, 'error');
           return true;
@@ -2161,7 +2181,7 @@ class paypaldp extends base {
             $this->_doDebug('PayPal Error Log - ' . $operation, "Value List:\r\n" . str_replace('&',"\r\n", $doPayPal->_sanitizeLog($doPayPal->_parseNameValueList($doPayPal->lastParamList))) . "\r\n\r\nResponse:\r\n" . print_r($response, true));
           }
           $errorText = MODULE_PAYMENT_PAYPALDP_TEXT_GEN_API_ERROR;
-          $errorNum .= ' (' . urldecode($response['L_SHORTMESSAGE0'] . ' <!-- ' . $response['RESPMSG']) . ' -->) ' . $response['L_ERRORCODE0'];
+          $errorNum = ' (' . urldecode($response['L_SHORTMESSAGE0'] . ' <!-- ' . $response['RESPMSG']) . ' -->) ' . $response['L_ERRORCODE0'];
           $detailedMessage = ($errorText == MODULE_PAYMENT_PAYPALDP_TEXT_GEN_API_ERROR || $errorText == MODULE_PAYMENT_PAYPALDP_TEXT_DECLINED || $this->enableDebugging || $response['CURL_ERRORS'] != '' || $this->emailAlerts) ? urldecode(' ' . $response['L_SHORTMESSAGE0'] . ' - ' . $response['L_LONGMESSAGE0'] . ' ' . $response['CURL_ERRORS']) : '';
           $explain = "\n\nProblem occurred while customer #" . $_SESSION['customer_id'] . ' -- ' . $_SESSION['customer_first_name'] . ' ' . $_SESSION['customer_last_name'] . ' -- was attempting checkout.' . "\n";
           $detailedEmailMessage = ($detailedMessage == '') ? '' : MODULE_PAYMENT_PAYPALDP_TEXT_EMAIL_ERROR_MESSAGE . ' ' . $response['RESPMSG'] . urldecode($response['L_ERRORCODE0'] . "\n" . $response['L_SHORTMESSAGE0'] . "\n" . $response['L_LONGMESSAGE0'] . $response['L_ERRORCODE1'] . "\n" . $response['L_SHORTMESSAGE1'] . "\n" . $response['L_LONGMESSAGE1'] . $response['L_ERRORCODE2'] . "\n" . $response['L_SHORTMESSAGE2'] . "\n" . $response['L_LONGMESSAGE2'] . ($response['CURL_ERRORS'] != '' ? "\n" . $response['CURL_ERRORS'] : '') . "\n\n" . 'Zen Cart message: ' . $detailedMessage . "\n\n" . $errorInfo . "\n\n" . 'Transaction Response Details: ' . print_r($response, true) . "\n\n" . 'Transaction Submission: ' . urldecode($doPayPal->_sanitizeLog($doPayPal->_parseNameValueList($doPayPal->lastParamList), true)));
@@ -2359,7 +2379,8 @@ class paypaldp extends base {
     $responseString = $this->send3DSecureHttp(MODULE_PAYMENT_PAYPALDP_CARDINAL_TXN_URL, $data, $debugData);
 
     if (MODULE_PAYMENT_CARDINAL_CENTINEL_DEBUGGING !== FALSE) {
-      $this->zcLog('Cardinal Lookup 2', '[' . zen_session_id() . '] Cardinal Centinel - cmpi_lookup response - ' . $responseString);
+      $responseDebug = preg_replace('#<(CardNumber|CardCode|Cvv)>.*?</\1>#is', '<$1>********</$1>', (string)$responseString);
+      $this->zcLog('Cardinal Lookup 2', '[' . zen_session_id() . '] Cardinal Centinel - cmpi_lookup response - ' . $responseDebug);
     }
 
     // parse the XML
@@ -2453,7 +2474,8 @@ class paypaldp extends base {
     $responseString = $this->send3DSecureHttp(MODULE_PAYMENT_PAYPALDP_CARDINAL_TXN_URL, $data, $debugData);
 
     if (MODULE_PAYMENT_CARDINAL_CENTINEL_DEBUGGING !== FALSE) {
-      $this->zcLog('Cardinal Auth 2', '[' . zen_session_id() . '] Cardinal Centinel - cmpi_authenticate response - ' . $responseString);
+      $responseDebug = preg_replace('#<(CardNumber|CardCode|Cvv)>.*?</\1>#is', '<$1>********</$1>', (string)$responseString);
+      $this->zcLog('Cardinal Auth 2', '[' . zen_session_id() . '] Cardinal Centinel - cmpi_authenticate response - ' . $responseDebug);
     }
 
     // parse the XML
@@ -2538,7 +2560,8 @@ class paypaldp extends base {
       curl_setopt($ch, CURLOPT_POST,1);
       curl_setopt($ch, CURLOPT_POSTFIELDS, "cmpi_msg=".urlencode($data));
       curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-//   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // NOTE: Leave commented-out! or set to TRUE!  This should NEVER be set to FALSE in production!!!!
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 //   curl_setopt($ch, CURLOPT_CAINFO, '/local/path/to/cacert.pem'); // for offline testing, this file can be obtained from http://curl.haxx.se/docs/caextract.html ... should never be used in production!
       curl_setopt($ch, CURLOPT_TIMEOUT, 8);
       curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
@@ -2785,7 +2808,7 @@ class paypaldp extends base {
 class CardinalXMLParser{
 
   var $xml_parser;
-  var $deseralizedResponse;
+  var $deserializedResponse;
   var $elementName;
   var $elementValue;
 

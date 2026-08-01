@@ -180,14 +180,14 @@ switch ($_GET['action']) {
 // base code - create duplicate codes from base code
     $zc_discount_coupons_create = (int)$_POST['coupon_copy_to_count'];
     if ($zc_discount_coupons_create < 1) {
-      $messageStack->add_session(WARNING_COUPON_DUPLICATE . $_POST['coupon_copy_to_dup_name'] . ' - x' . $_POST['coupon_copy_to_count'], 'caution');
+      $messageStack->add_session(WARNING_COUPON_DUPLICATE . zen_output_string_protected($_POST['coupon_copy_to_dup_name']) . ' - x' . $_POST['coupon_copy_to_count'], 'caution');
     } else {
         $status = Coupon::make_duplicates((int)$_GET['cid'], $_POST['coupon_copy_to_dup_name'], $zc_discount_coupons_create);
         if ($status === true) {
-            $messageStack->add_session(SUCCESS_COUPON_DUPLICATE . $_POST['coupon_copy_to_dup_name'] . ' - x' . $_POST['coupon_copy_to_count'], 'success');
+            $messageStack->add_session(SUCCESS_COUPON_DUPLICATE . zen_output_string_protected($_POST['coupon_copy_to_dup_name']) . ' - x' . $_POST['coupon_copy_to_count'], 'success');
         } else {
           // cannot create code
-          $messageStack->add_session(WARNING_COUPON_DUPLICATE_FAILED . $_POST['coupon_copy_to_dup_name'] . ' - x' . $_POST['coupon_copy_to_count'], 'caution');
+          $messageStack->add_session(WARNING_COUPON_DUPLICATE_FAILED . zen_output_string_protected($_POST['coupon_copy_to_dup_name']) . ' - x' . $_POST['coupon_copy_to_count'], 'caution');
         }
     }
     zen_redirect(zen_href_link(FILENAME_COUPON_ADMIN, 'cid=' . $_GET['cid'] . (isset($_GET['status']) ? '&status=' . $_GET['status'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
@@ -251,11 +251,11 @@ switch ($_GET['action']) {
     $query1 = $db->Execute($sql);
     if ($query1->RecordCount() > 0 && $_POST['coupon_code'] && $_GET['oldaction'] != 'voucheredit') {
       $update_errors = 1;
-      $messageStack->add(ERROR_COUPON_EXISTS . ' - ' . $_POST['coupon_code'], 'error');
+      $messageStack->add(ERROR_COUPON_EXISTS . ' - ' . zen_output_string_protected($_POST['coupon_code']), 'error');
     }
     if ($update_errors == 0 && $query1->RecordCount() > 0 && $query1->fields['coupon_id'] != $_GET['cid']) {
       $update_errors = 1;
-      $messageStack->add(ERROR_COUPON_EXISTS . ' - ' . $_POST['coupon_code'], 'error');
+      $messageStack->add(ERROR_COUPON_EXISTS . ' - ' . zen_output_string_protected($_POST['coupon_code']), 'error');
     }
 
     if ($update_errors != 0) {
@@ -284,14 +284,18 @@ switch ($_GET['action']) {
       $coupon_type = 'E'; // percentage off and free shipping
     }
     $_POST['coupon_amount'] = preg_replace('/[^0-9.]/', '', $_POST['coupon_amount']);
+    // Clamp percentages ('P' and 'E' types, see comments above) to at most 100.
+    if ($coupon_type === 'P' || $coupon_type === 'E') {
+        $_POST['coupon_amount'] = (string)min(100, (float)$_POST['coupon_amount']);
+    }
     $sql_data_array = [
       'coupon_code' => zen_db_prepare_input($_POST['coupon_code']),
       'coupon_amount' => zen_db_prepare_input($_POST['coupon_amount']),
       'coupon_product_count' => (int)$_POST['coupon_product_count'],
       'coupon_type' => zen_db_prepare_input($coupon_type),
-      'uses_per_coupon' => (int)$_POST['coupon_uses_coupon'],
-      'uses_per_user' => (int)$_POST['coupon_uses_user'],
-      'coupon_minimum_order' => (float)$_POST['coupon_min_order'],
+      'uses_per_coupon' => max(0, (int)$_POST['coupon_uses_coupon']),
+      'uses_per_user' => max(0, (int)$_POST['coupon_uses_user']),
+      'coupon_minimum_order' => max(0, (float)$_POST['coupon_min_order']),
       'restrict_to_products' => zen_db_prepare_input($_POST['coupon_products']),
       'restrict_to_categories' => zen_db_prepare_input($_POST['coupon_categories']),
       'coupon_start_date' => $_POST['coupon_startdate'],

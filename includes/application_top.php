@@ -206,11 +206,14 @@ if (!$contaminated && isset($_GET['action']) && $_GET['action'] === 'buy_now') {
         $contaminated = true;
     }
 }
+
+
 if ($contaminated) {
     header('HTTP/1.1 406 Not Acceptable');
     exit(0);
 }
 unset($contaminated, $isCrawlerUA, $refHost, $hostHeader, $hostOnly, $hasInternalReferer);
+
 /* *** END OF INOCULATION *** */
 
 // if session id is reconfigured, then we want to exclude its use immediately
@@ -388,6 +391,10 @@ foreach ($installedPlugins as $plugin) {
     $filePathCatalog = $filePath . 'catalog/includes/classes/';
     $psr4Autoloader->addPrefix($namespaceAdmin, $filePathAdmin);
     $psr4Autoloader->addPrefix($namespaceCatalog, $filePathCatalog);
+    // Load registered psr4Autoload in the plugin's root directory
+    if (file_exists($filePath . 'psr4Autoload.php')) {
+        require $filePath . 'psr4Autoload.php';
+    }
 }
 
 if (isset($loaderPrefix)) {

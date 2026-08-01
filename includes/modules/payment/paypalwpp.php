@@ -352,7 +352,7 @@ class paypalwpp extends base {
     // send the PayPal-provided javascript to trigger the incontext checkout experience
     return "      <script>
         window.paypalCheckoutReady = function () {
-        paypal.checkout.setup('" . MODULE_PAYMENT_PAYPALWPP_MERCHANTID . "', {
+        paypal.checkout.setup('" . json_encode(MODULE_PAYMENT_PAYPALWPP_MERCHANTID) . "', {
           //locale: '" . $this->getLanguageCode('incontext') . "',"
           . (MODULE_PAYMENT_PAYPALWPP_SERVER == 'live' ? '' : "\n          environment: 'sandbox',") . "
           container: 'checkout_confirmation',
@@ -2459,7 +2459,7 @@ if (false) { // disabled until clarification is received about coupons in PayPal
         // send Welcome Email if appropriate
         if ($this->new_acct_notify == 'Yes') {
           // require the language file
-          zen_include_language_file('create_account.php', '/', 'inline');
+          zen_include_language_file('create_account_send_email.php', '/modules/', 'inline');
           // set the mail text
           $email_text = sprintf(EMAIL_GREET_NONE, $paypal_ec_payer_info['payer_firstname']) . EMAIL_WELCOME . "\n\n" . EMAIL_TEXT;
           $email_text .= "\n\n" . EMAIL_EC_ACCOUNT_INFORMATION . "\nUsername: " . $paypal_ec_payer_info['payer_email'] . "\nPassword: " . $password . "\n\n";
@@ -2556,7 +2556,6 @@ if (false) { // disabled until clarification is received about coupons in PayPal
     // set the shipping method if one is not already set
     // defaults to the cheapest shipping method
     if ((!isset($_SESSION['shipping']) || (!isset($_SESSION['shipping']['id']) || $_SESSION['shipping']['id'] == '') && zen_count_shipping_modules() >= 1)) {
-      require_once(DIR_WS_CLASSES . 'http_client.php');
       require_once(DIR_WS_CLASSES . 'shipping.php');
       $shipping_Obj = new shipping;
 

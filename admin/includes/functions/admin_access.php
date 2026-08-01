@@ -575,6 +575,9 @@ function zen_reset_password($id, $password, $compare): array
         $sql = $db->bindVars($sql, ':adminID:', $id, 'integer');
         $sql = $db->bindVars($sql, ':newpwd:', $encryptedPassword, 'string');
         $db->Execute($sql);
+        if (isset($_SESSION['admin_id']) && (int)$_SESSION['admin_id'] === $id) {
+            zen_session_recreate();
+        }
         zen_record_admin_activity('Account password change saved.', 'warning');
     }
     return $errors;

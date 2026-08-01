@@ -79,6 +79,12 @@ class shoppingCart extends base
     protected $flag_duplicate_quantity_msgs_set = [];
 
     /**
+     * Hard ceiling on the number of file-upload attributes processed per add-to-cart
+     * request, independent of the client-supplied number_of_uploads value.
+     */
+    protected const MAX_UPLOAD_COUNT = 50;
+
+    /**
      * Instantiate a new shopping cart object
      */
     public function __construct()
@@ -130,11 +136,13 @@ class shoppingCart extends base
 
                     if (isset($data['attributes'])) {
                         foreach ($data['attributes'] as $option => $value) {
+                            $option_id = (int)$option;
+                            $value = (int)$value;
 
                             // include attribute value: needed for text attributes
-                            $attr_value = $data['attributes_values'][$option] ?? '';
+                            $attr_value = $data['attributes_values'][$option_id] ?? '';
 
-                            $products_options_sort_order = zen_get_attributes_options_sort_order(zen_get_prid($uprid), $option, $value);
+                            $products_options_sort_order = zen_get_attributes_options_sort_order(zen_get_prid($uprid), $option_id, $value);
                             if ($attr_value) {
                                 $attr_value = zen_db_input($attr_value);
                             }
@@ -142,7 +150,7 @@ class shoppingCart extends base
                                 "INSERT INTO " . TABLE_CUSTOMERS_BASKET_ATTRIBUTES . "
                                     (customers_id, products_id, products_options_id, products_options_value_id, products_options_value_text, products_options_sort_order)
                                  VALUES
-                                    (" . (int)$_SESSION['customer_id'] . ", '$uprid_db', '$option', '$value', '$attr_value', '$products_options_sort_order')";
+                                    (" . (int)$_SESSION['customer_id'] . ", '$uprid_db', '" . zen_db_input((string)$option) . "', $value, '$attr_value', '$products_options_sort_order')";
 
                             $db->Execute($sql);
                         }
@@ -337,17 +345,22 @@ class shoppingCart extends base
                     }
 
                     if ($blank_value === false) {
+                        $option = (int)$option;
                         if (is_array($value)) {
+                            $sanitizedValues = [];
                             foreach ($value as $opt => $val) {
+                                $val = (int)$val;
+                                $sanitizedValues[$opt] = $val;
                                 $this->contents[$uprid]['attributes'][$option . '_chk' . $val] = $val;
                             }
+                            $value = $sanitizedValues;
                         } else {
+                            $value = (int)$value;
                             $this->contents[$uprid]['attributes'][$option] = $value;
                         }
 
                         if (zen_is_logged_in() && !zen_in_guest_checkout()) {
                             $customer_id = (int)$_SESSION['customer_id'];
-                            $option = (int)$option;
                             if (is_array($value)) {
                                 foreach ($value as $opt => $val) {
                                     $products_options_sort_order = zen_get_attributes_options_sort_order($prid, $option, $opt);
@@ -458,11 +471,17 @@ class shoppingCart extends base
                 }
 
                 if ($blank_value === false) {
+                    $option = (int)$option;
                     if (is_array($value)) {
+                        $sanitizedValues = [];
                         foreach ($value as $opt => $val) {
+                            $val = (int)$val;
+                            $sanitizedValues[$opt] = $val;
                             $this->contents[$uprid]['attributes'][$option . '_chk' . $val] = $val;
                         }
+                        $value = $sanitizedValues;
                     } else {
+                        $value = (int)$value;
                         $this->contents[$uprid]['attributes'][$option] = $value;
                     }
 
@@ -942,6 +961,7 @@ class shoppingCart extends base
                 } // eof foreach
             } // attributes price
             $productTotal = $savedProductTotal + $attributesTotal;
+            $productTotal = max(0, $productTotal);
 
             // attributes weight
             if (isset($this->contents[$uprid]['attributes'])) {
@@ -2054,9 +2074,10 @@ class shoppingCart extends base
                         /**
                          * Need the upload class for attribute type that allows user uploads. Now psr4Autoloaded!
                          */
-                        for ($i = 1, $n = $_GET['number_of_uploads']; $i <= $n; $i++) {
+                        for ($i = 1, $n = min((int)$_GET['number_of_uploads'], self::MAX_UPLOAD_COUNT); $i <= $n; $i++) {
                             $upload_prefix = UPLOAD_PREFIX . $i;
                             $text_prefix = TEXT_PREFIX . ($_POST[$upload_prefix] ?? '');
+                            $text_upload_prefix = TEXT_PREFIX . $upload_prefix;
                             if (isset($_POST[$upload_prefix]) && !empty($_FILES['id']['tmp_name'][$text_prefix]) && (!isset($_POST[$upload_prefix], $_FILES['id']['tmp_name'][$text_prefix]) || $_FILES['id']['tmp_name'][$text_prefix] != 'none')) {
                                 $products_options_file = new upload('id');
                                 $products_options_file->set_destination(DIR_FS_UPLOADS);
@@ -2072,14 +2093,35 @@ class shoppingCart extends base
                                     $real_ids[$text_prefix] = $insert_id . ". " . $products_options_file->filename;
                                     $products_options_file->set_filename($insert_id . $products_image_extension);
                                     if (!($products_options_file->save())) {
+                                        unset($real_ids[$text_prefix]);
+                                        $db->Execute("DELETE FROM " . TABLE_FILES_UPLOADED . " WHERE files_uploaded_id = " . (int)$insert_id . " LIMIT 1");
                                         break;
                                     }
                                 } else {
                                     break;
                                 }
                             } else { // No file uploaded -- use previous value
-                                $real_ids[$text_prefix] = $_POST[$text_prefix] ?? '';
-                                if (!zen_get_attributes_valid($_POST['products_id'], $text_prefix, !empty($_POST[$text_prefix]) ? $_POST[$text_prefix] : '')) {
+                                $posted_reused_upload_value = $_POST[$text_upload_prefix] ?? ($_POST[$text_prefix] ?? '');
+                                $reused_upload_value = '';
+                                if ($posted_reused_upload_value !== '') {
+                                    $reused_files_uploaded_id = (int)$posted_reused_upload_value;
+                                    if ($reused_files_uploaded_id > 0) {
+                                        $ownership_sql = "SELECT files_uploaded_id, files_uploaded_name
+                                                          FROM " . TABLE_FILES_UPLOADED . "
+                                                          WHERE files_uploaded_id = " . $reused_files_uploaded_id . "
+                                                          AND (sesskey = '" . zen_session_id() . "'";
+                                        if (zen_is_logged_in()) {
+                                            $ownership_sql .= " OR customers_id = " . (int)$_SESSION['customer_id'];
+                                        }
+                                        $ownership_sql .= ") LIMIT 1";
+                                        $ownership_check = $db->Execute($ownership_sql);
+                                        if (!$ownership_check->EOF) {
+                                            $reused_upload_value = $reused_files_uploaded_id . '. ' . $ownership_check->fields['files_uploaded_name'];
+                                        }
+                                    }
+                                }
+                                $real_ids[$text_prefix] = $reused_upload_value;
+                                if (!zen_get_attributes_valid($_POST['products_id'], $text_prefix, $reused_upload_value)) {
                                     $the_list .=
                                         TEXT_ERROR_OPTION_FOR .
                                         '<span class="alertBlack">' .

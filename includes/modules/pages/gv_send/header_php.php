@@ -14,8 +14,7 @@
 // This should be first line of the script:
 $zco_notifier->notify('NOTIFY_HEADER_START_GV_SEND');
 if (isset($_POST['message'])) $_POST['message'] = zen_output_string_protected($_POST['message']);
-
-require_once('includes/classes/http_client.php');
+if (isset($_POST['to_name'])) $_POST['to_name'] = zen_output_string_protected($_POST['to_name']);
 
 if (!isset($_GET['action'])) $_GET['action'] = '';
 // verify no timeout has occurred on the send or process

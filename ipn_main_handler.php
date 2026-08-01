@@ -170,10 +170,8 @@ if (isset($_GET['type']) && $_GET['type'] === 'ec') {
      * validate transaction -- email address, matching txn record, etc
      */
     if (!ipn_validate_transaction($info, $_POST, 'IPN') === true) {
-        if (!$isECtransaction && $posted_txn_type !== '') {
-            ipn_debug_email('IPN FATAL ERROR :: Transaction did not validate. ABORTED.');
-            die();
-        }
+        ipn_debug_email('IPN FATAL ERROR :: Transaction did not validate. ABORTED.');
+        die();
     }
 
     if ($isDPtransaction) {
@@ -222,6 +220,13 @@ if (isset($_GET['type']) && $_GET['type'] === 'ec') {
     $paypalipnID = $lookupData['paypal_ipn_id'];
     $txn_type = $lookupData['txn_type'];
     $parentLookup = $txn_type;
+
+    $dupCheckSql = "SELECT txn_id FROM " . TABLE_PAYPAL_PAYMENT_STATUS_HISTORY . "
+                    WHERE txn_id = :txnId: AND payment_status = :paymentStatus: LIMIT 1";
+    $dupCheckSql = $db->bindVars($dupCheckSql, ':txnId:', $_POST['txn_id'], 'string');
+    $dupCheckSql = $db->bindVars($dupCheckSql, ':paymentStatus:', $_POST['payment_status'] ?? '', 'string');
+    $priorStatusHistory = $db->Execute($dupCheckSql);
+    $isDuplicateIpn = ($priorStatusHistory->RecordCount() > 0);
 
     ipn_debug_email(
         'Breakpoint: 4 - ' . 'Details:  txn_type=' . $txn_type . '    ordersID = ' . $ordersID . '  IPN_id=' . $paypalipnID . "\n\n" . '   Relevant data from POST:' . "\n     " . 'txn_type = ' . $txn_type . "\n     " . 'parent_txn_id = ' . (empty($_POST['parent_txn_id']) ? 'None' : $_POST['parent_txn_id']) . "\n     " . 'txn_id = ' . $_POST['txn_id']
@@ -395,7 +400,7 @@ if (isset($_GET['type']) && $_GET['type'] === 'ec') {
                     ipn_debug_email('Breakpoint: 5h - newer status code: ' . (int)$new_status);
                 }
 
-                $comments = 'PayPal status: ' . $_POST['payment_status'] . ' ' . $posted_pending_reason . ' @ ' . $_POST['payment_date'] . (($_POST['parent_txn_id'] != '') ? "\n" . ' Parent Trans ID:' . $_POST['parent_txn_id'] : '') . "\n" . ' Trans ID:' . $_POST['txn_id'] . "\n" . ' Amount: ' . $_POST['mc_gross'] . ' ' . $_POST['mc_currency'];
+                $comments = 'PayPal status: ' . htmlspecialchars($_POST['payment_status'], ENT_QUOTES) . ' ' . htmlspecialchars($posted_pending_reason, ENT_QUOTES) . ' @ ' . htmlspecialchars($_POST['payment_date'], ENT_QUOTES) . (($_POST['parent_txn_id'] != '') ? "\n" . ' Parent Trans ID:' . htmlspecialchars($_POST['parent_txn_id'], ENT_QUOTES) : '') . "\n" . ' Trans ID:' . htmlspecialchars($_POST['txn_id'], ENT_QUOTES) . "\n" . ' Amount: ' . htmlspecialchars($_POST['mc_gross'], ENT_QUOTES) . ' ' . htmlspecialchars($_POST['mc_currency'], ENT_QUOTES);
                 zen_update_orders_history($insert_id, $comments, null, $new_status, 0);
                 ipn_debug_email("Breakpoint: 5j - order stat hist update: order-id: $insert_id, status-id: $new_status, comments: $comments");
 
@@ -491,7 +496,8 @@ if (isset($_GET['type']) && $_GET['type'] === 'ec') {
                 $paypalipnID = $db->insert_ID();
             } else {
                 $sql_data_array = ipn_create_order_update_array($txn_type);
-                zen_db_perform(TABLE_PAYPAL, $sql_data_array, 'update', "txn_id='" . ($txn_type === 'cleared-authorization' ? $_POST['parent_txn_id'] : $_POST['txn_id']) . "'");
+                $txnWhereValue = ($txn_type === 'cleared-authorization' ? $_POST['parent_txn_id'] : $_POST['txn_id']);
+                zen_db_perform(TABLE_PAYPAL, $sql_data_array, 'update', $db->bindVars('txn_id=:txn_id:', ':txn_id:', $txnWhereValue, 'string'));
                 $sql = "SELECT paypal_ipn_id FROM " . TABLE_PAYPAL . " WHERE txn_id=:txn:";
                 $sql = $db->bindVars($sql, ':txn:', $_POST['txn_id'], 'string');
                 $result = $db->Execute($sql, 1);
@@ -551,8 +557,12 @@ if (isset($_GET['type']) && $_GET['type'] === 'ec') {
                 || $txn_type === 'echeck-cleared'
                 || $txn_type === 'express-checkout-cleared'
             ) {
-                ipn_update_orders_status_and_history($ordersID, $new_status, $txn_type);
-                $zco_notifier->notify('NOTIFY_PAYPALIPN_STATUS_HISTORY_UPDATE', [$ordersID, $new_status, $txn_type]);
+                if ($isDuplicateIpn) {
+                    ipn_debug_email('IPN NOTICE :: Duplicate IPN detected for txn_id ' . $_POST['txn_id'] . ' with payment_status ' . $_POST['payment_status'] . ' (already recorded). Skipping repeat order-status/history update to avoid duplicate order-history entries and re-extending download windows.');
+                } else {
+                    ipn_update_orders_status_and_history($ordersID, $new_status, $txn_type);
+                    $zco_notifier->notify('NOTIFY_PAYPALIPN_STATUS_HISTORY_UPDATE', [$ordersID, $new_status, $txn_type]);
+                }
             }
             break;
         default:

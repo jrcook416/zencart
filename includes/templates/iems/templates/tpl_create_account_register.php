@@ -23,6 +23,7 @@ $iemsAgencyOptionsByCounty = is_array($GLOBALS['iems_agency_options_by_county'] 
 $iemsSelectedCountyId = (int)($GLOBALS['iems_selected_county_id'] ?? 0);
 $iemsSelectedAgencyId = (int)($GLOBALS['iems_selected_agency_id'] ?? 0);
 $iemsAgencyOptions = $iemsAgencyOptionsByCounty[$iemsSelectedCountyId] ?? [];
+// TODO: Replace the generic selector placeholder text for county/agency with IEMS-specific wording.
 $iemsPlaceholder = defined('PULL_DOWN_DEFAULT') ? PULL_DOWN_DEFAULT : 'Please Select';
 $iemsCountyLabel = defined('ENTRY_IEMS_COUNTY') ? ENTRY_IEMS_COUNTY : 'County';
 $iemsAgencyLabel = defined('ENTRY_IEMS_AGENCY') ? ENTRY_IEMS_AGENCY : 'Agency';

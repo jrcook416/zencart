@@ -6,8 +6,6 @@ class ScriptedInstaller extends ScriptedInstallBase
 {
     protected function executeInstall()
     {
-        global $db;
-
         $this->executeInstallerSql(
             "CREATE TABLE IF NOT EXISTS `iems_customer_affiliations` (
                 `affiliation_ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -29,8 +27,8 @@ class ScriptedInstaller extends ScriptedInstallBase
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
 
-        $this->insertConfigGroup($db);
-        $this->insertLockToggle($db);
+        $this->insertConfigGroup();
+        $this->insertLockToggle();
 
         parent::executeInstall();
         return true;
@@ -38,24 +36,17 @@ class ScriptedInstaller extends ScriptedInstallBase
 
     protected function executeUpgrade($oldVersion)
     {
-        global $db;
-
-        $this->insertConfigGroup($db);
-        $this->insertLockToggle($db);
+        $this->insertConfigGroup();
+        $this->insertLockToggle();
 
         parent::executeUpgrade($oldVersion);
     }
 
     protected function executeUninstall()
     {
-        global $db;
-
         $this->executeInstallerSql("DROP TABLE IF EXISTS `iems_customer_affiliations`");
-
-        $db->Execute("DELETE FROM configuration WHERE configuration_key = 'IEMS_ACCOUNT_EDIT_LOCK_ENABLED'");
-
-        // Remove the IEMS config group only if it is now empty.
-        $db->Execute(
+        $this->executeInstallerSql("DELETE FROM configuration WHERE configuration_key = 'IEMS_ACCOUNT_EDIT_LOCK_ENABLED'");
+        $this->executeInstallerSql(
             "DELETE cg
                FROM configuration_group cg
                LEFT JOIN configuration c ON c.configuration_group_id = cg.configuration_group_id
@@ -70,9 +61,9 @@ class ScriptedInstaller extends ScriptedInstallBase
     // Helpers
     // -------------------------------------------------------------------------
 
-    private function insertConfigGroup($db): void
+    private function insertConfigGroup(): void
     {
-        $db->Execute(
+        $this->executeInstallerSql(
             "INSERT IGNORE INTO configuration_group
                 (configuration_group_title, configuration_group_description, sort_order, visible)
              VALUES
@@ -80,34 +71,26 @@ class ScriptedInstaller extends ScriptedInstallBase
         );
     }
 
-    private function insertLockToggle($db): void
+    private function insertLockToggle(): void
     {
-        $result = $db->Execute(
-            "SELECT configuration_group_id
-               FROM configuration_group
-              WHERE configuration_group_title = 'IEMS Settings'
-              LIMIT 1"
-        );
-        if ($result->EOF) {
-            return;
-        }
-        $groupId = (int)$result->fields['configuration_group_id'];
-
-        $db->Execute(
+        // Use INSERT ... SELECT so we never need to handle the group ID in PHP.
+        $this->executeInstallerSql(
             "INSERT IGNORE INTO configuration
                 (configuration_title, configuration_key, configuration_value,
                  configuration_description, configuration_group_id,
                  sort_order, date_added, set_function)
-             VALUES (
+             SELECT
                 'Lock Account Edit Fields',
                 'IEMS_ACCOUNT_EDIT_LOCK_ENABLED',
                 'true',
                 'When enabled, customers may only edit their phone number on the account edit page. All other fields display as read-only.',
-                " . $groupId . ",
+                cg.configuration_group_id,
                 1,
                 NOW(),
                 'zen_cfg_select_option(array(''true'', ''false''),'
-             )"
+             FROM configuration_group cg
+             WHERE cg.configuration_group_title = 'IEMS Settings'
+             LIMIT 1"
         );
     }
 }

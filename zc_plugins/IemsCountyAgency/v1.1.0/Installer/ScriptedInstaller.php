@@ -27,8 +27,9 @@ class ScriptedInstaller extends ScriptedInstallBase
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
         );
 
-        $this->insertConfigGroup();
-        $this->insertLockToggle();
+        $groupId = $this->insertConfigGroup();
+        $this->insertLockToggle($groupId);
+        $this->registerAdminPage($groupId);
 
         parent::executeInstall();
         return true;
@@ -36,16 +37,20 @@ class ScriptedInstaller extends ScriptedInstallBase
 
     protected function executeUpgrade($oldVersion)
     {
-        $this->insertConfigGroup();
-        $this->insertLockToggle();
+        $groupId = $this->insertConfigGroup();
+        $this->insertLockToggle($groupId);
+        $this->registerAdminPage($groupId);
 
         parent::executeUpgrade($oldVersion);
     }
 
     protected function executeUninstall()
     {
-        $this->executeInstallerSql("DROP TABLE IF EXISTS `iems_customer_affiliations`");
+        zen_deregister_admin_pages(['configIemsSettings']);
+
         $this->executeInstallerSql("DELETE FROM configuration WHERE configuration_key = 'IEMS_ACCOUNT_EDIT_LOCK_ENABLED'");
+
+        // Remove the IEMS config group only if it is now empty.
         $this->executeInstallerSql(
             "DELETE cg
                FROM configuration_group cg
@@ -54,6 +59,8 @@ class ScriptedInstaller extends ScriptedInstallBase
                 AND c.configuration_id IS NULL"
         );
 
+        $this->executeInstallerSql("DROP TABLE IF EXISTS `iems_customer_affiliations`");
+
         parent::executeUninstall();
     }
 
@@ -61,36 +68,67 @@ class ScriptedInstaller extends ScriptedInstallBase
     // Helpers
     // -------------------------------------------------------------------------
 
-    private function insertConfigGroup(): void
+    private function insertConfigGroup(): int
     {
+        global $db;
+
         $this->executeInstallerSql(
             "INSERT IGNORE INTO configuration_group
                 (configuration_group_title, configuration_group_description, sort_order, visible)
              VALUES
                 ('IEMS Settings', 'Configuration for Indianapolis EMS custom features', 200, 1)"
         );
+
+        $result  = $db->Execute(
+            "SELECT configuration_group_id
+               FROM configuration_group
+              WHERE configuration_group_title = 'IEMS Settings'
+              LIMIT 1"
+        );
+
+        return $result->EOF ? 0 : (int)$result->fields['configuration_group_id'];
     }
 
-    private function insertLockToggle(): void
+    private function insertLockToggle(int $groupId): void
     {
-        // Use INSERT ... SELECT so we never need to handle the group ID in PHP.
+        if ($groupId <= 0) {
+            return;
+        }
+
         $this->executeInstallerSql(
             "INSERT IGNORE INTO configuration
                 (configuration_title, configuration_key, configuration_value,
                  configuration_description, configuration_group_id,
                  sort_order, date_added, set_function)
-             SELECT
+             VALUES (
                 'Lock Account Edit Fields',
                 'IEMS_ACCOUNT_EDIT_LOCK_ENABLED',
                 'true',
                 'When enabled, customers may only edit their phone number on the account edit page. All other fields display as read-only.',
-                cg.configuration_group_id,
+                " . $groupId . ",
                 1,
                 NOW(),
                 'zen_cfg_select_option(array(''true'', ''false''),'
-             FROM configuration_group cg
-             WHERE cg.configuration_group_title = 'IEMS Settings'
-             LIMIT 1"
+             )"
+        );
+    }
+
+    private function registerAdminPage(int $groupId): void
+    {
+        if ($groupId <= 0) {
+            return;
+        }
+
+        // Remove any stale registration before re-inserting (handles upgrades cleanly).
+        zen_deregister_admin_pages(['configIemsSettings']);
+
+        zen_register_admin_page(
+            'configIemsSettings',
+            'BOX_CONFIGURATION_IEMS_SETTINGS',
+            'FILENAME_CONFIGURATION',
+            'gID=' . $groupId,
+            'configuration',
+            'Y'
         );
     }
 }

@@ -380,6 +380,7 @@ $paginationParameters = implode('&', $filterParameters);
     <h1><?php echo HEADING_TITLE; ?></h1>
 
     <div class="alert alert-info"><?php echo TEXT_READ_ONLY_COUNTIES; ?></div>
+    <p class="help-block"><?php echo TEXT_PROFILE_ACCESS_HELP; ?></p>
     <div class="alert alert-warning"><?php echo TEXT_STATUS_CONSEQUENCE; ?></div>
 
     <?php if ($formMode !== '') { ?>

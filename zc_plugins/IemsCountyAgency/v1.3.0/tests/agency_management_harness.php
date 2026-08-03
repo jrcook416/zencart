@@ -78,6 +78,9 @@ $assert($adminProfiles !== false, 'Native Admin Profiles page should be readable
 if ($page !== false) {
     foreach ([
         "'save', 'deactivate', 'reactivate'",
+        "!zen_is_superuser() && !check_page(FILENAME_IEMS_AGENCIES, [])",
+        "zen_redirect(zen_href_link(FILENAME_DENIED, '', 'SSL'))",
+        'Attempted access to unauthorized page [iems_agencies]',
         'a.agency_identifier LIKE ',
         '$formMode = $isCreate ? \'new\' : \'edit\'',
         'INSERT INTO " . TABLE_IEMS_AGENCIES',
@@ -105,12 +108,16 @@ if ($page !== false) {
         'Agency UI must never mutate county records.'
     );
     $assert(!str_contains(strtolower($page), 'delete agency'), 'Agency UI must not offer hard deletion.');
-    $assert(!str_contains($page, 'check_page('), 'Agency page should rely on native bootstrap authorization.');
     $bootstrapPosition = strpos($page, "require 'includes/application_top.php';");
+    $guardPosition = strpos($page, '!zen_is_superuser() && !check_page(FILENAME_IEMS_AGENCIES, [])');
     $mutationPosition = strpos($page, "if (\$_SERVER['REQUEST_METHOD'] === 'POST')");
     $assert(
-        $bootstrapPosition !== false && $mutationPosition !== false && $bootstrapPosition < $mutationPosition,
-        'Native authorization and CSRF bootstrap must run before every agency mutation.'
+        $bootstrapPosition !== false
+            && $guardPosition !== false
+            && $mutationPosition !== false
+            && $bootstrapPosition < $guardPosition
+            && $guardPosition < $mutationPosition,
+        'Native authorization, defense-in-depth page guard, and CSRF bootstrap must run before every agency mutation.'
     );
 }
 

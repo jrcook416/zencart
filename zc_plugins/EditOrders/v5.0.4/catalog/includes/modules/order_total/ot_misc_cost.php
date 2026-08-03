@@ -247,6 +247,6 @@ class ot_misc_cost
         if (defined($key)) {
             return constant($key);
         }
-        return $default_value;
+        return $default;
     }
 }

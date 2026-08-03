@@ -77,6 +77,6 @@ if (!function_exists('zen_config')) {
             return constant($key);
         }
 
-        return ($default_value !== null) ? $default_value : null;
+        return $default;
     }
 }

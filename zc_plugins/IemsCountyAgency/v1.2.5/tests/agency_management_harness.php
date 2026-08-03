@@ -43,6 +43,10 @@ $assert(IemsAgencyInput::positiveId('12') === 12, 'Positive numeric IDs should p
 $assert(IemsAgencyInput::positiveId('0') === null, 'Zero IDs should be rejected.');
 $assert(IemsAgencyInput::positiveId('1e2') === null, 'Non-digit IDs should be rejected.');
 $assert(IemsAgencyInput::positiveId(['12']) === null, 'Non-scalar IDs should be rejected.');
+$accessDenied = static fn (bool $isSuperuser, bool $profileAllowed): bool => !$isSuperuser && !$profileAllowed;
+$assert(!$accessDenied(false, true), 'An assigned admin profile should be authorized.');
+$assert($accessDenied(false, false), 'An unassigned admin profile should be denied.');
+$assert(!$accessDenied(true, false), 'A superuser should retain native access.');
 $tooLong = IemsAgencyInput::validate([
     'county_id' => '49',
     'agency_identifier' => 'ABCDEFGHIJK',
@@ -60,6 +64,9 @@ $assert($installer !== false, 'Installer should be readable.');
 if ($page !== false) {
     foreach ([
         "'save', 'deactivate', 'reactivate'",
+        "!zen_is_superuser() && !check_page(FILENAME_IEMS_AGENCIES, [])",
+        "zen_redirect(zen_href_link(FILENAME_DENIED, '', 'SSL'))",
+        'Attempted access to unauthorized page [iems_agencies]',
         'a.agency_identifier LIKE ',
         '$formMode = $isCreate ? \'new\' : \'edit\'',
         'INSERT INTO " . TABLE_IEMS_AGENCIES',
@@ -90,6 +97,13 @@ if ($page !== false) {
 
 if ($installer !== false) {
     $assert(str_contains($installer, "'customersIemsAgencies'"), 'Installer should register agency navigation.');
+    $assert(
+        str_contains(
+            $installer,
+            "'customersIemsAgencies',\n                'BOX_CUSTOMERS_IEMS_AGENCIES',\n                'FILENAME_IEMS_AGENCIES'"
+        ),
+        'Agency page registration should use native Admin Profiles page assignment.'
+    );
     $assert(
         !str_contains($installer, 'DROP TABLE IF EXISTS `iems_agencies`'),
         'Plugin lifecycle must not drop the foundation agency table.'

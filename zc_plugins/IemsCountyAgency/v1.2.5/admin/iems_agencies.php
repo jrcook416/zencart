@@ -6,6 +6,14 @@ use Zencart\Plugins\Admin\IemsCountyAgency\IemsAgencyInput;
 
 require 'includes/application_top.php';
 
+if (!zen_is_superuser() && !check_page(FILENAME_IEMS_AGENCIES, [])) {
+    zen_record_admin_activity(
+        'Attempted access to unauthorized page [iems_agencies]. Redirected to DENIED page instead.',
+        'notice'
+    );
+    zen_redirect(zen_href_link(FILENAME_DENIED, '', 'SSL'));
+}
+
 /**
  * @return array<string, mixed>|null
  */

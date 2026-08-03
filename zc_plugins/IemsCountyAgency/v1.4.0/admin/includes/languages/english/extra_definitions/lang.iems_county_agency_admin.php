@@ -6,6 +6,7 @@
 $define = [
     'BOX_CONFIGURATION_IEMS_SETTINGS' => 'IEMS Settings',
     'BOX_CUSTOMERS_IEMS_AGENCIES' => 'IEMS Agencies',
+    'BOX_CUSTOMERS_IEMS_UNITS' => 'IEMS Units',
     'ENTRY_IEMS_ADMIN_COUNTY' => 'IEMS County',
     'ENTRY_IEMS_ADMIN_AGENCY' => 'IEMS Agency',
     'TEXT_IEMS_ADMIN_SELECT_COUNTY' => '-- Select an active county --',

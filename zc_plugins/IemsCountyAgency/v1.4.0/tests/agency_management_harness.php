@@ -206,6 +206,7 @@ $assert(
 
 $intentionallyChangedFiles = [
     'Installer/ScriptedInstaller.php',
+    'admin/includes/languages/english/extra_definitions/lang.iems_county_agency_admin.php',
     'filenames.php',
     'manifest.php',
     'tests/agency_management_harness.php',

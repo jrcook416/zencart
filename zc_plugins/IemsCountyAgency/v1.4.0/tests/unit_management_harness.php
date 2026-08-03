@@ -64,6 +64,9 @@ $page = file_get_contents($pluginRoot . '/admin/iems_units.php');
 $installer = file_get_contents($pluginRoot . '/Installer/ScriptedInstaller.php');
 $manifest = require $pluginRoot . '/manifest.php';
 $filenames = file_get_contents($pluginRoot . '/filenames.php');
+$globalAdminLanguage = require $pluginRoot
+    . '/admin/includes/languages/english/extra_definitions/lang.iems_county_agency_admin.php';
+$pageLanguage = require $pluginRoot . '/admin/includes/languages/english/lang.iems_units.php';
 $adminAuth = file_get_contents($repositoryRoot . '/admin/includes/init_includes/init_admin_auth.php');
 $adminAccess = file_get_contents($repositoryRoot . '/admin/includes/functions/admin_access.php');
 $adminSessions = file_get_contents($repositoryRoot . '/admin/includes/init_includes/init_sessions.php');
@@ -74,6 +77,14 @@ $assert($page !== false, 'Unit admin page should be readable.');
 $assert($installer !== false, 'Installer should be readable.');
 $assert($filenames !== false, 'Filename definitions should be readable.');
 $assert($manifest['pluginVersion'] === 'v1.4.0', 'Manifest should identify plugin version v1.4.0.');
+$assert(
+    ($globalAdminLanguage['BOX_CUSTOMERS_IEMS_UNITS'] ?? null) === 'IEMS Units',
+    'The unit menu language key must be globally available before the admin menu is rendered.'
+);
+$assert(
+    ($pageLanguage['BOX_CUSTOMERS_IEMS_UNITS'] ?? null) === ($globalAdminLanguage['BOX_CUSTOMERS_IEMS_UNITS'] ?? null),
+    'The page-local unit label must remain consistent with the global admin-menu label.'
+);
 
 if ($page !== false) {
     foreach ([

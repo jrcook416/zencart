@@ -250,6 +250,6 @@ class ot_onetime_discount
             return constant($key);
         }
 
-        return ($default_value !== null) ? $default_value : null;
+        return $default;
     }
 }

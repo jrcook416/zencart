@@ -9,6 +9,16 @@ Zen Cart is free and open source software, with free community-driven support av
 
 --------------------
 
+This fork of Zen Cart&reg; was specifically written for the Logistics Section at Indianapolis, the emergency medical services agency providing 911 services to Indianapolis/Marion County, Indiana.  
+
+Indianapolis EMS started using Zen Cart&reg; in either 2012 or 2013.  The system has maintained almost 100% uptime over the last 13 or 14 years.  When the system was first built, files were edited by hand and uploaded to a web server.  Development was tedious and time-consuming.  With the advent of version control via Git or Subversion, the IEMS Zen Cart&reg; project was placed under version control in 2019 with version 1.5.6.  Version 1.5.6 remains in production today.  Development on versions 1.5.7 and 1.5.8 started in 2022 with active development ending in June of 2023 on version 1.5.8.  Development of the 2.2.2 fork began in June of 2026.
+
+This fork of Zen Cart was specifically written to support the Indianapolis EMS Logistics Section and their mutual aid partners in Indiana Hospital Preparedness District Five.  Prior to the development of Zen Cart and the underlying inventory control and management system and processes, Logistics depended on a labor-intensive set of processes to manage the inventory and the workforce. 
+
+In 2012 or 2013, the Zen Cart project was commissioned to fork the Zen Cart code to solve these problems.  Five custom Zen Cart installations were created.  From then until 2018, the installations were managed outside of version control.  With the release of v1.5.6, IEMS-specific code was created on a development branch and then pushed into five separate branches for each installation.  For redundancy, global changes were made in the same fashion with each individual installation holding the respective branches for the others.  Version 1.5.7 development started in 2022 with plans to upgrade to 1.5.8, but that work was stopped in 2023 and resumed in 2026. 
+
+---------------------
+
 
 Zen Cart&reg; v2.2.2
 ---------------------

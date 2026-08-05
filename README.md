@@ -9,7 +9,7 @@ Zen Cart is free and open source software, with free community-driven support av
 
 --------------------
 
-This fork of Zen Cart&reg; was specifically written for the Logistics Section at Indianapolis, the emergency medical services agency providing 911 services to Indianapolis/Marion County, Indiana.  
+This fork of Zen Cart&reg; was specifically written for the Logistics Section at Indianapolis Emergency Medical Services, the emergency medical services agency providing 911 services to Indianapolis/Marion County, Indiana.  
 
 Indianapolis EMS started using Zen Cart&reg; in either 2012 or 2013.  The system has maintained almost 100% uptime over the last 13 or 14 years.  When the system was first built, files were edited by hand and uploaded to a web server.  Development was tedious and time-consuming.  With the advent of version control via Git or Subversion, the IEMS Zen Cart&reg; project was placed under version control in 2019 with version 1.5.6.  Version 1.5.6 remains in production today.  Development on versions 1.5.7 and 1.5.8 started in 2022 with active development ending in June of 2023 on version 1.5.8.  Development of the 2.2.2 fork began in June of 2026.
 

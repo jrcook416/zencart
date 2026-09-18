@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require_once dirname(__DIR__, 2) . '/classes/IemsShippingEligibilityService.php';
+
 class iems_pickup extends ZenShipping
 {
     public function __construct(bool $uninstalling = false)

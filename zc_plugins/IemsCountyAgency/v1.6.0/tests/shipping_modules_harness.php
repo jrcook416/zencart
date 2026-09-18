@@ -173,8 +173,37 @@ foreach (['iems_pickup', 'iems_delivery'] as $module) {
     }
 }
 
-require $pluginRoot . '/catalog/includes/classes/IemsShippingEligibilityService.php';
+$directModule = $argv[1] ?? '';
+if (in_array($directModule, ['iems_pickup', 'iems_delivery'], true)) {
+    $db = new IemsShippingFakeDb();
+    $db->affiliationRows = [['delivery_enabled' => '1']];
+    $_SESSION = ['customer_id' => 42];
+    require $pluginRoot . '/catalog/includes/modules/shipping/' . $directModule . '.php';
+    $module = new $directModule();
+    if (!$module->enabled || !class_exists('IemsShippingEligibilityService', false)) {
+        throw new RuntimeException('Direct module inclusion did not load a working eligibility helper.');
+    }
+    exit(0);
+}
+
+$probeCommand = escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__FILE__);
+foreach (['iems_pickup', 'iems_delivery'] as $module) {
+    passthru($probeCommand . ' ' . escapeshellarg($module), $probeStatus);
+    $assert(
+        $probeStatus === 0,
+        'ModuleFinder-style direct inclusion and construction failed for ' . $module . '.'
+    );
+}
+
+$assert(
+    !class_exists('IemsShippingEligibilityService', false),
+    'The load-order regression must begin without the eligibility helper preloaded.'
+);
 require $pluginRoot . '/catalog/includes/modules/shipping/iems_pickup.php';
+$assert(
+    class_exists('IemsShippingEligibilityService', false),
+    'Direct ModuleFinder-style pickup inclusion must load its eligibility helper.'
+);
 require $pluginRoot . '/catalog/includes/modules/shipping/iems_delivery.php';
 
 $db = new IemsShippingFakeDb();
@@ -325,6 +354,12 @@ $assert(count($db->writes) === 6, 'Each module remove should delete only its con
 
 $moduleFinder = file_get_contents($repositoryRoot . '/includes/classes/ResourceLoaders/ModuleFinder.php');
 $shipping = file_get_contents($repositoryRoot . '/includes/classes/shipping.php');
+$pickupModule = file_get_contents(
+    $pluginRoot . '/catalog/includes/modules/shipping/iems_pickup.php'
+);
+$deliveryModule = file_get_contents(
+    $pluginRoot . '/catalog/includes/modules/shipping/iems_delivery.php'
+);
 $opcShipping = file_get_contents(
     $repositoryRoot . '/includes/templates/template_default/templates/tpl_modules_checkout_one_shipping.php'
 );
@@ -336,6 +371,12 @@ $assert(
     str_contains($shipping, "new ModuleFinder('shipping', new FileSystem())")
         && str_contains($shipping, "loadModuleLanguageFile(\$quote_module['file'], 'shipping')"),
     'Standard shipping initialization must discover module code and plugin language files.'
+);
+$requiredHelperLoad = "require_once dirname(__DIR__, 2) . '/classes/IemsShippingEligibilityService.php';";
+$assert(
+    str_contains($pickupModule, $requiredHelperLoad)
+        && str_contains($deliveryModule, $requiredHelperLoad),
+    'Each directly included IEMS shipping module must deterministically load its helper.'
 );
 $assert(
     str_contains($opcShipping, 'shipping'),

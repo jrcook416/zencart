@@ -20,6 +20,7 @@ of truth: `zc_install/sql/iems_custom/iems_foundation.sql`.
 | `county_ID` | Required foreign key -> `iems_counties.county_ID` |
 | `agency_identifier` | Alphanumeric, max 10 characters |
 | `agency_name` | Clean display name |
+| `delivery_enabled` | Non-null boolean controlled by authorized agency administrators; defaults to `0` (disabled), including on upgrade for all existing agencies |
 
 ### `iems_units`
 | Field | Type/Role |
@@ -66,6 +67,10 @@ selected county; unit options are filtered by selected agency).
 ## 4) Governance decisions
 
 - **System-of-record owner:** IEMS superusers/admin ops.
+- **Shipping eligibility owner:** Agency administrators maintain `delivery_enabled` through **Customers > IEMS Agencies**. Pickup requires a valid active county/agency affiliation; delivery additionally requires this flag to equal `1`.
+- **Fail-closed shipping:** Guest, unaffiliated, inactive, cross-county/inconsistent, duplicate, malformed, or missing-schema affiliation states expose neither IEMS shipping method. An inactive county or agency is never made eligible by `delivery_enabled`.
+- **Shipping cost:** Both Pickup at IEMS Logistics and Delivery to Location are hardcoded to `0.00`; module configuration provides enable/disable and sort order only.
+- **Live evaluation:** Shipping status and quote processing re-query current affiliation and agency state. Eligibility is not cached in session and does not depend on order-time unit selection or the agency fallback.
 - **Updates:** applied via repo SQL imports run by authorized admins.
 - **Update cadence:** ad hoc (as new counties/agencies/units are identified).
 - **Retention:** active/inactive model; hard deletes are avoided.
@@ -76,6 +81,7 @@ selected county; unit options are filtered by selected agency).
   performed the import, when, and the source file/version (see
   `iems_import_log` table).
 - **Seed scope:** import all known data at the time of each import.
+- **Plugin lifecycle:** IemsCountyAgency v1.6.0 adds `delivery_enabled` if missing. Plugin uninstall retains the field and all IEMS data.
 
 ## 5) Branch acceptance criterion
 

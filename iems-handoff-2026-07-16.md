@@ -7,7 +7,17 @@
 - Admin agency and unit management with native Admin Profiles authorization is complete through IemsCountyAgency v1.4.0.
 - IemsCountyAgency v1.5.0 adds mandatory per-order unit selection, standard and One-Page Checkout enforcement, order confirmation display, transient cart-bound state, and order-only persistence to the three existing suburb columns.
 - IemsCountyAgency v1.5.5 preserves mandatory active-unit selection and adds one explicit agency fallback only for a valid active agency with zero active units. The fallback uses a fixed server token, live hierarchy/unit revalidation, transient typed selection state, and the identical server-built agency label at checkout confirmation and in all three order suburb columns, with no schema or customer/address persistence changes.
+- IemsCountyAgency v1.6.0 adds an authorized agency delivery flag plus independent zero-cost **Pickup at IEMS Logistics** and **Delivery to Location** shipping modules. Pickup requires a signed-in customer with a current active, internally consistent county/agency affiliation; delivery additionally requires the active agency's flag. Both methods re-query current database state during status and quote processing, fail closed on schema/data mismatches, and remain independent of unit versus agency-fallback checkout selection.
 - Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, and the final operator runbook remain future work.
+
+### v1.6.0 deployment checks
+
+- Back up the database and upgrade IemsCountyAgency through Plugin Manager; verify `iems_agencies.delivery_enabled` exists as `TINYINT(1) NOT NULL DEFAULT 0` and existing agency rows remain intact and disabled.
+- Assign **Customers > IEMS Agencies** to the intended Admin Profiles and verify authorized delivery-setting changes are logged.
+- Install and enable each module independently under **Modules > Shipping**, set the desired sort orders, and confirm neither module exposes a configurable cost.
+- Test signed-out, unaffiliated, inactive, cross-county, pickup-only, and delivery-enabled customers in standard and One-Page Checkout.
+- Change an agency's delivery flag while checkout is in progress and confirm the next quote refresh reflects the new state immediately.
+- Confirm agencies with active units and agencies using the v1.5.5 fallback receive the same shipping eligibility when their affiliation and delivery flag are otherwise identical.
 
 The branch numbering below is retained as the original plan. Delivery was subsequently organized into incremental plugin versions, so this status section is authoritative for completed scope.
 

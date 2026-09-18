@@ -48,6 +48,17 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Makes no schema or configuration changes and writes no customer, address-book, affiliation, cookie, unit, fallback-row, or separate history data. Existing checkout template insertions are reused unchanged.
 - Upgrade through Plugin Manager from v1.5.0. Validation includes the v1.5.5 agency, unit, and checkout harnesses; unchanged v1.5.0 and v1.4.0 harnesses; PHP lint; prior-version/core/template diff checks; and independent review.
 
+## IEMS County Agency plugin v1.6.0
+
+- Adds `iems_agencies.delivery_enabled` as an idempotent, non-null boolean field that defaults to disabled for every existing and newly-created agency unless an authorized administrator enables it.
+- Extends **Customers > IEMS Agencies** with validated delivery enablement management, list display, persistence, and admin activity logging. Inactive counties or agencies remain ineligible regardless of the flag.
+- Packages two independent Modules > Shipping integrations: **Pickup at IEMS Logistics** for every signed-in customer with a valid active county/agency affiliation, and **Delivery to Location** only when that affiliated agency also has delivery enabled.
+- Both methods are always exactly zero cost. Their module settings expose only normal enable/disable and sort order controls; configuration cannot introduce a charge.
+- Revalidates schema, authentication, affiliation, active county/agency state, county-to-agency consistency, and the current agency flag during status and quote processing. Guest, unaffiliated, inactive, inconsistent, missing-field, duplicate-row, and malformed database states fail closed without transient eligibility caching.
+- Shipping eligibility is independent of v1.5.5 checkout unit selection and agency fallback state. Standard and One-Page Checkout use the existing shared shipping-module discovery pipeline with no core or checkout-template changes.
+- Plugin Manager install/upgrade adds the field if missing without modifying existing IEMS data. Uninstall intentionally retains all IEMS tables, rows, and the delivery flag.
+- Validation includes the v1.6.0 agency, unit, checkout, and shipping harnesses; unchanged v1.5.5, v1.5.0, and v1.4.0 harnesses; PHP lint; prior-version/core/template diff checks; and independent review.
+
 ## Database changes
 
 - Added `is_guest_order` column to the `orders` table with an **add-if-missing guard**.

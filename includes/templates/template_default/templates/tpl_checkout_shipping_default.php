@@ -116,6 +116,7 @@
 <?php
   }
 ?>
+<?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
 <fieldset class="shipping" id="comments">
 <legend><?php echo HEADING_ORDER_COMMENTS; ?></legend>
 <?php echo zen_draw_textarea_field('comments', '45', '3', (isset($comments) ? $comments : ''), 'aria-label="' . HEADING_ORDER_COMMENTS . '"'); ?>

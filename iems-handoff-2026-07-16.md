@@ -1,5 +1,15 @@
 # IEMS Adaptation Handoff (2026-07-16)
 
+## Status update (2026-09-18)
+
+- The county/agency/unit schema and legacy imports are complete.
+- Storefront registration, customer account affiliation handling, the default-enabled account-edit lock, and admin customer affiliation editing are complete.
+- Admin agency and unit management with native Admin Profiles authorization is complete through IemsCountyAgency v1.4.0.
+- IemsCountyAgency v1.5.0 adds mandatory per-order unit selection, standard and One-Page Checkout enforcement, order confirmation display, transient cart-bound state, and order-only persistence to the three existing suburb columns.
+- Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, and the final operator runbook remain future work.
+
+The branch numbering below is retained as the original plan. Delivery was subsequently organized into incremental plugin versions, so this status section is authoritative for completed scope.
+
 ## Working constraints (must persist)
 - **Approval gate:** No code/file changes without explicit user approval first.
 - **Plan-first delegation:** Any delegated session/sub-agent should propose a plan and wait for approval before implementing.
@@ -131,4 +141,3 @@ Use this prompt to start the next coding session:
 >  
 > Start with branch: `<INSERT TARGET BRANCH FROM HANDOFF PLAN>`.  
 > Provide an implementation plan, impacted files/components, data changes, and test strategy. Wait for approval before coding.
-

@@ -27,6 +27,16 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Upgrade from v1.3.0 through Plugin Manager. Registration is idempotent and does not remove existing agency-page profile assignments or recreate/drop IEMS data. Uninstall removes plugin navigation registrations but intentionally retains IEMS data and configuration.
 - Deployment validation: back up the database; confirm the `iems_units` unique and foreign-key constraints; upgrade the plugin; assign the units page to the intended profiles; test authorized, denied, and superuser access; test create/edit validation and agency reassignment; test deactivate/reactivate; confirm activity-log entries; and verify prior agency, affiliation, registration, account-edit, and lock behavior.
 
+## IEMS County Agency plugin v1.5.0
+
+- Requires each signed-in, affiliated customer to select an active unit for the current order. Choices are restricted to units matching the customer's active county and agency hierarchy.
+- Supports standard multi-page checkout, One-Page Checkout, virtual-order payment flow, and the template-default, responsive fallback, Bootstrap, and IEMS rendering paths.
+- Revalidates authentication, affiliation, hierarchy, unit status, cart identity, and label length before order creation. Client-supplied labels are never trusted; the label is rebuilt from current database values as `<county number> <agency identifier> <unit identifier> <unit name>`.
+- Keeps the unit selection transient and order-specific. It is bound to the current customer and cart, survives legitimate checkout and payment redirects, and is cleared on order completion, cart restart, logout, or payment cancellation.
+- Writes the rebuilt label identically to `orders.customers_suburb`, `orders.delivery_suburb`, and `orders.billing_suburb` through the pre-insert order object. It does not update customers, address-book entries, affiliations, configuration, cookies, or a separate history table.
+- Upgrade through Plugin Manager from v1.4.0. No schema or configuration changes are required.
+- Live validation checklist: test standard and One-Page Checkout with physical and virtual carts; verify missing, stale, inactive, and cross-agency units block checkout; verify payment cancellation/return behavior; confirm all three order suburb columns contain the same label; confirm customer, address-book, and affiliation data remain unchanged; and rerun agency/unit administration and profile-access checks.
+
 ## Database changes
 
 - Added `is_guest_order` column to the `orders` table with an **add-if-missing guard**.

@@ -256,6 +256,11 @@ if (!$payment_modules->in_special_checkout()) {
       }
       // ** END PAYPAL EXPRESS CHECKOUT **
 ?>
+            <?php
+            if (!empty($GLOBALS['iems_checkout_unit_render_on_payment'])) {
+                echo $GLOBALS['iems_checkout_unit_selector_html'] ?? '';
+            }
+            ?>
             <div id="orderComments-card" class="card mb-3">
                 <h4 class="card-header"><?= HEADING_ORDER_COMMENTS ?></h4>
                 <div class="card-body p-3">

@@ -78,6 +78,8 @@ require $template->get_template_dir('tpl_modules_opc_credit_selections.php', DIR
 //
 require $template->get_template_dir('tpl_modules_opc_shipping_choices.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_opc_shipping_choices.php';
 
+echo $GLOBALS['iems_checkout_unit_selector_html'] ?? '';
+
 // -----
 // Insert the payment-method choices block.
 //

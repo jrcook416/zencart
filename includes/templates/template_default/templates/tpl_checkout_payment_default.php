@@ -182,6 +182,11 @@ echo $payment_modules->javascript_validation(); ?>
         <?php
     }
     // ** END PAYPAL EXPRESS CHECKOUT ** ?>
+    <?php
+    if (!empty($GLOBALS['iems_checkout_unit_render_on_payment'])) {
+        echo $GLOBALS['iems_checkout_unit_selector_html'] ?? '';
+    }
+    ?>
     <fieldset>
         <legend><?= HEADING_ORDER_COMMENTS ?></legend>
         <?= zen_draw_textarea_field('comments', '45', '3', ($comments ?? ''), 'aria-label="' . HEADING_ORDER_COMMENTS . '"') ?>

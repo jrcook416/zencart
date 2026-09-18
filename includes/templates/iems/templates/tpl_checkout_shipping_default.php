@@ -151,6 +151,7 @@ if (zen_count_shipping_modules() > 0) {
 
 $comments = (isset($comments)) ? $comments : '';
 ?>
+        <?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
         <div id="orderComments-card" class="card mb-3">
             <h2 class="card-header"><?php echo HEADING_ORDER_COMMENTS; ?></h2>
             <div class="card-body p-3">

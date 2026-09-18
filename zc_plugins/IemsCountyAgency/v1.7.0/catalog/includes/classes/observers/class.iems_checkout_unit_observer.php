@@ -13,6 +13,7 @@ class zcObserverIemsCheckoutUnit extends base
         $this->service = new IemsCheckoutUnitService();
         $this->attach($this, [
             'NOTIFY_HEADER_START_CHECKOUT_SHIPPING',
+            'NOTIFY_HEADER_END_CHECKOUT_SHIPPING',
             'NOTIFY_HEADER_START_CHECKOUT_PAYMENT',
             'NOTIFY_HEADER_START_CHECKOUT_CONFIRMATION',
             'NOTIFY_HEADER_START_CHECKOUT_ONE',
@@ -34,6 +35,10 @@ class zcObserverIemsCheckoutUnit extends base
         switch ($eventID) {
             case 'NOTIFY_HEADER_START_CHECKOUT_SHIPPING':
                 $this->handleShippingPage();
+                break;
+
+            case 'NOTIFY_HEADER_END_CHECKOUT_SHIPPING':
+                $this->finalizeShippingPage();
                 break;
 
             case 'NOTIFY_HEADER_START_CHECKOUT_PAYMENT':
@@ -102,6 +107,35 @@ class zcObserverIemsCheckoutUnit extends base
         }
 
         $this->prepareSelector();
+    }
+
+    private function finalizeShippingPage(): void
+    {
+        if (($GLOBALS['iems_checkout_shipping_ready'] ?? false) !== true) {
+            return;
+        }
+
+        $methodsAvailable = ($GLOBALS['free_shipping'] ?? false) === true;
+        foreach (($GLOBALS['quotes'] ?? []) as $quote) {
+            if (
+                !isset($quote['error'])
+                && !empty($quote['methods'])
+                && is_array($quote['methods'])
+            ) {
+                $methodsAvailable = true;
+                break;
+            }
+        }
+        $GLOBALS['iems_checkout_shipping_methods_available'] = $methodsAvailable;
+        if (!$methodsAvailable) {
+            global $messageStack;
+
+            $messageStack->add(
+                'checkout_shipping',
+                ERROR_IEMS_CHECKOUT_NO_SHIPPING_METHODS,
+                'error'
+            );
+        }
     }
 
     private function handlePaymentPage(): void

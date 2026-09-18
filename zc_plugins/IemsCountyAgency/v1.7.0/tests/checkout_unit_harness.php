@@ -452,6 +452,38 @@ $assert(
     'The no-JavaScript first step and any changed unit must clear shipping and refresh before quoting.'
 );
 $_POST = [];
+$reloadedObserver = new zcObserverIemsCheckoutUnit();
+$reloadedHandleShippingPage = new ReflectionMethod($reloadedObserver, 'handleShippingPage');
+$reloadedHandleShippingPage->invoke($reloadedObserver);
+$assert(
+    ($GLOBALS['iems_checkout_shipping_ready'] ?? false) === true
+        && $service->getValidatedSelection(42)['selection_value'] === '9',
+    'The redirected GET must retain the cart-bound selection and advance beyond step one.'
+);
+$messageStack = new IemsCheckoutUnitFakeMessageStack();
+$GLOBALS['quotes'] = [];
+$GLOBALS['free_shipping'] = false;
+$finalizeShippingPage = new ReflectionMethod($reloadedObserver, 'finalizeShippingPage');
+$finalizeShippingPage->invoke($reloadedObserver);
+$assert(
+    ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true) === false
+        && end($messageStack->messages)['message'] === ERROR_IEMS_CHECKOUT_NO_SHIPPING_METHODS,
+    'A confirmed selection with zero actual quote methods must fail explicitly instead of silently looping.'
+);
+$GLOBALS['quotes'] = [[
+    'error' => 'Unavailable for this destination.',
+    'methods' => [['id' => 'zones', 'cost' => 5.00]],
+]];
+$finalizeShippingPage->invoke($reloadedObserver);
+$assert(
+    ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true) === false,
+    'An errored quote must not count as a selectable method.'
+);
+unset(
+    $GLOBALS['quotes'],
+    $GLOBALS['free_shipping'],
+    $GLOBALS['iems_checkout_shipping_methods_available']
+);
 $db->activeUnits = [];
 $service->saveSelection(42, IemsCheckoutUnitService::AGENCY_FALLBACK_TOKEN, 'standard');
 
@@ -661,6 +693,7 @@ $observerContents = file_get_contents(
 );
 $requiredObserverFragments = [
     'NOTIFY_HEADER_START_CHECKOUT_SHIPPING',
+    'NOTIFY_HEADER_END_CHECKOUT_SHIPPING',
     'NOTIFY_HEADER_START_CHECKOUT_PAYMENT',
     'NOTIFY_HEADER_START_CHECKOUT_CONFIRMATION',
     'NOTIFY_HEADER_START_CHECKOUT_ONE',
@@ -708,9 +741,17 @@ foreach ($templateFiles as $templateFile) {
 foreach (array_slice($templateFiles, 0, 3) as $templateFile) {
     $contents = file_get_contents($repositoryRoot . '/' . $templateFile);
     $assert(
-        substr_count($contents, "\$GLOBALS['iems_checkout_shipping_ready'] ?? true") === 2
-            && !str_contains($contents, "\$GLOBALS['iems_checkout_shipping_ready'] ?? false"),
+        preg_match_all(
+            '/\$GLOBALS\[\'iems_checkout_shipping_ready\'\]\s*\?\?\s*true/',
+            $contents
+        ) === 2,
         'The v1.7 observer must gate shipping without breaking older or disabled plugin versions: ' . $templateFile
+    );
+    $assert(
+        str_contains($contents, 'iems_checkout_shipping_methods_available')
+            && str_contains($contents, '$iems_checkout_can_continue'),
+        'A confirmed selection with no quote methods must display an error path without a looping submit: '
+            . $templateFile
     );
 }
 

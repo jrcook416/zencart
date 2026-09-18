@@ -32,7 +32,11 @@
 <br>
 <?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
 <?php
-  if (($GLOBALS['iems_checkout_shipping_ready'] ?? true) && zen_count_shipping_modules() > 0) {
+  if (
+    ($GLOBALS['iems_checkout_shipping_ready'] ?? true)
+    && ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true)
+    && zen_count_shipping_modules() > 0
+  ) {
 ?>
 
 <h2 id="checkoutShippingHeadingMethod"><?php echo HEADING_SHIPPING_METHOD; ?></h2>
@@ -125,17 +129,19 @@
 <?php
 // this can be defined in site-specific-settings
 $show_contact_us_instead_of_continue = $show_contact_us_instead_of_continue ?? false;
+$iems_checkout_can_continue = ($GLOBALS['iems_checkout_shipping_ready'] ?? false) !== true
+    || ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true);
 ?>
-<?php if (empty($show_contact_us_instead_of_continue)) { ?>
+<?php if ($iems_checkout_can_continue && empty($show_contact_us_instead_of_continue)) { ?>
     <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT); ?></div>
     <div class="buttonRow back"><?php echo '<strong>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</strong>' . '<br>' . TEXT_CONTINUE_CHECKOUT_PROCEDURE; ?></div>
 <?php } else { ?>
-    <?php if (zen_count_shipping_modules() > 0) { ?>
+    <?php if ($iems_checkout_can_continue && zen_count_shipping_modules() > 0) { ?>
         <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT); ?></div>
     <?php } else { ?>
         <div class="buttonRow forward"><a href="<?php echo zen_href_link(FILENAME_CONTACT_US, '', 'SSL'); ?>" id="linkContactUs"><?php echo zen_image_button(BUTTON_IMAGE_CONTACT_US , BUTTON_CONTACT_US_TEXT); ?></a></div>
     <?php } ?>
-    <?php if (zen_count_shipping_modules() > 0) { ?>
+    <?php if ($iems_checkout_can_continue && zen_count_shipping_modules() > 0) { ?>
         <div class="buttonRow back"><?php echo '<strong>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</strong>' . '<br>' . TEXT_CONTINUE_CHECKOUT_PROCEDURE; ?></div>
     <?php } else { ?>
         <div class="buttonRow back"><?php echo '<strong>' . TITLE_NO_SHIPPING_AVAILABLE . '</strong>' . '<br>' . TEXT_NO_SHIPPING_AVAILABLE; ?></div>

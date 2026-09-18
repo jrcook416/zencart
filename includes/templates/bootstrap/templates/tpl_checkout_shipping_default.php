@@ -52,7 +52,11 @@ if ($displayAddressEdit) {
         </div>
         <?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
 <?php
-if (($GLOBALS['iems_checkout_shipping_ready'] ?? true) && zen_count_shipping_modules() > 0) {
+if (
+    ($GLOBALS['iems_checkout_shipping_ready'] ?? true)
+    && ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true)
+    && zen_count_shipping_modules() > 0
+) {
 ?>
         <div id="shippingMethod-card" class="card mb-3">
             <h2 class="card-header"><?php echo HEADING_SHIPPING_METHOD; ?></h2>
@@ -166,7 +170,12 @@ $comments = (isset($comments)) ? $comments : '';
 // can be overridden via extra_datafiles/site-specific-bootstrap-settings.php.
 //
 $show_contact_us_instead_of_continue = $zca_show_contact_us_instead_of_continue ?? false;
-if (empty($show_contact_us_instead_of_continue) || zen_count_shipping_modules() > 0) {
+$iems_checkout_can_continue = ($GLOBALS['iems_checkout_shipping_ready'] ?? false) !== true
+    || ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true);
+if (
+    $iems_checkout_can_continue
+    && (empty($show_contact_us_instead_of_continue) || zen_count_shipping_modules() > 0)
+) {
     $action_button = zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT);
     $instruction_title = TITLE_CONTINUE_CHECKOUT_PROCEDURE;
     $instruction_text = TEXT_CONTINUE_CHECKOUT_PROCEDURE;

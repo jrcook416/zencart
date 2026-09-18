@@ -16,4 +16,5 @@ return [
     'ERROR_IEMS_CHECKOUT_UNIT_STALE' => 'Your IEMS selection expired because the cart or account changed. Select it again.',
     'ERROR_IEMS_CHECKOUT_DELIVERY_ADDRESS' => 'The selected IEMS shipping destination is incomplete or unavailable. Return to shipping or contact an administrator.',
     'ERROR_IEMS_CHECKOUT_PICKUP_CONFIGURATION' => 'IEMS Logistics pickup is not fully configured. Select another shipping method or contact an administrator.',
+    'ERROR_IEMS_CHECKOUT_NO_SHIPPING_METHODS' => 'Your IEMS selection was confirmed, but no shipping method is currently available. Contact an administrator before continuing checkout.',
 ];

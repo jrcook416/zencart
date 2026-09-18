@@ -37,6 +37,17 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Upgrade through Plugin Manager from v1.4.0. No schema or configuration changes are required.
 - Live validation checklist: test standard and One-Page Checkout with physical and virtual carts; verify missing, stale, inactive, and cross-agency units block checkout; verify payment cancellation/return behavior; confirm all three order suburb columns contain the same label; confirm customer, address-book, and affiliation data remain unchanged; and rerun agency/unit administration and profile-access checks.
 
+## IEMS County Agency plugin v1.5.5
+
+- Preserves v1.5.0 behavior when the signed-in customer's valid active agency has one or more active units: checkout lists only active units and requires an explicit unit selection.
+- When that agency has zero active units, checkout lists exactly one explicit agency fallback as `<county number> <agency identifier> <agency name>`. The fallback is never auto-selected.
+- Uses a fixed nonnumeric fallback token recognized only by the server. The agency reference and label are rebuilt from the customer's current active county/agency affiliation; submitted labels and agency IDs are not trusted.
+- Revalidates the active, internally consistent county/agency hierarchy and the current active-unit set whenever transient state is restored. Adding or reactivating any unit invalidates an agency fallback before order creation and requires an explicit unit selection.
+- Stores transient selection state as customer ID, cart ID, selection type, server-derived reference ID, and checkout flow. Standard, One-Page Checkout, virtual-order, PayPal, cancellation, cart restart, logout, and order-completion behavior remain covered by the v1.5.0 lifecycle hooks.
+- Rejects empty and greater-than-128-character unit or agency labels without truncation. The rebuilt label shown at confirmation is assigned identically to `orders.customers_suburb`, `orders.delivery_suburb`, and `orders.billing_suburb`.
+- Makes no schema or configuration changes and writes no customer, address-book, affiliation, cookie, unit, fallback-row, or separate history data. Existing checkout template insertions are reused unchanged.
+- Upgrade through Plugin Manager from v1.5.0. Validation includes the v1.5.5 agency, unit, and checkout harnesses; unchanged v1.5.0 and v1.4.0 harnesses; PHP lint; prior-version/core/template diff checks; and independent review.
+
 ## Database changes
 
 - Added `is_guest_order` column to the `orders` table with an **add-if-missing guard**.

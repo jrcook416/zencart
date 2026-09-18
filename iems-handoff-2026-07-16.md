@@ -6,6 +6,7 @@
 - Storefront registration, customer account affiliation handling, the default-enabled account-edit lock, and admin customer affiliation editing are complete.
 - Admin agency and unit management with native Admin Profiles authorization is complete through IemsCountyAgency v1.4.0.
 - IemsCountyAgency v1.5.0 adds mandatory per-order unit selection, standard and One-Page Checkout enforcement, order confirmation display, transient cart-bound state, and order-only persistence to the three existing suburb columns.
+- IemsCountyAgency v1.5.5 preserves mandatory active-unit selection and adds one explicit agency fallback only for a valid active agency with zero active units. The fallback uses a fixed server token, live hierarchy/unit revalidation, transient typed selection state, and the identical server-built agency label at checkout confirmation and in all three order suburb columns, with no schema or customer/address persistence changes.
 - Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, and the final operator runbook remain future work.
 
 The branch numbering below is retained as the original plan. Delivery was subsequently organized into incremental plugin versions, so this status section is authoritative for completed scope.

@@ -20,8 +20,12 @@
 ### v1.7.0 deployment checks
 
 - Back up the database and upgrade IemsCountyAgency through Plugin Manager. Verify the three `iems_units.delivery_*` columns are nullable with lengths 128/128/64. The normalizer converts blanks to `NULL` and clears partial triples.
-- Have authorized unit administrators enter all three address fields for every unit that should qualify for Delivery to Location. Confirm inactive units retain their fields but cannot quote delivery.
-- Open **Modules > Shipping > Pickup at IEMS Logistics** and configure recipient/location, optional company, street, city, and postcode. The module remains visibly unavailable until required values and the Indiana/United States code lookup validate.
+- Install and enable **Delivery to Location** (`iemsdelivery`) under **Modules > Shipping**.
+- Under **Customers > IEMS Agencies**, keep the selected unit's parent agency active and set **Delivery Enabled**. Delivery authorization is agency-level, not a unit setting.
+- Under **Customers > IEMS Units**, keep each delivery-ready real unit active and provide complete street, city, and postcode values. Inactive units retain their address but cannot quote delivery.
+- Install and enable **Pickup at IEMS Logistics** (`iemspickup`), then configure its recipient/location, optional company, street, city, and postcode. Pickup is withheld until all required values and the Indiana/United States code lookup validate.
+- Treat the explicit zero-unit agency fallback as pickup-only; it never qualifies for Delivery to Location.
+- Verify all shipping prerequisites before rollout. If no eligible, fully configured method exists, checkout displays the unavailable state and cannot proceed.
 - Exercise the two-step standard checkout without JavaScript: confirm a unit/fallback, observe the refresh and shipping methods, then change the selection and verify the prior method is cleared. Repeat the supported OPC, virtual, PayPal/payment-return, cancellation, and stale-state paths.
 - Place one pickup and one delivery order. Verify only delivery fields use the IEMS destination, all three order suburb labels remain canonical, and customer, billing, affiliation, unit, and address-book data are unchanged.
 - Test signed-out, unaffiliated, inactive, cross-county, pickup-only, and delivery-enabled customers in standard and One-Page Checkout.

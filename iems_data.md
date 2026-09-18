@@ -91,7 +91,16 @@ selected county; unit options are filtered by selected agency).
 - **Seed scope:** import all known data at the time of each import.
 - **Plugin lifecycle:** IemsCountyAgency v1.7.0 retains v1.6.0 `delivery_enabled`, adds/normalizes the three nullable unit address fields, and adds missing pickup-address settings when the pickup module is already installed. Plugin uninstall retains all IEMS reference fields and rows.
 
-## 5) Branch acceptance criterion
+## 5) Shipping deployment/operations checklist
+
+- Install and enable **Delivery to Location** (`iemsdelivery`) under **Modules > Shipping**.
+- Under **Customers > IEMS Agencies**, keep the selected unit's parent agency active and set **Delivery Enabled**. Delivery authorization is agency-level, not a unit setting.
+- Under **Customers > IEMS Units**, keep the selected real unit active and provide complete street, city, and postcode values.
+- Install and enable **Pickup at IEMS Logistics** (`iemspickup`), then configure its recipient/location, street, city, and postcode. Pickup is withheld if any required value is missing.
+- Treat the explicit zero-unit agency fallback as pickup-only; it never qualifies for Delivery to Location.
+- Verify these prerequisites before rollout. If no eligible, fully configured shipping method exists, checkout displays the unavailable state and cannot proceed.
+
+## 6) Branch acceptance criterion
 
 - Standard GitHub Actions testing (existing suites: `zc_unit_test_suite.yml`,
   `zc_feature_test_admin_suite.yml`, `zc_feature_test_store_suite.yml`) must

@@ -7,10 +7,10 @@ define('TABLE_CONFIGURATION', 'configuration');
 define('TABLE_IEMS_AGENCIES', 'iems_agencies');
 define('TABLE_IEMS_COUNTIES', 'iems_counties');
 define('TABLE_IEMS_CUSTOMER_AFFILIATIONS', 'iems_customer_affiliations');
-define('MODULE_SHIPPING_IEMS_PICKUP_STATUS', 'True');
-define('MODULE_SHIPPING_IEMS_PICKUP_SORT_ORDER', '0');
-define('MODULE_SHIPPING_IEMS_DELIVERY_STATUS', 'True');
-define('MODULE_SHIPPING_IEMS_DELIVERY_SORT_ORDER', '10');
+define('MODULE_SHIPPING_IEMSPICKUP_STATUS', 'True');
+define('MODULE_SHIPPING_IEMSPICKUP_SORT_ORDER', '0');
+define('MODULE_SHIPPING_IEMSDELIVERY_STATUS', 'True');
+define('MODULE_SHIPPING_IEMSDELIVERY_SORT_ORDER', '10');
 
 final class IemsShippingFakeResult
 {
@@ -165,7 +165,20 @@ $assert = static function (bool $condition, string $message): void {
 
 $pluginRoot = dirname(__DIR__);
 $repositoryRoot = dirname($pluginRoot, 3);
-foreach (['iems_pickup', 'iems_delivery'] as $module) {
+foreach (
+    [
+        'catalog/includes/modules/shipping/iems_pickup.php',
+        'catalog/includes/modules/shipping/iems_delivery.php',
+        'catalog/includes/languages/english/modules/shipping/lang.iems_pickup.php',
+        'catalog/includes/languages/english/modules/shipping/lang.iems_delivery.php',
+    ] as $legacyFile
+) {
+    $assert(
+        !file_exists($pluginRoot . '/' . $legacyFile),
+        'Underscored legacy shipping files must be removed: ' . $legacyFile
+    );
+}
+foreach (['iemspickup', 'iemsdelivery'] as $module) {
     $language = require $pluginRoot
         . '/catalog/includes/languages/english/modules/shipping/lang.' . $module . '.php';
     foreach ($language as $name => $value) {
@@ -174,7 +187,7 @@ foreach (['iems_pickup', 'iems_delivery'] as $module) {
 }
 
 $directModule = $argv[1] ?? '';
-if (in_array($directModule, ['iems_pickup', 'iems_delivery'], true)) {
+if (in_array($directModule, ['iemspickup', 'iemsdelivery'], true)) {
     $db = new IemsShippingFakeDb();
     $db->affiliationRows = [['delivery_enabled' => '1']];
     $_SESSION = ['customer_id' => 42];
@@ -187,7 +200,7 @@ if (in_array($directModule, ['iems_pickup', 'iems_delivery'], true)) {
 }
 
 $probeCommand = escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__FILE__);
-foreach (['iems_pickup', 'iems_delivery'] as $module) {
+foreach (['iemspickup', 'iemsdelivery'] as $module) {
     passthru($probeCommand . ' ' . escapeshellarg($module), $probeStatus);
     $assert(
         $probeStatus === 0,
@@ -199,12 +212,12 @@ $assert(
     !class_exists('IemsShippingEligibilityService', false),
     'The load-order regression must begin without the eligibility helper preloaded.'
 );
-require $pluginRoot . '/catalog/includes/modules/shipping/iems_pickup.php';
+require $pluginRoot . '/catalog/includes/modules/shipping/iemspickup.php';
 $assert(
     class_exists('IemsShippingEligibilityService', false),
     'Direct ModuleFinder-style pickup inclusion must load its eligibility helper.'
 );
-require $pluginRoot . '/catalog/includes/modules/shipping/iems_delivery.php';
+require $pluginRoot . '/catalog/includes/modules/shipping/iemsdelivery.php';
 
 $db = new IemsShippingFakeDb();
 $service = new IemsShippingEligibilityService();
@@ -254,14 +267,18 @@ $_SESSION = [
     ],
 ];
 $db->affiliationRows = [['delivery_enabled' => '1']];
-$pickup = new iems_pickup();
-$delivery = new iems_delivery();
+$pickup = new iemspickup();
+$delivery = new iemsdelivery();
 $assert($pickup->enabled && $delivery->enabled, 'Both modules should enable for an eligible agency.');
+$assert(
+    !str_contains($pickup->code, '_') && !str_contains($delivery->code, '_'),
+    'ZenShipping module codes must not contain the core module/method delimiter.'
+);
 
 $iemsGuestCheckout = true;
 $assert(
-    (new iems_pickup())->quote()['methods'] === []
-        && (new iems_delivery())->quote()['methods'] === [],
+    (new iemspickup())->quote()['methods'] === []
+        && (new iemsdelivery())->quote()['methods'] === [],
     'One-Page Checkout guests with a numeric pseudo-customer ID must fail closed.'
 );
 $iemsGuestCheckout = false;
@@ -277,6 +294,46 @@ $assert(
     $pickupQuote['methods'][0]['title'] === 'Pickup at IEMS Logistics'
         && $deliveryQuote['methods'][0]['title'] === 'Delivery to Location',
     'Each shipping module must return its approved customer-facing title.'
+);
+
+$checkoutShipping = file_get_contents(
+    $repositoryRoot . '/includes/modules/pages/checkout_shipping/header_php.php'
+);
+$shippingClass = file_get_contents($repositoryRoot . '/includes/classes/shipping.php');
+$opcAjax = file_get_contents(
+    $repositoryRoot . '/includes/classes/ajax/zcAjaxOnePageCheckout.php'
+);
+foreach (
+    [
+        'iemspickup' => $pickupQuote,
+        'iemsdelivery' => $deliveryQuote,
+    ] as $expectedModule => $quote
+) {
+    $shippingId = $quote['id'] . '_' . $quote['methods'][0]['id'];
+    $shippingElements = explode('_', $shippingId);
+    $assert(
+        $shippingElements === [$expectedModule, $expectedModule],
+        'Generated shipping IDs must contain exactly one core module/method delimiter.'
+    );
+    [$standardModule, $standardMethod] = explode('_', $shippingId);
+    $assert(
+        $standardModule === $expectedModule
+            && $standardMethod === $expectedModule,
+        'Standard checkout must round-trip the generated module and method IDs.'
+    );
+    $reinitializedModule = substr($shippingId, 0, strpos($shippingId, '_'));
+    $assert(
+        $reinitializedModule === $expectedModule
+            && in_array($reinitializedModule . '.php', ['iemspickup.php', 'iemsdelivery.php'], true),
+        'Module-specific shipping initialization must resolve the installed module filename.'
+    );
+}
+$assert(
+    str_contains($checkoutShipping, "list(\$module, \$method) = explode('_', \$_POST['shipping'])")
+        && str_contains($shippingClass, "substr(\$module['id'], 0, strpos(\$module['id'], '_'))")
+        && str_contains($opcAjax, "explode('_', \$_POST['shipping_selection'])")
+        && str_contains($opcAjax, 'count($shipping_elements) !== 2'),
+    'The regression must stay aligned with standard and OPC first-underscore parsing.'
 );
 
 $_SESSION['iems_checkout_unit']['selection_type'] = 'agency';
@@ -313,25 +370,25 @@ $assert(
 
 unset($_SESSION['customer_id']);
 $assert(
-    (new iems_pickup())->quote()['methods'] === []
-        && (new iems_delivery())->quote()['methods'] === [],
+    (new iemspickup())->quote()['methods'] === []
+        && (new iemsdelivery())->quote()['methods'] === [],
     'Guest module construction and quoting must fail closed.'
 );
 
 $_SESSION['customer_id'] = 42;
-$pickup = new iems_pickup();
-$delivery = new iems_delivery();
+$pickup = new iemspickup();
+$delivery = new iemsdelivery();
 $assert(
     $pickup->keys() === [
-        'MODULE_SHIPPING_IEMS_PICKUP_STATUS',
-        'MODULE_SHIPPING_IEMS_PICKUP_SORT_ORDER',
+        'MODULE_SHIPPING_IEMSPICKUP_STATUS',
+        'MODULE_SHIPPING_IEMSPICKUP_SORT_ORDER',
     ],
     'Pickup must expose only enable and sort-order configuration.'
 );
 $assert(
     $delivery->keys() === [
-        'MODULE_SHIPPING_IEMS_DELIVERY_STATUS',
-        'MODULE_SHIPPING_IEMS_DELIVERY_SORT_ORDER',
+        'MODULE_SHIPPING_IEMSDELIVERY_STATUS',
+        'MODULE_SHIPPING_IEMSDELIVERY_SORT_ORDER',
     ],
     'Delivery must expose only enable and sort-order configuration.'
 );
@@ -339,7 +396,10 @@ $assert(
 $db->writes = [];
 $pickup->install();
 $delivery->install();
-$assert(count($db->writes) === 4, 'Each module install should create exactly two configuration rows.');
+$assert(
+    count($db->writes) === 6,
+    'Each module install should remove its legacy keys and create exactly two configuration rows.'
+);
 foreach ($db->writes as $write) {
     $assert(
         !str_contains($write, '_COST')
@@ -348,17 +408,22 @@ foreach ($db->writes as $write) {
         'Shipping module configuration must not expose cost or manage schema.'
     );
 }
+$assert(
+    str_contains($db->writes[0], 'MODULE_SHIPPING_IEMS_PICKUP_STATUS')
+        && str_contains($db->writes[3], 'MODULE_SHIPPING_IEMS_DELIVERY_STATUS'),
+    'Installing renamed modules must remove orphaned underscored configuration keys.'
+);
 $pickup->remove();
 $delivery->remove();
-$assert(count($db->writes) === 6, 'Each module remove should delete only its configuration keys.');
+$assert(count($db->writes) === 8, 'Each module remove should delete only its configuration keys.');
 
 $moduleFinder = file_get_contents($repositoryRoot . '/includes/classes/ResourceLoaders/ModuleFinder.php');
-$shipping = file_get_contents($repositoryRoot . '/includes/classes/shipping.php');
+$shipping = $shippingClass;
 $pickupModule = file_get_contents(
-    $pluginRoot . '/catalog/includes/modules/shipping/iems_pickup.php'
+    $pluginRoot . '/catalog/includes/modules/shipping/iemspickup.php'
 );
 $deliveryModule = file_get_contents(
-    $pluginRoot . '/catalog/includes/modules/shipping/iems_delivery.php'
+    $pluginRoot . '/catalog/includes/modules/shipping/iemsdelivery.php'
 );
 $opcShipping = file_get_contents(
     $repositoryRoot . '/includes/templates/template_default/templates/tpl_modules_checkout_one_shipping.php'
@@ -397,8 +462,8 @@ $assert(
     'Plugin uninstall must preserve all IEMS data and the delivery field.'
 );
 $assert(
-    str_contains($installer, 'new iems_pickup(uninstalling: true)')
-        && str_contains($installer, 'new iems_delivery(uninstalling: true)')
+    str_contains($installer, 'new iemspickup(uninstalling: true)')
+        && str_contains($installer, 'new iemsdelivery(uninstalling: true)')
         && substr_count($installer, '->remove();') === 2,
     'Plugin uninstall must remove both shipping modules through their configuration-only lifecycle.'
 );

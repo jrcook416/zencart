@@ -181,8 +181,8 @@ if ($installer !== false) {
         'Plugin uninstall must preserve the delivery field.'
     );
     $assert(
-        str_contains($installer, 'new iems_pickup(uninstalling: true)')
-            && str_contains($installer, 'new iems_delivery(uninstalling: true)'),
+        str_contains($installer, 'new iemspickup(uninstalling: true)')
+            && str_contains($installer, 'new iemsdelivery(uninstalling: true)'),
         'Plugin uninstall must invoke both modules to remove their configuration only.'
     );
     $assert(str_contains($installer, "'customersIemsAgencies'"), 'Installer should register agency navigation.');

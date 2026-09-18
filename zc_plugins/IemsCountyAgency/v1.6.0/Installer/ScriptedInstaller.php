@@ -50,14 +50,15 @@ class ScriptedInstaller extends ScriptedInstallBase
 
     protected function executeUninstall()
     {
-        if (zen_config('MODULE_SHIPPING_IEMS_PICKUP_STATUS') !== null) {
-            require_once $this->pluginDir . '/catalog/includes/modules/shipping/iems_pickup.php';
-            (new iems_pickup(uninstalling: true))->remove();
+        if (zen_config('MODULE_SHIPPING_IEMSPICKUP_STATUS') !== null) {
+            require_once $this->pluginDir . '/catalog/includes/modules/shipping/iemspickup.php';
+            (new iemspickup(uninstalling: true))->remove();
         }
-        if (zen_config('MODULE_SHIPPING_IEMS_DELIVERY_STATUS') !== null) {
-            require_once $this->pluginDir . '/catalog/includes/modules/shipping/iems_delivery.php';
-            (new iems_delivery(uninstalling: true))->remove();
+        if (zen_config('MODULE_SHIPPING_IEMSDELIVERY_STATUS') !== null) {
+            require_once $this->pluginDir . '/catalog/includes/modules/shipping/iemsdelivery.php';
+            (new iemsdelivery(uninstalling: true))->remove();
         }
+        $this->removeLegacyShippingConfiguration();
 
         zen_deregister_admin_pages(['configIemsSettings', 'customersIemsAgencies', 'customersIemsUnits']);
 
@@ -103,6 +104,19 @@ class ScriptedInstaller extends ScriptedInstallBase
         $this->executeInstallerSql(
             "ALTER TABLE `iems_agencies`
                 MODIFY COLUMN `delivery_enabled` tinyint(1) NOT NULL DEFAULT 0"
+        );
+    }
+
+    private function removeLegacyShippingConfiguration(): void
+    {
+        $this->executeInstallerSql(
+            "DELETE FROM " . TABLE_CONFIGURATION . "
+              WHERE configuration_key IN (
+                'MODULE_SHIPPING_IEMS_PICKUP_STATUS',
+                'MODULE_SHIPPING_IEMS_PICKUP_SORT_ORDER',
+                'MODULE_SHIPPING_IEMS_DELIVERY_STATUS',
+                'MODULE_SHIPPING_IEMS_DELIVERY_SORT_ORDER'
+              )"
         );
     }
 

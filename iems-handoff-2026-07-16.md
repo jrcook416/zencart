@@ -14,7 +14,7 @@
 
 - Back up the database and upgrade IemsCountyAgency through Plugin Manager; verify `iems_agencies.delivery_enabled` exists as `TINYINT(1) NOT NULL DEFAULT 0` and existing agency rows remain intact and disabled.
 - Assign **Customers > IEMS Agencies** to the intended Admin Profiles and verify authorized delivery-setting changes are logged.
-- Install and enable each module independently under **Modules > Shipping**, set the desired sort orders, and confirm neither module exposes a configurable cost.
+- Install and enable the underscore-free `iemspickup` and `iemsdelivery` modules independently under **Modules > Shipping**, set the desired sort orders, and confirm neither module exposes a configurable cost.
 - Test signed-out, unaffiliated, inactive, cross-county, pickup-only, and delivery-enabled customers in standard and One-Page Checkout.
 - Change an agency's delivery flag while checkout is in progress and confirm the next quote refresh reflects the new state immediately.
 - Confirm agencies with active units and agencies using the v1.5.5 fallback receive the same shipping eligibility when their affiliation and delivery flag are otherwise identical.

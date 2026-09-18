@@ -50,8 +50,9 @@ if ($displayAddressEdit) {
                 </div>
             </div>
         </div>
+        <?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
 <?php
-if (zen_count_shipping_modules() > 0) {
+if (($GLOBALS['iems_checkout_shipping_ready'] ?? true) && zen_count_shipping_modules() > 0) {
 ?>
         <div id="shippingMethod-card" class="card mb-3">
             <h2 class="card-header"><?php echo HEADING_SHIPPING_METHOD; ?></h2>
@@ -75,7 +76,7 @@ if (zen_count_shipping_modules() > 0) {
 
                 <div id="shippingMethod-selected" class="selected"><?php echo sprintf(FREE_SHIPPING_DESCRIPTION, $currencies->format(MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER)) . zen_draw_hidden_field('shipping', 'free_free'); ?></div>
 <?php
-    } else {
+    } elseif ($GLOBALS['iems_checkout_shipping_ready'] ?? true) {
         $radio_buttons = 0;
         for ($i = 0, $n = count($quotes); $i < $n; $i++) {
       // bof: field set
@@ -151,7 +152,6 @@ if (zen_count_shipping_modules() > 0) {
 
 $comments = (isset($comments)) ? $comments : '';
 ?>
-        <?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
         <div id="orderComments-card" class="card mb-3">
             <h2 class="card-header"><?php echo HEADING_ORDER_COMMENTS; ?></h2>
             <div class="card-body p-3">

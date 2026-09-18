@@ -30,8 +30,9 @@
 <div class="floatingBox important forward"><?php echo TEXT_CHOOSE_SHIPPING_DESTINATION; ?></div>
 <br class="clearBoth">
 <br>
+<?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
 <?php
-  if (zen_count_shipping_modules() > 0) {
+  if (($GLOBALS['iems_checkout_shipping_ready'] ?? true) && zen_count_shipping_modules() > 0) {
 ?>
 
 <h2 id="checkoutShippingHeadingMethod"><?php echo HEADING_SHIPPING_METHOD; ?></h2>
@@ -57,7 +58,7 @@
 <div id="defaultSelected"><?php echo sprintf(FREE_SHIPPING_DESCRIPTION, $currencies->format(MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER)) . zen_draw_hidden_field('shipping', 'free_free'); ?></div>
 
 <?php
-    } else {
+    } elseif ($GLOBALS['iems_checkout_shipping_ready'] ?? true) {
       $radio_buttons = 0;
       for ($i=0, $n=sizeof($quotes); $i<$n; $i++) {
       // bof: field set
@@ -116,7 +117,6 @@
 <?php
   }
 ?>
-<?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
 <fieldset class="shipping" id="comments">
 <legend><?php echo HEADING_ORDER_COMMENTS; ?></legend>
 <?php echo zen_draw_textarea_field('comments', '45', '3', (isset($comments) ? $comments : ''), 'aria-label="' . HEADING_ORDER_COMMENTS . '"'); ?>

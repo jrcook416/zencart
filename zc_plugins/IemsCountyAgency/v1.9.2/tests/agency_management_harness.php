@@ -241,7 +241,7 @@ $adminHtmlOutput = file_get_contents($repositoryRoot . '/admin/includes/function
 $adminProfiles = file_get_contents($repositoryRoot . '/admin/profiles.php');
 $assert($page !== false, 'Agency admin page should be readable.');
 $assert($installer !== false, 'Installer should be readable.');
-$assert($manifest['pluginVersion'] === 'v1.9.1', 'Manifest should identify plugin version v1.9.1.');
+$assert($manifest['pluginVersion'] === 'v1.9.2', 'Manifest should identify plugin version v1.9.2.');
 $assert($adminAuth !== false, 'Native admin authorization bootstrap should be readable.');
 $assert($adminAccess !== false, 'Native admin access functions should be readable.');
 $assert($adminSessions !== false, 'Native admin session bootstrap should be readable.');
@@ -433,18 +433,19 @@ $relativeFiles = static function (string $root): array {
 
     return $files;
 };
-$previousRoot = dirname($pluginRoot) . '/v1.9.0';
+$previousRoot = dirname($pluginRoot) . '/v1.9.1';
 $previousFiles = $relativeFiles($previousRoot);
 $currentFiles = $relativeFiles($pluginRoot);
 $assert(
     array_diff($previousFiles, $currentFiles) === [],
-    'v1.9.1 must carry forward the complete v1.9.0 payload.'
+    'v1.9.2 must carry forward the complete v1.9.1 payload.'
 );
 
 $intentionallyChangedFiles = [
     'manifest.php',
     'tests/agency_management_harness.php',
     'tests/unit_management_harness.php',
+    'catalog/includes/classes/IemsShippingAddressService.php',
     'catalog/includes/classes/observers/class.iems_checkout_unit_observer.php',
     'catalog/includes/languages/english/extra_definitions/lang.iems_checkout_unit.php',
     'tests/checkout_unit_harness.php',
@@ -454,7 +455,7 @@ foreach (array_diff($previousFiles, $intentionallyChangedFiles) as $relativePath
     $newFile = $pluginRoot . '/' . $relativePath;
     $assert(
         hash_file('sha256', $oldFile) === hash_file('sha256', $newFile),
-        'v1.9.0 behavior changed unexpectedly: ' . $relativePath
+        'v1.9.1 behavior changed unexpectedly: ' . $relativePath
     );
 }
 

@@ -11,10 +11,14 @@ final class IemsShippingAddressService
     public const MODULE_DELIVERY = 'iemsdelivery';
 
     /**
+     * @param array<string, mixed> $customerAddress
      * @return array<string, mixed>|null
      */
-    public function getDestination(int $customerId, string $shippingModule): ?array
-    {
+    public function getDestination(
+        int $customerId,
+        string $shippingModule,
+        array $customerAddress = []
+    ): ?array {
         if (!$this->isModuleEnabled($shippingModule)) {
             return null;
         }
@@ -35,8 +39,9 @@ final class IemsShippingAddressService
             }
 
             return $this->buildAddress(
-                trim($selection['unit_identifier'] . ' ' . $selection['unit_name']),
-                $selection['agency_name'],
+                (string)($customerAddress['firstname'] ?? ''),
+                (string)($customerAddress['lastname'] ?? ''),
+                (string)($customerAddress['company'] ?? ''),
                 $selection['street_address'],
                 $selection['city'],
                 $selection['postcode'],
@@ -51,6 +56,7 @@ final class IemsShippingAddressService
 
         return $this->buildAddress(
             $this->configurationValue('MODULE_SHIPPING_IEMSPICKUP_RECIPIENT'),
+            '',
             $this->configurationValue('MODULE_SHIPPING_IEMSPICKUP_COMPANY'),
             $this->configurationValue('MODULE_SHIPPING_IEMSPICKUP_STREET_ADDRESS'),
             $this->configurationValue('MODULE_SHIPPING_IEMSPICKUP_CITY'),
@@ -87,7 +93,8 @@ final class IemsShippingAddressService
      * @return array<string, mixed>
      */
     private function buildAddress(
-        string $name,
+        string $firstName,
+        string $lastName,
         string $company,
         string $streetAddress,
         string $city,
@@ -96,8 +103,8 @@ final class IemsShippingAddressService
         array $region
     ): array {
         return [
-            'firstname' => $name,
-            'lastname' => '',
+            'firstname' => $firstName,
+            'lastname' => $lastName,
             'company' => $company,
             'street_address' => $streetAddress,
             'suburb' => $suburb,

@@ -100,9 +100,14 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Relabels the customer-facing checkout selector from **IEMS Unit** to **Ordering Unit** across standard checkout, One-Page Checkout, virtual-order payment, and supported template paths through the shared plugin language key. Administrative **IEMS Units** terminology is unchanged.
 - On the initial standard checkout shipping step, before a unit or agency fallback has been confirmed, displays only the normal delivery-information/address block, required Ordering Unit selector, validation messages, and continue controls. The stock no-shipping warning and the complete order-comments section are suppressed in this state.
 - After a valid selection is confirmed, restores normal shipping choices, the genuine no-method warning when applicable, and order comments. The guard uses a shipping-page-only plugin state flag and defaults to normal template behavior when the plugin is absent.
-- For unit delivery, preserves the customer's company, first name, and last name while replacing the destination fields with the selected unit's canonical suburb label, managed street, city, fixed Indiana state, postcode, and United States country. Pickup continues to use its configured recipient and company.
 - Preserves the no-JavaScript confirmation round trip, One-Page Checkout behavior, shipping/payment validation, later checkout comments, and fail-closed final-order checks. No schema, configuration, admin terminology, or historical plugin version changes are introduced.
 - **Validation:** run all v1.9.1 deterministic harnesses, the v1.9.0 checkout regression harness, and PHP lint for v1.9.1 plus the three guarded checkout templates.
+
+## IEMS County Agency plugin v1.9.2
+
+- For unit delivery, preserves the customer's company, first name, and last name while replacing the destination fields with the selected unit's canonical suburb label, managed street, city, fixed Indiana state, postcode, and United States country. Pickup continues to use its configured recipient and company.
+- Preserves all v1.9.1 initial checkout presentation, selector labeling, shipping/payment validation, and fail-closed behavior without schema or configuration changes.
+- **Validation:** run all v1.9.2 deterministic harnesses, the affected v1.9.1 checkout and shipping regression harnesses, and PHP lint for the v1.9.2 payload.
 
 ## Database changes
 

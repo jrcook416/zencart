@@ -109,13 +109,6 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Preserves all v1.9.1 initial checkout presentation, selector labeling, shipping/payment validation, and fail-closed behavior without schema or configuration changes.
 - **Validation:** run all v1.9.2 deterministic harnesses, the affected v1.9.1 checkout and shipping regression harnesses, and PHP lint for the v1.9.2 payload.
 
-## IEMS County Agency plugin v1.9.4
-
-- On the administrative **Orders** detail screen only, formats recognized `iemsdelivery` and `iemspickup` delivery addresses as two lines: `<county code>, <agency identifier>` followed by the selected unit label or agency-fallback name.
-- Omits the conventional customer/company, street, city, zone/state, postcode, and country lines from that compact admin display. Stored order data, storefront/order-history presentation, maps, invoices, packing slips, and non-IEMS orders remain unchanged.
-- Parses only the canonical persisted IEMS suburb label and falls back to Zen Cart's standard address rendering for malformed historical labels or non-IEMS shipping modules.
-- **Validation:** run all v1.9.4 deterministic harnesses, including `orders_harness.php`, all v1.9.2 regression harnesses, and PHP lint for the v1.9.4 payload.
-
 ## Database changes
 
 - Added `is_guest_order` column to the `orders` table with an **add-if-missing guard**.

@@ -109,6 +109,13 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Preserves all v1.9.1 initial checkout presentation, selector labeling, shipping/payment validation, and fail-closed behavior without schema or configuration changes.
 - **Validation:** run all v1.9.2 deterministic harnesses, the affected v1.9.1 checkout and shipping regression harnesses, and PHP lint for the v1.9.2 payload.
 
+## IEMS County Agency plugin v1.9.4 compatibility recovery and v1.9.5
+
+- Restores a complete v1.9.4 compatibility payload for sites whose database already registers v1.9.4. Its functional source and shipping/payment modules match v1.9.2, so a Git deployment restores runtime files immediately without requiring filesystem intervention.
+- Adds v1.9.5 as the supported forward upgrade with the same verified v1.9.2 behavior and installer semantics. Upgrade does not uninstall modules or remove their configuration.
+- Neither recovery version includes the withdrawn Admin Orders display observer or any Admin Orders address customization.
+- **Validation:** run all six deterministic harnesses for v1.9.4 and v1.9.5, all v1.9.2 regressions, PHP lint for both recovery payloads, and source-parity guards.
+
 ## Database changes
 
 - Added `is_guest_order` column to the `orders` table with an **add-if-missing guard**.

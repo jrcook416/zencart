@@ -70,6 +70,16 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Revalidates selection, affiliation, agency flag, unit status/address, pickup configuration, and Indiana/US lookup at quote and final order boundaries. Stale, partial, malformed, overlength, duplicate, missing-schema, inactive, or changed state fails explicitly before insertion.
 - **Deployment/operations checklist:** upgrade through Plugin Manager from v1.6.0; install and enable `iemsdelivery`; enable Delivery on the selected unit's active parent agency under **Customers > IEMS Agencies**; keep the selected real unit active with complete street, city, and postcode under **Customers > IEMS Units**; and install/enable `iemspickup` with complete recipient, street, city, and postcode settings. Agency-fallback selections are pickup-only. Checkout cannot proceed when no eligible, fully configured method exists, so verify these settings before rollout. Validation includes all v1.7.0 deterministic harnesses, unchanged v1.4.0-v1.6.0 harnesses, PHP lint, prior-version and template guards, and security/compatibility review.
 
+## IEMS County Agency plugin v1.8.0
+
+- Adds `iems_agencies.payment_mode` as a non-null `varchar(16)` with the supported values `invoice` and `iems_unit`. Existing, missing, null, or invalid values normalize to `invoice`; newly created agencies also default to `invoice`.
+- Extends **Customers > IEMS Agencies** with one required payment-method selector, list display, strict server validation, persistence, and old-to-new activity logging. The options are exactly **Invoice Billing to Agency** and **Indianapolis EMS Unit**, so an agency cannot select both or neither.
+- Packages matching independent offline payment modules: `iemsinvoice` and `iemsunit`. Each retains normal **Modules > Payment** installation, enable/disable, order-status, and sort-order controls and adds no checkout fields or external processing.
+- At checkout, only the globally enabled module matching the signed-in customer's one current valid active agency is offered. Eligibility revalidates the required schema, unique affiliation, active county and agency, consistent hierarchy, positive identifiers, and stored mode during module discovery, confirmation, and final order processing.
+- Guest, unaffiliated, inactive, inconsistent, duplicate, malformed, missing-schema, and invalid-mode states fail closed. A mode changed after selection clears the stale payment choice and returns the customer to payment selection before an order is inserted.
+- Plugin uninstall removes configuration for either installed custom payment module while intentionally retaining all agency rows and `payment_mode` values.
+- **Deployment/operations checklist:** back up the database; upgrade through Plugin Manager from v1.7.0; verify every agency initially shows **Invoice Billing to Agency**; explicitly change only agencies requiring **Indianapolis EMS Unit**; install and enable both custom modules under **Modules > Payment**; then disable or uninstall every other payment module through normal administration. Do not remove stock module source files.
+
 ## Database changes
 
 - Added `is_guest_order` column to the `orders` table with an **add-if-missing guard**.

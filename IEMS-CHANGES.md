@@ -105,7 +105,7 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 
 ## IEMS County Agency plugin v1.9.2
 
-- For unit delivery, preserves the customer's company, first name, and last name while replacing the destination fields with the selected unit's canonical suburb label, managed street, city, fixed Indiana state, postcode, and United States country. Pickup continues to use its configured recipient and company.
+- For unit delivery, preserves the customer's company, first name, and last name while replacing the destination fields with the selected unit's canonical suburb label, managed street, city, fixed Indiana state, postcode, and United States country. Identity resolves from the selected checkout delivery address, then billing, then the default customer address so an absent default-address array cannot blank an otherwise valid out-of-county destination. Pickup continues to use its configured recipient and company.
 - Preserves all v1.9.1 initial checkout presentation, selector labeling, shipping/payment validation, and fail-closed behavior without schema or configuration changes.
 - **Validation:** run all v1.9.2 deterministic harnesses, the affected v1.9.1 checkout and shipping regression harnesses, and PHP lint for the v1.9.2 payload.
 

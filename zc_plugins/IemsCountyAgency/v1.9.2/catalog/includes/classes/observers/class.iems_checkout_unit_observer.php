@@ -320,7 +320,7 @@ class zcObserverIemsCheckoutUnit extends base
             ? (new IemsShippingAddressService())->getDestination(
                 $this->customerId(),
                 $shippingModule,
-                $order->customer
+                $this->customerDeliveryIdentity($order)
             )
             : null;
         if ($destination === null) {
@@ -336,6 +336,26 @@ class zcObserverIemsCheckoutUnit extends base
         }
 
         $order->delivery = $destination;
+    }
+
+    /**
+     * @return array{firstname: string, lastname: string, company: string}
+     */
+    private function customerDeliveryIdentity(object $order): array
+    {
+        $identity = [];
+        foreach (['firstname', 'lastname', 'company'] as $field) {
+            $identity[$field] = '';
+            foreach ([$order->delivery, $order->billing, $order->customer] as $address) {
+                $value = trim((string)($address[$field] ?? ''));
+                if ($value !== '') {
+                    $identity[$field] = $value;
+                    break;
+                }
+            }
+        }
+
+        return $identity;
     }
 
     private function selectedShippingModuleIsIems(): bool

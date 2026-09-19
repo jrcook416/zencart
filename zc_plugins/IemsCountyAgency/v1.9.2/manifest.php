@@ -6,7 +6,7 @@ return [
     'pluginAuthor' => 'IEMS Team',
     'pluginId' => 0,
     'zcVersions' => ['v220', 'v221', 'v222'],
-    'changelog' => 'v1.9.2 preserves the customer company and name in unit-delivery addresses while retaining the selected unit label and managed street, city, state, postcode, and country. Pickup addressing and all v1.9.1 checkout presentation behavior remain unchanged.',
+    'changelog' => 'v1.9.2 preserves customer company and name in unit-delivery addresses using checkout delivery, billing, and default-address identity fallback, while retaining the selected unit label and managed location. Pickup addressing and all v1.9.1 checkout presentation behavior remain unchanged.',
     'github_repo' => '',
     'pluginGroups' => [],
 ];

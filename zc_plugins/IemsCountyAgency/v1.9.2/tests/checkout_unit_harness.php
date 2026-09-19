@@ -552,14 +552,27 @@ $order = (object)[
     'content_type' => 'physical',
     'info' => ['shipping_method' => $_SESSION['shipping']['title'], 'shipping_cost' => 0.00],
     'customer' => [
-        'firstname' => 'Jeremiah',
-        'lastname' => 'Cook',
-        'company' => 'Indianapolis EMS',
+        'firstname' => 'Default',
+        'lastname' => 'Customer',
+        'company' => 'Default Company',
         'suburb' => 'old-customer',
         'street_address' => 'customer-street',
     ],
-    'delivery' => ['suburb' => 'old-delivery', 'street_address' => 'address-book-street'],
-    'billing' => ['suburb' => 'old-billing', 'street_address' => 'billing-street', 'zone_id' => 12],
+    'delivery' => [
+        'firstname' => '',
+        'lastname' => '',
+        'company' => '',
+        'suburb' => 'old-delivery',
+        'street_address' => 'address-book-street',
+    ],
+    'billing' => [
+        'firstname' => 'Jeremiah',
+        'lastname' => 'Cook',
+        'company' => 'Indianapolis EMS',
+        'suburb' => 'old-billing',
+        'street_address' => 'billing-street',
+        'zone_id' => 12,
+    ],
 ];
 $setOrderSuburbs = new ReflectionMethod($observer, 'setOrderSuburbs');
 $taxCountryId = 38;
@@ -610,15 +623,49 @@ $paidShipping = [
     'cost' => 40.78,
 ];
 $_SESSION['shipping'] = $paidShipping;
-$order->info = ['shipping_method' => $paidShipping['title'], 'shipping_cost' => $paidShipping['cost']];
-$enforceDelivery->invoke($observer, $order);
+$outOfCountyOrder = (object)[
+    'content_type' => 'physical',
+    'info' => ['shipping_method' => $paidShipping['title'], 'shipping_cost' => $paidShipping['cost']],
+    'customer' => [],
+    'delivery' => [
+        'firstname' => '',
+        'lastname' => '',
+        'company' => '',
+        'suburb' => 'old-delivery',
+        'street_address' => 'customer-delivery-street',
+    ],
+    'billing' => [
+        'firstname' => 'Jeremiah',
+        'lastname' => 'Cook',
+        'company' => 'Indianapolis EMS',
+        'suburb' => 'old-billing',
+        'street_address' => 'billing-street',
+        'zone_id' => 12,
+    ],
+];
+$taxCountryId = 38;
+$taxZoneId = 74;
+$setOrderSuburbs->invokeArgs($observer, [$outOfCountyOrder, &$taxCountryId, &$taxZoneId]);
+$assert(
+    $outOfCountyOrder->delivery['firstname'] === 'Jeremiah'
+        && $outOfCountyOrder->delivery['lastname'] === 'Cook'
+        && $outOfCountyOrder->delivery['company'] === 'Indianapolis EMS'
+        && $outOfCountyOrder->delivery['suburb'] === '49 IEMS MED1 Medic 1'
+        && $outOfCountyOrder->delivery['street_address'] === '3930 Georgetown Road'
+        && $outOfCountyOrder->delivery['city'] === 'Indianapolis'
+        && $outOfCountyOrder->delivery['state'] === 'Indiana'
+        && $outOfCountyOrder->delivery['postcode'] === '46254'
+        && $outOfCountyOrder->delivery['country']['title'] === 'United States',
+    'Out-of-county delivery must retain checkout identity and populate the complete managed unit destination.'
+);
+$enforceDelivery->invoke($observer, $outOfCountyOrder);
 foreach (['miles' => '20.00', 'flatRate' => '40.00', 'perMileRate' => '0.56'] as $field => $newValue) {
     $oldValue = $db->$field;
     $db->$field = $newValue;
     $_SESSION['shipping'] = $paidShipping;
     $redirected = false;
     try {
-        $enforceDelivery->invoke($observer, $order);
+        $enforceDelivery->invoke($observer, $outOfCountyOrder);
     } catch (IemsCheckoutUnitFakeRedirect) {
         $redirected = true;
     }
@@ -626,10 +673,10 @@ foreach (['miles' => '20.00', 'flatRate' => '40.00', 'perMileRate' => '0.56'] as
     $db->$field = $oldValue;
 }
 $_SESSION['shipping'] = $paidShipping;
-$order->info['shipping_cost'] = 0;
+$outOfCountyOrder->info['shipping_cost'] = 0;
 $redirected = false;
 try {
-    $enforceDelivery->invoke($observer, $order);
+    $enforceDelivery->invoke($observer, $outOfCountyOrder);
 } catch (IemsCheckoutUnitFakeRedirect) {
     $redirected = true;
 }

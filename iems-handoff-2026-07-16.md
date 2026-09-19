@@ -9,6 +9,7 @@
 - IemsCountyAgency v1.5.5 preserves mandatory active-unit selection and adds one explicit agency fallback only for a valid active agency with zero active units. The fallback uses a fixed server token, live hierarchy/unit revalidation, transient typed selection state, and the identical server-built agency label at checkout confirmation and in all three order suburb columns, with no schema or customer/address persistence changes.
 - IemsCountyAgency v1.6.0 adds an authorized agency delivery flag plus independent zero-cost **Pickup at IEMS Logistics** and **Delivery to Location** shipping modules. Pickup requires a signed-in customer with a current active, internally consistent county/agency affiliation; delivery additionally requires the active agency's flag. Both methods re-query current database state during status and quote processing, fail closed on schema/data mismatches, and remain independent of unit versus agency-fallback checkout selection.
 - IemsCountyAgency v1.7.0 adds all-or-none managed unit delivery addresses, selection-aware IEMS quotes, a no-JavaScript two-step standard shipping flow, fixed code-resolved Indiana/US destinations, configurable IEMS Logistics pickup details, and final in-memory order delivery overrides. Pickup supports confirmed real units and the zero-unit agency fallback; delivery requires a confirmed real active unit, agency enablement, and a complete current unit address.
+- IemsCountyAgency v1.8.0 adds one required agency payment mode plus the offline **Invoice Billing to Agency** and **Indianapolis EMS Unit** modules. Only the globally enabled method matching the signed-in customer's current unique, consistent, active affiliation is offered, with live fail-closed revalidation through final order processing.
 - Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, and the final operator runbook remain future work.
 
 ### v1.6.0 deployment checks
@@ -31,6 +32,14 @@
 - Test signed-out, unaffiliated, inactive, cross-county, pickup-only, and delivery-enabled customers in standard and One-Page Checkout.
 - Change an agency's delivery flag while checkout is in progress and confirm the next quote refresh reflects the new state immediately.
 - Confirm agencies with active units and agencies using the v1.5.5 fallback receive the same shipping eligibility when their affiliation and delivery flag are otherwise identical.
+
+### v1.8.0 deployment checks
+
+- Back up the database and upgrade IemsCountyAgency through Plugin Manager. Verify `iems_agencies.payment_mode` is `VARCHAR(16) NOT NULL DEFAULT 'invoice'` and all existing agencies default to **Invoice Billing to Agency** unless explicitly changed.
+- Under **Customers > IEMS Agencies**, verify the single payment selector, list display, Admin Profiles access, and activity-log entries for changed modes.
+- Install and enable **Invoice Billing to Agency** (`iemsinvoice`) and **Indianapolis EMS Unit** (`iemsunit`) under **Modules > Payment**. Set any desired order status and sort order.
+- Disable or uninstall all other payment modules through **Modules > Payment**; leave stock module source files intact.
+- Test one active agency in each mode, then test guest, unaffiliated, inactive county/agency, inconsistent affiliation, duplicate affiliation, malformed schema/data, invalid mode, and mode changes during checkout. No invalid state may expose or process either custom method.
 
 The branch numbering below is retained as the original plan. Delivery was subsequently organized into incremental plugin versions, so this status section is authoritative for completed scope.
 

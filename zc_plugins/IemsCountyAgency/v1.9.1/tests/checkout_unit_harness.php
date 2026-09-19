@@ -551,7 +551,13 @@ $_SESSION['shipping'] = [
 $order = (object)[
     'content_type' => 'physical',
     'info' => ['shipping_method' => $_SESSION['shipping']['title'], 'shipping_cost' => 0.00],
-    'customer' => ['suburb' => 'old-customer', 'street_address' => 'customer-street'],
+    'customer' => [
+        'firstname' => 'Jeremiah',
+        'lastname' => 'Cook',
+        'company' => 'Indianapolis EMS',
+        'suburb' => 'old-customer',
+        'street_address' => 'customer-street',
+    ],
     'delivery' => ['suburb' => 'old-delivery', 'street_address' => 'address-book-street'],
     'billing' => ['suburb' => 'old-billing', 'street_address' => 'billing-street', 'zone_id' => 12],
 ];
@@ -560,7 +566,8 @@ $taxCountryId = 38;
 $taxZoneId = 74;
 $setOrderSuburbs->invokeArgs($observer, [$order, &$taxCountryId, &$taxZoneId]);
 $assert(
-    $order->delivery['firstname'] === 'MED1 Medic 1'
+    $order->delivery['firstname'] === 'Jeremiah'
+        && $order->delivery['lastname'] === 'Cook'
         && $order->delivery['company'] === 'Indianapolis EMS'
         && $order->delivery['street_address'] === '3930 Georgetown Road'
         && $order->delivery['city'] === 'Indianapolis'
@@ -568,7 +575,7 @@ $assert(
         && $order->delivery['state'] === 'Indiana'
         && $order->delivery['country']['title'] === 'United States'
         && $order->delivery['suburb'] === '49 IEMS MED1 Medic 1',
-    'Delivery must use the current managed unit destination while preserving the canonical IEMS label.'
+    'Delivery must combine customer identity with the current managed unit destination and canonical IEMS label.'
 );
 $assert(
     $order->customer['street_address'] === 'customer-street'

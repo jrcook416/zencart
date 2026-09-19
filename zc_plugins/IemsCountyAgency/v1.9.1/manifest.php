@@ -6,7 +6,7 @@ return [
     'pluginAuthor' => 'IEMS Team',
     'pluginId' => 0,
     'zcVersions' => ['v220', 'v221', 'v222'],
-    'changelog' => 'v1.9.1 relabels the checkout selector as Ordering Unit and limits the initial standard shipping step to delivery information, the required selector, and continuation controls. Shipping-unavailable messaging and order comments remain visible after unit confirmation, with standard, Bootstrap, IEMS, and One-Page Checkout compatibility preserved.',
+    'changelog' => 'v1.9.1 relabels the checkout selector as Ordering Unit, simplifies the initial standard shipping step, and combines customer identity with the selected unit address for delivery. Shipping-unavailable messaging and order comments remain visible after unit confirmation, with standard, Bootstrap, IEMS, and One-Page Checkout compatibility preserved.',
     'github_repo' => '',
     'pluginGroups' => [],
 ];

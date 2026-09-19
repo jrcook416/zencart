@@ -12,6 +12,7 @@
 - IemsCountyAgency v1.8.0 adds one required agency payment mode plus the offline **Invoice Billing to Agency** and **Indianapolis EMS Unit** modules. Only the globally enabled method matching the signed-in customer's current unique, consistent, active affiliation is offered, with live fail-closed revalidation through final order processing.
 - IemsCountyAgency v1.9.0 extends the existing delivery module with retained agency shipping categories, nullable managed unit mileage, configurable global out-of-county rates, three category-specific delivery labels, and pickup-preferred initial selection that respects explicit eligible choices. Existing delivery eligibility, managed-address, and final-order guards remain required.
 - IemsCountyAgency v1.9.1 relabels the checkout selector as **Ordering Unit** and simplifies only the initial standard shipping step by suppressing the premature no-shipping warning and order-comments section until a selection is confirmed. Normal warnings and comments return after confirmation; One-Page Checkout and later checkout behavior remain unchanged.
+- Unit delivery now combines the customer's company and name with the selected unit's canonical suburb label and managed street/city/state/ZIP/country. Pickup continues to use its configured recipient and company.
 - Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, and the final operator runbook remain future work.
 
 ### v1.6.0 deployment checks
@@ -63,6 +64,7 @@
 - Upgrade through Plugin Manager and confirm the standard checkout shipping page initially shows the delivery address, required **Ordering Unit** selector, validation messages, and continue control without the stock no-shipping warning or order-comments textarea.
 - Confirm a valid unit or agency fallback without JavaScript. Verify shipping choices appear, comments return, and a genuine zero-method state displays the normal warning and blocks checkout as before.
 - Verify the **Ordering Unit** heading in the supported standard, virtual-order, and One-Page Checkout paths; leave Admin **IEMS Units** terminology unchanged.
+- Verify final unit delivery shows the customer's company/name, selected unit suburb label, and managed unit street/city/Indiana/ZIP/United States; verify pickup still shows its configured recipient/company.
 - Run all v1.9.1 harnesses, the v1.9.0 checkout regression harness, and PHP lint.
 
 The branch numbering below is retained as the original plan. Delivery was subsequently organized into incremental plugin versions, so this status section is authoritative for completed scope.

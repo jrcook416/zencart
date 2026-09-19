@@ -317,7 +317,11 @@ class zcObserverIemsCheckoutUnit extends base
         }
 
         $destination = ($_SESSION['shipping']['id'] ?? '') === $shippingModule . '_' . $shippingModule
-            ? (new IemsShippingAddressService())->getDestination($this->customerId(), $shippingModule)
+            ? (new IemsShippingAddressService())->getDestination(
+                $this->customerId(),
+                $shippingModule,
+                $order->customer
+            )
             : null;
         if ($destination === null) {
             unset($_SESSION['shipping']);

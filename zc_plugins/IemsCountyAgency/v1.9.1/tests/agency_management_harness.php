@@ -445,6 +445,7 @@ $intentionallyChangedFiles = [
     'manifest.php',
     'tests/agency_management_harness.php',
     'tests/unit_management_harness.php',
+    'catalog/includes/classes/IemsShippingAddressService.php',
     'catalog/includes/classes/observers/class.iems_checkout_unit_observer.php',
     'catalog/includes/languages/english/extra_definitions/lang.iems_checkout_unit.php',
     'tests/checkout_unit_harness.php',

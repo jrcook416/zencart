@@ -52,6 +52,8 @@ if ($displayAddressEdit) {
         </div>
         <?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
 <?php
+$iems_checkout_initial_unit_selection =
+    ($GLOBALS['iems_checkout_initial_unit_selection'] ?? false) === true;
 if (
     ($GLOBALS['iems_checkout_shipping_ready'] ?? true)
     && ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true)
@@ -143,7 +145,7 @@ if (
             </div>
         </div>
 <?php
-} else {
+} elseif (!$iems_checkout_initial_unit_selection) {
 ?>
         <div id="noShipping-card" class="card mb-3">
             <div class="card-body p-3">
@@ -155,6 +157,7 @@ if (
 }
 
 $comments = (isset($comments)) ? $comments : '';
+if (!$iems_checkout_initial_unit_selection) {
 ?>
         <div id="orderComments-card" class="card mb-3">
             <h2 class="card-header"><?php echo HEADING_ORDER_COMMENTS; ?></h2>
@@ -162,6 +165,9 @@ $comments = (isset($comments)) ? $comments : '';
                 <?php echo zen_draw_textarea_field('comments', '45', '3', $comments, 'aria-label="' . HEADING_ORDER_COMMENTS . '"'); ?>
             </div>
         </div>
+<?php
+}
+?>
     </div>
 <?php
 // -----
@@ -173,8 +179,11 @@ $show_contact_us_instead_of_continue = $zca_show_contact_us_instead_of_continue 
 $iems_checkout_can_continue = ($GLOBALS['iems_checkout_shipping_ready'] ?? false) !== true
     || ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true);
 if (
-    $iems_checkout_can_continue
-    && (empty($show_contact_us_instead_of_continue) || zen_count_shipping_modules() > 0)
+    $iems_checkout_initial_unit_selection
+    || (
+        $iems_checkout_can_continue
+        && (empty($show_contact_us_instead_of_continue) || zen_count_shipping_modules() > 0)
+    )
 ) {
     $action_button = zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT);
     $instruction_title = TITLE_CONTINUE_CHECKOUT_PROCEDURE;

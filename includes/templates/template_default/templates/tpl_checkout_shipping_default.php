@@ -32,6 +32,8 @@
 <br>
 <?php echo $GLOBALS['iems_checkout_unit_selector_html'] ?? ''; ?>
 <?php
+$iems_checkout_initial_unit_selection =
+    ($GLOBALS['iems_checkout_initial_unit_selection'] ?? false) === true;
   if (
     ($GLOBALS['iems_checkout_shipping_ready'] ?? true)
     && ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true)
@@ -114,17 +116,19 @@
 ?>
 
 <?php
-  } else {
+  } elseif (!$iems_checkout_initial_unit_selection) {
 ?>
 <h2 id="checkoutShippingHeadingMethod"><?php echo TITLE_NO_SHIPPING_AVAILABLE; ?></h2>
 <div id="checkoutShippingContentChoose" class="important"><?php echo TEXT_NO_SHIPPING_AVAILABLE; ?></div>
 <?php
   }
 ?>
+<?php if (!$iems_checkout_initial_unit_selection) { ?>
 <fieldset class="shipping" id="comments">
 <legend><?php echo HEADING_ORDER_COMMENTS; ?></legend>
 <?php echo zen_draw_textarea_field('comments', '45', '3', (isset($comments) ? $comments : ''), 'aria-label="' . HEADING_ORDER_COMMENTS . '"'); ?>
 </fieldset>
+<?php } ?>
 
 <?php
 // this can be defined in site-specific-settings
@@ -132,7 +136,10 @@ $show_contact_us_instead_of_continue = $show_contact_us_instead_of_continue ?? f
 $iems_checkout_can_continue = ($GLOBALS['iems_checkout_shipping_ready'] ?? false) !== true
     || ($GLOBALS['iems_checkout_shipping_methods_available'] ?? true);
 ?>
-<?php if ($iems_checkout_can_continue && empty($show_contact_us_instead_of_continue)) { ?>
+<?php if (
+    $iems_checkout_initial_unit_selection
+    || ($iems_checkout_can_continue && empty($show_contact_us_instead_of_continue))
+) { ?>
     <div class="buttonRow forward"><?php echo zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT); ?></div>
     <div class="buttonRow back"><?php echo '<strong>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</strong>' . '<br>' . TEXT_CONTINUE_CHECKOUT_PROCEDURE; ?></div>
 <?php } else { ?>

@@ -95,6 +95,14 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Checkout validates county codes before accepting any unit or agency fallback, so an invalid county code blocks both pickup and delivery. This differs from malformed delivery-only schema/category/mileage, which blocks delivery but leaves pickup eligible when county/affiliation/selection are otherwise valid. Normalized comparisons never rewrite stored county labels. Generated category/mileage columns are rejected by schema guards.
 - **Validation:** run the v1.9 installer, agency, unit, checkout, shipping, and payment harnesses and PHP lint. The installer harness covers fresh installation, missing-column upgrades, repeated upgrade/reinstall, compatible county-code widths, invalid county preflight, malformed new-column rejection, missing-only rate backfill, settings preservation, and retained schema/data after uninstall. It uses a deterministic fake database, not a live MySQL/MariaDB migration; stage a real database backup/upgrade test before deployment.
 
+## IEMS County Agency plugin v1.9.1
+
+- Relabels the customer-facing checkout selector from **IEMS Unit** to **Ordering Unit** across standard checkout, One-Page Checkout, virtual-order payment, and supported template paths through the shared plugin language key. Administrative **IEMS Units** terminology is unchanged.
+- On the initial standard checkout shipping step, before a unit or agency fallback has been confirmed, displays only the normal delivery-information/address block, required Ordering Unit selector, validation messages, and continue controls. The stock no-shipping warning and the complete order-comments section are suppressed in this state.
+- After a valid selection is confirmed, restores normal shipping choices, the genuine no-method warning when applicable, and order comments. The guard uses a shipping-page-only plugin state flag and defaults to normal template behavior when the plugin is absent.
+- Preserves the no-JavaScript confirmation round trip, One-Page Checkout behavior, shipping/payment validation, later checkout comments, and fail-closed final-order checks. No schema, configuration, admin terminology, or historical plugin version changes are introduced.
+- **Validation:** run all v1.9.1 deterministic harnesses, the v1.9.0 checkout regression harness, and PHP lint for v1.9.1 plus the three guarded checkout templates.
+
 ## Database changes
 
 - Added `is_guest_order` column to the `orders` table with an **add-if-missing guard**.

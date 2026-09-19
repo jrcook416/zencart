@@ -11,6 +11,7 @@
 - IemsCountyAgency v1.7.0 adds all-or-none managed unit delivery addresses, selection-aware IEMS quotes, a no-JavaScript two-step standard shipping flow, fixed code-resolved Indiana/US destinations, configurable IEMS Logistics pickup details, and final in-memory order delivery overrides. Pickup supports confirmed real units and the zero-unit agency fallback; delivery requires a confirmed real active unit, agency enablement, and a complete current unit address.
 - IemsCountyAgency v1.8.0 adds one required agency payment mode plus the offline **Invoice Billing to Agency** and **Indianapolis EMS Unit** modules. Only the globally enabled method matching the signed-in customer's current unique, consistent, active affiliation is offered, with live fail-closed revalidation through final order processing.
 - IemsCountyAgency v1.9.0 extends the existing delivery module with retained agency shipping categories, nullable managed unit mileage, configurable global out-of-county rates, three category-specific delivery labels, and pickup-preferred initial selection that respects explicit eligible choices. Existing delivery eligibility, managed-address, and final-order guards remain required.
+- IemsCountyAgency v1.9.1 relabels the checkout selector as **Ordering Unit** and simplifies only the initial standard shipping step by suppressing the premature no-shipping warning and order-comments section until a selection is confirmed. Normal warnings and comments return after confirmation; One-Page Checkout and later checkout behavior remain unchanged.
 - Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, and the final operator runbook remain future work.
 
 ### v1.6.0 deployment checks
@@ -56,6 +57,13 @@
 - Change module display sort order and confirm available pickup remains preferred through `NOTIFY_SHIPPING_MODULE_CALCULATE_CHEAPEST`. Missing/invalid new delivery schema must leave otherwise eligible pickup usable. Change category or rates after the order object is built: final validation must compare both session shipping and order label/cost with the new quote and return to shipping on a mismatch.
 - Uninstall/reinstall preserves categories, mileage, addresses, flags, payment modes, and reference rows. Uninstall removes shipping/payment module settings; reinstall does not restore those settings or rerun county-based classification. Back up settings separately if they will be reused.
 - Run v1.9 installer/admin/shipping/checkout/payment harnesses and PHP lint, then stage a real MySQL/MariaDB upgrade against a database copy. The installer harness uses a fake database and does not replace this migration rehearsal. Test standard and One-Page Checkout, zero/unknown mileage, custom rate preservation, repeat upgrades, and no customer/address-book writes.
+
+### v1.9.1 deployment checks
+
+- Upgrade through Plugin Manager and confirm the standard checkout shipping page initially shows the delivery address, required **Ordering Unit** selector, validation messages, and continue control without the stock no-shipping warning or order-comments textarea.
+- Confirm a valid unit or agency fallback without JavaScript. Verify shipping choices appear, comments return, and a genuine zero-method state displays the normal warning and blocks checkout as before.
+- Verify the **Ordering Unit** heading in the supported standard, virtual-order, and One-Page Checkout paths; leave Admin **IEMS Units** terminology unchanged.
+- Run all v1.9.1 harnesses, the v1.9.0 checkout regression harness, and PHP lint.
 
 The branch numbering below is retained as the original plan. Delivery was subsequently organized into incremental plugin versions, so this status section is authoritative for completed scope.
 

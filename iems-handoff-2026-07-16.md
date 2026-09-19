@@ -13,6 +13,7 @@
 - IemsCountyAgency v1.9.0 extends the existing delivery module with retained agency shipping categories, nullable managed unit mileage, configurable global out-of-county rates, three category-specific delivery labels, and pickup-preferred initial selection that respects explicit eligible choices. Existing delivery eligibility, managed-address, and final-order guards remain required.
 - IemsCountyAgency v1.9.1 relabels the checkout selector as **Ordering Unit** and simplifies only the initial standard shipping step by suppressing the premature no-shipping warning and order-comments section until a selection is confirmed. Normal warnings and comments return after confirmation; One-Page Checkout and later checkout behavior remain unchanged.
 - IemsCountyAgency v1.9.2 combines the customer's company and name with the selected unit's canonical suburb label and managed street/city/state/ZIP/country. Identity falls back across checkout delivery, billing, and default customer addresses so out-of-county delivery cannot be blank when the default-address array is unavailable. Pickup continues to use its configured recipient and company.
+- IemsCountyAgency v1.9.4 reduces the administrative Orders delivery block for recognized IEMS methods to two lines: county code plus agency identifier, then the selected unit or agency fallback. Other order displays and stored addresses remain unchanged.
 - Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, and the final operator runbook remain future work.
 
 ### v1.6.0 deployment checks
@@ -71,6 +72,13 @@
 - Upgrade through Plugin Manager and verify final unit delivery shows the customer's company/name, selected unit suburb label, and managed unit street/city/Indiana/ZIP/United States.
 - Verify pickup still shows its configured recipient/company and all v1.9.1 initial-page behavior remains unchanged.
 - Run all v1.9.2 harnesses, the affected v1.9.1 checkout and shipping regression harnesses, and PHP lint.
+
+### v1.9.4 deployment checks
+
+- Upgrade through Plugin Manager and open unit-based and agency-fallback orders in **Admin > Customers > Orders**.
+- Verify the delivery block shows only `<county code>, <agency identifier>` on line one and the selected unit or agency on line two, with no zone/state or country.
+- Verify non-IEMS and malformed historical orders retain standard Zen Cart address formatting; verify invoices and packing slips are unchanged.
+- Run all v1.9.4 harnesses, all v1.9.2 regression harnesses, and PHP lint.
 
 The branch numbering below is retained as the original plan. Delivery was subsequently organized into incremental plugin versions, so this status section is authoritative for completed scope.
 

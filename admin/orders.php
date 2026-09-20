@@ -1400,7 +1400,7 @@ if ($show_orders_weights === true) {
                                             ];
                                             $search = zen_build_keyword_where_clause($keyword_search_fields, trim($keywords), true);
                                     }               
-                                    $new_fields .= ",`o.delivery_suburb`, o.customers_company, o.customers_email_address, o.customers_street_address, o.delivery_company, o.delivery_name, o.delivery_street_address, o.delivery_postcode, o.billing_company, o.billing_name, o.billing_street_address, o.billing_postcode, o.payment_module_code, o.shipping_module_code, o.orders_status, o.ip_address, o.language_code, o.delivery_state, o.delivery_country, o.customers_state, o.customers_country ";
+                                    $new_fields .= ", o.delivery_suburb, o.customers_company, o.customers_email_address, o.customers_street_address, o.delivery_company, o.delivery_name, o.delivery_street_address, o.delivery_postcode, o.billing_company, o.billing_name, o.billing_street_address, o.billing_postcode, o.payment_module_code, o.shipping_module_code, o.orders_status, o.ip_address, o.language_code, o.delivery_state, o.delivery_country, o.customers_state, o.customers_country ";
 
                                     $order_by = " ORDER BY o.orders_id DESC";
                                     $zco_notifier->notify('NOTIFY_ADMIN_ORDERS_SEARCH_PARMS', $keywords, $search, $search_distinct, $new_fields, $new_table, $order_by);

@@ -14,7 +14,7 @@
 - IemsCountyAgency v1.9.1 relabels the checkout selector as **Ordering Unit** and simplifies only the initial standard shipping step by suppressing the premature no-shipping warning and order-comments section until a selection is confirmed. Normal warnings and comments return after confirmation; One-Page Checkout and later checkout behavior remain unchanged.
 - IemsCountyAgency v1.9.2 combines the customer's company and name with the selected unit's canonical suburb label and managed street/city/state/ZIP/country. Identity falls back across checkout delivery, billing, and default customer addresses so out-of-county delivery cannot be blank when the default-address array is unavailable. Pickup continues to use its configured recipient and company.
 - IemsCountyAgency v1.9.4 is a compatibility recovery containing the complete v1.9.2 behavior and module payload for sites already registered at that version. v1.9.5 is the supported forward version with identical business behavior and installer semantics. Neither version customizes the Admin Orders address display.
-- Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, and the final operator runbook remain future work.
+- Customer-group derivation, product-group availability/minimum/maximum rules, legacy migration/backfill, anomaly reporting, an administrative CSV export/reporting workflow for the Chief to analyze theoretical usage in Excel, and the final operator runbook remain future work.
 
 ### v1.6.0 deployment checks
 
@@ -86,6 +86,7 @@ The branch numbering below is retained as the original plan. Delivery was subseq
 - **Approval gate:** No code/file changes without explicit user approval first.
 - **Plan-first delegation:** Any delegated session/sub-agent should propose a plan and wait for approval before implementing.
 - **Architecture preference:** Use **template/plugin** approaches; avoid Zen Cart core edits unless truly unavoidable, and flag any core-touch explicitly.
+- **Clarification gate:** Ask for clarification before implementing any ambiguous requirement or unresolved reporting rule.
 - **Environment assumption:** This is **development-only** work (no live production deployment yet). Reconfirm if this changes.
 
 ## Functional requirements agreed so far
@@ -171,18 +172,27 @@ Acceptance focus:
 
 ---
 
-### Branch 5: Hardening + migration + operator documentation
+### Branch 5: Hardening + migration + reporting + operator documentation
 **Suggested name:** `iems-rollout-hardening-and-migration`
 
 Scope:
 - Migration/backfill strategy for existing customers and legacy `suburb` usage.
 - Admin QA checklist and exception handling paths.
 - Audit/reporting hooks for county/agency/group assignment anomalies.
-- Final documentation for support/admin operations.
+- Add an Admin Profiles-authorized CSV export/reporting workflow for the Chief to analyze theoretical usage in Excel.
+- Include **County** and **Agency Identifier** as two separate sortable CSV fields/columns.
+- Before implementation, define the theoretical usage metrics, report date range and filtering, product and quantity fields, order-status treatment, canceled/test-order handling, detail versus aggregation, and behavior for legacy orders with missing or incomplete affiliation data.
+- Use explicit affiliation snapshot or lookup semantics, including deterministic handling of missing legacy data.
+- Generate Excel-importable CSV with correct escaping, encoding, headers, and numeric formatting.
+- Add deterministic coverage for report filtering, aggregation, affiliation snapshot or lookup semantics, missing legacy data, and CSV output.
+- Provide final support/admin documentation covering report operation, CSV export, and Excel import.
 
 Acceptance focus:
 - Legacy data transition path is explicit and testable.
-- Operational team can manage and troubleshoot with clear runbook steps.
+- Only authorized Admin Profiles can access the reporting workflow.
+- The Chief can export an Excel-importable report with independently sortable **County** and **Agency Identifier** columns.
+- Reporting decisions and edge-case behavior are documented and covered by deterministic tests.
+- Operational teams can manage, export, import, analyze, and troubleshoot with clear runbook steps.
 
 ## Cross-branch guardrails
 - Keep each branch narrowly scoped and independently testable.
@@ -200,6 +210,7 @@ Use this prompt to start the next coding session:
 > **Important constraints:**  
 > - Do not make code changes until you present a plan and I approve it.  
 > - Prefer template/plugin approaches; avoid core edits unless unavoidable and explicitly justified.  
+> - Ask for clarification before implementing ambiguous requirements or unresolved reporting rules.
 > - Assume development-only environment (no production deployment yet).  
 >  
 > **Current requirements:**  

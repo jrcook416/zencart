@@ -1506,32 +1506,31 @@ if ($show_orders_weights === true) {
 <?php if ($show_zone_info) { ?>
                                 <td class="dataTableContent text-left">
 <?php
+                                        $isIemsShipping = in_array(
+                                            $orders->fields['shipping_module_code'],
+                                            ['iemspickup', 'iemsdelivery'],
+                                            true
+                                        );
 
-    $isIemsShipping = in_array(
-        $orders->fields['shipping_module_code'],
-        ['iemspickup', 'iemsdelivery'],
-        true
-    );
+                                        $iemsParts = preg_split(
+                                            '/\s+/',
+                                            trim((string)$orders->fields['delivery_suburb']),
+                                            3
+                                        );
 
-    $iemsParts = preg_split(
-        '/\s+/',
-        trim((string)$orders->fields['delivery_suburb']),
-        3
-    );
-
-    if ($isIemsShipping && count($iemsParts) === 3) {
-        echo zen_output_string_protected($iemsParts[0] . ' ' . $iemsParts[1])
-            . '<br>'
-            . zen_output_string_protected($iemsParts[2]);
-    } elseif (!empty($orders->fields['delivery_country'])) {
-    echo zen_output_string_protected($orders->fields['delivery_state'])
-        . '<br>'
-        . zen_output_string_protected($orders->fields['delivery_country']);
-} else {
-    echo zen_output_string_protected($orders->fields['customers_state'])
-        . '<br>'
-        . zen_output_string_protected($orders->fields['customers_country']);
-}
+                                        if ($isIemsShipping && count($iemsParts) === 3) {
+                                            echo zen_output_string_protected($iemsParts[0] . ' ' . $iemsParts[1])
+                                                . '<br>'
+                                                . zen_output_string_protected($iemsParts[2]);
+                                        } elseif (!empty($orders->fields['delivery_country'])) {
+                                            echo zen_output_string_protected($orders->fields['delivery_state'])
+                                                . '<br>'
+                                                . zen_output_string_protected($orders->fields['delivery_country']);
+                                        } else {
+                                            echo zen_output_string_protected($orders->fields['customers_state'])
+                                                . '<br>'
+                                                . zen_output_string_protected($orders->fields['customers_country']);
+                                        }
 ?>
                                 </td>
 <?php } ?>

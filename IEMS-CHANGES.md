@@ -116,6 +116,14 @@ The fork history includes imported/bundled plugin work beyond upstream `zencart/
 - Neither recovery version includes the withdrawn Admin Orders display observer or any Admin Orders address customization.
 - **Validation:** run all six deterministic harnesses for v1.9.4 and v1.9.5, all v1.9.2 regressions, PHP lint for both recovery payloads, and source-parity guards.
 
+## IEMS County Agency plugin v1.9.6
+
+- Shows the IEMS county/agency and unit (or agency fallback) on the **Admin > Customers > Orders** listing for orders shipped with `iemspickup` or `iemsdelivery`. The label `<county> <agency> <unit or agency name>` renders as `<county> <agency>` on one line and the rest on the next; other orders keep the stock state/country display, and malformed labels fall back to it.
+- Implemented entirely by `zcObserverIemsOrdersList`. Zen Cart has no notifier for the zone cell, so the observer turns off the stock column through the documented `$show_zone_info` override, adds `o.delivery_suburb` through `NOTIFY_ADMIN_ORDERS_SEARCH_PARMS`, and renders the replacement column through `NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_HEADING`/`_DATA`. The column now sits after Comments instead of after Customers.
+- Replaces the direct `admin/orders.php` edits made after v1.9.5; `admin/orders.php` is restored to its stock 2.2.2 content. The withdrawn v1.9.4 order-detail address observer is not reintroduced.
+- No schema, configuration, checkout, shipping, or payment changes. Upgrade through Plugin Manager from v1.9.5.
+- **Validation:** run all seven v1.9.6 harnesses (including the new `orders_list_harness.php`) and PHP lint, then check the Orders listing with IEMS pickup, IEMS delivery, and non-IEMS orders.
+
 ## Database changes
 
 - Added `is_guest_order` column to the `orders` table with an **add-if-missing guard**.

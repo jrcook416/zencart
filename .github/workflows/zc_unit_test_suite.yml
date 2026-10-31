@@ -18,11 +18,6 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Link admin/ to the store admin folder (minion)
-        # The test framework expects the admin folder at admin/; the store branches keep
-        # the live stores' folder name, minion.
-        run: if [ -d minion ] && [ ! -e admin ]; then ln -s minion admin; fi
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:

@@ -17,3 +17,5 @@ zenTestPlugin/
 !ScanAdditionalImages/
 !ScanAdditionalImages/**
 
+!IemsLegacyBridge/
+!IemsLegacyBridge/**

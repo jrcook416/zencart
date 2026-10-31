@@ -1,0 +1,7 @@
+/**
+ * IEMS: 1.5.6c look for the unit picker and form selects.
+ */
+select {height:35px;margin-bottom:10px;}
+.iemsUnitLabel {background-color:yellow;}
+select.iemsUnitSelect {width:20em;background-color:yellow;}
+#navCatTabs li a:hover, input.submit_button:hover, input.cssButtonHover {background:#ff0000;}

@@ -29,6 +29,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Link admin/ to the store admin folder (minion)
+        # The test framework expects the admin folder at admin/; the store branches keep
+        # the live stores' folder name, minion.
+        run: if [ -d minion ] && [ ! -e admin ]; then ln -s minion admin; fi
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:

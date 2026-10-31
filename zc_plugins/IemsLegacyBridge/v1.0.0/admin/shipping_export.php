@@ -2,7 +2,7 @@
 /**
  * Export Shipping/Order Information (inventory feed).
  *
- * Port of the 1.5.6c minion/shipping_export.php (Export Shipping and Order
+ * Port of the 1.5.6c admin/shipping_export.php (Export Shipping and Order
  * Information v1.3.2 by Eric Leuenberger, with IEMS edits) to Zen Cart 2.2.2.
  *
  * The export file must stay byte-for-byte compatible with the 1.5.6c output,

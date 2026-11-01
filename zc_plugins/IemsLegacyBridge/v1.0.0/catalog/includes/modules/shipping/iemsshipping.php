@@ -7,8 +7,9 @@
  *
  * IEMS: "Ship to External Agency" from 1.5.6c, a copy of the stock Per Item
  * module under its own code and MODULE_SHIPPING_IEMS_* settings, so stores that
- * already have it installed keep their settings. The 1.5.6c copy added the Per
- * Item module's handling fee; this one uses its own (MODULE_SHIPPING_IEMS_HANDLING).
+ * already have it installed keep their settings. Like the 1.5.6c copy, the quote
+ * adds the Per Item module's handling fee (MODULE_SHIPPING_ITEM_HANDLING), not
+ * its own.
  */
 
 /**
@@ -76,7 +77,10 @@ class iemsshipping extends ZenShipping
                 [
                     'id' => $this->code,
                     'title' => MODULE_SHIPPING_IEMS_TEXT_WAY,
-                    'cost' => (MODULE_SHIPPING_IEMS_COST * $item_total_count) + MODULE_SHIPPING_IEMS_HANDLING,
+                    // Same as 1.5.6c: the Per Item module's handling
+                    // fee (0 if Per Item is not installed).
+                    'cost' => (MODULE_SHIPPING_IEMS_COST * $item_total_count)
+                        + (defined('MODULE_SHIPPING_ITEM_HANDLING') ? (float)MODULE_SHIPPING_ITEM_HANDLING : 0),
                 ],
             ],
         ];

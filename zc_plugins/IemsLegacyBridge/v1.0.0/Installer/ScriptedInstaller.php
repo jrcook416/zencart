@@ -188,6 +188,26 @@ class ScriptedInstaller extends ScriptedInstallBase
                 'Pre-filled post code at sign-up and on a new address book entry.', 13],
         ];
 
+        // Admin passwords saved by Zen Cart 1.5.6 (see the admin observer).
+        $this->executeInstallerSql(
+            "INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
+                (configuration_title, configuration_key, configuration_value, configuration_description,
+                 configuration_group_id, sort_order, date_added, set_function)
+             VALUES
+                ('Convert 1.5.6 admin passwords at login', 'IEMS_LEGACY_ADMIN_PWD_CONVERT', 'true',
+                 'Zen Cart 1.5.6 saved admin passwords containing &amp; &quot; &lt; &gt; in converted form, so stock 2.2 rejects them. When true, an admin whose password was saved before the date below and fails the stock check is checked once the way 1.5.6 did; on a match the same password is re-saved in stock form and the stock login continues. Set to false once every admin has logged in.',
+                 " . $groupId . ", 20, NOW(), 'zen_cfg_select_option([\\'true\\', \\'false\\'], ')"
+        );
+        $this->executeInstallerSql(
+            "INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
+                (configuration_title, configuration_key, configuration_value, configuration_description,
+                 configuration_group_id, sort_order, date_added)
+             VALUES
+                ('1.5.6 admin passwords: saved before', 'IEMS_LEGACY_ADMIN_PWD_BEFORE', '" . date('Y-m-d H:i:s') . "',
+                 'Only admin passwords last changed before this date and time (when the bridge was installed) get the 1.5.6 check. Passwords set in 2.2 always use the stock check only.',
+                 " . $groupId . ", 21, NOW())"
+        );
+
         foreach ($settings as [$title, $key, $value, $description, $sort]) {
             $this->executeInstallerSql(
                 "INSERT IGNORE INTO " . TABLE_CONFIGURATION . "

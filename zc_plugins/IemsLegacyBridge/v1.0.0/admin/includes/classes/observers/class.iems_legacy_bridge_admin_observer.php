@@ -10,6 +10,7 @@ class zcObserverIemsLegacyBridgeAdmin extends base
 {
     public function __construct()
     {
+        $this->convertLegacyAdminPassword();
         $this->attach($this, [
             'NOTIFY_ADMIN_PRODUCT_COLLECT_INFO_EXTRA_INPUTS',
             'NOTIFY_MODULES_UPDATE_PRODUCT_END',
@@ -17,6 +18,67 @@ class zcObserverIemsLegacyBridgeAdmin extends base
             'NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_HEADING',
             'NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_DATA',
         ]);
+    }
+
+    /**
+     * Zen Cart 1.5.6 ran admin form values, passwords included, through
+     * htmlspecialchars() before hashing or checking them, so an admin password
+     * containing & " < > is stored as the hash of the converted text. Stock 2.2
+     * (1.5.7+) checks the password as typed, so those correct passwords fail.
+     *
+     * Runs before admin/login.php on a login POST. Only when ALL of these hold:
+     * the CSRF token is valid, the admin name matches exactly, the account is
+     * not locked and has no reset pending, the password was last changed before
+     * the bridge was installed, the stock check FAILS, and the 1.5.6 check
+     * (same typed password, converted the way 1.5.6 did) MATCHES. Then the same
+     * password is re-saved in stock 2.2 form and the stock login runs as usual.
+     * A wrong password fails both checks. After one login the admin is on stock.
+     */
+    private function convertLegacyAdminPassword(): void
+    {
+        global $db;
+
+        if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST'
+            || ($_GET['cmd'] ?? basename($_SERVER['SCRIPT_NAME'] ?? '', '.php')) !== 'login'
+            || !defined('IEMS_LEGACY_ADMIN_PWD_CONVERT') || IEMS_LEGACY_ADMIN_PWD_CONVERT !== 'true'
+            || !defined('IEMS_LEGACY_ADMIN_PWD_BEFORE')
+            || empty($_SESSION['securityToken'])
+            || ($_POST['securityToken'] ?? '') !== $_SESSION['securityToken']
+            || ($_POST['action'] ?? '') !== 'do' . $_SESSION['securityToken']
+            || !is_string($_POST['admin_name'] ?? null) || !is_string($_POST['admin_pass'] ?? null)) {
+            return;
+        }
+        $name = zen_db_prepare_input($_POST['admin_name']);
+        $typed = zen_db_prepare_input($_POST['admin_pass']);
+        if ($name === '' || $typed === '') {
+            return;
+        }
+        $sql = "SELECT admin_id, admin_name, admin_pass, reset_token, lockout_expires, pwd_last_change_date
+                  FROM " . TABLE_ADMIN . " WHERE admin_name = :name: LIMIT 1";
+        $row = $db->Execute($db->bindVars($sql, ':name:', $name, 'string'));
+        if ($row->EOF || $row->fields['admin_name'] !== $name
+            || (int)$row->fields['lockout_expires'] > time()
+            || (string)$row->fields['reset_token'] !== ''
+            || (string)$row->fields['admin_pass'] === ''
+            || (string)$row->fields['pwd_last_change_date'] >= IEMS_LEGACY_ADMIN_PWD_BEFORE) {
+            return;
+        }
+        $hash = (string)$row->fields['admin_pass'];
+        if (zen_validate_password($typed, $hash)) {
+            return; // stock check passes; nothing to do
+        }
+        $as156 = zen_db_prepare_input(htmlspecialchars($_POST['admin_pass'], ENT_COMPAT, defined('CHARSET') ? CHARSET : 'UTF-8', true));
+        if ($as156 === $typed || !zen_validate_password($as156, $hash)) {
+            return; // not a 1.5.6-converted password: leave it to the stock login
+        }
+        $db->Execute(
+            "UPDATE " . TABLE_ADMIN . "
+                SET admin_pass = '" . zen_db_input(zen_encrypt_password($typed)) . "'
+              WHERE admin_id = " . (int)$row->fields['admin_id']
+        );
+        if (function_exists('zen_record_admin_activity')) {
+            zen_record_admin_activity('IEMS Legacy Bridge: 1.5.6 password for ' . $name . ' re-saved in 2.2 form', 'notice');
+        }
     }
 
     public function update(&$class, $eventID, $p1, &$p2, &$p3, &$p4, &$p5, &$p6, &$p7)

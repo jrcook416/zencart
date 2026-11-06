@@ -25,6 +25,9 @@ class zcObserverIemsLegacyBridge extends base
             'NOTIFY_MODULE_CHECKOUT_NEW_ADDRESS_VALIDATION',
             'NOTIFY_ADDRESS_BOOK_PROCESS_VALIDATION',
             'NOTIFY_HEADER_START_CHECKOUT_SHIPPING',
+            // One-Page Checkout skips checkout_shipping, so guard its pages too.
+            'NOTIFY_HEADER_START_CHECKOUT_ONE',
+            'NOTIFY_HEADER_START_CHECKOUT_ONE_CONFIRMATION',
             'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_FREE_OR_CALL',
             'NOTIFIER_CART_GET_PRODUCTS_END',
         ]);
@@ -43,6 +46,8 @@ class zcObserverIemsLegacyBridge extends base
                 $this->validatePostedUnit('addressbook', $p2);
                 break;
             case 'NOTIFY_HEADER_START_CHECKOUT_SHIPPING':
+            case 'NOTIFY_HEADER_START_CHECKOUT_ONE':
+            case 'NOTIFY_HEADER_START_CHECKOUT_ONE_CONFIRMATION':
                 $this->guardShippingAddressUnit();
                 break;
             case 'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_FREE_OR_CALL':
@@ -74,7 +79,8 @@ class zcObserverIemsLegacyBridge extends base
 
     /**
      * Legacy checkout_shipping redirected back to the shipping-address page when
-     * the delivery address still carried the placeholder unit.
+     * the delivery address still carried the placeholder unit. The same check
+     * runs on One-Page Checkout's pages, which bypass checkout_shipping.
      */
     private function guardShippingAddressUnit(): void
     {

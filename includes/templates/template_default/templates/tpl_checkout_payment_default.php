@@ -37,11 +37,6 @@ echo $payment_modules->javascript_validation(); ?>
         <h2 id="checkoutPaymentHeadingAddress"><?= TITLE_BILLING_ADDRESS ?></h2>
 
         <div id="checkoutBillto" class="floatingBox back">
-            <?php
-            if (MAX_ADDRESS_BOOK_ENTRIES >= 2) { ?>
-                <div class="buttonRow forward"><a href="<?= zen_href_link(FILENAME_CHECKOUT_PAYMENT_ADDRESS, '', 'SSL') ?>"><?= zen_image_button(BUTTON_IMAGE_CHANGE_ADDRESS, BUTTON_CHANGE_ADDRESS_ALT) ?></a></div>
-            <?php
-            } ?>
             <address><?= zen_address_label($_SESSION['customer_id'], $_SESSION['billto'], true, ' ', '<br>') ?></address>
         </div>
 

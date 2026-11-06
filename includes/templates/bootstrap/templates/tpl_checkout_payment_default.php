@@ -49,15 +49,6 @@ if (!$payment_modules->in_special_checkout()) {
                         </div>
                         <div class="col-sm-7">
                             <?= TEXT_SELECTED_BILLING_DESTINATION ?>
-<?php
-    if (zen_config('MAX_ADDRESS_BOOK_ENTRIES') >= 2) {
-?>
-                            <div class="btn-toolbar justify-content-end mt-3" role="toolbar">
-                                <?= zca_button_link(zen_href_link(FILENAME_CHECKOUT_PAYMENT_ADDRESS, '', 'SSL'), BUTTON_CHANGE_ADDRESS_ALT, 'button_change_address') ?>
-                            </div>
-<?php
-    }
-?>
                         </div>
                     </div>
                 </div>

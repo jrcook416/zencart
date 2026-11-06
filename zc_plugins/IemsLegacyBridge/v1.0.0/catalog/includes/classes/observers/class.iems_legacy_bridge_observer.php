@@ -37,6 +37,7 @@ class zcObserverIemsLegacyBridge extends base
             'NOTIFY_HEADER_START_CHECKOUT_PAYMENT',
             'NOTIFY_HEADER_START_CHECKOUT_CONFIRMATION',
             'NOTIFY_HEADER_START_CHECKOUT_PROCESS',
+            'NOTIFY_HEADER_START_CHECKOUT_PAYMENT_ADDRESS',
         ]);
     }
 
@@ -70,6 +71,10 @@ class zcObserverIemsLegacyBridge extends base
             case 'NOTIFY_HEADER_START_CHECKOUT_CONFIRMATION':
             case 'NOTIFY_HEADER_START_CHECKOUT_PROCESS':
                 $this->syncBillingAddressWithDelivery();
+                break;
+            case 'NOTIFY_HEADER_START_CHECKOUT_PAYMENT_ADDRESS':
+                // Billing is locked to the delivery unit; no separate billing address.
+                zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
                 break;
         }
     }

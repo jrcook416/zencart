@@ -11,6 +11,9 @@ use Zencart\Plugins\Catalog\IemsLegacyBridge\LegacyUnits;
  *  - unit-of-measure text after the displayed price (functions_prices.php);
  *  - " (uom)" appended to cart product names (shopping_cart.php), which is what
  *    ends up in orders_products.products_name and the Shipping Export feed.
+ *
+ * Also makes the order's customer and billing addresses match the delivery address
+ * (the unit chosen at the start of checkout).
  */
 class zcObserverIemsLegacyBridge extends base
 {
@@ -30,6 +33,7 @@ class zcObserverIemsLegacyBridge extends base
             'NOTIFY_HEADER_START_CHECKOUT_ONE_CONFIRMATION',
             'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_FREE_OR_CALL',
             'NOTIFIER_CART_GET_PRODUCTS_END',
+            'NOTIFY_ORDER_CART_AFTER_ADDRESSES_SET',
         ]);
     }
 
@@ -56,7 +60,39 @@ class zcObserverIemsLegacyBridge extends base
             case 'NOTIFIER_CART_GET_PRODUCTS_END':
                 $this->appendUomToCartNames($p2);
                 break;
+            case 'NOTIFY_ORDER_CART_AFTER_ADDRESSES_SET':
+                $this->matchOrderAddressesToDelivery($class);
+                break;
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Order addresses
+    // -------------------------------------------------------------------------
+
+    /**
+     * The delivery address carries the unit picked at the start of checkout. Copy it
+     * over the order's billing and customer addresses so all three match; the customer's
+     * telephone and email address (not part of an address) are kept.
+     */
+    public function matchOrderAddressesToDelivery(object $order): void
+    {
+        $delivery = $order->delivery ?? null;
+        if (!is_array($delivery)
+            || trim((string)($delivery['street_address'] ?? '')) === ''
+            || LegacyUnits::isPlaceholder((string)($delivery['suburb'] ?? ''))) {
+            return;
+        }
+
+        $order->billing = $delivery;
+
+        $customer = is_array($order->customer ?? null) ? $order->customer : [];
+        foreach (['telephone', 'email_address'] as $key) {
+            if (array_key_exists($key, $customer)) {
+                $delivery[$key] = $customer[$key];
+            }
+        }
+        $order->customer = $delivery;
     }
 
     // -------------------------------------------------------------------------

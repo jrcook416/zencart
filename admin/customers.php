@@ -1793,18 +1793,12 @@ if ($action === 'edit' || $action === 'update') {
                     TEXT_INFO_NUMBER_OF_ORDERS . ' ' .
                     $cInfo->number_of_orders;
                 if ($cInfo->number_of_orders > 0) {
-                    // Migrated orders can carry a status ID with no orders_status row; the Customer class
-                    // then needs this text, which stock Zen Cart only defines on the storefront.
-                    // Empty, so those orders render like any other with no status shown.
-                    if (!defined('TEXT_UNKNOWN_ORDERS_STATUS_NAME')) {
-                        define('TEXT_UNKNOWN_ORDERS_STATUS_NAME', '');
-                    }
                     $text .= ' [ ';
                     foreach ($customer->getOrderHistory(5) as $order) {
                         $text .= '<a href="' . zen_href_link(
                             FILENAME_ORDERS,
                             'cID=' . $cInfo->customers_id . '&oID=' . $order['orders_id'] . '&action=edit'
-                        ) . '" title="Purchased: ' . zen_date_short($order['date_purchased']) . (($order['orders_status_name'] ?? '') !== '' ? ', status ' . $order['orders_status_name'] : '') . '">' . $order['orders_id'] . '</a> ';
+                        ) . '" title="Purchased: ' . zen_date_short($order['date_purchased']) . ', status ' . $order['orders_status_name'] . '">' . $order['orders_id'] . '</a> ';
                     }
                     if ($cInfo->number_of_orders > 5) {
                         $text .= ' ... ';

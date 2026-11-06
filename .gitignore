@@ -256,4 +256,7 @@ CLAUDE.local.md
 settings.local.json
 .ddev
 
+# live admin directory (renamed copy of admin/); never commit
+/wombat/
+
 

@@ -93,6 +93,14 @@ $missing->delivery = false;
 $observer->matchOrderAddressesToDelivery($missing);
 $assert($missing->billing === $accountAddress, 'A missing delivery address should leave billing unchanged.');
 
+$_SESSION = ['customer_id' => 5, 'sendto' => 42, 'billto' => 7];
+$observer->syncBillingAddressWithDelivery();
+$assert($_SESSION['billto'] === 42, 'billto should follow sendto.');
+
+$_SESSION = ['customer_id' => 5, 'billto' => 7];
+$observer->syncBillingAddressWithDelivery();
+$assert($_SESSION['billto'] === 7, 'billto should stay when sendto is unset.');
+
 if ($failures !== []) {
     fwrite(STDERR, implode(PHP_EOL, $failures) . PHP_EOL);
     exit(1);

@@ -34,6 +34,9 @@ class zcObserverIemsLegacyBridge extends base
             'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_FREE_OR_CALL',
             'NOTIFIER_CART_GET_PRODUCTS_END',
             'NOTIFY_ORDER_CART_AFTER_ADDRESSES_SET',
+            'NOTIFY_HEADER_START_CHECKOUT_PAYMENT',
+            'NOTIFY_HEADER_START_CHECKOUT_CONFIRMATION',
+            'NOTIFY_HEADER_START_CHECKOUT_PROCESS',
         ]);
     }
 
@@ -62,6 +65,11 @@ class zcObserverIemsLegacyBridge extends base
                 break;
             case 'NOTIFY_ORDER_CART_AFTER_ADDRESSES_SET':
                 $this->matchOrderAddressesToDelivery($class);
+                break;
+            case 'NOTIFY_HEADER_START_CHECKOUT_PAYMENT':
+            case 'NOTIFY_HEADER_START_CHECKOUT_CONFIRMATION':
+            case 'NOTIFY_HEADER_START_CHECKOUT_PROCESS':
+                $this->syncBillingAddressWithDelivery();
                 break;
         }
     }
@@ -93,6 +101,18 @@ class zcObserverIemsLegacyBridge extends base
             }
         }
         $order->customer = $delivery;
+    }
+
+    /**
+     * The payment page prints the billing address from $_SESSION['billto'], so point it
+     * at the delivery address (the unit) before the page, confirmation and order run.
+     */
+    public function syncBillingAddressWithDelivery(): void
+    {
+        if (empty($_SESSION['customer_id']) || empty($_SESSION['sendto'])) {
+            return;
+        }
+        $_SESSION['billto'] = $_SESSION['sendto'];
     }
 
     // -------------------------------------------------------------------------

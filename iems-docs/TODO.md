@@ -16,7 +16,8 @@ Future work from the 2026-07-16 handoff and its 2026-09-19 status (not started u
 - [ ] Fill gaps in `HISTORY.md` marked unverified once Jeremiah answers.
 
 ## Optional / deferred
-- [ ] Decide whether tools that expect `AGENTS.md`/`CLAUDE.md` at the repo root need a root stub now that they live in `iems-docs/`.
+- [ ] Decide whether to edit the stale "Version 1.5.6 remains in production" sentence in `iems-docs/README.md` (DECISIONS Q9).
+- [x] Root stubs for AGENTS.md/CLAUDE.md: decided no (DECISIONS D10).
 
 ## Not building
 Not stated in repo files. Unverified; ask Jeremiah before adding anything here.

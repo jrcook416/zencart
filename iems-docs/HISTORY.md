@@ -2,11 +2,14 @@
 
 Reconstructed from `git log` of `v222-iems-dev` (HEAD 1c1c62364 at writing), `IEMS-CHANGES.md`, the IEMS README text (`iems-docs/README.md`; formerly in the root README, commits 9e100688d and 80a9c5ca8) and the 2026-07-16 handoff. Dates are commit dates. Items without a hash are from README prose and are **unverified** against git.
 
-## Before this repository's 2.2.2 fork (README, unverified)
-- 2012 or 2013: IEMS Zen Cart installations commissioned; five custom installations; managed outside version control until 2018.
-- 2019: placed under version control with v1.5.6 (still in production per README).
-- 2022-2023: v1.5.7 and v1.5.8 development; stopped June 2023.
-- June 2026: 2.2.2 fork development began (README). First fork-specific commits in git are dated 2026-07-07 (below).
+## Before this repository's 2.2.2 fork
+README prose (written 2026-08-05, commits 9e100688d and 80a9c5ca8) is **unverified** against git; git only partly corroborates it:
+- 2012 or 2013: IEMS Zen Cart installations commissioned; five custom installations; managed outside version control until 2018 (README only; not in this repo's git).
+- 2019: placed under version control with v1.5.6 (README only). The repo's `v1.5.6` tag (5d8ba1378, 2019-01-04) is the upstream Zen Cart release, not an IEMS-authored commit. No IEMS-authored commit from 2019 exists in this history.
+- 2022-2023: v1.5.7 and v1.5.8 development (README). One tag, `v157d-EO` (35038957e, "updating after deleting the dist-configure file.", author Jeremiah Cook, dated 2022-04-08), is the only pre-2026 Jeremiah-authored commit found; it is not an ancestor of `v222-iems-dev`. Its meaning ("EO") is unverified.
+- June 2026: 2.2.2 fork development began (README). The first fork-specific commits in git are dated 2026-07-07 (below).
+- Production status: as of 2026-11-07 the 2.2.2 revision without the multi-store work is live in production (stated by Jeremiah; see `DECISIONS.md` D9). The README sentence "Version 1.5.6 remains in production today" predates this and is stale.
+- All other tags (v1.5.0 to v2.2.2, 43 total) are upstream Zen Cart release tags.
 
 ## Timeline (verified from git)
 | Date | Commit | Event |
@@ -31,7 +34,8 @@ Reconstructed from `git log` of `v222-iems-dev` (HEAD 1c1c62364 at writing), `IE
 | 2026-09-18 | 590f90252 | v1.5.5 agency fallback for agencies with zero active units |
 | 2026-09-18 | b8e36d881 | v1.6.0 delivery flag; `iemspickup`/`iemsdelivery` shipping modules |
 | 2026-09-18 | de1a8e232, 099d832dc, 913c9b045 | v1.7.0 managed unit delivery addresses; checkout-loop fix; shipping prerequisites documented |
-| 2026-09-19 | aa2f60f66, 4a7af2d34 | v1.8.0 agency payment methods; shipping model extension merged (v1.9.0 content per IEMS-CHANGES; commit mapping unverified) |
+| 2026-09-19 | aa2f60f66, fd30d72e6 | v1.8.0 agency payment methods (version directory first added in aa2f60f66; fd30d72e6 carries the same subject, relationship not examined) |
+| 2026-09-19 | a631f4717, 4a7af2d34 | v1.9.0 agency shipping model added (a631f4717); merged by 4a7af2d34 |
 | 2026-09-19 | 0e7088437 | v1.9.1 checkout presentation ("Ordering Unit") |
 | 2026-09-19 | d84cfb3ec, 18c5c3394, 1d570644e | v1.9.2 delivery identity/address |
 | 2026-09-19 | 2341ccab9, 62bb25742, e26092de1 | v1.9.4 admin order address display added, reverted, compatibility releases restored (v1.9.4/v1.9.5) |
@@ -42,7 +46,29 @@ Reconstructed from `git log` of `v222-iems-dev` (HEAD 1c1c62364 at writing), `IE
 | 2026-11-06 | f089ec107 | Password-reset link opens on login-to-browse stores (PR #62, 1c1c62364) |
 
 ## Version to commit map (IemsCountyAgency)
-v1.1.0 ae02de400; v1.2.5 3d2c0759d; v1.3.0 0d37beb04; v1.4.0 058c0dea4; v1.5.0 89963d285; v1.5.5 590f90252; v1.6.0 b8e36d881; v1.7.0 de1a8e232; v1.8.0 aa2f60f66; v1.9.0 unverified (shipping model extension, merge 4a7af2d34); v1.9.1 0e7088437; v1.9.2 18c5c3394; v1.9.4/v1.9.5 e26092de1; v1.9.6 64cf51778. v1.0.0 and v1.2.0 etc.: not located (unverified).
+Source: the commit that first added `zc_plugins/IemsCountyAgency/<version>/manifest.php` (all 17 version directories still exist).
+
+| Version | Commit | Date |
+|---------|--------|------|
+| v1.0.0 | 0b6dcca32 | 2026-07-17 |
+| v1.1.0 | ae02de400 | 2026-08-01 |
+| v1.2.0 | 00c2433f0 | 2026-08-03 |
+| v1.2.5 | 3d2c0759d | 2026-08-03 |
+| v1.3.0 | 0d37beb04 | 2026-08-03 |
+| v1.4.0 | 058c0dea4 | 2026-08-03 |
+| v1.5.0 | 89963d285 | 2026-09-18 |
+| v1.5.5 | 590f90252 | 2026-09-18 |
+| v1.6.0 | b8e36d881 | 2026-09-18 |
+| v1.7.0 | de1a8e232 | 2026-09-18 |
+| v1.8.0 | aa2f60f66 | 2026-09-19 |
+| v1.9.0 | a631f4717 | 2026-09-19 |
+| v1.9.1 | 0e7088437 | 2026-09-19 |
+| v1.9.2 | 18c5c3394 | 2026-09-19 |
+| v1.9.4 | 2341ccab9 (removed in 62bb25742, restored in e26092de1) | 2026-09-19 |
+| v1.9.5 | e26092de1 | 2026-09-19 |
+| v1.9.6 | 64cf51778 | 2026-10-22 |
+
+No git tags exist for these plugin versions.
 
 ## Open items
 See `TODO.md` and "Open questions" in `DECISIONS.md`.

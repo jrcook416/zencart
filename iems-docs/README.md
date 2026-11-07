@@ -33,6 +33,8 @@ Project documentation for this fork lives in this folder (`iems-docs/`), kept ou
 | [`iems_data.md`](iems_data.md) | IEMS data definitions |
 | [`AGENTS.md`](AGENTS.md), [`CONVENTIONS.md`](CONVENTIONS.md), [`CLAUDE.md`](CLAUDE.md) | Agent guidance, coding standards, Claude rules |
 
+**Production status.** The 2.2.2 revision without the multi-store work is live in production (Jeremiah, 2026-11-07; `DECISIONS.md` D9). The history paragraphs above predate this; where they say version 1.5.6 remains in production, treat that as stale. All IEMS documentation lives in this folder; AGENTS.md and CLAUDE.md stay here (D10).
+
 **One source of truth.** Decisions and standing constraints: `DECISIONS.md`. Live state: `TODO.md`. Version-level technical detail: `IEMS-CHANGES.md`. Timeline: `HISTORY.md`. Handoffs are records only and are not edited after sending; the 2026-07-16 handoff holds historical requirements, and where it conflicts with `DECISIONS.md` or `TODO.md`, those win. The system of record is git: entries cite commit hashes, and anything not verifiable from git or the files is marked **unverified**.
 
 **Roles.** Formal role approval is unverified (see `DECISIONS.md` open questions). Jeremiah (jrcook416) is project owner/developer, approves changes, and commits and pushes manually. AI assistants (Claude, GitHub Copilot) propose plans, implement approved work and stage changes; they never auto-commit, push or deploy.

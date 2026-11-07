@@ -222,7 +222,7 @@ ON DUPLICATE KEY UPDATE `county_name` = VALUES(`county_name`);
 --     split into agency_identifier and agency_name.
 --   - agency_filter, agency_customer_group, agency_address: dropped. Not
 --     part of the new schema; customer-group derivation is handled
---     separately per the county+agency model (see iems_data.md governance
+--     separately per the county+agency model (see iems-docs/iems_data.md governance
 --     notes / handoff doc Branch 4).
 --
 -- Data corrections applied during import, confirmed with the data owner:

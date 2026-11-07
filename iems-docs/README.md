@@ -29,9 +29,9 @@ Project documentation for this fork lives in this folder (`iems-docs/`), kept ou
 | [`DECISIONS.md`](DECISIONS.md) | Rulings and standing constraints, one place |
 | [`HISTORY.md`](HISTORY.md) | Dated project history, reconstructed from git |
 | [`handoffs/`](handoffs/) | Dated, never-edited handoff records ([`TEMPLATE.md`](handoffs/TEMPLATE.md)) |
-| [`IEMS-CHANGES.md`](../IEMS-CHANGES.md) | Per-version technical change log (fork vs upstream 2.2.2) |
-| [`iems_data.md`](../iems_data.md) | IEMS data definitions |
-| [`AGENTS.md`](../AGENTS.md), [`CONVENTIONS.md`](../CONVENTIONS.md), [`CLAUDE.md`](../CLAUDE.md) | Agent guidance, coding standards, Claude rules |
+| [`IEMS-CHANGES.md`](IEMS-CHANGES.md) | Per-version technical change log (fork vs upstream 2.2.2) |
+| [`iems_data.md`](iems_data.md) | IEMS data definitions |
+| [`AGENTS.md`](AGENTS.md), [`CONVENTIONS.md`](CONVENTIONS.md), [`CLAUDE.md`](CLAUDE.md) | Agent guidance, coding standards, Claude rules |
 
 **One source of truth.** Decisions and standing constraints: `DECISIONS.md`. Live state: `TODO.md`. Version-level technical detail: `IEMS-CHANGES.md`. Timeline: `HISTORY.md`. Handoffs are records only and are not edited after sending; the 2026-07-16 handoff holds historical requirements, and where it conflicts with `DECISIONS.md` or `TODO.md`, those win. The system of record is git: entries cite commit hashes, and anything not verifiable from git or the files is marked **unverified**.
 

@@ -14,8 +14,8 @@ Concise guidance for automated AI coding agents (and humans) to become productiv
 
 Project docs (IEMS fork)
 ------------------------
-- Live tasks, decisions, history and handoffs: `iems-docs/` (start at `iems-docs/README.md`). Technical change log: `IEMS-CHANGES.md`; data definitions: `iems_data.md`.
-- The `docs/` folder is upstream Zen Cart content; do not add project docs there.
+- Live tasks, decisions, history and handoffs: this folder (`iems-docs/`; start at `README.md`). Technical change log: `IEMS-CHANGES.md`; data definitions: `iems_data.md`.
+- The root `docs/` folder is upstream Zen Cart content; do not add project docs there.
 
 Quick orientation (high-value entry points)
 ----------------------------------------

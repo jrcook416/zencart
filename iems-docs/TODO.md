@@ -16,7 +16,7 @@ Future work from the 2026-07-16 handoff and its 2026-09-19 status (not started u
 - [ ] Fill gaps in `HISTORY.md` marked unverified once Jeremiah answers.
 
 ## Optional / deferred
-- [ ] Decide whether to move `IEMS-CHANGES.md` and `iems_data.md` into `iems-docs/`.
+- [ ] Decide whether tools that expect `AGENTS.md`/`CLAUDE.md` at the repo root need a root stub now that they live in `iems-docs/`.
 
 ## Not building
 Not stated in repo files. Unverified; ask Jeremiah before adding anything here.

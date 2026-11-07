@@ -34,5 +34,5 @@ Single home for rulings and standing constraints. Each entry cites its source. N
 4. Which IemsCountyAgency versions lack git commits (v1.0.0, v1.2.0, v1.3.5, etc.)?
 5. Should HISTORY include pre-2026 events (README prose is unverified)?
 6. Are formal roles (like the training repo's Rob/Frank) wanted here, or only owner + assistants?
-7. Should `IEMS-CHANGES.md` and `iems_data.md` move into `iems-docs/`? Left in place pending your answer.
+7. ~~Should `IEMS-CHANGES.md` and `iems_data.md` move into `iems-docs/`?~~ Resolved 2026-11-07 by Jeremiah: AGENTS.md, CONVENTIONS.md, CLAUDE.md, IEMS-CHANGES.md and iems_data.md all moved into `iems-docs/`. Side effect: tools that look for AGENTS.md/CLAUDE.md at the repo root will not find them; `zc_install/sql/iems_custom/iems_foundation.sql` still mentions `iems_data.md` by old path (code not changed).
 8. Is the `bootstrap`/`iems` template readme under `docs/` upstream-derived or fork-authored? Left untouched.

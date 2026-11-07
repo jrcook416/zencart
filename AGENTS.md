@@ -12,6 +12,11 @@ not the repo root. `tmp/` is gitignored. Create it if it doesn't exist.
 -------
 Concise guidance for automated AI coding agents (and humans) to become productive in this Zen Cart v2.2 PHP codebase. Focus is on immediately actionable facts: where to look, how the app boots, test & dev commands, conventions, and integration points.
 
+Project docs (IEMS fork)
+------------------------
+- Live tasks, decisions, history and handoffs: `iems-docs/` (start at `iems-docs/README.md`). Technical change log: `IEMS-CHANGES.md`; data definitions: `iems_data.md`.
+- The `docs/` folder is upstream Zen Cart content; do not add project docs there.
+
 Quick orientation (high-value entry points)
 ----------------------------------------
 - Root storefront entry: `index.php` (loads `includes/application_top.php`, uses PageLoader to pull page modules and requisite plugins).

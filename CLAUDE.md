@@ -13,6 +13,12 @@ Read these two files before doing anything else:
 Before making any changes, verify that the current branch is appropriate for the work being
 requested. If it is not, ask before proceeding.
 
+## Project docs
+
+IEMS project state lives in `iems-docs/` (see `iems-docs/README.md`): `TODO.md` for live tasks,
+`DECISIONS.md` for rulings, `HISTORY.md` for the timeline, `handoffs/` for dated, never-edited
+handoff records. Write a new handoff from `handoffs/TEMPLATE.md` rather than editing an old one.
+
 ## Human review
 
 Do not auto-commit. All changes are reviewed and committed manually by the developer.

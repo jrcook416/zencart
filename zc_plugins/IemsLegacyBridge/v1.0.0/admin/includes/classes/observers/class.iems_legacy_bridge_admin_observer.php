@@ -17,6 +17,7 @@ class zcObserverIemsLegacyBridgeAdmin extends base
             'NOTIFY_ADMIN_ORDERS_SEARCH_PARMS',
             'NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_HEADING',
             'NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_DATA',
+            'NOTIFY_EO_GET_PRODUCTS_AVAILABLE_STOCK',
         ]);
     }
 
@@ -99,7 +100,26 @@ class zcObserverIemsLegacyBridgeAdmin extends base
             case 'NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_DATA':
                 $this->addUnitData($p2, $p3);
                 break;
+            case 'NOTIFY_EO_GET_PRODUCTS_AVAILABLE_STOCK':
+                $this->allowAnyEditOrdersQuantity($p2, $p3);
+                break;
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Edit Orders: with "Allow Checkout" off, EO refuses to add a product whose
+    // requested quantity exceeds its stock, so an out-of-stock product could be
+    // listed but never added. Report a large available quantity in that case so
+    // staff can add any product. Does nothing when STOCK_ALLOW_CHECKOUT is 'true'.
+    // -------------------------------------------------------------------------
+
+    private function allowAnyEditOrdersQuantity(&$stockQuantity, &$stockHandled): void
+    {
+        if (zen_config('STOCK_ALLOW_CHECKOUT') !== 'false') {
+            return;
+        }
+        $stockQuantity = 999999;
+        $stockHandled = true;
     }
 
     // -------------------------------------------------------------------------

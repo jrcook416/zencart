@@ -18,6 +18,7 @@ class zcObserverIemsLegacyBridgeAdmin extends base
             'NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_HEADING',
             'NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_DATA',
             'NOTIFY_EO_GET_PRODUCTS_AVAILABLE_STOCK',
+            'ZEN_UPDATE_ORDERS_HISTORY_AFTER_INSERT',
         ]);
     }
 
@@ -103,7 +104,41 @@ class zcObserverIemsLegacyBridgeAdmin extends base
             case 'NOTIFY_EO_GET_PRODUCTS_AVAILABLE_STOCK':
                 $this->allowAnyEditOrdersQuantity($p2, $p3);
                 break;
+            case 'ZEN_UPDATE_ORDERS_HISTORY_AFTER_INSERT':
+                $this->dropEditOrdersChangeLog($p1, $p2);
+                break;
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Edit Orders writes an automatic "These values were changed in the order:"
+    // status-history row on every save, and offers no way to turn it off. Stock
+    // zen_update_orders_history() has no cancel hook either, so the row is
+    // removed immediately after it is inserted. Only that row is removed: it
+    // must come from edit_orders.php action=update_order and its comment must
+    // start with Edit Orders' own TEXT_OSH_CHANGED_VALUES text. Any other
+    // history write (status updates, admin comments, other EO records) is kept.
+    // -------------------------------------------------------------------------
+
+    private function dropEditOrdersChangeLog($oshId, $oshData): void
+    {
+        global $db;
+
+        if (!defined('TEXT_OSH_CHANGED_VALUES') || !is_array($oshData) || (int)$oshId <= 0
+            || basename($_SERVER['SCRIPT_NAME'] ?? '') !== 'edit_orders.php'
+            || ($_GET['action'] ?? '') !== 'update_order') {
+            return;
+        }
+        $comments = (string)($oshData['comments'] ?? '');
+        if (!str_starts_with($comments, (string)TEXT_OSH_CHANGED_VALUES)) {
+            return;
+        }
+        $db->Execute(
+            "DELETE FROM " . TABLE_ORDERS_STATUS_HISTORY . "
+              WHERE orders_status_history_id = " . (int)$oshId . "
+                AND orders_id = " . (int)($oshData['orders_id'] ?? 0) . "
+              LIMIT 1"
+        );
     }
 
     // -------------------------------------------------------------------------

@@ -441,6 +441,7 @@ if (isset($_POST['download_csv'])) {
 // Order status dropdowns
 $status_array = [];
 $status_table = [];
+$default_finalized_status_id = '';
 $orders_status = $db->Execute(
     "SELECT orders_status_id, orders_status_name
        FROM " . TABLE_ORDERS_STATUS . "
@@ -453,6 +454,9 @@ while (!$orders_status->EOF) {
         'text' => $orders_status->fields['orders_status_name'] . ' [' . $orders_status->fields['orders_status_id'] . ']',
     ];
     $status_table[$orders_status->fields['orders_status_id']] = $orders_status->fields['orders_status_name'] . ' [' . $orders_status->fields['orders_status_id'] . ']';
+    if ($default_finalized_status_id === '' && strcasecmp(trim((string)$orders_status->fields['orders_status_name']), 'Finalized') === 0) {
+        $default_finalized_status_id = (string)$orders_status->fields['orders_status_id'];
+    }
     $orders_status->MoveNext();
 }
 
@@ -544,7 +548,7 @@ $pending_orders = $db->Execute($pending_query);
             <p><?php echo TEXT_RUNIN_TEST; ?></p>
             <?php echo zen_draw_form('download_csv', FILENAME_SHIPPING_EXPORT, '', 'post', 'id="download_csv"'); ?>
             <input type="button" class="btn btn-default btn-sm" value="<?php echo TEXT_CHECK_UNCHECK_ALL; ?>" onclick="iemsExportToggleAll();"><br><br>
-            <?php echo zen_draw_checkbox_field('export_test', '1', false); ?>&nbsp;<?php echo TEXT_RUNIN_TEST_FIELD; ?><br>
+            <?php echo zen_draw_checkbox_field('export_test', '1', empty($_POST) || iems_export_flag('export_test')); ?>&nbsp;<?php echo TEXT_RUNIN_TEST_FIELD; ?><br>
             <?php echo zen_draw_checkbox_field('split_name', '1', false); ?>&nbsp;<?php echo TEXT_SPLIT_NAME_FIELD; ?><br>
             <?php echo zen_draw_checkbox_field('include_header_row', '1', true); ?>&nbsp;<?php echo TEXT_HEADER_ROW_FIELD; ?><br><br>
             <?php echo TEXT_EMAIL_EXPORT_FORMAT; ?><?php echo zen_draw_pull_down_menu('format', $available_export_formats, '0'); ?>
@@ -556,7 +560,7 @@ $pending_orders = $db->Execute($pending_query);
             <hr>
             <strong><?php echo HEADING_UPDATE_STATUS_TITLE; ?></strong><br><?php echo TEXT_UPDATE_STATUS; ?><br>
             <?php echo zen_draw_checkbox_field('status_setting', '1', true); ?>&nbsp;<?php echo TEXT_SET_STATUS_AFTER_EXPORT_FIELD; ?>
-            <?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, (string)($_POST['order_status_setting'] ?? ''), 'id="order_status_setting" class="form-control"'); ?>
+            <?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, (string)($_POST['order_status_setting'] ?? $default_finalized_status_id), 'id="order_status_setting" class="form-control"'); ?>
             <hr>
             <strong><?php echo HEADING_STATUS_FILTER_TITLE; ?></strong><br>
             <?php echo zen_draw_radio_field('status_target', '1', false); ?>&nbsp;<?php echo TEXT_ANY_ORDER_STATUS_FIELD; ?><br>

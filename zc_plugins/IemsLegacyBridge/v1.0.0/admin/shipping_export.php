@@ -441,6 +441,8 @@ if (isset($_POST['download_csv'])) {
 // Order status dropdowns
 $status_array = [];
 $status_table = [];
+$default_finalized_status_id = '';
+$finalized_status_id_fallback = '';
 $default_delivered_status_id = '';
 $delivered_status_id_fallback = '';
 $orders_status = $db->Execute(
@@ -455,6 +457,12 @@ while (!$orders_status->EOF) {
         'text' => $orders_status->fields['orders_status_name'] . ' [' . $orders_status->fields['orders_status_id'] . ']',
     ];
     $status_table[$orders_status->fields['orders_status_id']] = $orders_status->fields['orders_status_name'] . ' [' . $orders_status->fields['orders_status_id'] . ']';
+    if ($default_finalized_status_id === '' && strcasecmp(trim((string)$orders_status->fields['orders_status_name']), 'Finalized') === 0) {
+        $default_finalized_status_id = (string)$orders_status->fields['orders_status_id'];
+    }
+    if ((string)$orders_status->fields['orders_status_id'] === '6') {
+        $finalized_status_id_fallback = '6';
+    }
     if ($default_delivered_status_id === '' && strcasecmp(trim((string)$orders_status->fields['orders_status_name']), 'Delivered') === 0) {
         $default_delivered_status_id = (string)$orders_status->fields['orders_status_id'];
     }
@@ -560,16 +568,16 @@ $pending_orders = $db->Execute($pending_query);
             <strong><?php echo HEADING_AUTO_EMAIL_TITLE; ?></strong><br>
             <?php echo zen_draw_checkbox_field('savetofile', '1', false); ?>&nbsp;<?php echo TEXT_SAVE_AND_EMAIL_FIELD; ?><br>
             <?php echo TEXT_SUPPLIER_EMAIL_FIELD; ?>&nbsp;<?php echo zen_draw_input_field('auto_email_supplier', $default_email, 'class="form-control"'); ?>
-            <?php echo TEXT_EMAIL_SUBJECT_FIELD; ?>&nbsp;<?php echo zen_draw_input_field('auto_email_subject', sprintf(EMAIL_EXPORT_SUBJECT, STORE_NAME), 'class="form-control"'); ?>
+            <?php echo TEXT_EMAIL_SUBJECT_FIELD; ?>&nbsp;<?php echo zen_draw_input_field('auto_email_subject', '', 'class="form-control"'); ?>
             <hr>
             <strong><?php echo HEADING_UPDATE_STATUS_TITLE; ?></strong><br><?php echo TEXT_UPDATE_STATUS; ?><br>
             <?php echo zen_draw_checkbox_field('status_setting', '1', true); ?>&nbsp;<?php echo TEXT_SET_STATUS_AFTER_EXPORT_FIELD; ?>
-            <?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, (string)($_POST['order_status_setting'] ?? ($default_delivered_status_id !== '' ? $default_delivered_status_id : $delivered_status_id_fallback)), 'id="order_status_setting" class="form-control"'); ?>
+            <?php echo zen_draw_pull_down_menu('order_status_setting', $status_array, (string)($_POST['order_status_setting'] ?? ($default_finalized_status_id !== '' ? $default_finalized_status_id : $finalized_status_id_fallback)), 'id="order_status_setting" class="form-control"'); ?>
             <hr>
             <strong><?php echo HEADING_STATUS_FILTER_TITLE; ?></strong><br>
             <?php echo zen_draw_radio_field('status_target', '1', false); ?>&nbsp;<?php echo TEXT_ANY_ORDER_STATUS_FIELD; ?><br>
             <?php echo zen_draw_radio_field('status_target', '2', true); ?>&nbsp;<?php echo TEXT_ASSIGNED_ORDER_STATUS_FIELD; ?><br>
-            <?php echo zen_draw_pull_down_menu('order_status', $status_array, (string)($_POST['order_status'] ?? ''), 'id="order_status" class="form-control"'); ?>
+            <?php echo zen_draw_pull_down_menu('order_status', $status_array, (string)($_POST['order_status'] ?? ($default_delivered_status_id !== '' ? $default_delivered_status_id : $delivered_status_id_fallback)), 'id="order_status" class="form-control"'); ?>
             <hr>
             <strong><?php echo HEADING_PREVIOUS_EXPORTS_TITLE; ?></strong><br><?php echo TEXT_PREVIOUS_EXPORTS; ?><br>
             <?php echo zen_draw_checkbox_field('dload_include', '1', false); ?>&nbsp;<?php echo TEXT_PREVIOUS_EXPORTS_FIELD; ?>

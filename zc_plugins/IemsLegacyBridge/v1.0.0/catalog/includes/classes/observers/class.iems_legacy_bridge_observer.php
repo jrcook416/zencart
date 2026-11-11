@@ -38,6 +38,10 @@ class zcObserverIemsLegacyBridge extends base
             'NOTIFY_HEADER_START_CHECKOUT_CONFIRMATION',
             'NOTIFY_HEADER_START_CHECKOUT_PROCESS',
             'NOTIFY_HEADER_START_CHECKOUT_PAYMENT_ADDRESS',
+            'NOTIFY_SEFU_INTERCEPT',
+            'NOTIFY_ZEN_REDIRECT',
+            'NOTIFY_HEADER_START_CHECKOUT_SUCCESS',
+            'NOTIFY_CHECKOUT_PROCESS_BEFORE_CART_RESET',
         ]);
     }
 
@@ -56,6 +60,7 @@ class zcObserverIemsLegacyBridge extends base
             case 'NOTIFY_HEADER_START_CHECKOUT_SHIPPING':
             case 'NOTIFY_HEADER_START_CHECKOUT_ONE':
             case 'NOTIFY_HEADER_START_CHECKOUT_ONE_CONFIRMATION':
+                $this->enforceShippingAddressStep();
                 $this->guardShippingAddressUnit();
                 break;
             case 'NOTIFY_ZEN_GET_PRODUCTS_DISPLAY_PRICE_FREE_OR_CALL':
@@ -70,19 +75,118 @@ class zcObserverIemsLegacyBridge extends base
             case 'NOTIFY_HEADER_START_CHECKOUT_PAYMENT':
             case 'NOTIFY_HEADER_START_CHECKOUT_CONFIRMATION':
             case 'NOTIFY_HEADER_START_CHECKOUT_PROCESS':
+                $this->enforceShippingAddressStep();
                 $this->syncBillingAddressWithDelivery();
                 break;
             case 'NOTIFY_HEADER_START_CHECKOUT_PAYMENT_ADDRESS':
                 // Billing is locked to the delivery unit; no separate billing address.
                 zen_redirect(zen_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
                 break;
+            case 'NOTIFY_SEFU_INTERCEPT':
+                $this->pointHeaderCheckoutAtShippingAddress($p3, $p4);
+                break;
+            case 'NOTIFY_ZEN_REDIRECT':
+                $this->markShippingAddressStepDone($p1);
+                break;
+            case 'NOTIFY_HEADER_START_CHECKOUT_SUCCESS':
+            case 'NOTIFY_CHECKOUT_PROCESS_BEFORE_CART_RESET':
+                unset($_SESSION['iems_shipping_address_step']);
+                break;
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Header "Checkout" link
+    // -------------------------------------------------------------------------
+
+    /**
+     * 1.5.6c sent the header Checkout link to checkout_shipping_address, where the
+     * unit is picked. Templates build it with zen_href_link(FILENAME_CHECKOUT_SHIPPING),
+     * which has no hook of its own, so the notifier zen_href_link() raises for every
+     * link is used: only a plain checkout_shipping link built by the header or mobile
+     * menu template is changed. Cart buttons, breadcrumbs and redirects are untouched.
+     * checkout_shipping_address sends a logged-out customer to login (and back to
+     * itself afterwards) and an empty cart to the shopping cart, as checkout_shipping does.
+     */
+    private function pointHeaderCheckoutAtShippingAddress(&$page, $parameters): void
+    {
+        if (!defined('FILENAME_CHECKOUT_SHIPPING') || !defined('FILENAME_CHECKOUT_SHIPPING_ADDRESS')
+            || $page !== FILENAME_CHECKOUT_SHIPPING || !empty($parameters)) {
+            return;
+        }
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10) as $frame) {
+            if (in_array(basename($frame['file'] ?? ''), ['tpl_header.php', 'tpl_modules_mobile_menu.php'], true)) {
+                $page = FILENAME_CHECKOUT_SHIPPING_ADDRESS;
+                return;
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // checkout_shipping_address cannot be bypassed
+    // -------------------------------------------------------------------------
+
+    /**
+     * The step counts as done when checkout_shipping_address submits successfully, which
+     * the core module signals by redirecting on to checkout_shipping (or checkout_payment
+     * for a virtual cart). The mark is tied to the customer and to the cart's internal
+     * cartID, which core regenerates on every cart change, so any cart change, a
+     * different login, a placed order (cleared explicitly) or a new session means the
+     * step must be done again.
+     */
+    private function markShippingAddressStepDone($redirect): void
+    {
+        global $current_page_base;
+
+        if (!is_array($redirect) || ($current_page_base ?? '') !== 'checkout_shipping_address'
+            || empty($_SESSION['customer_id']) || !isset($_SESSION['cart'])) {
+            return;
+        }
+        $url = html_entity_decode((string)($redirect['url'] ?? ''));
+        if (!preg_match('/main_page=checkout_(shipping|payment)(&|$)/', $url)
+            && !preg_match('#/checkout_(shipping|payment)(\?|$)#', $url)) {
+            return;
+        }
+        $_SESSION['iems_shipping_address_step'] = [
+            'customer' => (int)$_SESSION['customer_id'],
+            'cart' => (string)($_SESSION['cart']->cartID ?? ''),
+        ];
+    }
+
+    /**
+     * Send later checkout steps back to checkout_shipping_address until it is done.
+     * Logged-out customers and empty or virtual carts are left to core (login first,
+     * which returns to the step they asked for and is then gated here; nothing to ship).
+     * checkout_shipping_address itself is never gated, so there is no redirect loop.
+     */
+    public function enforceShippingAddressStep(): void
+    {
+        if (!$this->shippingAddressStepRequired()) {
+            return;
+        }
+        zen_redirect(zen_href_link(FILENAME_CHECKOUT_SHIPPING_ADDRESS, '', 'SSL'));
+    }
+
+    public function shippingAddressStepRequired(): bool
+    {
+        if (empty($_SESSION['customer_id']) || !isset($_SESSION['cart']) || !is_object($_SESSION['cart'])
+            || !defined('FILENAME_CHECKOUT_SHIPPING_ADDRESS')) {
+            return false;
+        }
+        $cart = $_SESSION['cart'];
+        if ($cart->count_contents() <= 0
+            || (method_exists($cart, 'get_content_type') && $cart->get_content_type() === 'virtual')) {
+            return false;
+        }
+        $step = $_SESSION['iems_shipping_address_step'] ?? null;
+        return !is_array($step)
+            || (int)($step['customer'] ?? 0) !== (int)$_SESSION['customer_id']
+            || (string)($step['cart'] ?? '') !== (string)($cart->cartID ?? '');
     }
 
     // -------------------------------------------------------------------------
     // Order addresses
     // -------------------------------------------------------------------------
-
     /**
      * The delivery address carries the unit picked at the start of checkout. Copy it
      * over the order's billing and customer addresses so all three match; the customer's

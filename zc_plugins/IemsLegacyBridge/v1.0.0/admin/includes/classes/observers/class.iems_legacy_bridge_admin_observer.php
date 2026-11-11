@@ -19,6 +19,9 @@ class zcObserverIemsLegacyBridgeAdmin extends base
             'NOTIFY_ADMIN_ORDERS_LIST_EXTRA_COLUMN_DATA',
             'NOTIFY_EO_GET_PRODUCTS_AVAILABLE_STOCK',
             'ZEN_UPDATE_ORDERS_HISTORY_AFTER_INSERT',
+            'NOTIFY_EO_ADDL_CUSTOMER_ADDRESS_ROWS',
+            'NOTIFY_EO_ADDL_BILLING_ADDRESS_ROWS',
+            'NOTIFY_EO_ADDL_SHIPPING_ADDRESS_ROWS',
         ]);
     }
 
@@ -107,7 +110,62 @@ class zcObserverIemsLegacyBridgeAdmin extends base
             case 'ZEN_UPDATE_ORDERS_HISTORY_AFTER_INSERT':
                 $this->dropEditOrdersChangeLog($p1, $p2);
                 break;
+            case 'NOTIFY_EO_ADDL_CUSTOMER_ADDRESS_ROWS':
+                $this->addEditOrdersUnitPicker('customer', $p1, $p2);
+                break;
+            case 'NOTIFY_EO_ADDL_BILLING_ADDRESS_ROWS':
+                $this->addEditOrdersUnitPicker('billing', $p1, $p2);
+                break;
+            case 'NOTIFY_EO_ADDL_SHIPPING_ADDRESS_ROWS':
+                $this->addEditOrdersUnitPicker('delivery', $p1, $p2);
+                break;
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Edit Orders: the address modals show Suburb as free text, but on the IEMS
+    // stores that column holds the unit from the legacy `units` table (matched
+    // verbatim by inventory). Edit Orders has no hook to change a built-in field,
+    // so each modal gets a unit dropdown named "suburb" (the same form key, so
+    // EO's save path is unchanged) and a small script that swaps it in for the
+    // text input. Without JavaScript both fields post and the later one (the
+    // dropdown) wins. The current value is always an option, so a unit that is no
+    // longer in the table, or an empty one, is never changed just by saving.
+    // Does nothing when the units table is missing or empty.
+    // -------------------------------------------------------------------------
+
+    private function addEditOrdersUnitPicker(string $addressName, $addressFields, &$additionalRows): void
+    {
+        if (!is_array($addressFields) || !array_key_exists('suburb', $addressFields)) {
+            return;
+        }
+        $options = \Zencart\Plugins\Catalog\IemsLegacyBridge\LegacyUnits::allOptions();
+        if ($options === []) {
+            return;
+        }
+        if (!is_array($additionalRows)) {
+            $additionalRows = [];
+        }
+
+        // EO has already HTML-escaped the address values it hands to observers.
+        $current = html_entity_decode((string)$addressFields['suburb'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        if (!in_array($current, array_column($options, 'id'), true)) {
+            array_unshift($options, ['id' => $current, 'text' => $current]);
+        }
+
+        $id = $addressName . '_suburb';
+        $select = '<select name="suburb" id="' . $id . '_unit" class="form-control">' . "\n";
+        foreach ($options as $option) {
+            $select .= '<option value="' . htmlspecialchars($option['id'], ENT_QUOTES, 'UTF-8') . '"'
+                . ($option['id'] === $current ? ' selected="selected"' : '') . '>'
+                . htmlspecialchars($option['text'], ENT_QUOTES, 'UTF-8') . '</option>' . "\n";
+        }
+        $select .= '</select>';
+        $script = "<script>(function(){var s=document.getElementById('" . $id . "_unit');if(!s){return;}"
+            . "var f=s.form||s.closest('form');var t=f&&f.querySelector('input[name=suburb]');"
+            . "if(t&&t.parentNode){s.id='" . $id . "';t.parentNode.replaceChild(s,t);}})();</script>";
+
+        $additionalRows[] = ['label' => '', 'field_id' => '', 'input' => $select . $script];
     }
 
     // -------------------------------------------------------------------------

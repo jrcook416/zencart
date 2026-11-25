@@ -295,7 +295,7 @@ if (!$payment_modules->in_special_checkout()) {
 ?>
         <div id="paymentSubmit" class="btn-toolbar justify-content-between" role="toolbar">
             <?= '<strong>' . $title_continue_checkout . '</strong><br>' . TEXT_CONTINUE_CHECKOUT_PROCEDURE ?>
-            <?= zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT, 'onclick="submitFunction(' . zen_user_has_gv_account($_SESSION['customer_id']) . ',' . $order->info['total'] . ')"') ?>
+            <?= zen_image_submit(BUTTON_IMAGE_CONTINUE_CHECKOUT, BUTTON_CONTINUE_ALT, 'onclick="submitFunction(' . (float)$gv_balance . ',' . $order->info['total'] . ')"') ?>
         </div>
     <?= '</form>' ?>
 

@@ -28,7 +28,7 @@ test('6 cart: add, change quantity, remove, add again', async ({ page }) => {
   expect(await subtotal(page), 'subtotal for 3 = 3 x subtotal for 1')
     .toBeCloseTo(one * 3, 2);
 
-  const del = page.locator('a[href*="action=remove_product"]').first();
+  const del = page.locator('a[href*="action=remove_product"]:visible').first();
   await Promise.all([page.waitForNavigation(), del.click()]);
   await checkPage(page, 'cart-removed');
   await expect(page.locator('body'))

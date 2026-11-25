@@ -17,7 +17,7 @@ async function search(page, words) {
   } else {
     await go(page, 'search_result', 'keyword=' + encodeURIComponent(words));
   }
-  expect(mainPageOf(page)).toBe('search_result');
+  return mainPageOf(page);
 }
 
 test('3 search finds a product and handles no results',
@@ -28,11 +28,18 @@ test('3 search finds a product and handles no results',
       .first().innerText()).trim();
     const pid = new URL(page.url()).searchParams.get('products_id');
 
-    await search(page, name);
-    expect(await page.locator(`a[href*="products_id=${pid}"]`).count(),
-      `"${name}" (id ${pid}) in the search results`).toBeGreaterThan(0);
+    // With exactly one match the store opens that product directly.
+    if (await search(page, name) === 'product_info') {
+      expect(new URL(page.url()).searchParams.get('products_id'),
+        `search for "${name}" opens product ${pid}`).toBe(pid);
+    } else {
+      expect(mainPageOf(page)).toBe('search_result');
+      expect(await page.locator(`a[href*="products_id=${pid}"]`).count(),
+        `"${name}" (id ${pid}) in the search results`).toBeGreaterThan(0);
+    }
 
-    await search(page, 'zzqxv-no-such-item-9137');
+    expect(await search(page, 'zzqxv-no-such-item-9137'))
+      .toBe('search_result');
     await expect(page.locator('body'))
       .toContainText('There is no product that matches the search criteria');
   });

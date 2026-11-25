@@ -187,11 +187,11 @@ async function addToCart(page, qty = 1) {
 async function emptyCart(page) {
   await go(page, 'shopping_cart');
   for (let i = 0; i < 30; i++) {
-    const del = page.locator('a[href*="action=remove_product"]').first();
+    const del = page.locator('a[href*="action=remove_product"]:visible').first();
     if (!await del.count()) break;
     await Promise.all([page.waitForNavigation(), del.click()]);
   }
-  await expect(page.locator('a[href*="action=remove_product"]'))
+  await expect(page.locator('a[href*="action=remove_product"]:visible'))
     .toHaveCount(0);
 }
 

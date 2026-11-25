@@ -1,5 +1,5 @@
 // 4. Login: a bad password is rejected with a message. The test customer
-//    logs in and lands on My Account.
+//    logs in (this store lands on the home page) and My Account opens.
 const { test, expect, CUSTOMER, login, loginAsCustomer, mainPageOf } =
   require('./helpers');
 
@@ -10,7 +10,7 @@ test('4a bad password is rejected', async ({ page }) => {
     'Sorry, there is no match for that email address and/or password');
 });
 
-test('4b test customer logs in and lands on My Account',
+test('4b test customer logs in and My Account opens',
   async ({ page }) => {
     await loginAsCustomer(page);
   });

@@ -1,9 +1,13 @@
 // 2. Browse: open a category, then a product page. Name, price and the
 //    Add to Cart button show.
-const { test, expect, findProduct } = require('./helpers');
+// The IEMS store only shows categories to logged-in customers, so the
+// test logs in first.
+const { test, expect, findProduct, loginAsCustomer } =
+  require('./helpers');
 
 test('2 browse to a product: name, price, Add to Cart',
   async ({ page }) => {
+    await loginAsCustomer(page);
     await findProduct(page);
     await expect(page.locator('h1.productName, h1[id$=productName]').first(),
       'product name').not.toBeEmpty();

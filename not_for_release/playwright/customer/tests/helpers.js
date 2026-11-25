@@ -107,10 +107,16 @@ async function login(page, email = CUSTOMER.email,
   return mainPageOf(page);
 }
 
+// Logs in as the test customer. This store sends a customer to the home
+// page after login (not My Account), so this checks the Log Out link
+// shows, then opens My Account.
 async function loginAsCustomer(page) {
-  const landed = await login(page);
-  expect(landed, 'test customer should land on My Account '
-    + '(check the login in README.md)').toBe('account');
+  await login(page);
+  expect(await page.locator('a[href*="main_page=logoff"]').count(),
+    'logged in: Log Out link shows (check the login in README.md)')
+    .toBeGreaterThan(0);
+  await go(page, 'account');
+  expect(mainPageOf(page), 'My Account opens').toBe('account');
 }
 
 // Last money amount in a piece of text, as a number. "$1,234.50" -> 1234.5

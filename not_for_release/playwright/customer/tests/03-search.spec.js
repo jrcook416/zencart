@@ -1,7 +1,9 @@
 // 3. Search: a known product is found; a nonsense search shows
 //    "no results" without an error.
-const { test, expect, go, checkPage, findProduct, mainPageOf } =
-  require('./helpers');
+// Logs in first: the IEMS store only shows products to logged-in
+// customers.
+const { test, expect, go, checkPage, findProduct, mainPageOf,
+  loginAsCustomer } = require('./helpers');
 
 // Uses the search box in the header; if it is not on screen, opens the
 // same search results page directly.
@@ -20,6 +22,7 @@ async function search(page, words) {
 
 test('3 search finds a product and handles no results',
   async ({ page }) => {
+    await loginAsCustomer(page);
     await findProduct(page);
     const name = (await page.locator('h1.productName, h1[id$=productName]')
       .first().innerText()).trim();

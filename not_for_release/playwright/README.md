@@ -34,11 +34,12 @@ A screenshot of every page a test opens is saved in the report.
 ## Customer tests (`customer/tests`)
 
 1. Home page: logo, header, category links, footer.
-2. Browse: a category, then a product: name, price, Add to Cart.
+2. Browse (logged in; this store shows categories only to logged-in
+   customers): a category, then a product: name, price, Add to Cart.
 3. Search: a product is found by name; a nonsense word shows
    "There is no product that matches the search criteria".
-4. Login: a bad password is rejected; the test customer lands on
-   My Account.
+4. Login: a bad password is rejected; the test customer logs in (this
+   store lands on the home page) and My Account opens.
 5. Account: order history lists orders, one order opens, address book
    opens.
 6. Cart: add, change the quantity to 3, remove, add again; the subtotal

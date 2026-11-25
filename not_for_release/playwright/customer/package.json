@@ -1,0 +1,12 @@
+{
+  "name": "iems-playwright-customer",
+  "private": true,
+  "description": "Storefront (customer) browser tests for the local IEMS store",
+  "scripts": {
+    "test": "playwright test",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

@@ -118,16 +118,25 @@ http://localhost/zencart/).
 
 ```
 cd /mnt/c/dev/zencart/not_for_release/playwright/customer
-npx playwright test
+ZC_UNIT=AM001 ZC_PLACE_ORDER=1 npx playwright test
 
 cd /mnt/c/dev/zencart/not_for_release/playwright/admin
 npx playwright test
 ```
 
-Good looks like: a list of tests with a check mark each and a last line
-such as `11 passed, 1 skipped` (customer; the skipped one is the
-optional order) or `13 passed, 1 skipped` (admin; Shipping Export).
-Any `failed` line names the test and the reason.
+`ZC_UNIT=AM001` makes checkout use the unit set up in step 7.
+`ZC_PLACE_ORDER=1` places one order in the test database, which the
+admin tests then work on.
+
+Good looks like:
+- customer: a check mark on every line and `12 passed`.
+- admin: `13 passed, 1 skipped`. The skip is Shipping Export, which is
+  part of the Legacy Bridge on the live branches and is not in
+  v222-iems-dev.
+
+Not checked on this branch, for the same reason: the unit of measure
+after the price (Legacy Bridge only). Any `failed` line names the test
+and the reason.
 
 To see screenshots and details: `npx playwright show-report` in the same
 folder (opens a web page). One test only: `npx playwright test 06-cart`.
@@ -165,10 +174,86 @@ test logins above and turns store email off. To load a new copy
 gunzip -c /mnt/c/testdb/<file>.sql.gz | mysql -u iemstest -p iems_testdb
 ```
 
-For checkout tests 7 to 9 the IEMS County Agency plugin must be
-installed in the local admin (Modules > Plugin Manager), and the test
-customer needs a county and agency. If not, test 7 stops with a message
-saying so.
+## Setup so every test runs (once per fresh test database)
+
+The test database comes from the live IEMS store, which does not use the
+IEMS County Agency plugin. These steps add the plugin and give the test
+customer a county, agency and unit. They change only `iems_testdb`.
+
+**1. Check the database (read only).** In WSL:
+
+```
+mysql -u iemstest -p iems_testdb -e "SHOW TABLES LIKE 'iems\_%';"
+mysql -u iemstest -p iems_testdb -e "SHOW TABLES LIKE '%configuration';"
+```
+
+Good: the first shows nothing; the second shows exactly
+`configuration` (no prefix). If not, stop: the steps below assume that.
+
+**2. Load the county/agency/unit tables.** This creates `iems_counties`
+(92), `iems_agencies` (123), `iems_units` (141) and `iems_import_log`
+from the file in this branch:
+
+```
+mysql -u iemstest -p iems_testdb \
+  < /mnt/c/dev/zencart/zc_install/sql/iems_custom/iems_foundation.sql
+```
+
+Good: no output. Check:
+
+```
+mysql -u iemstest -p iems_testdb -e "SELECT COUNT(*) FROM iems_units;"
+```
+
+shows `141`.
+
+**3. Install the plugin.** Admin (http://localhost/zencart/admin/) >
+Modules > Plugin Manager > IEMS County Agency > Install (v1.9.6).
+This adds its columns, the customer affiliation table, the menu pages
+Customers > IEMS Agencies and Customers > IEMS Units, and Configuration >
+IEMS Settings.
+
+**4. Shipping modules.** Modules > Shipping:
+- "Pickup at IEMS Logistics": Install, then Edit and fill Pickup
+  Recipient `IEMS Logistics`, Pickup Street Address
+  `3930 Georgetown Road`, Pickup City `Indianapolis`, Pickup Postcode
+  `46254`. Update. (Pickup is hidden until these are filled.)
+- "IEMS Agency Delivery": Install.
+
+**5. Payment modules.** Modules > Payment: Install
+"Invoice Billing to Agency" and "Indianapolis EMS Unit".
+
+**6. The agency.** Customers > IEMS Agencies > search `IEMS` > Edit
+"Indianapolis EMS": Delivery to Location `Enabled`, Shipping Category
+`IEMS`, Payment Method `Invoice Billing to Agency`, Status Active. Save.
+
+**7. The unit.** Customers > IEMS Units > search `AM001` > Edit
+"AM001 IEMS Ambulance 001": Managed Delivery Address street
+`3930 Georgetown Road`, city `Indianapolis`, postcode `46254`. Save.
+(Delivery is only offered for a unit with an address.)
+
+**8. The test customer.** Customers > Customers > search
+`jeremiah@jeremiahcook.net` > Edit: IEMS County `49 Marion`, IEMS Agency
+`49 IEMS Indianapolis EMS`. Update.
+
+**9. Check (read only):**
+
+```
+mysql -u iemstest -p iems_testdb -e "
+SELECT c.customers_email_address, k.county_number,
+       a.agency_identifier, a.delivery_enabled,
+       a.shipping_category, a.payment_mode
+FROM iems_customer_affiliations f
+JOIN customers c ON c.customers_id = f.customer_id
+JOIN iems_counties k ON k.county_ID = f.county_ID
+JOIN iems_agencies a ON a.agency_ID = f.agency_ID;"
+```
+
+Good: one row, `jeremiah@jeremiahcook.net 49 IEMS 1 iems invoice`.
+
+With this setup the checkout offers "Pickup at IEMS Logistics" and
+"Indianapolis EMS / Eskenazi Delivery" (both $0.00) and
+"Invoice Billing to Agency".
 
 ## Adding a test
 

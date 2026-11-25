@@ -3,8 +3,8 @@
 $define = [
     'HEADER_SALES_TEXT' => 'Indianapolis EMS Logistics',
     'HEADER_LOGO_IMAGE' => 'logo.png',
-    'HEADER_LOGO_WIDTH' => '100px',
-    'HEADER_LOGO_HEIGHT' => '100px',
+    'HEADER_LOGO_WIDTH' => '100',
+    'HEADER_LOGO_HEIGHT' => '100',
     'HEADER_ALT_TEXT' => 'Powered by Zen Cart :: The Art of E-Commerce',
 ];
 

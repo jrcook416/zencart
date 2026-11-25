@@ -192,11 +192,14 @@ Good: the first shows nothing; the second shows exactly
 
 **2. Load the county/agency/unit tables.** This creates `iems_counties`
 (92), `iems_agencies` (123), `iems_units` (141) and `iems_import_log`
-from the file in this branch:
+from `zc_install/sql/iems_custom/iems_foundation.sql` in this branch.
+A working store has no `zc_install` folder, so read it from GitHub (the
+database password is asked for):
 
 ```
-mysql -u iemstest -p iems_testdb \
-  < /mnt/c/dev/zencart/zc_install/sql/iems_custom/iems_foundation.sql
+curl -fsSL https://raw.githubusercontent.com/jrcook416/zencart/\
+v222-iems-dev/zc_install/sql/iems_custom/iems_foundation.sql \
+  | mysql -u iemstest -p iems_testdb
 ```
 
 Good: no output. Check:

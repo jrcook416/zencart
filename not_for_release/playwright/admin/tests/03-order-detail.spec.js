@@ -2,7 +2,7 @@
 //    items, totals and status history show. Change the status with a
 //    comment (no customer email), and it saves and shows in the history.
 const { test, expect, go, checkPage, submitForm, loginAsAdmin,
-  testOrderId } = require('./helpers');
+  testOrderId, fillText } = require('./helpers');
 
 test('3 order detail and status change', async ({ page }) => {
   await loginAsAdmin(page);
@@ -34,7 +34,7 @@ test('3 order detail and status change', async ({ page }) => {
   const form = page.locator('form[name=statusUpdateForm]').filter({
     has: page.locator('#statusUpdateSelect') }).first();
   await sel.selectOption(other);
-  await form.locator('#comments').fill(comment);
+  await fillText(page, '#comments', comment);
   await form.locator('input[name=notify][value="0"]').check(); // no email
   await submitForm(page, form);
   await checkPage(page, 'status-updated');

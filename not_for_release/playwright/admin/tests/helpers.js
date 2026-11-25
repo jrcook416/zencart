@@ -138,6 +138,25 @@ async function testOrderId(page) {
   return String(Math.max(...ids));
 }
 
+// Types into a textarea. When the store's HTML editor (TinyMCE or
+// CKEditor) has replaced it, the text goes in through the editor instead.
+async function fillText(page, selector, text) {
+  const box = page.locator(selector).first();
+  if (await box.isVisible()) {
+    await box.fill(text);
+    return;
+  }
+  await page.evaluate(([sel, t]) => {
+    const el = document.querySelector(sel);
+    if (window.tinymce && el && window.tinymce.get(el.id)) {
+      window.tinymce.get(el.id).setContent(t);
+    } else if (window.CKEDITOR && el && window.CKEDITOR.instances[el.id]) {
+      window.CKEDITOR.instances[el.id].setData(t);
+    }
+    if (el) el.value = t;
+  }, [selector, text]);
+}
+
 // Order total shown on the order's detail page.
 async function orderPageTotal(page, oID) {
   await go(page, 'orders', `oID=${oID}&action=edit`);
@@ -147,4 +166,5 @@ async function orderPageTotal(page, oID) {
 module.exports = {
   test, expect, ADMIN, CUSTOMER_EMAIL, cmdOf, pageProblems, checkPage, go,
   submitForm, login, loginAsAdmin, money, testOrderId, orderPageTotal,
+  fillText,
 };

@@ -48,9 +48,18 @@ test('4 Edit Orders: no-change totals, quantity change saves',
     // (the pop-up is left open; setQty() reloads the page)
     expect(startQty, 'first product quantity').toBeGreaterThan(0);
 
+    // The first item's line total; a $0.00 item does not change the total.
+    const line = money(await page.locator('#products-listing tr.eo-prod')
+      .first().innerText());
+
     const up = await setQty(page, oID, startQty + 1);
-    expect(up.recalced, 'total changes when the quantity changes')
-      .not.toBeCloseTo(up.before, 2);
+    if (line > 0) {
+      expect(up.recalced, 'total changes when the quantity changes')
+        .not.toBeCloseTo(up.before, 2);
+    } else {
+      expect(up.recalced, '$0.00 item: total unchanged')
+        .toBeCloseTo(up.before, 2);
+    }
     expect(await orderPageTotal(page, oID), 'new total saved')
       .toBeCloseTo(up.recalced, 2);
 

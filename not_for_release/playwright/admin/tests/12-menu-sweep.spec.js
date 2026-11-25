@@ -8,7 +8,15 @@ test('12 every admin menu page loads', async ({ page }) => {
   await loginAsAdmin(page);
   const links = await page.locator('nav.navbar .dropdown-menu a[href]')
     .evaluateAll((as) => [...new Set(as.map((a) => a.href))]);
-  const todo = links.filter((h) => !/cmd=logoff|[?&]action=/.test(h));
+  // Only this admin's own pages (no outside links), and no logoff or
+  // action links.
+  const dir = (u) => u.origin + u.pathname.replace(/[^/]*$/, '');
+  const here = dir(new URL(page.url()));
+  const todo = links.filter((h) => {
+    const u = new URL(h);
+    return dir(u) === here
+      && u.searchParams.get('cmd') && !/cmd=logoff|[?&]action=/.test(h);
+  });
   expect(todo.length, 'pages in the admin menu').toBeGreaterThan(10);
 
   const failures = [];

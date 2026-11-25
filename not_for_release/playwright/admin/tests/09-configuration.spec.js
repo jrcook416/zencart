@@ -2,10 +2,12 @@
 //    View only; nothing is saved.
 const { test, expect, go, loginAsAdmin } = require('./helpers');
 
+// Group 12 is "Email" on a new install and "E-Mail Options" on stores
+// upgraded from older Zen Cart, so it is matched either way.
 const GROUPS = [
-  [1, 'My Store'],
-  [7, 'Shipping/Packaging'],
-  [12, 'Email'],
+  [1, /My Store/],
+  [7, /Shipping\/Packaging/],
+  [12, /E-?mail/i],
 ];
 
 test('9 configuration groups open (view only)', async ({ page }) => {

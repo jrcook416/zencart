@@ -4,7 +4,8 @@ const { defineConfig } = require('@playwright/test');
 
 const store = (process.env.ZC_BASE_URL || 'http://localhost/zencart/')
   .replace(/\/?$/, '/');
-const admin = (process.env.ZC_ADMIN_URL || store + 'admin/')
+// Admin folder on the local store is named wombat (as on prod).
+const admin = (process.env.ZC_ADMIN_URL || store + 'wombat/')
   .replace(/\/?$/, '/');
 
 module.exports = defineConfig({

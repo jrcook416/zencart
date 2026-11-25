@@ -149,7 +149,7 @@ All optional. Put them before the command, e.g.
 | Variable              | Default                              |
 |-----------------------|--------------------------------------|
 | `ZC_BASE_URL`         | `http://localhost/zencart/`          |
-| `ZC_ADMIN_URL`        | `<ZC_BASE_URL>admin/`                |
+| `ZC_ADMIN_URL`        | `<ZC_BASE_URL>wombat/`               |
 | `ZC_CUSTOMER_EMAIL`   | `jeremiah@jeremiahcook.net`          |
 | `ZC_CUSTOMER_PASSWORD`| `iems-test-2026`                     |
 | `ZC_ADMIN_USER`       | `testadmin`                          |
@@ -191,15 +191,13 @@ Good: the first shows nothing; the second shows exactly
 `configuration` (no prefix). If not, stop: the steps below assume that.
 
 **2. Load the county/agency/unit tables.** This creates `iems_counties`
-(92), `iems_agencies` (123), `iems_units` (141) and `iems_import_log`
-from `zc_install/sql/iems_custom/iems_foundation.sql` in this branch.
-A working store has no `zc_install` folder, so read it from GitHub (the
-database password is asked for):
+(92), `iems_agencies` (123), `iems_units` (141) and `iems_import_log`.
+The file is `zc_install/sql/iems_custom/iems_foundation.sql` in the repo;
+on the local store `zc_install` is renamed `valpo`, so:
 
 ```
-curl -fsSL https://raw.githubusercontent.com/jrcook416/zencart/\
-v222-iems-dev/zc_install/sql/iems_custom/iems_foundation.sql \
-  | mysql -u iemstest -p iems_testdb
+mysql -u iemstest -p iems_testdb \
+  < /mnt/c/dev/zencart/valpo/sql/iems_custom/iems_foundation.sql
 ```
 
 Good: no output. Check:
@@ -210,7 +208,7 @@ mysql -u iemstest -p iems_testdb -e "SELECT COUNT(*) FROM iems_units;"
 
 shows `141`.
 
-**3. Install the plugin.** Admin (http://localhost/zencart/admin/) >
+**3. Install the plugin.** Admin (http://localhost/zencart/wombat/) >
 Modules > Plugin Manager > IEMS County Agency > Install (v1.9.6).
 This adds its columns, the customer affiliation table, the menu pages
 Customers > IEMS Agencies and Customers > IEMS Units, and Configuration >

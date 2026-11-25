@@ -38,8 +38,10 @@ test('3 search finds a product and handles no results',
         `"${name}" (id ${pid}) in the search results`).toBeGreaterThan(0);
     }
 
-    expect(await search(page, 'zzqxv-no-such-item-9137'))
-      .toBe('search_result');
+    // No match: the store goes back to the search page (or a results
+    // page) and shows the "no product" message.
+    expect(['search', 'search_result'])
+      .toContain(await search(page, 'zzqxv-no-such-item-9137'));
     await expect(page.locator('body'))
       .toContainText('There is no product that matches the search criteria');
   });

@@ -37,7 +37,8 @@ A screenshot of every page a test opens is saved in the report.
 2. Browse (logged in; this store shows categories only to logged-in
    customers): a category, then a product: name, price, Add to Cart.
 3. Search: a product is found by name; a nonsense word shows
-   "There is no product that matches the search criteria".
+   "There is no product that matches the search criteria" (this store
+   shows it on the search page).
 4. Login: a bad password is rejected; the test customer logs in (this
    store lands on the home page) and My Account opens.
 5. Account: order history lists orders, one order opens, address book

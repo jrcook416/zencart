@@ -35,9 +35,9 @@ case " iems external ifd leo wayne " in
   *) echo "Unknown store: $STORE"; exit 1 ;;
 esac
 DBNAME="iems_${STORE}_v222"
-ADMIN_PW="IemsAdmin-2026"
-CUST_PW="IemsTest-2026"
-CUST_EMAIL="test.customer@example.test"
+ADMIN_PW="iems-admin-2026"
+CUST_PW="iems-test-2026"
+CUST_EMAIL="jeremiah@jeremiahcook.net"
 ARCH="$HOME/_offsite_backups"
 OUTDIR="$HOME/_testdb"
 TESTCNF="$HOME/.backup/restoretest.cnf"
@@ -310,11 +310,12 @@ ok "logs, sessions, tokens, payment records emptied"
 ok "store email off, payment/SMTP passwords blank"
 
 # 8. dump, with a last sweep for any email address
-# left in other tables (kept: iemssupply.net and
-# example.test)
+# left in other tables (kept: iemssupply.net,
+# example.test and the test customer's address)
 echo
 echo "Step 4: write the file"
 mkdir -p "$OUTDIR"
+export KEEP="$CUST_EMAIL"
 OUT="$OUTDIR/$STORE-testdb-$(date +%Y%m%d-%H%M).sql.gz"
 mysqldump --defaults-extra-file="$TESTCNF" \
   -u "$TU" --no-tablespaces --single-transaction \
@@ -322,6 +323,7 @@ mysqldump --defaults-extra-file="$TESTCNF" \
   | sed -E 's/DEFINER=`[^`]*`@`[^`]*`//g' \
   | perl -pe 's{([A-Za-z0-9._%+-]+)\@((?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})}{
       my ($u, $d) = ($1, $2);
+      lc("$u\@$d") eq lc($ENV{KEEP}) ||
       $d =~ /(^|\.)(iemssupply\.net|example\.test)$/i
       ? "$u\@$d" : "x".(++$n)."\@example.test" }ge' \
   | gzip > "$OUT"
@@ -333,6 +335,7 @@ gunzip -c "$OUT" | tail -n 1 | grep -q \
 left=$(gunzip -c "$OUT" | grep -oE \
   '[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,}' \
   | grep -viE '@(.*\.)?(iemssupply\.net|example\.test)$' \
+  | grep -viFx "$CUST_EMAIL" \
   | sort -u | head -n 3)
 [ -z "$left" ] || { rm -f "$OUT";
   stop "real email addresses still in file"; }

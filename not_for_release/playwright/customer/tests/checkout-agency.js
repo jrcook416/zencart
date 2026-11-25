@@ -79,6 +79,20 @@ async function shippingOptions(page) {
     }));
 }
 
+// Ticks a radio button or checkbox the way a person does. This template
+// draws its own boxes over the real ones, so click the label when there
+// is one, then check it took.
+async function tick(page, input) {
+  const id = await input.getAttribute('id');
+  const label = id ? page.locator(`label[for="${id}"]`) : null;
+  if (label && await label.count() && await label.first().isVisible()) {
+    await label.first().click();
+  } else {
+    await input.check();
+  }
+  await expect(input).toBeChecked();
+}
+
 // From a fresh checkout: picks a unit, an IEMS shipping choice (pickup
 // first) and the agency payment option, and stops on the confirm page.
 async function goToConfirm(page) {
@@ -89,7 +103,7 @@ async function goToConfirm(page) {
     || opts.find((o) => o.value.startsWith('iemsdelivery_'));
   expect(ship, 'an IEMS shipping choice').toBeTruthy();
   const radio = page.locator(`input[name=shipping][value="${ship.value}"]`);
-  if (await radio.getAttribute('type') === 'radio') await radio.check();
+  if (await radio.getAttribute('type') === 'radio') await tick(page, radio);
   await submitForm(page, page.locator('form[name=checkout_address]'));
   await checkPage(page, 'payment');
   expect(mainPageOf(page), 'payment page').toBe('checkout_payment');
@@ -100,9 +114,9 @@ async function goToConfirm(page) {
   expect(code, `agency payment option (one of ${PAYMENT_CODES}) in `
     + `[${codes}]`).toBeTruthy();
   const p = page.locator(`input[name=payment][value="${code}"]`);
-  if (await p.getAttribute('type') === 'radio') await p.check();
+  if (await p.getAttribute('type') === 'radio') await tick(page, p);
   const cond = page.locator('#conditions');
-  if (await cond.count()) await cond.check();
+  if (await cond.count()) await tick(page, cond);
   await submitForm(page, page.locator('form[name=checkout_payment]'));
   await checkPage(page, 'confirm');
   expect(mainPageOf(page), 'confirm page').toBe('checkout_confirmation');
